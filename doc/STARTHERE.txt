@@ -1,0 +1,115 @@
+
+Usage
+======
+
+Outwardly Wilt looks like a normal class based API library, however due to the asynchronous nature
+of HTTP requests in the Dart runtime no synchronous procedures are provided, results are passed back
+to the client by calling a client supplied callback(known as a completer) function. An annotated 
+example of this using Wilt to get a document by id is shown below:-
+
+main() {
+
+	/**
+	* The 'completer' function for the Wilt API call *
+	*/
+	void completer(){
+       
+        /* Check for error */
+       jsonobject.JsonObject res = wilting.completionResponse;     
+       if ( res.error ) {
+         /* Process the error */
+         jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+         String errorText = errorResponse.error;
+         String reasonText = errorResponse.reason;
+         int statusCode = res.errorCode;
+         return;
+       }
+       
+       /* Get the success response*/
+       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+       .... do other stuff
+    }
+    
+    
+    /**
+    * Instantiate a Wilt object.
+    */
+    Wilt wilting = new Wilt("localhost", 
+                            "5984",
+                            "http://");
+                            
+    /* Set the database to use */
+    wilting.db = "mydb";
+    
+    */ Set the completion function */
+    wilting.resultCompletion = completer;
+    
+    /* Call the wilt API */
+    wilting.getDocument("myuniqueid");
+   .... do other stuff 
+
+ }
+
+Things to note from the above code :-
+
+1. Responses to API method calls from Wilt are supplied using JSON objects.
+
+2. The completer function is global, ie it is in force from when set to when changed for
+   all API method calls. This allows a specific completer to be used per call, or one global completer
+   to be used for all API calls.
+   
+3. The higher level functions such as the one above need a database to use, again this is set
+   globally or on a per call basis. All API methods except httpRequest require a database to be set.
+   
+4. Note the constructor, host, port and scheme must be supplied but can be empty, i.e '', we do not 
+   always need a port for instance. If any of these are supplied as null Wilt will throw a WiltException.
+   
+The structure of the completion response JSON Object from Wilt can be seen from the above code.
+If the error flag is set the jsonCouchResponse object contains the error text, reason and HTTP status 
+code as returned from HTTP otherwise the jsonCouchResponse contains a successful response from CouchDB.
+Note successful here means in the context of the request itself, not in the context of any higher level
+CouchDB errors such as conflict error for instance. The client code needs to inspect the success response
+appropriately in the context of the API method used.
+
+Using JSON Objects allows a more natural manipulation of CouchDB responses than just returning JSON
+strings(you can of course stringify the response if it suits you to do so). However CouchDB uses JSON 
+identifiers starting with an underscore, e.g. _id, _rev etc. These are not currently supported by JSON Object
+at this time and if these are needed for a particular CouchDB operation then the string methods supplied by the
+API must be used over the methods that take JSON Objects. The class WiltUserUtils contains helper functions
+to manipulate JSON Objects with underscore properties.
+
+Wilt checks its API parameters when supplied, if required parameters are not supplied or numeric parameters
+are not valid Wilt will throw a WiltException with a message containing the failure reason. The Dart HTML library
+can also throw exceptions, exception handling in these cases needs to be performed by the client, Wilt itself has
+no exception handling built in.
+
+Authentication
+==============
+
+Wilt has two methods of authentication, none(the CouchDB Admin Party) or Basic HTTP authentication.
+The method to use is set using the login method where a username and password are supplied to Wilt,
+when called Basic authentication is automatically set. Cookie authentication supported by CouchDB is not
+implemented in Wilt and may never be due to CORS restrictions in the browser, see the document 
+CouchDB_and_CORS.txt for more detail here.
+
+
+Next Steps
+===========
+
+Hopefully this should be enough to get you started with Wilt, if you are new to the CouchDB world
+please read the CouchDB_and_CORS.txt document for guidance in this area(probably wise to read this anyway).
+
+The test suite contains numerous examples of using Wilt(one Wilt instantiation per test, one per group etc).
+Please have a look at this code for more detailed examples of Wilt usage. Note that to run the tests you will 
+need the unittest library installed. Please read the Testing.txt document in the doc/testing folder for further 
+information.
+
+
+
+
+
+
+
+
+
+

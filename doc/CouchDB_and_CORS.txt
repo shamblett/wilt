@@ -1,0 +1,97 @@
+
+Interfacing CouchDB into a browser environment has historically been a bit of a minefield and
+in most respects still is. The text below documents my current take on the state of CouchDB and
+CORS restrictions. Please don't take this as absolute, if in doubt google it!
+
+CORS
+====
+
+CORS(Cross Origin Resource Sharing) is a browser based security model that allows browsers to
+bypass the same origin security policy in a secure way by defining how the browser and server interact to
+allow the request to be processed. To implement CORS you need control not only of the browser but also of the
+server you are communicating with in order to instruct it to allow CORS requests and properly return HTTP header
+information to the browser.
+
+CORS usually affects browser based CouchDB requests from the very start even if your CouchDB instance is on the
+same host as your webserver. This is because say you have a CouchDB database browser page served from 
+http://mycouchtest, in it you have Wilt(or javascript calls etc) to your CouchDB which natively runs on port
+5984, so your requests would be http://mycouchtest:5984.
+
+Oops! adding port 5984 breaks the same origin security policy, its no longer the same origin as your web page and
+the calls fail. Seeing as you can't put both your webserver and your CouchDB instance on the same port you now have 
+a problem. 
+ 
+CouchDB versions and CORS support
+=================================
+
+The current version of CouchDB(1.3.0) now supports CORS requests, it can be configured to accept a list of
+origins, request methods etc to allow the corrrct headers to be sent back to the browser when a CORS request is made.
+Previous versions didn't support CORS natively at all. 
+
+There is however still a problem with this, version 1.3.0 is not yet a 
+full CORS implementation, you cannot for instance set the Allow Headers header to what you may wish as its not
+yet supported. This means that you can't tell the server to allow Authorization headers from the browser, which means
+you can't use Basic Auth with 1.3.0, its CORS implementation works only in Admin Party mode, which is not the
+securest way to run things on the web.
+
+Also Cookie based authentication can't be used as the browser security model will not allow access to the
+Set-Cookie header returned by the server, so the auth cookie supplied can't be used in future requests. 
+This pretty much rules out this method of authentication for CouchDB, hence Wilt does not support this.
+
+The above restrictions pretty much rule out using cloud based CouchDB providers(Iris, Cloudant et al) even if they are
+using version 1.3.0 as all requests are over HTTP and must be authorized.
+ 
+So, how do we get round these restrictions?
+
+Proxying CouchDb
+=================
+
+The only real way to do this is to proxy access to your CouchDB instance using either Apache or Nginx say so you
+can control the headers sent back to the browser from the proxy server. Actual access to the CouchDB instance
+of course is now server to server, not browser to server so all CORS restrictions disappear.
+
+Please google for setting this up, there are many articles on this. I've included an apache  vhosts file I've used 
+in testing to give a flavour of how to set this up. You can of course proxy to many CouchDB instances, whether they be local 
+or cloud based servers.
+
+Apache Vhosts File
+===================
+
+#
+# CouchDB
+#
+# Note:-
+# http://141.196.22.198:5984 is the CouchDB instance
+# http://127.0.0.1:3030 is your browser origin(you can use * for any)
+#
+<VirtualHost *:80>
+    <Proxy http://141.196.22.198:5984>
+        Order deny,allow
+        Allow from all 
+    </Proxy> 
+    RewriteEngine on
+    RewriteCond %{REQUEST_METHOD} ^OPTIONS
+    Header set Access-Control-Allow-Origin http://127.0.0.1:3030
+	Header set Access-Control-Allow-Credentials true
+    Header set Access-Control-Allow-Headers Content-Type
+	Header merge Access-Control-Allow-Headers Authorization
+	Header merge Access-Control-Allow-Headers Destination
+	Header set Access-Control-Allow-Methods GET
+	Header merge Access-Control-Allow-Methods POST
+	Header merge Access-Control-Allow-Methods PUT 
+	Header merge Access-Control-Allow-Methods OPTIONS
+	Header merge Access-Control-Allow-Methods DELETE 
+	Header merge Access-Control-Allow-Methods HEAD 
+	Header merge Access-Control-Allow-Methods COPY
+    Header set Access-Control-Max-Age 3600 
+     
+    ProxyRequests off
+    ProxyPreserveHost Off
+    KeepAlive Off
+
+    ProxyPass / http://141.196.22.198:5984/ nocanon
+    ProxyPassReverse / http://141.196.22.198:5984/
+</VirtualHost>
+
+
+

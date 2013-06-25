@@ -1,0 +1,10 @@
+name: wilt
+version: 1.0.0
+author: S. Hamblett <steve.hamblett@linux.com>
+description: A browser based  CouchDBAPI  library based on the SAG CouchDB library for PHP
+homepage: https://github.com/shamblett/wilt
+dependencies:
+  browser: '>=0.5.20 <0.5.21'
+  json_object: '>=1.0.15'
+dev_dependencies:
+  unittest: any
