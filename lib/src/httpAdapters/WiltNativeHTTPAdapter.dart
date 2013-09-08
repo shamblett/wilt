@@ -108,7 +108,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     html.HttpRequest.request(url,
                         method:method,
                         withCredentials:false,
-                        responseType:"json",
+                        responseType:null,
                         requestHeaders:headers,
                         sendData:data
         
