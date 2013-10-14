@@ -12,13 +12,6 @@ part of wilt;
 
 class WiltUserUtils {
   
-  
-  /* Helper utilities for JSON Objct manipulation. CouchDB returns key
-   * values with underscores as the first character, e.g. _id, this confuses
-   * JSON Objects currently.
-   * 
-   */
-  
   /**
    * Get a document id from a JSON Object
    */
@@ -34,7 +27,6 @@ class WiltUserUtils {
   /**
    * Get a revision from a JSON object 
    */
-  
   static String getDocumentRev(jsonobject.JsonObject response) {
     
     String temp = json.stringify(response);

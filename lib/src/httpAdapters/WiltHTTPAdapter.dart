@@ -15,7 +15,6 @@ abstract class WiltHTTPAdapter {
   
   WiltHTTPAdapter();
   
-  
   /*
    * Processes the HTTP request returning the server's response as
    * a JSON Object
@@ -28,7 +27,7 @@ abstract class WiltHTTPAdapter {
   /*
    * Result Handling
    */
-  void onError(html.HttpRequestProgressEvent response);
+  void onError(html.ProgressEvent response);
   void onSuccess(html.HttpRequest response);
   
 }

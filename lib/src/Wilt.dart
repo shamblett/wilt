@@ -1,6 +1,6 @@
 
 /*
- * Packge : Wilt
+ * Package : Wilt
  * Author : S. Hamblett <steve.hamblett@linux.com>
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
@@ -80,7 +80,9 @@ part of wilt;
 
 class Wilt {
   
-  /* URL constants for CouchDB functions */
+  /**
+   *  URL constants for CouchDB functions 
+   */
   static const String SESSION = "/_session";
   static const String STATS = "/_stats";
   static const String ALLDBS = "/_all_dbs";
@@ -95,12 +97,13 @@ class Wilt {
    * If login is called AUTH_BASIC is set, otherwise it defaults to AUTH_NONE
    * 
    */
-
   static const String AUTH_BASIC = 'basic';
   static const String AUTH_NONE = 'none';
   
   
-  /* Http parameter set */
+  /**
+   *  Http parameter set 
+   */
   String db = null;                 //Database name
   String host = null;              //Host to connect to.
   String port = null;              //Port to connect to.
@@ -108,15 +111,18 @@ class Wilt {
   WiltNativeHTTPAdapter _httpAdapter;
   
   
-  /* Completion function */
+  /**
+   * Completion function 
+   */
   var clientCompletion = null;
   
-  /* Authentication, both user and password must be set together */
+  /**
+   *  Authentication, both user and password must be set together 
+   */
   String _user = null;                      //Username to authenticate with.
   String _password = null;                  //Password to authenticate with.
   String authenticationType = AUTH_NONE;   //Authentication type
    
- /* Constructor */
   Wilt(this.host,
        this.port,
        this.scheme,
@@ -133,8 +139,6 @@ class Wilt {
     /* Get our HTTP adapter */
     _httpAdapter = new WiltNativeHTTPAdapter(this.clientCompletion);
   }
-  
-  /* Private */
   
   /**
    *  The internal HTTP request method. This wraps the
@@ -205,7 +209,7 @@ class Wilt {
                          
         
     String returnUrl = newUrl.toString();
-    return returnUrl;
+    return returnUrl/* Private */;
     
   }
   
@@ -235,10 +239,6 @@ class Wilt {
     return url;
     
   }
-  
-  /* Public */
-  
-  /* Getters and Setter */
   
   /**
    *  Completion callback 
@@ -273,13 +273,8 @@ class Wilt {
   }
   
   /**
-   * Basic methods where a url path is passed. 
-   * The database name is appended to the url
-   * so only the last part of the url need be supplied.
-   */
-  
-  /**
-   * Performs an HTTP GET operation.
+   * Performs an HTTP GET operation, the URL is conditioned and
+   * the current database added.
    */
   void get( String url) {
         
@@ -293,7 +288,8 @@ class Wilt {
    }
   
   /**
-   * Performs a HTTP HEAD operation.
+   * Performs a HTTP HEAD operation, the URL is conditioned and
+   * the current database added.
    */
   head( String url) {
     
@@ -306,7 +302,8 @@ class Wilt {
    }
   
   /**
-   * Performs a HTTP POST operation.
+   * Performs a HTTP POST operation,, the URL is conditioned and
+   * the current database added.
    */
   post( String url, 
         String data,
@@ -323,7 +320,8 @@ class Wilt {
    }
   
   /**
-   * Performs a HTTP PUT operation.
+   * Performs a HTTP PUT operation,, the URL is conditioned and
+   * the current database added.
    */
   put( String url, 
        String data) {
@@ -338,7 +336,8 @@ class Wilt {
    }
   
   /**
-   * Performs a HTTP DELETE operation.
+   * Performs a HTTP DELETE operation,, the URL is conditioned and
+   * the current database added.
    *
    */
   delete( String url) {
@@ -351,11 +350,7 @@ class Wilt {
                  url);
     
    }
-  
-  /** 
-   * Document oriented functions where a document id/rev is used 
-   */
-  
+ 
   /**
    * Performs an HTTP GET operation for the supplied document id and
    * optional revision. 
@@ -557,10 +552,6 @@ class Wilt {
   }
   
   /**
-   * Multi document functions
-   */
-  
-  /**
    * Get all documents.
    * The parameters should be self explanatory and are addative.
    * Refer to the CouchDb documentation for further explanation.
@@ -723,10 +714,6 @@ class Wilt {
   }
   
   /**
-   *  Database functions 
-   */
-  
-  /**
    * Creates a database with the specified name.
    */
   void createDatabase(String name) {
@@ -779,11 +766,6 @@ class Wilt {
   }
   
   /**
-   *  Informational functions. 
-   *  These are non database specific functions.
-   */
-  
-  /**
    * Get current session information from CouchDB
    */
   void getSession() {
@@ -796,7 +778,7 @@ class Wilt {
   }
   
   /**
-   * Get current stats from couchdb
+   * Get current stats from CouchDB
    */
   void getStats() {
     
@@ -808,7 +790,7 @@ class Wilt {
   }
   
   /**
-   * Get all the databases from couchdb
+   * Get all the databases from CouchDB
    */
   void getAllDbs() {
     
@@ -820,10 +802,8 @@ class Wilt {
   }
   
   /**
-   * Authentication
-   */
-  
-  /* Updates the login credentials in Wilt that will be used for all further
+   * Authentication.
+   * Updates the login credentials in Wilt that will be used for all further
    * requests to CouchDB. Both user name and password must be set, even if one
    * or the other is '' i.e empty. After logging in all communication with CouchDB
    * is made using the selected auithentication method.
@@ -844,11 +824,7 @@ class Wilt {
   }
   
   /**
-   * Utility functions
-   */
-  
-  /**
-   * Ask CouchDB to generate IDs.
+   * Ask CouchDB to generate document Id's.
    * 
    */
   void generateIds([int amount=10]) {

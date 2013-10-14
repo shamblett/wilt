@@ -24,27 +24,35 @@ part of wilt;
 class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
   
  
-  /* The method used */
+  /**
+   * The method used 
+   */
   String _method = null;
   
-  /* All responses are JSON Objects */
+  /** 
+   * All responses are JSON Objects 
+   */
   jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
   
-  /* Completion callback */
+  /** 
+   * Completion callback 
+   */
   var completion = null;
   
- /* Optional completer */
+  /**
+   *  Optional completer 
+   */
   WiltNativeHTTPAdapter([this.completion]);
     
-  /* All response headers */
+  /**
+   *  All response headers 
+   */
   String allResponseHeaders = null;
  
-  /*
-   * We get an HttpRequestProgressEvent on error and process this
-   * to return a JSON Object.
-   * 
+  /**
+   * Error completion
    */
-  void onError(html.HttpRequestProgressEvent response){
+  void onError(html.ProgressEvent response){
     
     /* Get the HTTP request from the progress event */
     html.HttpRequest req = response.target;
@@ -87,7 +95,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
   }
   
    
-  /*
+  /**
    * Processes the HTTP request, returning the server's response
    * via the completion callback.
    */
