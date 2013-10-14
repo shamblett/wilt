@@ -38,7 +38,7 @@ abstract class WiltHTTPAdapter {
  
  WiltHTTPAdapter();
  
- /**
+ /*
   * Processes the HTTP request returning the server's response as
   * a JSON Object
   */
@@ -47,14 +47,10 @@ abstract class WiltHTTPAdapter {
                   [String data = null,
                   Map headers = null]);
  
- /**
-  * Error handling
+ /*
+  * Result Handling
   */
  void onError(html.ProgressEvent response);
- 
- /**
-  * Success handling
-  */
  void onSuccess(html.HttpRequest response);
  
 }
@@ -88,22 +84,18 @@ WiltHTTPAdapter();
 abstract void <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
               title="Permalink to WiltHTTPAdapter.httpRequest">#</a></h4>
 <div class="doc">
-<p>Processes the HTTP request returning the server's response as
-a JSON Object</p>
 </div>
 </div>
 <div class="method"><h4 id="onError">
 abstract void <strong>onError</strong>(ProgressEvent response) <a class="anchor-link" href="#onError"
               title="Permalink to WiltHTTPAdapter.onError">#</a></h4>
 <div class="doc">
-<p>Error handling</p>
 </div>
 </div>
 <div class="method"><h4 id="onSuccess">
 abstract void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-link" href="#onSuccess"
               title="Permalink to WiltHTTPAdapter.onSuccess">#</a></h4>
 <div class="doc">
-<p>Success handling</p>
 </div>
 </div>
 </div>
@@ -111,7 +103,7 @@ abstract void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-10-14 10:44:37.403</div>
+          <div>This page was generated at 2013-10-14 11:24:07.919</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
