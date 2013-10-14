@@ -1,0 +1,118 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>WiltHTTPAdapter abstract class / wilt Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wilt" data-type="WiltHTTPAdapter">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wilt.html">wilt</a> &rsaquo; <a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>WiltHTTPAdapter</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+abstract class WiltHTTPAdapter {
+ 
+ 
+ WiltHTTPAdapter();
+ 
+ /**
+  * Processes the HTTP request returning the server's response as
+  * a JSON Object
+  */
+ void httpRequest(String method, 
+                  String url, 
+                  [String data = null,
+                  Map headers = null]);
+ 
+ /**
+  * Error handling
+  */
+ void onError(html.ProgressEvent response);
+ 
+ /**
+  * Success handling
+  */
+ void onSuccess(html.HttpRequest response);
+ 
+}
+</pre>
+</div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../wilt/WiltNativeHTTPAdapter.html">WiltNativeHTTPAdapter</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>WiltHTTPAdapter</strong>() <a class="anchor-link" href="#"
+              title="Permalink to WiltHTTPAdapter.WiltHTTPAdapter">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
+<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
+through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+only.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+<pre class="source">
+WiltHTTPAdapter();
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="httpRequest">
+abstract void <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
+              title="Permalink to WiltHTTPAdapter.httpRequest">#</a></h4>
+<div class="doc">
+<p>Processes the HTTP request returning the server's response as
+a JSON Object</p>
+</div>
+</div>
+<div class="method"><h4 id="onError">
+abstract void <strong>onError</strong>(ProgressEvent response) <a class="anchor-link" href="#onError"
+              title="Permalink to WiltHTTPAdapter.onError">#</a></h4>
+<div class="doc">
+<p>Error handling</p>
+</div>
+</div>
+<div class="method"><h4 id="onSuccess">
+abstract void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-link" href="#onSuccess"
+              title="Permalink to WiltHTTPAdapter.onSuccess">#</a></h4>
+<div class="doc">
+<p>Success handling</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-14 10:44:37.403</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

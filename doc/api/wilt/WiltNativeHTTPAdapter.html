@@ -1,0 +1,311 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>WiltNativeHTTPAdapter class / wilt Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wilt" data-type="WiltNativeHTTPAdapter">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wilt.html">wilt</a> &rsaquo; <a href="../wilt/WiltNativeHTTPAdapter.html">WiltNativeHTTPAdapter</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>WiltNativeHTTPAdapter</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
+ 
+
+ /**
+  * The method used 
+  */
+ String _method = null;
+ 
+ /** 
+  * All responses are JSON Objects 
+  */
+ jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+ 
+ /** 
+  * Completion callback 
+  */
+ var completion = null;
+ 
+ /**
+  *  Optional completer 
+  */
+ WiltNativeHTTPAdapter([this.completion]);
+   
+ /**
+  *  All response headers 
+  */
+ String allResponseHeaders = null;
+
+ /**
+  * Error completion
+  */
+ void onError(html.ProgressEvent response){
+   
+   /* Get the HTTP request from the progress event */
+   html.HttpRequest req = response.target;
+   
+   /* Process the error response */
+   jsonResponse.error = true;
+   jsonResponse.responseText = req.responseText;
+   jsonResponse.errorCode = req.status;
+   if ( (req.status != 0)  &amp;&amp; (_method != 'HEAD') ) {
+     jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject.fromJsonString(req.responseText);
+     jsonResponse.jsonCouchResponse = errorAsJson;
+   } else {
+     jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+     errorAsJson.error = "Invalid HTTP response";
+     errorAsJson.reason = "HEAD or status code of 0";
+     jsonResponse.jsonCouchResponse = errorAsJson;
+   }
+   
+   /* Set the response headers */
+   allResponseHeaders = req.getAllResponseHeaders();
+ }
+ 
+ /**
+  * Successful completion
+  */
+ void onSuccess(html.HttpRequest response){
+   
+   /* Process the success response */
+   jsonResponse.error = false;
+   jsonResponse.responseText = response.responseText;
+   if ( _method != 'HEAD') {
+     jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+     jsonResponse.jsonCouchResponse = successAsJson;
+   }
+   jsonResponse.errorCode = null;
+   
+   /* Set the response headers */
+   allResponseHeaders = response.getAllResponseHeaders();
+   
+ }
+ 
+  
+ /**
+  * Processes the HTTP request, returning the server's response
+  * via the completion callback.
+  */
+ void httpRequest(String method, 
+                  String url, 
+                  [String data = null,
+                  Map headers = null]) {
+   
+    
+    /* Initialise */
+    jsonResponse.error = null;
+    jsonResponse.successText = null;
+    jsonResponse.errorText = null;
+    jsonResponse.errorCode = null;
+    _method = method;
+   
+   /* Query couchdb over HTTP */ 
+   html.HttpRequest.request(url,
+                       method:method,
+                       withCredentials:false,
+                       responseType:null,
+                       requestHeaders:headers,
+                       sendData:data
+       
+       )
+       ..then(onSuccess)
+       ..catchError(onError)
+       ..whenComplete(completion);
+   
+ }
+ 
+ 
+}
+</pre>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>WiltNativeHTTPAdapter</strong>([completion]) <a class="anchor-link" href="#"
+              title="Permalink to WiltNativeHTTPAdapter.WiltNativeHTTPAdapter">#</a></h4>
+<div class="doc">
+<p> Optional completer </p>
+<pre class="source">
+WiltNativeHTTPAdapter([this.completion]);
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="allResponseHeaders">
+<button class="show-code">Code</button>
+String         <strong>allResponseHeaders</strong> <a class="anchor-link"
+            href="#allResponseHeaders"
+            title="Permalink to WiltNativeHTTPAdapter.allResponseHeaders">#</a>
+        </h4>
+        <div class="doc">
+<p> All response headers </p>
+<pre class="source">
+String allResponseHeaders = null
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="completion">
+<button class="show-code">Code</button>
+var         <strong>completion</strong> <a class="anchor-link"
+            href="#completion"
+            title="Permalink to WiltNativeHTTPAdapter.completion">#</a>
+        </h4>
+        <div class="doc">
+<p>Completion callback </p>
+<pre class="source">
+var completion = null
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="jsonResponse">
+<button class="show-code">Code</button>
+JsonObject         <strong>jsonResponse</strong> <a class="anchor-link"
+            href="#jsonResponse"
+            title="Permalink to WiltNativeHTTPAdapter.jsonResponse">#</a>
+        </h4>
+        <div class="doc">
+<p>All responses are JSON Objects </p>
+<pre class="source">
+jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject()
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="httpRequest">
+<button class="show-code">Code</button>
+void <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
+              title="Permalink to WiltNativeHTTPAdapter.httpRequest">#</a></h4>
+<div class="doc">
+<p>Processes the HTTP request, returning the server's response
+via the completion callback.</p>
+<pre class="source">
+void httpRequest(String method, 
+                String url, 
+                [String data = null,
+                Map headers = null]) {
+ 
+  
+  /* Initialise */
+  jsonResponse.error = null;
+  jsonResponse.successText = null;
+  jsonResponse.errorText = null;
+  jsonResponse.errorCode = null;
+  _method = method;
+ 
+ /* Query couchdb over HTTP */ 
+ html.HttpRequest.request(url,
+                     method:method,
+                     withCredentials:false,
+                     responseType:null,
+                     requestHeaders:headers,
+                     sendData:data
+     
+     )
+     ..then(onSuccess)
+     ..catchError(onError)
+     ..whenComplete(completion);
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="onError">
+<button class="show-code">Code</button>
+void <strong>onError</strong>(ProgressEvent response) <a class="anchor-link" href="#onError"
+              title="Permalink to WiltNativeHTTPAdapter.onError">#</a></h4>
+<div class="doc">
+<p>Error completion</p>
+<pre class="source">
+void onError(html.ProgressEvent response){
+ 
+ /* Get the HTTP request from the progress event */
+ html.HttpRequest req = response.target;
+ 
+ /* Process the error response */
+ jsonResponse.error = true;
+ jsonResponse.responseText = req.responseText;
+ jsonResponse.errorCode = req.status;
+ if ( (req.status != 0)  &amp;&amp; (_method != 'HEAD') ) {
+   jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject.fromJsonString(req.responseText);
+   jsonResponse.jsonCouchResponse = errorAsJson;
+ } else {
+   jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+   errorAsJson.error = "Invalid HTTP response";
+   errorAsJson.reason = "HEAD or status code of 0";
+   jsonResponse.jsonCouchResponse = errorAsJson;
+ }
+ 
+ /* Set the response headers */
+ allResponseHeaders = req.getAllResponseHeaders();
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="onSuccess">
+<button class="show-code">Code</button>
+void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-link" href="#onSuccess"
+              title="Permalink to WiltNativeHTTPAdapter.onSuccess">#</a></h4>
+<div class="doc">
+<p>Successful completion</p>
+<pre class="source">
+void onSuccess(html.HttpRequest response){
+ 
+ /* Process the success response */
+ jsonResponse.error = false;
+ jsonResponse.responseText = response.responseText;
+ if ( _method != 'HEAD') {
+   jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+   jsonResponse.jsonCouchResponse = successAsJson;
+ }
+ jsonResponse.errorCode = null;
+ 
+ /* Set the response headers */
+ allResponseHeaders = response.getAllResponseHeaders();
+ 
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-10-14 10:44:37.377</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
