@@ -81,35 +81,62 @@ part of wilt;
 class Wilt {
   
   /**
-   *  URL constants for CouchDB functions 
+   *  URL constant for CouchDB SESSION function 
    */
   static const String SESSION = "/_session";
+  /**
+   *  URL constant for CouchDB STATS function 
+   */
   static const String STATS = "/_stats";
+  /**
+   *  URL constant for CouchDB ALLDBS function 
+   */
   static const String ALLDBS = "/_all_dbs";
+  /**
+   *  URL constant for CouchDB ALLDOCS function 
+   */
   static const String ALLDOCS = "/_all_docs";
+  /**
+   *  URL constant for CouchDB BULKDOCS function 
+   */
   static const String BULKDOCS = "/_bulk_docs";
+  /**
+   *  URL constant for CouchDB UUID function 
+   */
   static const String UUIDS ="/_uuids";
   
   /**
-   * Authentication type constants 
-   * 
+   *
    * AUTH_BASIC denotes Basic HTTP authentication. 
    * If login is called AUTH_BASIC is set, otherwise it defaults to AUTH_NONE
    * 
    */
   static const String AUTH_BASIC = 'basic';
+  /**
+   * No authentication 
+   */
   static const String AUTH_NONE = 'none';
   
-  
-  /**
-   *  Http parameter set 
+  /** 
+   * Database name
    */
-  String db = null;                 //Database name
-  String host = null;              //Host to connect to.
-  String port = null;              //Port to connect to.
-  String scheme = null;            //Scheme
-  WiltNativeHTTPAdapter _httpAdapter;
-  
+  String db = null; 
+  /** 
+   * Host name
+   */
+  String host = null;  
+  /** 
+   * Port number
+   */
+  String port = null;      
+  /** 
+   * HTTP scheme
+   */
+  String scheme = null;            
+  /**
+   * HTTP Adapter
+   */
+  WiltNativeHTTPAdapter _httpAdapter = null;
   
   /**
    * Completion function 
@@ -117,11 +144,17 @@ class Wilt {
   var clientCompletion = null;
   
   /**
-   *  Authentication, both user and password must be set together 
+   *  Authentication, user name
    */
-  String _user = null;                      //Username to authenticate with.
-  String _password = null;                  //Password to authenticate with.
-  String authenticationType = AUTH_NONE;   //Authentication type
+  String _user = null; 
+  /**
+   *  Authentication, user password
+   */
+  String _password = null;   
+  /**
+   *  Authentication, type
+   */
+  String authenticationType = AUTH_NONE;   
    
   Wilt(this.host,
        this.port,
@@ -137,7 +170,7 @@ class Wilt {
     }
     
     /* Get our HTTP adapter */
-    _httpAdapter = new WiltNativeHTTPAdapter(this.clientCompletion);
+     _httpAdapter = new WiltNativeHTTPAdapter(this.clientCompletion);
   }
   
   /**
