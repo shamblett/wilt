@@ -414,7 +414,7 @@ class Wilt {
     String jsonData = null;
     try {
      
-      jsonData = json.stringify(document);
+      jsonData = JSON.encode(document);
     
     } catch(e) {
       
@@ -471,7 +471,7 @@ class Wilt {
     String jsonData = null;
     try {
      
-      jsonData = json.stringify(document);
+      jsonData = JSON.encode(document);
     
     } catch(e) {
       
@@ -618,7 +618,7 @@ class Wilt {
     
     if ( keys != null ) {
      
-      String keyString = json.stringify(keys);
+      String keyString = JSON.encode(keys);
       url = _setURLParameter(url, 
                              'keys', 
                              keyString);
@@ -659,7 +659,7 @@ class Wilt {
     String docString = null;
     try{
      
-      docString = json.stringify(documentMap);
+      docString = JSON.encode(documentMap);
     
     } catch(e) {
       

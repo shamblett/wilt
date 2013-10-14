@@ -18,8 +18,8 @@ class WiltUserUtils {
   static String getDocumentId(jsonobject.JsonObject response) {
     
     
-    String temp = json.stringify(response);
-    Map tempMap = json.parse(temp);
+    String temp = JSON.encode(response);
+    Map tempMap = JSON.decode(temp);
     return tempMap["_id"];
     
   }
@@ -29,8 +29,8 @@ class WiltUserUtils {
    */
   static String getDocumentRev(jsonobject.JsonObject response) {
     
-    String temp = json.stringify(response);
-    Map tempMap = json.parse(temp);
+    String temp = JSON.encode(response);
+    Map tempMap = JSON.decode(temp);
     return tempMap["_rev"];
     
   }
@@ -41,10 +41,10 @@ class WiltUserUtils {
   static String addDocumentRev(jsonobject.JsonObject document,
                         String revision){
     
-    String temp = json.stringify(document);
-    Map tempMap = json.parse(temp);
+    String temp = JSON.encode(document);
+    Map tempMap = JSON.decode(temp);
     tempMap["_rev"] = revision;
-    return json.stringify(tempMap);
+    return JSON.encode(tempMap);
     
   }
   
@@ -54,10 +54,10 @@ class WiltUserUtils {
   static String addDocumentId(jsonobject.JsonObject document,
                               String id){
     
-    String temp = json.stringify(document);
-    Map tempMap = json.parse(temp);
+    String temp = JSON.encode(document);
+    Map tempMap = JSON.decode(temp);
     tempMap["_id"] = id;
-    return json.stringify(tempMap);
+    return JSON.encode(tempMap);
     
   }
   

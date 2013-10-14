@@ -9,7 +9,7 @@ library wilt;
 
 import 'dart:async';
 import 'dart:html' as html;
-import 'dart:json' as json;
+import 'dart:convert';
 import 'package:json_object/json_object.dart' as jsonobject;
 
 part 'src/Wilt.dart';
