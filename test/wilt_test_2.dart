@@ -7,14 +7,10 @@
 
 library wilt_test;
 
-import 'dart:async';
-import 'dart:json' as json;
-
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';  
 import 'package:unittest/html_config.dart';
-import 'package:unittest/interactive_html_config.dart';
 import 'wilt_test_config.dart';
 
 main() {  
@@ -174,7 +170,7 @@ main() {
     
   }); 
   
-   test("Create document(POST) and check", () {  
+   solo_test("Create document(POST) and check", () {  
         
     void checkCompleter(){
       
@@ -219,6 +215,8 @@ main() {
         logMessage("WILT::Reason is $reasonText");
         int statusCode = res.errorCode;
         logMessage("WILT::Status code is $statusCode");
+        String responseHeaders = wilting.responseHeaders;
+        logMessage("WILT::Response headers are $responseHeaders");
         return;
       }
       

@@ -137,7 +137,7 @@ class Wilt {
    * HTTP Adapter
    */
   WiltNativeHTTPAdapter _httpAdapter = null;
-  
+  String get responseHeaders => _httpAdapter.responseHeaders;
   /**
    * Completion function 
    */

@@ -7,14 +7,10 @@
 
 library wilt_test;
 
-import 'dart:async';
-import 'dart:json' as json;
-
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';  
 import 'package:unittest/html_config.dart';
-import 'package:unittest/interactive_html_config.dart';
 import 'wilt_test_config.dart';
 
 main() {  

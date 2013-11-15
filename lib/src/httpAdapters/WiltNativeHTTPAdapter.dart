@@ -47,7 +47,8 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
   /**
    *  All response headers 
    */
-  String allResponseHeaders = null;
+  String _allResponseHeaders = null;
+  String get responseHeaders => _allResponseHeaders;
  
   /**
    * Error completion
@@ -72,7 +73,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     }
     
     /* Set the response headers */
-    allResponseHeaders = req.getAllResponseHeaders();
+    _allResponseHeaders = req.getAllResponseHeaders();
   }
   
   /**
@@ -80,17 +81,36 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
    */
   void onSuccess(html.HttpRequest response){
     
-    /* Process the success response */
+    /**
+     *  Process the success response, note that an error response from CouchDB is 
+     *  treated as an error, not as a success with an 'error' field in it.
+     */
     jsonResponse.error = false;
+    jsonResponse.errorCode = 0;
     jsonResponse.responseText = response.responseText;
+    Map couchResp = JSON.decode(response.responseText);
+    if ( couchResp.containsKey('error')) {
+      
+      jsonResponse.error = true;
+      jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+      errorAsJson.error = "CouchDb Error";
+      errorAsJson.reason = couchResp['reason'];
+      jsonResponse.jsonCouchResponse = errorAsJson;
+      /* Set the response headers */
+      _allResponseHeaders = response.getAllResponseHeaders();
+      return;
+      
+    }
+    
+    /**
+     * Success response
+     */
     if ( _method != 'HEAD') {
       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
       jsonResponse.jsonCouchResponse = successAsJson;
-    }
-    jsonResponse.errorCode = null;
-    
+    }  
     /* Set the response headers */
-    allResponseHeaders = response.getAllResponseHeaders();
+    _allResponseHeaders = response.getAllResponseHeaders();
     
   }
   
