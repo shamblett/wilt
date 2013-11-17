@@ -7,6 +7,7 @@
 
 library wilt_test;
 
+import 'dart:async';
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';  
@@ -17,7 +18,22 @@ main() {
   
   useHtmlConfiguration();
   
-  void myTests(Wilt wilting) {
+  /* Group 4 - Single documents and database methods */
+  group("4. Single documents and database - ", () {
+  
+    
+    /* Create our Wilt */
+    Wilt wilting = new Wilt(hostName, 
+        port,
+        scheme);
+   
+
+   /* Login if we are using authentication */
+    if ( userName != null ) {
+      
+      wilting.login(userName,
+                    userPassword);
+    }
     
     /*Group setup */   
     String docId = null;
@@ -27,7 +43,10 @@ main() {
     String putId3 = 'myuniqueid3';
     String copyId = 'mycopyid';
     
-    test("Create Database not authorized", () {  
+    /* Duration for callback test */
+    Duration testDuration = new Duration(milliseconds:TEST_DURATION);
+    
+    skip_test("Create Database not authorized", () {  
       
       /* Create a local wilting for this test */
       Wilt localWilting = new Wilt(hostName, 
@@ -55,12 +74,14 @@ main() {
       
       localWilting.resultCompletion = completer;
       localWilting.createDatabase(databaseName);
-     
+      
     });
     
     /* Create the test database */
     test("Create Test Database", () {  
       
+      Future done = new Future.delayed(testDuration,
+                                       () => true);
       
       void completer(){
         
@@ -77,21 +98,25 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Create Test Database Failed');
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         
       }
-      
+    
       wilting.resultCompletion = completer;
       wilting.createDatabase(databaseName);
+      return done;
       
     });
     
     /* Create a database then delete it */ 
     test("Delete Database", () {  
+      
+      Future done = new Future.delayed(testDuration,
+          () => true);
       
       void checkCompleter(){
        
@@ -108,7 +133,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Delete Database Failed Check.');
        }
        
      }
@@ -128,21 +153,27 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
+         throw new WiltException('WILT::Delete Database Failed.');
        }
        
        /* Now delete it */
        wilting.resultCompletion = checkCompleter;
        wilting.deleteDatabase("wiltdeleteme");
        
+       
      }
      
      wilting.resultCompletion = completer;
      wilting.createDatabase("wiltdeleteme");
+     return done;
          
    });
   
   
-     test("HEAD null URL", () {  
+  test("HEAD null URL", () { 
+    
+    Future done = new Future.delayed(testDuration,
+        () => true);
     
     void completer(){
       
@@ -159,6 +190,7 @@ main() {
         logMessage("WILT::Reason is $reasonText");
         int statusCode = res.errorCode;
         logMessage("WILT::Status code is $statusCode");
+        throw new WiltException('WILT::HEAD null URL Failed.');
       }
       
     }
@@ -166,12 +198,16 @@ main() {
     wilting.resultCompletion = completer;
     wilting.db = databaseName;
     wilting.head(null);
+    return done;
      
     
   }); 
   
-   solo_test("Create document(POST) and check", () {  
+   test("Create document(POST) and check", () {  
         
+     Future done = new Future.delayed(testDuration,
+         () => true);
+     
     void checkCompleter(){
       
       jsonobject.JsonObject res = wilting.completionResponse;
@@ -187,7 +223,7 @@ main() {
         logMessage("WILT::Reason is $reasonText");
         int statusCode = res.errorCode;
         logMessage("WILT::Status code is $statusCode");
-        return;
+        throw new WiltException('WILT::Create document(POST) Check Failed');
       }
       
       /* Check the documents parameters */
@@ -217,7 +253,7 @@ main() {
         logMessage("WILT::Status code is $statusCode");
         String responseHeaders = wilting.responseHeaders;
         logMessage("WILT::Response headers are $responseHeaders");
-        return;
+        throw new WiltException('WILT::Create document(POST) Failed');
       }
       
       /* Get the documents id and re-get the document to check correctness */
@@ -227,6 +263,7 @@ main() {
       /* Now get the document and check it */
       wilting.resultCompletion = checkCompleter;
       wilting.getDocument(docId);
+     
     }
     
     wilting.resultCompletion = completer;
@@ -235,11 +272,16 @@ main() {
     document.title = "Created by a Post Request";
     document.version = 1;
     document.author = "Me";
-    wilting.postDocument(document);    
+    wilting.postDocument(document);
+    return done;
     
   }); 
    
    test("Create document(PUT) and check", () {  
+     
+     
+     Future done = new Future.delayed(testDuration,
+         () => true);
      
      void checkCompleter(){
        
@@ -256,7 +298,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Create document(PUT) Check Failed');
        }
        
        /* Check the documents parameters */
@@ -285,7 +327,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Create document(PUT) Failed');
        }
        
        /* Get the documents id and re-get the document to check correctness */
@@ -295,6 +337,7 @@ main() {
        /* Now get the document and check it */
        wilting.resultCompletion = checkCompleter;
        wilting.getDocument(putId);
+       
      }
      
      wilting.resultCompletion = completer;
@@ -304,12 +347,16 @@ main() {
      document.version = 2;
      document.author = "Me again";
      wilting.putDocument(putId,
-                         document);    
+                         document);   
+     return done;
      
    }); 
    
     test("Update document and check", () {  
      
+      Future done = new Future.delayed(testDuration,
+          () => true);
+      
     void checkUpdater(){
        
        jsonobject.JsonObject res = wilting.completionResponse;
@@ -325,7 +372,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Update Document Check 3 Failed');
        }
        
        /* Check the documents parameters */
@@ -352,7 +399,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Update Document Check 2 Failed');
        }
        
        /* Check the documents parameters */
@@ -373,7 +420,8 @@ main() {
                                                        returnedDocRev);
        wilting.resultCompletion = checkUpdater;
        wilting.putDocumentString(putId2,
-                                 docString);    
+                                 docString);
+      
      }
      
      void completer(){
@@ -391,7 +439,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         return;
+         throw new WiltException('WILT::Update Document Check 1 Failed');
        }
        
        /* Get the documents id and re-get the document to check correctness */
@@ -401,6 +449,7 @@ main() {
        /* Now get the document and check it */
        wilting.resultCompletion = checkCompleter;
        wilting.getDocument(putId2);
+     
      }
      
      wilting.resultCompletion = completer;
@@ -410,11 +459,15 @@ main() {
      document.version = 3;
      document.author = "Me also";
      wilting.putDocument(putId2,
-                         document);    
+                         document); 
+     return done;
      
    }); 
    
     test("Delete document and check ", () {  
+      
+      Future done = new Future.delayed(testDuration,
+          () => true);
       
       void checkCompleter(){
         
@@ -431,7 +484,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Delete document Check 1 Failed');
         }
         
         /* Check the document has been deleted */
@@ -455,7 +508,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Delete document Check 2 Failed');
         }
         
         /* Get the documents id and re-get the document to check correctness */
@@ -467,6 +520,7 @@ main() {
         wilting.resultCompletion = checkCompleter;
         wilting.deleteDocument(putId3,
                                returnedDocRev);
+        
       }
       
       wilting.resultCompletion = completer;
@@ -476,12 +530,15 @@ main() {
       document.version = 1;
       document.author = "Its me again";
       wilting.putDocument(putId3,
-                          document);    
+                          document);
+      return done;
       
     }); 
     
     test("Copy document and check ", () {  
       
+      Future done = new Future.delayed(testDuration,
+          () => true);
       
       void checkCompleter(){
         
@@ -498,7 +555,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Copy Document Check 1 Failed');
         }
         
         /* Check the document has been retrieved*/
@@ -522,7 +579,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Copy Document Check Failed');
         }
         
         /* Get the copied document */
@@ -536,12 +593,16 @@ main() {
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
       wilting.copyDocument(putId,
-                           copyId);    
+                           copyId);
+      return done;
       
     }); 
    
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {  
+      
+      Future done = new Future.delayed(testDuration,
+          () => true);
       
       void completer(){
         
@@ -558,7 +619,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          return;
+          throw new WiltException('WILT::Raw HTTP Request Failed');
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
@@ -570,32 +631,10 @@ main() {
       wilting.resultCompletion = completer;
       String url = "/$databaseName/$putId";
       wilting.httpRequest(url);
+      return done;
       
     });
     
-  }
-  /* Group 4 - Single documents and database methods */
-  group("4. Single documents and database - ", () {
-  
-    
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, 
-        port,
-        scheme);
-   
-
-   /* Login if we are using authentication */
-    if ( userName != null ) {
-      
-      wilting.login(userName,
-                    userPassword);
-    }
-    
-   /* Run the tests */
-   myTests(wilting);
-   
-   
-   
   });
   
 }

@@ -7,8 +7,11 @@
 
 /* Global configuration, please edit */
 
+/* Test duration */
+final int TEST_DURATION = 500; // ms
+
 /* CouchDB server */
-String hostName = "141.196.22.210";
+String hostName = "proxy.dicerati.com";
 String port = "8080";
 String scheme = "http://"; 
 
