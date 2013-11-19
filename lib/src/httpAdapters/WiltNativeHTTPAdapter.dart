@@ -74,6 +74,13 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     
     /* Set the response headers */
     _allResponseHeaders = req.getAllResponseHeaders();
+    
+    /**
+     * Call the completer, in an error condition we might not get to
+     * whenComplete on the request
+     */
+    completion;
+   
   }
   
   /**
