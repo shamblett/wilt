@@ -368,7 +368,7 @@ main() {
        
      }); 
     
-      solo_test("Bulk Insert Supplied Keys", () {  
+      test("Bulk Insert Supplied Keys", () {  
        
        Wilt wilting = new Wilt(hostName, 
            port,
