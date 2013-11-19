@@ -88,8 +88,26 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     jsonResponse.error = false;
     jsonResponse.errorCode = 0;
     jsonResponse.responseText = response.responseText;
-    Map couchResp = JSON.decode(response.responseText);
-    if ( couchResp.containsKey('error')) {
+    var couchResp;
+    try {
+      
+      couchResp = JSON.decode(response.responseText);
+    
+    } catch (e) {
+      
+      jsonResponse.error = true;
+      jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+      errorAsJson.error = "JSON Decode Error";
+      errorAsJson.reason = "None";
+      jsonResponse.jsonCouchResponse = errorAsJson;
+      /* Set the response headers */
+      _allResponseHeaders = response.getAllResponseHeaders();
+      return;
+      
+    }
+    
+    
+    if ( (couchResp is Map) && (couchResp.containsKey('error')) ) {
       
       jsonResponse.error = true;
       jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
