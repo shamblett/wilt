@@ -43,7 +43,7 @@ main() {
     String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
     
-    skip_test("Create Database not authorized", () {  
+    test("Create Database not authorized", () {  
       
       /* Create a local wilting for this test */
       Wilt localWilting = new Wilt(hostName, 
@@ -53,7 +53,7 @@ main() {
       localWilting.login('freddy',
                          'freddypass');
  
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = localWilting.completionResponse;
         try {
@@ -64,14 +64,13 @@ main() {
           expect(errorResponse.error, equals('unauthorized'));
           expect(errorResponse.reason, equals('Name or password is incorrect.'));
           expect(res.errorCode, equals(401));
-          return;
         }
         
-      }
+      });
       
-      localWilting.resultCompletion = completer;
+      localWilting.resultCompletion = completer;    
       localWilting.createDatabase(databaseName);
-      expectAsync0(completer);
+      
     });
     
     /* Create the test database */
@@ -504,31 +503,7 @@ main() {
       
     }); 
     
-    test("Copy document and check ", () {  
-      
-      var checkCompleter = expectAsync0((){
-        
-        jsonobject.JsonObject res = wilting.completionResponse;
-        try {
-          expect(res.error, isFalse);
-        } catch(e) {
-          
-          logMessage("WILT::Copy document and check copy");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
-          logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
-          logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
-          logMessage("WILT::Status code is $statusCode");
-          
-        }
-        
-        /* Check the document has been retrieved*/
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
-        expect(returnedDocId, equals(copyId));
-      });
+    test("Copy document", () {  
       
       var completer = expectAsync0((){
         
@@ -537,7 +512,7 @@ main() {
           expect(res.error, isFalse);
         } catch(e) {
           
-          logMessage("WILT::Copy document and check");
+          logMessage("WILT::Copy document");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
@@ -548,12 +523,10 @@ main() {
           
         }
         
-        /* Get the copied document */
+        /* Check the copied document */
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         String copyDocId = successResponse.id;
         expect(copyDocId, equals(copyId));
-        wilting.resultCompletion = checkCompleter;
-        wilting.getDocument(copyId);
         
       });
       
@@ -563,6 +536,8 @@ main() {
                            copyId);
       
     }); 
+    
+    
    
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {  
