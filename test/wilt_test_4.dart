@@ -17,14 +17,25 @@ import 'wilt_test_config.dart';
 main() {  
   
   useHtmlConfiguration();
-  //useInteractiveHtmlConfiguration();
   
+  /* Group 5 - Information tests */
+  group("Information/Utilty Tests - ", () {
   
-void myTests(Wilt wilting) {
+    /* Create our Wilt */
+    Wilt wilting = new Wilt(hostName, 
+        port,
+        scheme);
+   
+   /* Login if we are using authentication */
+    if ( userName != null ) {
+      
+      wilting.login(userName,
+                    userPassword);
+    }
     
     test("Get Session Information", () {  
     
-      void completer(){
+      var completer = expectAsync0((){
       
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -45,7 +56,7 @@ void myTests(Wilt wilting) {
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       
-      }
+      });
     
       wilting.resultCompletion = completer;
       wilting.getSession();
@@ -54,7 +65,7 @@ void myTests(Wilt wilting) {
   
     test("Get Stats Information", () {  
     
-     void completer(){
+      var completer = expectAsync0((){
       
       jsonobject.JsonObject res = wilting.completionResponse;
       try {
@@ -74,17 +85,17 @@ void myTests(Wilt wilting) {
       
       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
       expect(successResponse.couchdb, isNotNull);
-    }
+      
+    });
     
     wilting.resultCompletion = completer;
     wilting.getStats();
-     
-    
+       
     }); 
   
     test("Get All DB's", () {  
     
-      void completer(){
+      var completer = expectAsync0((){
       
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -105,7 +116,7 @@ void myTests(Wilt wilting) {
       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
       expect(successResponse.contains(databaseName), isTrue);
      
-      }
+      });
     
       wilting.resultCompletion = completer;
       wilting.getAllDbs();
@@ -114,7 +125,7 @@ void myTests(Wilt wilting) {
   
     test("Generate Ids", () {  
     
-      void completer(){
+      var completer = expectAsync0((){
       
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -135,31 +146,12 @@ void myTests(Wilt wilting) {
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
       
-      }
+      });
     
       wilting.resultCompletion = completer;
       wilting.generateIds(10);
         
     }); 
-  }  
-
-  /* Group 5 - Information tests */
-  group("Information/Utilty Tests - ", () {
-  
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, 
-        port,
-        scheme);
-   
-   /* Login if we are using authentication */
-    if ( userName != null ) {
-      
-      wilting.login(userName,
-                    userPassword);
-    }
-    
-   /* Run the tests */
-   myTests(wilting);
    
   });
  

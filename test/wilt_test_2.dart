@@ -7,7 +7,7 @@
 
 library wilt_test;
 
-import 'dart:async';
+//import 'dart:async';
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';  
@@ -17,10 +17,10 @@ import 'wilt_test_config.dart';
 main() {  
   
   useHtmlConfiguration();
+ 
   
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
-  
     
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 
@@ -38,13 +38,10 @@ main() {
     /*Group setup */   
     String docId = null;
     String docRev = null;
-    String putId = 'myuniqueid';
-    String putId2 = 'myuniqueid2';
-    String putId3 = 'myuniqueid3';
+    String putId = 'mytestid';
+    String putId2 = 'mytestid2';
+    String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
-    
-    /* Duration for callback test */
-    Duration testDuration = new Duration(milliseconds:TEST_DURATION);
     
     skip_test("Create Database not authorized", () {  
       
@@ -74,16 +71,13 @@ main() {
       
       localWilting.resultCompletion = completer;
       localWilting.createDatabase(databaseName);
-      
+      expectAsync0(completer);
     });
     
     /* Create the test database */
     test("Create Test Database", () {  
       
-      Future done = new Future.delayed(testDuration,
-                                       () => true);
-      
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -98,27 +92,23 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Create Test Database Failed');
+          
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
-        
-      }
+        expect(successResponse.ok, isTrue);        
+      });
     
       wilting.resultCompletion = completer;
       wilting.createDatabase(databaseName);
-      return done;
+      
       
     });
     
     /* Create a database then delete it */ 
     test("Delete Database", () {  
       
-      Future done = new Future.delayed(testDuration,
-          () => true);
-      
-      void checkCompleter(){
+      var checkCompleter = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -133,12 +123,12 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Delete Database Failed Check.');
+         
        }
        
-     }
+     });
       
-     void completer(){
+      var completer = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -153,7 +143,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Delete Database Failed.');
+         
        }
        
        /* Now delete it */
@@ -161,25 +151,21 @@ main() {
        wilting.deleteDatabase("wiltdeleteme");
        
        
-     }
+     });
      
      wilting.resultCompletion = completer;
      wilting.createDatabase("wiltdeleteme");
-     return done;
          
    });
   
   
   test("HEAD null URL", () { 
     
-    Future done = new Future.delayed(testDuration,
-        () => true);
-    
-    void completer(){
+    var completer = expectAsync0((){
       
       jsonobject.JsonObject res = wilting.completionResponse;
       try {
-      expect(res.error, isFalse);
+      expect(res.error, isTrue);
       } catch(e) {
         
         logMessage("WILT::Head null URL");
@@ -190,25 +176,21 @@ main() {
         logMessage("WILT::Reason is $reasonText");
         int statusCode = res.errorCode;
         logMessage("WILT::Status code is $statusCode");
-        throw new WiltException('WILT::HEAD null URL Failed.');
+        
       }
       
-    }
+    });
     
     wilting.resultCompletion = completer;
     wilting.db = databaseName;
     wilting.head(null);
-    return done;
      
     
   }); 
   
    test("Create document(POST) and check", () {  
-        
-     Future done = new Future.delayed(testDuration,
-         () => true);
      
-    void checkCompleter(){
+     var checkCompleter = expectAsync0((){
       
       jsonobject.JsonObject res = wilting.completionResponse;
       try {
@@ -223,7 +205,7 @@ main() {
         logMessage("WILT::Reason is $reasonText");
         int statusCode = res.errorCode;
         logMessage("WILT::Status code is $statusCode");
-        throw new WiltException('WILT::Create document(POST) Check Failed');
+       
       }
       
       /* Check the documents parameters */
@@ -234,9 +216,10 @@ main() {
       expect(successResponse.title, equals("Created by a Post Request"));
       expect(successResponse.version, equals(1));
       expect(successResponse.author, equals("Me"));
-    }
+      
+    });
     
-    void completer(){
+     var completer = expectAsync0((){
       
       jsonobject.JsonObject res = wilting.completionResponse;
       try {
@@ -253,7 +236,7 @@ main() {
         logMessage("WILT::Status code is $statusCode");
         String responseHeaders = wilting.responseHeaders;
         logMessage("WILT::Response headers are $responseHeaders");
-        throw new WiltException('WILT::Create document(POST) Failed');
+        
       }
       
       /* Get the documents id and re-get the document to check correctness */
@@ -264,7 +247,7 @@ main() {
       wilting.resultCompletion = checkCompleter;
       wilting.getDocument(docId);
      
-    }
+    });
     
     wilting.resultCompletion = completer;
     wilting.db = databaseName;
@@ -273,17 +256,12 @@ main() {
     document.version = 1;
     document.author = "Me";
     wilting.postDocument(document);
-    return done;
     
   }); 
    
-   test("Create document(PUT) and check", () {  
+  test("Create document(PUT) and check", () {  
      
-     
-     Future done = new Future.delayed(testDuration,
-         () => true);
-     
-     void checkCompleter(){
+    var checkCompleter = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -298,7 +276,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Create document(PUT) Check Failed');
+         
        }
        
        /* Check the documents parameters */
@@ -310,9 +288,9 @@ main() {
        expect(successResponse.version, equals(2));
        expect(successResponse.author, equals("Me again"));
        
-     }
+     });
      
-     void completer(){
+    var completer = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -327,7 +305,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Create document(PUT) Failed');
+         
        }
        
        /* Get the documents id and re-get the document to check correctness */
@@ -338,7 +316,7 @@ main() {
        wilting.resultCompletion = checkCompleter;
        wilting.getDocument(putId);
        
-     }
+     });
      
      wilting.resultCompletion = completer;
      wilting.db = databaseName;
@@ -348,16 +326,12 @@ main() {
      document.author = "Me again";
      wilting.putDocument(putId,
                          document);   
-     return done;
      
    }); 
    
-    test("Update document and check", () {  
-     
-      Future done = new Future.delayed(testDuration,
-          () => true);
+   test("Update document and check", () {  
       
-    void checkUpdater(){
+     var checkUpdater = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -372,7 +346,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Update Document Check 3 Failed');
+        
        }
        
        /* Check the documents parameters */
@@ -382,9 +356,9 @@ main() {
        String returnedDocRev = successResponse.rev;    
        expect(returnedDocRev, isNot(equals(docRev)));
        
-     }
+     });
     
-     void checkCompleter(){
+     var checkCompleter = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -399,7 +373,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Update Document Check 2 Failed');
+        
        }
        
        /* Check the documents parameters */
@@ -422,9 +396,9 @@ main() {
        wilting.putDocumentString(putId2,
                                  docString);
       
-     }
+     });
      
-     void completer(){
+     var completer = expectAsync0((){
        
        jsonobject.JsonObject res = wilting.completionResponse;
        try {
@@ -439,7 +413,7 @@ main() {
          logMessage("WILT::Reason is $reasonText");
          int statusCode = res.errorCode;
          logMessage("WILT::Status code is $statusCode");
-         throw new WiltException('WILT::Update Document Check 1 Failed');
+         
        }
        
        /* Get the documents id and re-get the document to check correctness */
@@ -450,7 +424,7 @@ main() {
        wilting.resultCompletion = checkCompleter;
        wilting.getDocument(putId2);
      
-     }
+     });
      
      wilting.resultCompletion = completer;
      wilting.db = databaseName;
@@ -460,16 +434,12 @@ main() {
      document.author = "Me also";
      wilting.putDocument(putId2,
                          document); 
-     return done;
      
    }); 
    
-    test("Delete document and check ", () {  
+   test("Delete document and check ", () {  
       
-      Future done = new Future.delayed(testDuration,
-          () => true);
-      
-      void checkCompleter(){
+     var checkCompleter = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -484,16 +454,16 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Delete document Check 1 Failed');
+         
         }
         
         /* Check the document has been deleted */
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         String putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
-      }
+      });
       
-      void completer(){
+     var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -508,7 +478,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Delete document Check 2 Failed');
+          
         }
         
         /* Get the documents id and re-get the document to check correctness */
@@ -521,7 +491,7 @@ main() {
         wilting.deleteDocument(putId3,
                                returnedDocRev);
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -531,16 +501,12 @@ main() {
       document.author = "Its me again";
       wilting.putDocument(putId3,
                           document);
-      return done;
       
     }); 
     
     test("Copy document and check ", () {  
       
-      Future done = new Future.delayed(testDuration,
-          () => true);
-      
-      void checkCompleter(){
+      var checkCompleter = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -555,16 +521,16 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Copy Document Check 1 Failed');
+          
         }
         
         /* Check the document has been retrieved*/
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, equals(copyId));
-      }
+      });
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -579,32 +545,29 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Copy Document Check Failed');
+          
         }
         
         /* Get the copied document */
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         String copyDocId = successResponse.id;
-        expect(copyDocId, equals(copyDocId));
+        expect(copyDocId, equals(copyId));
         wilting.resultCompletion = checkCompleter;
         wilting.getDocument(copyId);
-      }
+        
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
       wilting.copyDocument(putId,
                            copyId);
-      return done;
       
     }); 
    
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {  
       
-      Future done = new Future.delayed(testDuration,
-          () => true);
-      
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -619,19 +582,18 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          throw new WiltException('WILT::Raw HTTP Request Failed');
+         
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       String url = "/$databaseName/$putId";
       wilting.httpRequest(url);
-      return done;
       
     });
     

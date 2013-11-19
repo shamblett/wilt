@@ -16,13 +16,29 @@ import 'wilt_test_config.dart';
 main() {  
   
   useHtmlConfiguration();
-  //useInteractiveHtmlConfiguration();
   
-  void myTests(Wilt wilting) {
+  /* Group 5 - Bulk documents */
+  group("5. Bulk Documents - ", () {
+    
+    
+    /* Create our Wilt */
+    Wilt wilting = new Wilt(hostName, 
+        port,
+        scheme);
+   
+   /* Login if we are using authentication */
+    if ( userName != null ) {
+      
+      wilting.login(userName,
+                    userPassword);
+    }
     
     /* Setup */
-    String putId = 'myuniqueid';
-    String putId2 = 'myuniqueid2';
+    String docId = null;
+    String docRev = null;
+    String putId = 'mytestid';
+    String putId2 = 'mytestid2';
+    String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
     
     test("Get All Docs  - Include docs", () {  
@@ -32,7 +48,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -55,7 +71,7 @@ main() {
         expect(successResponse.rows[1].id, equals(copyId));
         expect(successResponse.rows[2].id, equals(putId));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -71,7 +87,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -100,7 +116,7 @@ main() {
         }
         expect(count, equals(1));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -117,7 +133,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -146,7 +162,7 @@ main() {
         }
         expect(count, equals(2));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -162,7 +178,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -191,7 +207,7 @@ main() {
         }
         expect(count, equals(4));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -207,7 +223,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -236,7 +252,7 @@ main() {
         }
         expect(count, equals(2));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -255,7 +271,7 @@ main() {
           scheme);
       
       
-      void completer(){
+      var completer = expectAsync0((){
         
         jsonobject.JsonObject res = wilting.completionResponse;
         try {
@@ -284,7 +300,7 @@ main() {
         }
         expect(count, equals(2));
         
-      }
+      });
       
       wilting.resultCompletion = completer;
       wilting.db = databaseName;
@@ -304,7 +320,7 @@ main() {
            scheme);
        
        
-       void completer(){
+       var completer = expectAsync0((){
          
          jsonobject.JsonObject res = wilting.completionResponse;
          try {
@@ -327,7 +343,7 @@ main() {
          expect(successResponse[1].ok, isTrue);
          expect(successResponse[2].ok, isTrue);
          
-       }
+       });
        
        wilting.resultCompletion = completer;
        wilting.db = databaseName;
@@ -352,14 +368,14 @@ main() {
        
      }); 
     
-      test("Bulk Insert Supplied Keys", () {  
+      solo_test("Bulk Insert Supplied Keys", () {  
        
        Wilt wilting = new Wilt(hostName, 
            port,
            scheme);
        
        
-       void completer(){
+       var completer = expectAsync0((){
          
          jsonobject.JsonObject res = wilting.completionResponse;
          try {
@@ -382,7 +398,7 @@ main() {
          expect(successResponse[1].id, equals("MyBulkId2")); 
          expect(successResponse[2].id, equals("MyBulkId3"));
          
-       }
+       });
        
        wilting.resultCompletion = completer;
        wilting.db = databaseName;
@@ -413,26 +429,6 @@ main() {
        wilting.bulkString(docs);    
        
      });  
-  }
-  
-  /* Group 5 - Bulk documents */
-  group("5. Bulk Documents - ", () {
-    
-    
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, 
-        port,
-        scheme);
-   
-   /* Login if we are using authentication */
-    if ( userName != null ) {
-      
-      wilting.login(userName,
-                    userPassword);
-    }
-    
-   /* Run the tests */
-   myTests(wilting);
    
   });
     
