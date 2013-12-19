@@ -7,16 +7,13 @@
 
 /* Global configuration, please edit */
 
-/* Test duration */
-final int TEST_DURATION = 500; // ms
-
 /* CouchDB server */
-String hostName = "proxy.dicerati.com";
-String port = "8080";
-String scheme = "http://"; 
+final String hostName = "xxxx";
+final String port = "xxxx";
+final String scheme = "http://"; 
 
 /* Database to use for testing */
-String databaseName = 'wilttest';
+final String databaseName = 'wilttest';
 
 /**
  *  Authentication, set as you wish, note leaving userName and password null 
@@ -24,6 +21,6 @@ String databaseName = 'wilttest';
  *  used.
  */
 
-String userName = null;
-String userPassword = null;
+final String userName = '';
+final String userPassword = '';
 
