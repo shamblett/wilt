@@ -26,6 +26,8 @@ Once the configuration is done the test suite can be run.
 The browser output itself should simply list the tests run, all of which should be passed, if there
 is any other output such as stack traces etc. then something has failed.
 
+Note that test 24 will be marked as ERROR, this is expected.
+
 Lines that start with 'WILT:', are log lines from the test code itself when an error has been detected, hopefully
 the log entry should contain enogh information to allow debugging of the specific test.
 
