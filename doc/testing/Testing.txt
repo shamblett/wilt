@@ -3,11 +3,10 @@ Methodology
 ===========
 
 Wilt comes with a suite of unit tests that can be found under the test directory.
-The tests themselves use the unittest library which needs to be installed and are split not
-only into the usual groups and tests in groups but also across seperate Dart files.
+The tests themselves use the unittest library which needs to be installed and are split 
+into test groups.
 
-The test suite contains 4 separate dart files, wilt_test_1 to wilt_test_4 each with its
-own html file and a wilt_test_config file. This allows them to be run by being selected in
+The test suite contains 1 dart file, wilt_test.dart. This is run by being selected in
 the Dart editor and selecting run in Dartium.
 
 Please read the CouchDB_and_CORS document in docs before proceeding further unless you already have
@@ -22,11 +21,7 @@ The contents should be self explanatory, set the parameters to suit your environ
 Running the tests
 ==================
 
-Once the configuration is done the individual test suites can be run, start with wilt_test_1.
-This tests construction and parameter validation and as such does not actually make any calls to
-the CouchDB instance, this test should always work. Then proceed to wilt_test_2, 3 and 4 in order.
-Output takes the form of the basic HTML test output(useHtmlConfiguration), this allows debugging
-to be done on individual tests if needed.
+Once the configuration is done the test suite can be run.
 
 The browser output itself should simply list the tests run, all of which should be passed, if there
 is any other output such as stack traces etc. then something has failed.
@@ -37,42 +32,14 @@ the log entry should contain enogh information to allow debugging of the specifi
 The test suit can't be repeated until the database it creates is deleted.
 
 You can use this test suite to check correctness of your browser and CouchDB environment as well as the
-Wilt code. If wilt_test_2 passes your environment should be OK.
+Wilt code.
 
 Results
 ========
-
-Excepting any errors thrown in the output HTML or in the Dart editor you should see the following in 
-your CouchDB instance.
-
-1. wilt_test_1 does not interact with CouchDB so there should be nothing to see.
-
-2. wilt_test_2 creates the test database('wilttest' by default if not changed in the configuration file) and
-   at the end of the run it should contain 4 documents, one with a CouchDB generated id, and 3 others with id's of
-   mycopyid, mytestid and mytestid2. Note that the first test in this group will fail witha DOM exception, this
-   is supposed to happen.
-   
-3. wilt_test_3 should then add to the database the following documents, 3 more with CouchDB generated id's
-   and MyBulkId1, 2 and 3.
-   
-4. wilt_test_4 interacts with CouchDB but tests only utility functions such as getAllDbs and as such no more entries are
-   created in the test database.
    
 In total you should have one new database containing 10 documents in total. Note if this is the case then any output
 in the Dart editor described above(excepting WILT: lines) can be ignored as the tests have passed.
 
-Pitfalls
-=========
-
-The tests in wilt_test_2 and 3 depend on tests above them, i.e wilt_test_2 creates the test database, if this fails
-everything fails, or if the next test can't find the test database in CouchDB it will fail. Some tests rely on
-previously created documents and obviously will fail if this step fails.
-
-This is not optimal by any means but I've run these test several times in my testing environment and mostly they
-operate OK, if you get failures on the first run delete the database and try again. 
-
-You can of course step through each test individually by marking the test to be a 'solo_test', run it, then unmark it, 
-mark the next one and so on. This is the safest way to run the test suite but could take some time.
 
 
 
