@@ -73,7 +73,7 @@
  * Cookie authentication is not supported and may never be due to restrictions on getting the 
  * Set-Cookie header from an AJAX request in the browser.
  * 
- * 
+ * Document attachments of the 'standalone' type only are supported.
  */
 
 part of wilt;
@@ -357,14 +357,16 @@ class Wilt {
    * the current database added.
    */
   put( String url, 
-       String data) {
+       String data,
+       [Map headers]) {
       
       url = _conditionUrl(url);
     
     /* Perform the put */
     _httpRequest('PUT', 
                 url,
-                data:data);
+                data:data,
+                headers:headers);
     
    }
   
@@ -831,6 +833,171 @@ class Wilt {
     
     _httpRequest('GET', 
                  url);
+    
+  }
+  
+  /**
+   * Create an attachment on an existing document.
+   * contentType is in the form of a mime type e.g. 'image/png'
+   */
+  void createAttachment(String docId,
+                        String attachmentName,
+                        String rev,
+                        String contentType,
+                        List<int> payload) {
+    
+   /**
+    * Check all parameters are supplied
+    */
+    if ( docId == null ) {
+    
+      throw new WiltException('createAttachment() expects a document id.');
+    }
+    
+    if ( attachmentName == null ) {
+      
+      throw new WiltException('createAttachment() expects an attachment name.');
+    }
+    
+    if ( rev == null ) {
+      
+      throw new WiltException('createAttachment() expects a revision.');
+    }
+    
+    if ( contentType == null ) {
+      
+      throw new WiltException('createAttachment() expects a content type.');
+    }
+    
+    if ( payload == null ) {
+      
+      throw new WiltException('createAttachment() expects a payload.');
+    }
+    
+    /**
+     * Set the headers
+     */
+    Map headers = new Map<String,String>();
+    headers["Content-Type"] = contentType;
+    headers["Content-Length"] =  payload.length;
+    
+    /**
+     * Make the PUT request
+     */
+    String url = "$docId/$attachmentName?rev=$rev";
+    put(url,
+        payload.toString(),
+        headers);
+    
+  }
+  
+  /**
+   * Update an attachment on an existing document.
+   * contentType is in the form of a mime type e.g. 'image/png'
+   */
+  void updateAttachment(String docId,
+                        String attachmentName,
+                        String rev,
+                        String contentType,
+                        List<int> payload) {
+    
+   /**
+    * Check all parameters are supplied
+    */
+    if ( docId == null ) {
+    
+      throw new WiltException('updateAttachment() expects a document id.');
+    }
+    
+    if ( attachmentName == null ) {
+      
+      throw new WiltException('updateAttachment() expects an attachment name.');
+    }
+    
+    if ( rev == null ) {
+      
+      throw new WiltException('updateAttachment() expects a revision.');
+    }
+    
+    if ( contentType == null ) {
+      
+      throw new WiltException('updateAttachment() expects a content type.');
+    }
+    
+    if ( payload == null ) {
+      
+      throw new WiltException('updateAttachment() expects a payload.');
+    }
+    
+    /**
+     * Set the headers
+     */
+    Map headers = new Map<String,String>();
+    headers["Content-Type"] = contentType;
+    headers["Content-Length"] =  payload.length;
+    
+    /**
+     * Make the PUT request
+     */
+    String url = "$docId/$attachmentName?rev=$rev";
+    put(url,
+        payload.toString(),
+        headers);
+    
+  }
+  
+  /**
+   * Delete an attachment
+   */
+  void deleteAttachment(String docId,
+                        String attachmentName,
+                        String rev) {
+    
+    if ( docId == null ) {
+      
+      throw new WiltException('deleteAttachment() expects a document id.');
+    }
+    
+    if ( attachmentName == null ) {
+      
+      throw new WiltException('deleteAttachment() expects an attachment name.');
+    }
+    
+    if ( rev == null ) {
+      
+      throw new WiltException('deleteAttachment() expects a revision.');
+    }
+    
+    /**
+     * Make the DELETE request
+     */
+    String url = "$docId/$attachmentName?rev=$rev";
+    delete(url);
+    
+  }
+  
+  /**
+   * Get an attachment
+   */
+  void getAttachment(String docId,
+                     String attachmentName) {
+    
+    
+    if ( docId == null ) {
+      
+      throw new WiltException('getAttachment() expects a document id.');
+    }
+    
+    if ( attachmentName == null ) {
+      
+      throw new WiltException('getAttachment() expects an attachment name.');
+    }
+    
+    /**
+     * Make the GET request
+     */
+    String url = "$docId/$attachmentName";
+    get(url);
     
   }
   
