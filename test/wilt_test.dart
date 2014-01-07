@@ -386,6 +386,303 @@ main() {
       
     }); 
     
+    test("Create Attachment no Doc Id", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.createAttachment(null,
+                                 'name',
+                                 'rev',
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    }); 
+    
+    test("Create Attachment no Attachment name", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.createAttachment('id',
+                                 null,
+                                 'rev',
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Create Attachment no Revision", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.createAttachment('id',
+                                 'name',
+                                 null,
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Create Attachment no Content Type", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.createAttachment('id',
+                                 'name',
+                                 'rev',
+                                 null,
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Create Attachment no Payload", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.createAttachment('id',
+                                 'name',
+                                 'rev',
+                                 'image/png',
+                                 null);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Update Attachment no Doc Id", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.updateAttachment(null,
+                                 'name',
+                                 'rev',
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    }); 
+    
+    test("Update Attachment no Attachment name", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.updateAttachment('id',
+                                 null,
+                                 'rev',
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Update Attachment no Revision", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.updateAttachment('id',
+                                 'name',
+                                 null,
+                                 'image/png',
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Update Attachment no Content Type", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        List payload = [10,20,30];
+        wilting.updateAttachment('id',
+                                 'name',
+                                 'rev',
+                                 null,
+                                 payload);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Update Attachment no Payload", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.updateAttachment('id',
+                                 'name',
+                                 'rev',
+                                 'image/png',
+                                 null);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Delete Attachment no Doc Id", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.deleteAttachment(null,
+                                 'name',
+                                 'rev');
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    }); 
+    
+    test("Delete Attachment no Attachment name", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.deleteAttachment('id',
+                                 null,
+                                 'rev');
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Delete Attachment no Revision", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.deleteAttachment('id',
+                                 'name',
+                                 null);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    test("Get Attachment no Doc Id", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.getAttachment(null,
+                              'name');
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    }); 
+    
+    test("Get Attachment no Attachment name", () {  
+      
+      Wilt wilting = new Wilt(hostName, 
+          port,
+          scheme);
+      
+      void wrapper(){
+        
+        wilting.getAttachment('id',
+                                 null);
+      }
+      
+      expect(wrapper,throwsA(new isInstanceOf<WiltException>()));
+      
+      
+    });
+    
+    
   });
   
   /* Group 4 - Single documents and database methods */
