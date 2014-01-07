@@ -394,7 +394,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.createAttachment(null,
                                  'name',
                                  'rev',
@@ -415,7 +415,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.createAttachment('id',
                                  null,
                                  'rev',
@@ -436,7 +436,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.createAttachment('id',
                                  'name',
                                  null,
@@ -457,7 +457,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.createAttachment('id',
                                  'name',
                                  'rev',
@@ -498,7 +498,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.updateAttachment(null,
                                  'name',
                                  'rev',
@@ -511,7 +511,7 @@ main() {
       
     }); 
     
-    test("Update Attachment no Attachment name", () {  
+   test("Update Attachment no Attachment name", () {  
       
       Wilt wilting = new Wilt(hostName, 
           port,
@@ -519,7 +519,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.updateAttachment('id',
                                  null,
                                  'rev',
@@ -532,7 +532,7 @@ main() {
       
     });
     
-    test("Update Attachment no Revision", () {  
+   test("Update Attachment no Revision", () {  
       
       Wilt wilting = new Wilt(hostName, 
           port,
@@ -540,7 +540,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.updateAttachment('id',
                                  'name',
                                  null,
@@ -553,7 +553,7 @@ main() {
       
     });
     
-    test("Update Attachment no Content Type", () {  
+   test("Update Attachment no Content Type", () {  
       
       Wilt wilting = new Wilt(hostName, 
           port,
@@ -561,7 +561,7 @@ main() {
       
       void wrapper(){
         
-        List payload = [10,20,30];
+        String payload = 'Hello';
         wilting.updateAttachment('id',
                                  'name',
                                  'rev',
@@ -1788,6 +1788,168 @@ main() {
       wilting.resultCompletion = completer;
       wilting.generateIds(10);
         
+    }); 
+   
+  });
+  
+  /* Group 6 - Attachment tests */
+  group("Attachment Tests - ", () {
+  
+    /* Create our Wilt */
+    Wilt wilting = new Wilt(hostName, 
+        port,
+        scheme);
+   
+   /* Login if we are using authentication */
+    if ( userName != null ) {
+      
+      wilting.login(userName,
+                    userPassword);
+    }
+    
+    /* Globals for the group */
+    String testDocRev = null;
+    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'+
+                      'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr'+
+                      'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'+
+                      '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+    
+    test("Create document(PUT) for attachment tests and check", () {  
+      
+      var checkCompleter = expectAsync0((){
+        
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+          expect(res.error, isFalse);
+        } catch(e) {
+          
+          logMessage("WILT::Create Document(PUT) for attachment tests and check updated");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          
+        }
+        
+        /* Check the documents parameters */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        expect(returnedDocId, 'attachmentTestDoc');
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
+        expect(successResponse.version, equals(1));
+        expect(successResponse.author, equals("SJH"));
+        
+      });
+      
+      var completer = expectAsync0((){
+        
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+          expect(res.error, isFalse);
+        } catch(e) {
+          
+          logMessage("WILT::Test Put Document for attachment tests and check");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          
+        }
+        
+        /* Get the documents id and re-get the document to check correctness */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String putDocId = successResponse.id;
+        expect(putDocId, equals('attachmentTestDoc'));
+        /* Now get the document and check it */
+        wilting.resultCompletion = checkCompleter;
+        wilting.getDocument('attachmentTestDoc');
+        
+      });
+      
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      document.title = "Created by a Put Request for attachment testing";
+      document.version = 1;
+      document.author = "SJH";
+      wilting.putDocument('attachmentTestDoc',
+          document);   
+      
+    }); 
+    
+    test("Create Attachment", () {  
+    
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Create Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.createAttachment('attachmentTestDoc',
+                               'attachmentName',
+                               '1-de1e5c83461c770693969b492288cb8f',//testDocRev,
+                               'image/png',
+                               pngImage);
+    
+    }); 
+  
+    solo_test("Get Attachment", () {  
+      
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Get Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.getAttachment('attachmentTestDoc',
+                            'attachmentName');
+                               
+    
     }); 
    
   });

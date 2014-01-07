@@ -844,7 +844,7 @@ class Wilt {
                         String attachmentName,
                         String rev,
                         String contentType,
-                        List<int> payload) {
+                        String payload) {
     
    /**
     * Check all parameters are supplied
@@ -879,14 +879,14 @@ class Wilt {
      */
     Map headers = new Map<String,String>();
     headers["Content-Type"] = contentType;
-    headers["Content-Length"] =  payload.length;
+    headers["Content-Length"] =  payload.length.toString();
     
     /**
      * Make the PUT request
      */
     String url = "$docId/$attachmentName?rev=$rev";
     put(url,
-        payload.toString(),
+        payload,
         headers);
     
   }
@@ -899,7 +899,7 @@ class Wilt {
                         String attachmentName,
                         String rev,
                         String contentType,
-                        List<int> payload) {
+                        String payload) {
     
    /**
     * Check all parameters are supplied
@@ -941,7 +941,7 @@ class Wilt {
      */
     String url = "$docId/$attachmentName?rev=$rev";
     put(url,
-        payload.toString(),
+        payload,
         headers);
     
   }
