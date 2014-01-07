@@ -879,7 +879,6 @@ class Wilt {
      */
     Map headers = new Map<String,String>();
     headers["Content-Type"] = contentType;
-    headers["Content-Length"] =  payload.length.toString();
     
     /**
      * Make the PUT request
@@ -934,7 +933,6 @@ class Wilt {
      */
     Map headers = new Map<String,String>();
     headers["Content-Type"] = contentType;
-    headers["Content-Length"] =  payload.length;
     
     /**
      * Make the PUT request
