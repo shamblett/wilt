@@ -1913,13 +1913,13 @@ main() {
       wilting.db = databaseName;
       wilting.createAttachment('attachmentTestDoc',
                                'attachmentName',
-                               '1-de1e5c83461c770693969b492288cb8f',//testDocRev,
+                               testDocRev,
                                'image/png',
                                pngImage);
     
     }); 
   
-    solo_test("Get Attachment", () {  
+    test("Get Attachment", () {  
       
       var completer = expectAsync0((){
       
@@ -1941,6 +1941,10 @@ main() {
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
+        String payload = res.responseText;
+        expect(payload, equals(pngImage));
+        String contentType = successResponse.contentType;
+        expect(contentType, equals('image/png'));
       
       });
     

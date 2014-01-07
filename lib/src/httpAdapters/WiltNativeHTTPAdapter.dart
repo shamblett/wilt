@@ -95,45 +95,63 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     jsonResponse.error = false;
     jsonResponse.errorCode = 0;
     jsonResponse.responseText = response.responseText;
-    var couchResp;
-    try {
-      
-      couchResp = JSON.decode(response.responseText);
-    
-    } catch (e) {
-      
-      jsonResponse.error = true;
-      jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
-      errorAsJson.error = "JSON Decode Error";
-      errorAsJson.reason = "None";
-      jsonResponse.jsonCouchResponse = errorAsJson;
-      /* Set the response headers */
-      _allResponseHeaders = response.getAllResponseHeaders();
-      return;
-      
-    }
-    
-    
-    if ( (couchResp is Map) && (couchResp.containsKey('error')) ) {
-      
-      jsonResponse.error = true;
-      jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
-      errorAsJson.error = "CouchDb Error";
-      errorAsJson.reason = couchResp['reason'];
-      jsonResponse.jsonCouchResponse = errorAsJson;
-      /* Set the response headers */
-      _allResponseHeaders = response.getAllResponseHeaders();
-      return;
-      
-    }
     
     /**
-     * Success response
+     * Check the header, if application/json try and decode it,
+     * otherwise its just raw data, ie an attachment.
      */
-    if ( _method != 'HEAD') {
-      jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+    if ( response.responseHeaders.containsValue('application/json')) {
+    
+      var couchResp;
+      try {
+      
+        couchResp = JSON.decode(response.responseText);
+    
+      } catch (e) {
+      
+        jsonResponse.error = true;
+        jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+        errorAsJson.error = "JSON Decode Error";
+        errorAsJson.reason = "None";
+        jsonResponse.jsonCouchResponse = errorAsJson;
+        /* Set the response headers */
+       _allResponseHeaders = response.getAllResponseHeaders();
+        return;
+      
+      }
+      
+      if ( (couchResp is Map) && (couchResp.containsKey('error')) ) {
+        
+        jsonResponse.error = true;
+        jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+        errorAsJson.error = "CouchDb Error";
+        errorAsJson.reason = couchResp['reason'];
+        jsonResponse.jsonCouchResponse = errorAsJson;
+        /* Set the response headers */
+        _allResponseHeaders = response.getAllResponseHeaders();
+        return;
+        
+      }
+      
+      /**
+       * Success response
+       */
+      if ( _method != 'HEAD') {
+        jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+        jsonResponse.jsonCouchResponse = successAsJson;
+      } 
+      
+      
+    } else {
+      
+      jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+      successAsJson.ok = true;
+      successAsJson.contentType = response.responseHeaders['content-type'];
       jsonResponse.jsonCouchResponse = successAsJson;
-    }  
+      
+    }
+    
+    
     /* Set the response headers */
     _allResponseHeaders = response.getAllResponseHeaders();
     
