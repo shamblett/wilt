@@ -98,8 +98,20 @@ class WiltChangeNotification {
     _client.onLoad.listen((event) {
       
       String response = _client.responseText;
-      Map dbChange = JSON.decode(response);
-      processDbChange(dbChange);
+      
+      try {
+        
+        Map dbChange = JSON.decode(response);
+        processDbChange(dbChange);
+        
+      } catch (e) {
+        
+        /**
+         * Just report this for now
+         */
+        print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
+        
+      }
       
     });
     
@@ -108,6 +120,11 @@ class WiltChangeNotification {
      */
     _client.onError.listen((event) {
       
+      /**
+       * Just report this for now
+       */
+      print( "WiltChangeNotification::MonitorChanges HTTP Error Status code is ${_client.status}");
+      print( "WiltChangeNotification::MonitorChanges HTTP Error Status text is ${_client.statusText}");
       
     });
     
