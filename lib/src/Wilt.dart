@@ -1054,7 +1054,10 @@ class Wilt {
    * Change notification start, see the WiltChangeNotification class for more details
    * If a database name is not supplied the currently selected database is used.
    */
-  bool startChangeNotification([String databaseName = null,
+  bool startChangeNotification(String host,
+                               String port,
+                               String scheme,
+                               [String databaseName = null,
                                 WiltChangeNotificationParameters parameters = null]) {
     
     String name;
@@ -1068,7 +1071,10 @@ class Wilt {
     }
     
     changeNotificationDbName = name;
-    _changeNotifier = new WiltChangeNotification(name,
+    _changeNotifier = new WiltChangeNotification(host,
+                                                 port,
+                                                 scheme,
+                                                 name,
                                                  parameters);
   }
   
@@ -1083,7 +1089,8 @@ class Wilt {
   }
   
   /**
-   * Change the parameter set for change notifications
+   * Change the parameter set for change notifications.
+   * Note that host, port and scheme are not changeable.
    */
   bool resetChangeNotification(WiltChangeNotificationParameters parameters,
                                [ String databaseName = null] ) {
@@ -1106,7 +1113,10 @@ class Wilt {
     
     changeNotificationDbName = name;
     stopChangeNotification();
-    return startChangeNotification(name,
+    return startChangeNotification(host,
+                                   port,
+                                   scheme,
+                                   name,
                                    parameters);
     
   }
