@@ -15,6 +15,8 @@ import 'package:json_object/json_object.dart' as jsonobject;
 part 'src/Wilt.dart';
 part 'src/WiltException.dart';
 part 'src/WiltUserUtils.dart';
+part 'src/WiltChangeNotificationParameters.dart';
+part 'src/WiltChangeNotification.dart';
 part 'src/httpAdapters/WiltHTTPAdapter.dart';
 part 'src/httpAdapters/WiltNativeHTTPAdapter.dart';
 

@@ -84,26 +84,32 @@ class Wilt {
    *  URL constant for CouchDB SESSION function 
    */
   static const String SESSION = "/_session";
+  
   /**
    *  URL constant for CouchDB STATS function 
    */
   static const String STATS = "/_stats";
+  
   /**
    *  URL constant for CouchDB ALLDBS function 
    */
   static const String ALLDBS = "/_all_dbs";
+  
   /**
    *  URL constant for CouchDB ALLDOCS function 
    */
   static const String ALLDOCS = "/_all_docs";
+  
   /**
    *  URL constant for CouchDB BULKDOCS function 
    */
   static const String BULKDOCS = "/_bulk_docs";
+  
   /**
    *  URL constant for CouchDB UUID function 
    */
   static const String UUIDS ="/_uuids";
+  
   
   /**
    *
@@ -112,6 +118,7 @@ class Wilt {
    * 
    */
   static const String AUTH_BASIC = 'basic';
+  
   /**
    * No authentication 
    */
@@ -121,23 +128,37 @@ class Wilt {
    * Database name
    */
   String db = null; 
+  /**
+   * Change notification database name
+   */
+  String changeNotificationDbName = null;
+  
   /** 
    * Host name
    */
   String host = null;  
+  
   /** 
    * Port number
    */
-  String port = null;      
+  String port = null; 
+  
   /** 
    * HTTP scheme
    */
-  String scheme = null;            
+  String scheme = null; 
+  
   /**
    * HTTP Adapter
    */
   WiltNativeHTTPAdapter _httpAdapter = null;
   String get responseHeaders => _httpAdapter.responseHeaders;
+  
+  /**
+   * Change notification 
+   */
+  WiltChangeNotification _changeNotifier = null;
+  
   /**
    * Completion function 
    */
@@ -1028,6 +1049,68 @@ class Wilt {
     get(url);
     
   }
+  
+  /**
+   * Change notification start, see the WiltChangeNotification class for more details
+   * If a database name is not supplied the currently selected database is used.
+   */
+  bool startChangeNotification([String databaseName = null,
+                                WiltChangeNotificationParameters parameters = null]) {
+    
+    String name;
+    if ( databaseName == null ) {
+      
+      name = db;
+      
+    } else {
+      
+      name = databaseName;
+    }
+    
+    changeNotificationDbName = name;
+    _changeNotifier = new WiltChangeNotification(name,
+                                                 parameters);
+  }
+  
+  /**
+   * Change notification stop, see the WiltChangeNotification class for more details
+   */
+  void stopChangeNotification() {
+    
+    _changeNotifier = null;
+    changeNotificationDbName = null;
+    
+  }
+  
+  /**
+   * Change the parameter set for change notifications
+   */
+  bool resetChangeNotification(WiltChangeNotificationParameters parameters,
+                               [ String databaseName = null] ) {
+    
+
+    if ( parameters == null ) {
+      
+      throw new WiltException('resetChangeNotification() expects a parameter set.');
+    }
+    
+    String name;
+    if ( databaseName == null ) {
+      
+      name = changeNotificationDbName;
+      
+    } else {
+      
+      name = databaseName;
+    }
+    
+    changeNotificationDbName = name;
+    stopChangeNotification();
+    return startChangeNotification(name,
+                                   parameters);
+    
+  }
+  
   
   /**
    * Authentication.
