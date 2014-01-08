@@ -839,6 +839,7 @@ class Wilt {
   /**
    * Create an attachment on an existing document.
    * contentType is in the form of a mime type e.g. 'image/png'
+   * If the document needs to be created as well as the attachment set the rev to ''
    */
   void createAttachment(String docId,
                         String attachmentName,
@@ -883,7 +884,12 @@ class Wilt {
     /**
      * Make the PUT request
      */
-    String url = "$docId/$attachmentName?rev=$rev";
+    String url;
+    if ( rev != '' ) {
+      url = "$docId/$attachmentName?rev=$rev";
+    } else {
+      url = "$docId/$attachmentName";
+    }
     put(url,
         payload,
         headers);

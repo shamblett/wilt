@@ -1814,6 +1814,11 @@ main() {
                       'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'+
                       '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
     
+    String pngImageUpdate = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'+
+        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr'+
+        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'+
+        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
+    
     test("Create document(PUT) for attachment tests and check", () {  
       
       var checkCompleter = expectAsync0((){
@@ -1919,8 +1924,37 @@ main() {
     
     }); 
   
-    test("Get Attachment", () {  
+    test("Get Create Attachment", () {  
       
+      var revisionCompleter = expectAsync0((){
+        
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+          expect(res.error, isFalse);
+        } catch(e) {
+          
+          logMessage("WILT::Get Create Attachment Get Document Revision");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          
+        }
+        
+        /* Check the documents parameters */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        expect(returnedDocId, 'attachmentTestDoc');
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
+        expect(successResponse.version, equals(1));
+        expect(successResponse.author, equals("SJH"));
+        
+      });
+
       var completer = expectAsync0((){
       
         jsonobject.JsonObject res = wilting.completionResponse;
@@ -1928,7 +1962,7 @@ main() {
         expect(res.error, isFalse);
         } catch(e) {
         
-          logMessage("WILT::Get Attachment Failed");
+          logMessage("WILT::Get Create Attachment Failed");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
@@ -1941,10 +1975,14 @@ main() {
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         String payload = res.responseText;
         expect(payload, equals(pngImage));
         String contentType = successResponse.contentType;
         expect(contentType, equals('image/png'));
+        /* Now get the document to get the new revision  */
+        wilting.resultCompletion = revisionCompleter;
+        wilting.getDocument('attachmentTestDoc');
       
       });
     
@@ -1955,7 +1993,202 @@ main() {
                                
     
     }); 
-   
+    
+    test("Update Attachment", () {  
+      
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Update Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+        
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.updateAttachment('attachmentTestDoc',
+                               'attachmentName',
+                               testDocRev,
+                               'image/png',
+                               pngImageUpdate);
+    
+    }); 
+    
+    test("Get Update Attachment", () {  
+      
+      var revisionCompleter = expectAsync0((){
+        
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+          expect(res.error, isFalse);
+        } catch(e) {
+          
+          logMessage("WILT::Get Update Attachment Get Document Revision");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          
+        }
+        
+        /* Check the documents parameters */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        expect(returnedDocId, 'attachmentTestDoc');
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
+        expect(successResponse.version, equals(1));
+        expect(successResponse.author, equals("SJH"));
+        
+      });
+
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Get Update Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        String payload = res.responseText;
+        expect(payload, equals(pngImageUpdate));
+        String contentType = successResponse.contentType;
+        expect(contentType, equals('image/png'));
+        /* Now get the document to get the new revision  */
+        wilting.resultCompletion = revisionCompleter;
+        wilting.getDocument('attachmentTestDoc');
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.getAttachment('attachmentTestDoc',
+                            'attachmentName');
+                               
+    
+    }); 
+    
+    test("Create Attachment With New Document", () {  
+      
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Create Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.createAttachment('anotherAttachmentTestDoc',
+                               'attachmentName',
+                               '',
+                               'image/png',
+                               pngImage);
+    
+    });
+    
+    test("Create Attachment Invalid Revision", () {  
+      
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.error, isTrue);
+        int statusCode = res.errorCode;
+        expect(statusCode, equals(409));
+
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.createAttachment('attachmentTestDoc',
+                               'anotherAttachmentName',
+                               '1-bb48c078f0fac47234e774a7a51b86ac',
+                               'image/png',
+                               pngImage);
+    
+    }); 
+    
+    test("Delete Attachment", () {  
+      
+      var completer = expectAsync0((){
+      
+        jsonobject.JsonObject res = wilting.completionResponse;
+        try {
+        expect(res.error, isFalse);
+        } catch(e) {
+        
+          logMessage("WILT::Delete Attachment Failed");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+          return;
+        }
+        
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+      
+      });
+    
+      wilting.resultCompletion = completer;
+      wilting.db = databaseName;
+      wilting.deleteAttachment('attachmentTestDoc',
+                               'attachmentName',
+                               testDocRev);
+    
+    }); 
+    
   });
   
 }
