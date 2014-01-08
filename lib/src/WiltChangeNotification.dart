@@ -99,6 +99,14 @@ class WiltChangeNotification {
       
       String response = _client.responseText;
       
+      /**
+       * Ignore heartbeat responses
+       */
+      if ( response.length == 1 ) return;
+      
+      /**
+       * Proces the change notification
+       */
       try {
         
         Map dbChange = JSON.decode(response);
