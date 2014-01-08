@@ -1729,6 +1729,67 @@ main() {
     wilting.getStats();
        
     }); 
+    
+    test("Get Database Information - default", () {  
+      
+      var completer = expectAsync0((){
+      
+      jsonobject.JsonObject res = wilting.completionResponse;
+      try {
+      expect(res.error, isFalse);
+      } catch(e) {
+        
+        logMessage("WILT::Get Database Information - default");
+        jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+        String errorText = errorResponse.error;
+        logMessage("WILT::Error is $errorText");
+        String reasonText = errorResponse.reason;
+        logMessage("WILT::Reason is $reasonText");
+        int statusCode = res.errorCode;
+        logMessage("WILT::Status code is $statusCode");
+        return;
+     }
+      
+      jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+      expect(successResponse.db_name, equals(databaseName));
+      
+    });
+    
+    wilting.resultCompletion = completer;
+    wilting.db = databaseName;
+    wilting.getDatabaseInfo();
+       
+    }); 
+
+    solo_test("Get Database Information - specified", () {  
+      
+      var completer = expectAsync0((){
+      
+      jsonobject.JsonObject res = wilting.completionResponse;
+      try {
+      expect(res.error, isFalse);
+      } catch(e) {
+        
+        logMessage("WILT::Get Database Information - specified");
+        jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+        String errorText = errorResponse.error;
+        logMessage("WILT::Error is $errorText");
+        String reasonText = errorResponse.reason;
+        logMessage("WILT::Reason is $reasonText");
+        int statusCode = res.errorCode;
+        logMessage("WILT::Status code is $statusCode");
+        return;
+     }
+      
+      jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+      expect(successResponse.db_name, equals(databaseName));
+      
+    });
+    
+    wilting.resultCompletion = completer;
+    wilting.getDatabaseInfo(databaseName);
+       
+    }); 
   
     test("Get All DB's", () {  
     

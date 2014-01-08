@@ -801,6 +801,30 @@ class Wilt {
   }
   
   /**
+   * Get information about a database
+   */
+  void getDatabaseInfo([String dbName = null]) {
+    
+    String name;
+    if ( dbName != null ) {
+      
+      name = dbName;
+      
+    } else {
+      
+      name = db;
+    }
+    
+    String url = "/$name";
+    
+    /**
+     * Perform the GET
+     */
+    _httpRequest('GET', 
+                  url);
+    
+  }
+  /**
    * Get current session information from CouchDB
    */
   void getSession() {
