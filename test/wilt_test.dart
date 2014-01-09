@@ -2252,4 +2252,30 @@ main() {
     
   });
   
+  /* Group 7 - Change Notifications */
+  group("Change Notification Tests - ", () {
+  
+    /* Create our Wilt */
+    Wilt wilting = new Wilt(hostName, 
+        port,
+        scheme);
+   
+   /* Login if we are using authentication */
+    if ( userName != null ) {
+      
+      wilting.login(userName,
+                    userPassword);
+    }
+    
+    /* Globals for the group */
+    
+    test("Start Change Notification", () {  
+      
+      wilting.startChangeNotification();
+      
+    });
+    
+  });
+  
+  
 }

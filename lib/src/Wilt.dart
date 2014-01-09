@@ -127,7 +127,10 @@ class Wilt {
   /** 
    * Database name
    */
-  String db = null; 
+  String _db = null; 
+  String get db => _db;
+  set db(String name) => _db = name;
+  
   /**
    * Change notification database name
    */
@@ -136,17 +139,20 @@ class Wilt {
   /** 
    * Host name
    */
-  String host = null;  
+  String _host = null;  
+  String get host => _host;
   
   /** 
    * Port number
    */
-  String port = null; 
+  String _port = null; 
+  String get port => _port;
   
   /** 
    * HTTP scheme
    */
-  String scheme = null; 
+  String _scheme = null; 
+  String get scheme => _scheme;
   
   /**
    * HTTP Adapter
@@ -177,9 +183,9 @@ class Wilt {
    */
   String authenticationType = AUTH_NONE;   
    
-  Wilt(this.host,
-       this.port,
-       this.scheme,
+  Wilt(this._host,
+       this._port,
+       this._scheme,
        [this.clientCompletion = null]) {
     
     if ( (host == null) ||
@@ -813,7 +819,7 @@ class Wilt {
     
     /* Null the current database if we have deleted it */
     if ( name == db )
-      db = null;
+      _db = null;
     
     /* Perform the delete */
     _httpRequest('DELETE', 
@@ -1054,10 +1060,7 @@ class Wilt {
    * Change notification start, see the WiltChangeNotification class for more details
    * If a database name is not supplied the currently selected database is used.
    */
-  bool startChangeNotification(String host,
-                               String port,
-                               String scheme,
-                               [String databaseName = null,
+  bool startChangeNotification([String databaseName = null,
                                 WiltChangeNotificationParameters parameters = null]) {
     
     String name;
@@ -1071,9 +1074,9 @@ class Wilt {
     }
     
     changeNotificationDbName = name;
-    _changeNotifier = new _WiltChangeNotification(host,
-                                                 port,
-                                                 scheme,
+    _changeNotifier = new _WiltChangeNotification(_host,
+                                                 _port,
+                                                 _scheme,
                                                  name,
                                                  parameters);
   }
@@ -1113,10 +1116,7 @@ class Wilt {
     
     changeNotificationDbName = name;
     stopChangeNotification();
-    return startChangeNotification(host,
-                                   port,
-                                   scheme,
-                                   name,
+    return startChangeNotification(name,
                                    parameters);
     
   }
