@@ -4,7 +4,8 @@
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
  *
- * Change notification parameters, defaults taken from the CouchDB API documents
+ * Change notification parameters, defaults taken from the CouchDB API documents.
+ * 
  */
 
 part of wilt;

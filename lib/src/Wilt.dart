@@ -157,7 +157,7 @@ class Wilt {
   /**
    * Change notification 
    */
-  WiltChangeNotification _changeNotifier = null;
+  _WiltChangeNotification _changeNotifier = null;
   
   /**
    * Completion function 
@@ -1071,7 +1071,7 @@ class Wilt {
     }
     
     changeNotificationDbName = name;
-    _changeNotifier = new WiltChangeNotification(host,
+    _changeNotifier = new _WiltChangeNotification(host,
                                                  port,
                                                  scheme,
                                                  name,

@@ -16,6 +16,7 @@ part 'src/Wilt.dart';
 part 'src/WiltException.dart';
 part 'src/WiltUserUtils.dart';
 part 'src/WiltChangeNotificationParameters.dart';
+part 'src/WiltChangeNotificationEvent.dart';
 part 'src/WiltChangeNotification.dart';
 part 'src/httpAdapters/WiltHTTPAdapter.dart';
 part 'src/httpAdapters/WiltNativeHTTPAdapter.dart';

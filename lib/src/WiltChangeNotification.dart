@@ -11,16 +11,16 @@
  * When destroyed, change notification ceases.
  * 
  * 
- * The resulting notifications are turned into notification classes and streamed to
- * the notification consumer. 
+ * The resulting notifications are turned into notification events and streamed to
+ * the notification consumer. See the WiltChangeNotificationEvent class for furter details
  * 
  * CouchDb is initialized to supply the change notification stream as a continuous stream
- * with regular heartbeats
+ * with regular heartbeats.
  */
 
 part of wilt;
 
-class WiltChangeNotification {
+class _WiltChangeNotification {
   
   /**
    * Parameters set
@@ -52,7 +52,7 @@ class WiltChangeNotification {
    */ 
   html.HttpRequest _client = null;
   
-  WiltChangeNotification(this._host,
+  _WiltChangeNotification(this._host,
                          this._port,
                          this._scheme,
                          [this._dbName,
@@ -90,56 +90,68 @@ class WiltChangeNotification {
     /**
      * Open the request
      */
-    _client.open('GET', url);
+    try {
+      
+      _client.open('GET', url);
     
-    /**
-     * Listener for changes
-     */
-    _client.onLoad.listen((event) {
-      
-      String response = _client.responseText;
-      
       /**
-       * Ignore heartbeat responses
-       */
-      if ( response.length == 1 ) return;
+      * Listener for changes
+      */
+      _client.onLoad.listen((event) {
       
-      /**
-       * Proces the change notification
-       */
-      try {
-        
-        Map dbChange = JSON.decode(response);
-        processDbChange(dbChange);
-        
-      } catch (e) {
-        
+        String response = _client.responseText;
+      
         /**
-         * Just report this for now
-         */
-        print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
-        
-      }
+        * Ignore heartbeat responses
+        */
+        if ( response.length == 1 ) return;
       
-    });
+        /**
+        * Proces the change notification
+        */
+        try {
+        
+          Map dbChange = JSON.decode(response);
+          processDbChange(dbChange);
+        
+        } catch (e) {
+        
+          /**
+          * Recoverable error, send the client an error event
+          */
+          print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
+        
+        }
+      
+      });
     
-    /**
-     * Listener for errors
-     */
-    _client.onError.listen((event) {
+      /**
+      * Listener for errors
+      */
+      _client.onError.listen((event) {
+      
+        /**
+        * Unrecoverable error, send the client an abort event
+        */
+        print( "WiltChangeNotification::MonitorChanges HTTP Error Status code is ${_client.status}");
+        print( "WiltChangeNotification::MonitorChanges HTTP Error Status text is ${_client.statusText}");
+      
+      });
+    
+      /**
+      * Send the request
+      */
+      _client.send();
+      
+    } catch (e) {
       
       /**
-       * Just report this for now
+       * Unrecoverable error, send the client an abort event
        */
-      print( "WiltChangeNotification::MonitorChanges HTTP Error Status code is ${_client.status}");
-      print( "WiltChangeNotification::MonitorChanges HTTP Error Status text is ${_client.statusText}");
+      print("WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.ToString()}");
       
-    });
-    
-    /**
-     * Send the request
-     */
-    _client.send();
+      
+    }
       
   }
   
