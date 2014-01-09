@@ -12,7 +12,10 @@
  * 
  * 
  * The resulting notifications are turned into notification events and streamed to
- * the notification consumer. See the WiltChangeNotificationEvent class for furter details
+ * the notification consumer. See the WiltChangeNotificationEvent class for further details.
+ * 
+ * The 'limit' parameter of the CouchDB request is set to 1 so as to allow only one
+ * change notification to be recieved at a time.
  * 
  * CouchDb is initialized to supply the change notification stream as a continuous stream
  * with regular heartbeats.
@@ -81,7 +84,7 @@ class _WiltChangeNotification {
                    "feed=continuous"+
                    "&heartbeat=${_parameters.heartbeat}"+
                    "&since=${_parameters.since}"+
-                   "&limit=${_parameters.limit}"+
+                   "&limit=1"+
                    "&descending=${_parameters.descending}"+
                    "&include_docs=${_parameters.includeDocs}";
                    
