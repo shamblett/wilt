@@ -14,11 +14,9 @@
  * The resulting notifications are turned into notification events and streamed to
  * the notification consumer. See the WiltChangeNotificationEvent class for further details.
  * 
- * The 'limit' parameter of the CouchDB request is set to 1 so as to allow only one
- * change notification to be recieved at a time.
  * 
- * CouchDb is initialized to supply the change notification stream as a continuous stream
- * with regular heartbeats.
+ * CouchDb is initialized to supply the change notification stream in 'normal' mode, hence
+ * this class requests the updates manually on a timed basis dependent on the heartberat period.
  */
 
 part of wilt;
@@ -51,9 +49,19 @@ class _WiltChangeNotification {
   String _scheme = null; 
   
   /**
-   * HTTP client
+   * HTTP client TODO
    */ 
   html.HttpRequest _client = null;
+  
+  /**
+   * Timer
+   */
+  Timer _timer = null;
+  
+  /**
+   * Since sequence number
+   */
+  int _sequence = 0;
   
   _WiltChangeNotification(this._host,
                          this._port,
@@ -68,53 +76,56 @@ class _WiltChangeNotification {
       
     }
     
-    monitorChanges();
+    _sequence = _parameters.since;
+    /**
+     * Start the heartbeat timer
+     */
+    Duration heartbeat = new Duration(milliseconds:_parameters.heartbeat);
+    _timer = new Timer.periodic(heartbeat,_requestChanges);
+    
+    /**
+     * Start change notifications
+     */
+    _requestChanges(_timer);
     
   }
   
   /**
-   * Monitor CouchDB in continous mode with a heartbeat
+   *  Request the change notifications
    */
-  void monitorChanges() {
+  void _requestChanges(Timer timer) {
+    
+    /**
+     * Close any existing client and create a new one
+     */
+    _client = null;
+    _client = new html.HttpRequest();
     
     /**
      * Create the URL from the parameters
      */
+    String sequence = _sequence.toString();
     String path = "$_dbName/_changes?"+
-                   "feed=continuous"+
-                   "&heartbeat=${_parameters.heartbeat}"+
-                   "&since=${_parameters.since}"+
-                   "&limit=1"+
+                   "&since=$sequence"+
                    "&descending=${_parameters.descending}"+
                    "&include_docs=${_parameters.includeDocs}";
                    
     String url = "$_scheme$_host:${_port.toString()}/$path";
-    
+   
     /**
      * Open the request
      */
     try {
       
-      _client.open('GET', url);
-    
-      /**
-      * Listener for changes
-      */
-      _client.onLoad.listen((event) {
-      
-        String response = _client.responseText;
-      
-        /**
-        * Ignore heartbeat responses
-        */
-        if ( response.length == 1 ) return;
-      
+      html.HttpRequest.getString(url)
+      ..then((result){
+                
         /**
         * Proces the change notification
         */
         try {
         
-          Map dbChange = JSON.decode(response);
+          Map dbChange = JSON.decode(result);
           processDbChange(dbChange);
         
         } catch (e) {
@@ -125,33 +136,18 @@ class _WiltChangeNotification {
           print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
         
         }
-      
+        
+        
       });
-    
-      /**
-      * Listener for errors
-      */
-      _client.onError.listen((event) {
       
-        /**
-        * Unrecoverable error, send the client an abort event
-        */
-        print( "WiltChangeNotification::MonitorChanges HTTP Error Status code is ${_client.status}");
-        print( "WiltChangeNotification::MonitorChanges HTTP Error Status text is ${_client.statusText}");
       
-      });
-    
-      /**
-      * Send the request
-      */
-      _client.send();
       
     } catch (e) {
       
       /**
        * Unrecoverable error, send the client an abort event
        */
-      print("WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.ToString()}");
+      print("WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}");
       
       
     }
@@ -164,14 +160,27 @@ class _WiltChangeNotification {
    */
   void processDbChange(Map change ) {
       
-    Map document = change['doc'];
-    if ( !change.containsKey('deleted') ) {  
-   
+    /**
+     * Check for an error response TODO
+     */
+    print(change);
+    
+    /**
+     * Update the last sequence number
+     */
+    _sequence = change['last_seq'];
+    
+    /**
+     * Process the result list
+     */
+    List results = change['results'];
+    if ( results.isEmpty) return;
+    
+    results.forEach((var result) {
       
-    } else {
       
-      
-    }
+    });
+    
     
   }
   

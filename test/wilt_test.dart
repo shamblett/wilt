@@ -1761,7 +1761,7 @@ main() {
        
     }); 
 
-    solo_test("Get Database Information - specified", () {  
+    test("Get Database Information - specified", () {  
       
       var completer = expectAsync0((){
       
@@ -2269,8 +2269,9 @@ main() {
     
     /* Globals for the group */
     
-    test("Start Change Notification", () {  
+    solo_test("Start Change Notification", () {  
       
+      wilting.db = databaseName;
       wilting.startChangeNotification();
       
     });

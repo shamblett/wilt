@@ -10,7 +10,7 @@
  * class data, see individual properties for this mapping. Uers should check the 
  * event type property BEFORE accessing any other property.
  * 
- * See each event for a description of its effect.
+ * See each event below for a description of its effect.
  * 
  */
 
@@ -30,7 +30,7 @@ class WiltChangeNotificationEvent {
    * 
    * A document has been deleted
    */
-  static const String Delete = "delete";
+  static const String DELETE = "delete";
   
   /**
    * Decode error event
@@ -41,6 +41,13 @@ class WiltChangeNotificationEvent {
    * the change notification class.
    */
   static const String DECODE_ERROR = "decode";
+  
+  /**
+   * CouchDb error event
+   * 
+   * The change notification recieved from CouchDB indicates an error.
+   */
+  static const String COUCHDB_ERROR = "couch";
   
   /**
    * Abort event
@@ -115,6 +122,22 @@ class WiltChangeNotificationEvent {
   String _httpResponseText = null;
   String get httpResponseText => _httpResponseText;
   
+  /**
+   * Couch error
+   * 
+   * Valid for update and delete
+   */
+  String _couchError = null;
+  String get couchError => _couchError;
+  
+  /**
+   * Couch reason
+   * 
+   * Valid for update and delete
+   */
+  String _couchReason = null;
+  String get couchReason => _couchReason;
+  
   WiltChangeNotificationEvent.update(this._docId,
                                      [this._docRevision,
                                       this._document]);
@@ -127,5 +150,8 @@ class WiltChangeNotificationEvent {
   
   WiltChangeNotificationEvent.abort(this._httpReason,
                                     this._httpStatus);
+  
+  WiltChangeNotificationEvent.couchDbError(this._couchError,
+                                           this._couchReason);
   
 }
