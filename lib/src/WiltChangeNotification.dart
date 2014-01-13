@@ -27,6 +27,8 @@ class _WiltChangeNotification {
    * Parameters set
    */
   WiltChangeNotificationParameters  _parameters = null;
+  WiltChangeNotificationParameters get parameters => _parameters;
+  set parameters(WiltChangeNotificationParameters parameters) => _parameters = parameters;
   
   /**
    * Database name
@@ -49,11 +51,6 @@ class _WiltChangeNotification {
   String _scheme = null; 
   
   /**
-   * HTTP client TODO
-   */ 
-  html.HttpRequest _client = null;
-  
-  /**
    * Timer
    */
   Timer _timer = null;
@@ -62,6 +59,21 @@ class _WiltChangeNotification {
    * Since sequence number
    */
   int _sequence = 0;
+  
+  /**
+   * Paused indicator
+   */
+  bool _paused = false;
+  bool get pause => _paused;
+  set pause(bool flag) => _paused = flag;
+  
+  /**
+   * Change notification stream controller
+   * 
+   * Populated with WiltChangeNotificationEvent events
+   */
+  final _changeNotification = new StreamController();
+  get changeNotification => _changeNotification;
   
   _WiltChangeNotification(this._host,
                          this._port,
@@ -77,6 +89,7 @@ class _WiltChangeNotification {
     }
     
     _sequence = _parameters.since;
+    
     /**
      * Start the heartbeat timer
      */
@@ -94,12 +107,11 @@ class _WiltChangeNotification {
    *  Request the change notifications
    */
   void _requestChanges(Timer timer) {
-    
+     
     /**
-     * Close any existing client and create a new one
+     * If paused return
      */
-    _client = null;
-    _client = new html.HttpRequest();
+    if ( _paused ) return;
     
     /**
      * Create the URL from the parameters
@@ -121,7 +133,7 @@ class _WiltChangeNotification {
       ..then((result){
                 
         /**
-        * Proces the change notification
+        * Process the change notification
         */
         try {
         
@@ -134,7 +146,12 @@ class _WiltChangeNotification {
           * Recoverable error, send the client an error event
           */
           print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
-        
+          WiltChangeNotificationEvent notification = new  
+              WiltChangeNotificationEvent.decodeError(result,
+                                                      e.toString());
+          
+          _changeNotification.add(notification);
+          
         }
         
         
@@ -148,7 +165,10 @@ class _WiltChangeNotification {
        * Unrecoverable error, send the client an abort event
        */
       print("WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}");
+      WiltChangeNotificationEvent notification = new  
+          WiltChangeNotificationEvent.abort(e.toString());
       
+      _changeNotification.add(notification);
       
     }
       
@@ -161,8 +181,20 @@ class _WiltChangeNotification {
   void processDbChange(Map change ) {
       
     /**
-     * Check for an error response TODO
+     * Check for an error response
      */
+    if ( change.containsKey('error') ) {
+      
+      WiltChangeNotificationEvent notification = new  
+          WiltChangeNotificationEvent.couchDbError(change['error'],
+                                                   change['reason']);
+      
+      _changeNotification.add(notification);
+      
+      return;
+      
+    }
+    
     print(change);
     
     /**
@@ -176,7 +208,39 @@ class _WiltChangeNotification {
     List results = change['results'];
     if ( results.isEmpty) return;
     
-    results.forEach((var result) {
+    results.forEach((Map result) {
+      
+      Map changes = result['changes'][0];
+      
+      /**
+       * Check for delete or update
+       */
+      if ( result.containsKey('deleted') ) {
+        
+        WiltChangeNotificationEvent notification = new  
+            WiltChangeNotificationEvent.delete(result['id'],
+                                               changes['rev'],
+                                               result['seq']);
+        
+        _changeNotification.add(notification);
+        
+      } else {
+        
+        jsonobject.JsonObject document = null;
+        if ( changes.containsKey('doc') ) {
+          
+          document = new  jsonobject.JsonObject.fromJsonString(changes['doc']);
+          
+        }
+        WiltChangeNotificationEvent notification = new  
+            WiltChangeNotificationEvent.update(result['id'],
+                                               changes['rev'],
+                                               result['seq'],
+                                               document);
+        
+        _changeNotification.add(notification);
+        
+      }
       
       
     });

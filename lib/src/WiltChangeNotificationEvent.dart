@@ -99,20 +99,12 @@ class WiltChangeNotificationEvent {
   jsonobject.JsonObject get  document => _document;
   
   /**
-   * HTTP status code
+   * Exception string
    * 
-   * Valid for abort
+   * Valid for abort and decode error
    */
-  int _httpStatus = 0;
-  int get httpStatus => _httpStatus;
-  
-  /**
-   * HTTP reason text
-   * 
-   * Valid for abort
-   */
-  String _httpReason = null;
-  String get httpReason => _httpReason;
+  String _exception = null;
+  String get exception => _exception;
   
   /**
    * HTTP response text
@@ -139,17 +131,19 @@ class WiltChangeNotificationEvent {
   String get couchReason => _couchReason;
   
   WiltChangeNotificationEvent.update(this._docId,
-                                     [this._docRevision,
-                                      this._document]);
+                                     this._docRevision,
+                                     this._sequenceNumber,
+                                     [this._document]);
   
   WiltChangeNotificationEvent.delete(this._docId,
-                                     [this._docRevision]);
+                                     this._docRevision,
+                                     this._sequenceNumber);
   
   
-  WiltChangeNotificationEvent.decodeError(this._httpResponseText);
+  WiltChangeNotificationEvent.decodeError(this._httpResponseText,
+                                          String exception);
   
-  WiltChangeNotificationEvent.abort(this._httpReason,
-                                    this._httpStatus);
+  WiltChangeNotificationEvent.abort(String exception);
   
   WiltChangeNotificationEvent.couchDbError(this._couchError,
                                            this._couchReason);

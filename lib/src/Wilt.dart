@@ -166,6 +166,12 @@ class Wilt {
   _WiltChangeNotification _changeNotifier = null;
   
   /**
+   * Change notification event stream
+   */
+  Stream<WiltChangeNotificationEvent> get changeNotification => 
+                                 _changeNotifier.changeNotification.stream; 
+  
+  /**
    * Completion function 
    */
   var clientCompletion = null;
@@ -182,7 +188,7 @@ class Wilt {
    *  Authentication, type
    */
   String authenticationType = AUTH_NONE;   
-   
+    
   Wilt(this._host,
        this._port,
        this._scheme,
@@ -1060,7 +1066,7 @@ class Wilt {
    * Change notification start, see the WiltChangeNotification class for more details
    * If a database name is not supplied the currently selected database is used.
    */
-  bool startChangeNotification([String databaseName = null,
+  void startChangeNotification([String databaseName = null,
                                 WiltChangeNotificationParameters parameters = null]) {
     
     String name;
@@ -1093,34 +1099,42 @@ class Wilt {
   
   /**
    * Change the parameter set for change notifications.
-   * Note that host, port and scheme are not changeable.
+   * Note that database name, host, port and scheme are not changeable.
    */
-  bool resetChangeNotification(WiltChangeNotificationParameters parameters,
-                               [ String databaseName = null] ) {
+  void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
     
 
     if ( parameters == null ) {
       
-      throw new WiltException('resetChangeNotification() expects a parameter set.');
+      throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
     }
     
-    String name;
-    if ( databaseName == null ) {
+    if ( _changeNotifier != null ) {
       
-      name = changeNotificationDbName;
-      
-    } else {
-      
-      name = databaseName;
+      throw new WiltException('updateChangeNotificationParameters() no change notifier.');
     }
     
-    changeNotificationDbName = name;
-    stopChangeNotification();
-    return startChangeNotification(name,
-                                   parameters);
+    _changeNotifier.parameters = parameters;
     
   }
   
+  /**
+   * Pause change notifications
+   */
+  void pauseChangeNotification() {
+    
+    _changeNotifier.pause = true;
+    
+  }
+  
+  /**
+   * Restart change notifications after a pause
+   */
+  void restartChangeNotifications() {
+    
+    _changeNotifier.pause = false;
+    
+  }
   
   /**
    * Authentication.
