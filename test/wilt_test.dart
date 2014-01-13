@@ -7,6 +7,7 @@
 
 library wilt_test;
 
+import 'dart:async';
 
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
@@ -2253,7 +2254,7 @@ main() {
   });
   
   /* Group 7 - Change Notifications */
-  group("Change Notification Tests - ", () {
+  solo_group("Change Notification Tests - ", () {
   
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 
@@ -2267,16 +2268,143 @@ main() {
                     userPassword);
     }
     
-    /* Globals for the group */
-    
-    solo_test("Start Change Notification", () {  
+    test("Start Change Notification", () {  
       
       wilting.db = databaseName;
-      wilting.startChangeNotification();
+      void wrapper() {
+        
+        wilting.startChangeNotification();
+        
+      }
+      
+      expect(wrapper,returnsNormally);
+      
+    });
+    
+    test("Check Change Notifications", () {  
+      
+      int count = 0;
+      
+      var completer = expectAsync0((){
+        
+        wilting.stopChangeNotification();
+        expect(count,12);
+        
+      });
+      
+      wilting.changeNotification.listen((e) {
+          
+        count++;  
+        if ( e.docId == 'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
+        if ( e.docId == 'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
+        if ( e.docId == 'anotherAttachmentTestDoc') completer();
+          
+      });
+      
+    });
+    
+    test("Start Change Notification With Docs", () {  
+      
+      wilting.db = databaseName;
+      WiltChangeNotificationParameters parameters = new WiltChangeNotificationParameters();
+      parameters.includeDocs = true;
+      void wrapper() {
+        
+        wilting.startChangeNotification(parameters);
+        
+      }
+      
+      expect(wrapper,returnsNormally);
+      
+    });
+    
+    test("Check Change Notifications With Docs", () {  
+      
+      int count = 0;
+      
+      var completer = expectAsync0((){
+        
+        expect(count,12);
+        
+      });
+      
+      wilting.changeNotification.listen((e) {
+          
+        count++;  
+        if ( e.docId == 'mytestid2') {
+          
+          expect(e.type, WiltChangeNotificationEvent.UPDATE);
+          jsonobject.JsonObject document = e.document;
+          expect(document.title, "Created by a Put Request for updating ");
+          expect(document.version, 4);
+          expect(document.author,"Me also and again");
+          
+        }
+        if ( e.docId == 'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
+        if ( e.docId == 'anotherAttachmentTestDoc') completer();
+          
+      });
+      
+    });
+    
+    test("Notification Pause", () {  
+      
+      int count = 0;
+      
+      var completer = expectAsync0((){
+        
+        expect(count,3);
+        wilting.pauseChangeNotifications();
+        
+      });
+      
+      wilting.changeNotification.listen((e) {
+          
+        count++;  
+        expect(e.type,WiltChangeNotificationEvent.LAST_SEQUENCE);
+        if ( count == 3 ) completer();
+          
+      });
+      
+    });
+    
+    test("Check Notification Pause", () {  
+    
+      int resLength = -1;
+      
+      var completer = expectAsync0((){
+      
+      expect(wilting.changeNotificationsPaused, true);
+      
+      });
+    
+      completer();
+    
+    });
+    
+    test("Notification Restart", () {  
+      
+      int count = 0;
+      
+      var completer = expectAsync0((){
+        
+        expect(wilting.changeNotificationsPaused, false);
+        expect(count,3);
+        wilting.stopChangeNotification();
+        
+      });
+      
+      wilting.restartChangeNotifications();
+      wilting.changeNotification.listen((e) {
+          
+        count++;  
+        expect(e.type,WiltChangeNotificationEvent.LAST_SEQUENCE);
+        if ( count == 3 ) completer();
+          
+      });
       
     });
     
   });
-  
   
 }

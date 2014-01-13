@@ -36,7 +36,7 @@ class WiltChangeNotificationParameters {
    * Period in milliseconds between notification requests to CouchDB
    * Be sensible with this, 1 second between requests is a good minimum.
    */
-  int _heartbeat = 5000;
+  int _heartbeat = 2000;
   int get heartbeat => _heartbeat;
   set heartbeat(int period) => _heartbeat = period;
   

@@ -59,6 +59,15 @@ class WiltChangeNotificationEvent {
   static const String ABORT = "abort";
   
   /**
+   * Last sequence number event
+   * 
+   * Sent by CouchDb when there are no changes as such but we have asked for notifications,
+   * only the last sequence number is returned.
+   * 
+   */
+  static const String LAST_SEQUENCE = "sequence";
+  
+  /**
    * Type
    * 
    * Valid for all events
@@ -69,7 +78,7 @@ class WiltChangeNotificationEvent {
   /**
    * Sequence Number
    * 
-   * Valid for update and delete
+   * Valid for update, delete and sequence
    */
   int _sequenceNumber = 0;
   int get sequenceNumber => _sequenceNumber;
@@ -133,19 +142,45 @@ class WiltChangeNotificationEvent {
   WiltChangeNotificationEvent.update(this._docId,
                                      this._docRevision,
                                      this._sequenceNumber,
-                                     [this._document]);
+                                     [this._document]) {
+    
+    _type = UPDATE;
+    
+  }
   
   WiltChangeNotificationEvent.delete(this._docId,
                                      this._docRevision,
-                                     this._sequenceNumber);
+                                     this._sequenceNumber){
+                                       
+    _type = DELETE;
+                                       
+                                     }
   
   
   WiltChangeNotificationEvent.decodeError(this._httpResponseText,
-                                          String exception);
+                                          this._exception) {
+    
+    _type = DECODE_ERROR;
+    
+  }
   
-  WiltChangeNotificationEvent.abort(String exception);
+  WiltChangeNotificationEvent.abort(this._exception) {
+    
+    _type = ABORT;
+    
+  }
   
   WiltChangeNotificationEvent.couchDbError(this._couchError,
-                                           this._couchReason);
+                                           this._couchReason) {
+    
+    _type = COUCHDB_ERROR;
+    
+  }
+  
+ WiltChangeNotificationEvent.sequence(this._sequenceNumber) {
+    
+    _type = LAST_SEQUENCE;
+    
+  }
   
 }

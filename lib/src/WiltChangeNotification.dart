@@ -72,7 +72,7 @@ class _WiltChangeNotification {
    * 
    * Populated with WiltChangeNotificationEvent events
    */
-  final _changeNotification = new StreamController();
+  final _changeNotification = new StreamController.broadcast();
   get changeNotification => _changeNotification;
   
   _WiltChangeNotification(this._host,
@@ -195,8 +195,6 @@ class _WiltChangeNotification {
       
     }
     
-    print(change);
-    
     /**
      * Update the last sequence number
      */
@@ -206,7 +204,17 @@ class _WiltChangeNotification {
      * Process the result list
      */
     List results = change['results'];
-    if ( results.isEmpty) return;
+    if ( results.isEmpty) {
+      
+      
+      WiltChangeNotificationEvent notification = new  
+          WiltChangeNotificationEvent.sequence(_sequence);
+      
+      _changeNotification.add(notification);
+      
+      return;
+      
+    }
     
     results.forEach((Map result) {
       
@@ -227,9 +235,9 @@ class _WiltChangeNotification {
       } else {
         
         jsonobject.JsonObject document = null;
-        if ( changes.containsKey('doc') ) {
+        if ( result.containsKey('doc') ) {
           
-          document = new  jsonobject.JsonObject.fromJsonString(changes['doc']);
+          document = new  jsonobject.JsonObject.fromMap(result['doc']);
           
         }
         WiltChangeNotificationEvent notification = new  
@@ -248,5 +256,31 @@ class _WiltChangeNotification {
     
   }
   
+  /**
+   * Stop change notifications
+   */
+  void stopNotifications() {
+    
+    _timer.cancel();
+    
+  }
+  
+  /**
+   * Restart change notifications
+   */
+  void restartChangeNotifications() {
+    
+    /**
+     * Start the heartbeat timer
+     */
+    Duration heartbeat = new Duration(milliseconds:_parameters.heartbeat);
+    _timer = new Timer.periodic(heartbeat,_requestChanges);
+    
+    /**
+     * Start change notifications
+     */
+    _requestChanges(_timer);
+    
+  }
                           
 }

@@ -167,9 +167,16 @@ class Wilt {
   
   /**
    * Change notification event stream
+   * 
+   * This is a broadcast stream so can support more than one listener.
+   * 
    */
   Stream<WiltChangeNotificationEvent> get changeNotification => 
-                                 _changeNotifier.changeNotification.stream; 
+                                 _changeNotifier.changeNotification.stream;
+  /**
+   * Change notification paused state
+   */
+  bool get changeNotificationsPaused => _changeNotifier.pause;
   
   /**
    * Completion function 
@@ -1066,8 +1073,8 @@ class Wilt {
    * Change notification start, see the WiltChangeNotification class for more details
    * If a database name is not supplied the currently selected database is used.
    */
-  void startChangeNotification([String databaseName = null,
-                                WiltChangeNotificationParameters parameters = null]) {
+  void startChangeNotification([WiltChangeNotificationParameters parameters = null,
+                                String databaseName = null]) {
     
     String name;
     if ( databaseName == null ) {
@@ -1092,6 +1099,7 @@ class Wilt {
    */
   void stopChangeNotification() {
     
+    _changeNotifier.stopNotifications();
     _changeNotifier = null;
     changeNotificationDbName = null;
     
@@ -1099,6 +1107,7 @@ class Wilt {
   
   /**
    * Change the parameter set for change notifications.
+   * 
    * Note that database name, host, port and scheme are not changeable.
    */
   void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
@@ -1109,7 +1118,7 @@ class Wilt {
       throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
     }
     
-    if ( _changeNotifier != null ) {
+    if ( _changeNotifier == null ) {
       
       throw new WiltException('updateChangeNotificationParameters() no change notifier.');
     }
@@ -1121,9 +1130,10 @@ class Wilt {
   /**
    * Pause change notifications
    */
-  void pauseChangeNotification() {
+  void pauseChangeNotifications() {
     
     _changeNotifier.pause = true;
+    _changeNotifier.stopNotifications();
     
   }
   
@@ -1133,6 +1143,7 @@ class Wilt {
   void restartChangeNotifications() {
     
     _changeNotifier.pause = false;
+    _changeNotifier.restartChangeNotifications();
     
   }
   
