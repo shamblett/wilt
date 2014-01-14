@@ -59,7 +59,8 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
  /**
   *  All response headers 
   */
- String allResponseHeaders = null;
+ String _allResponseHeaders = null;
+ String get responseHeaders =&gt; _allResponseHeaders;
 
  /**
   * Error completion
@@ -84,7 +85,14 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
    }
    
    /* Set the response headers */
-   allResponseHeaders = req.getAllResponseHeaders();
+   _allResponseHeaders = req.getAllResponseHeaders();
+   
+   /**
+    * Call the completer, in an error condition we might not get to
+    * whenComplete on the request
+    */
+   completion;
+  
  }
  
  /**
@@ -92,17 +100,72 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
   */
  void onSuccess(html.HttpRequest response){
    
-   /* Process the success response */
+   /**
+    *  Process the success response, note that an error response from CouchDB is 
+    *  treated as an error, not as a success with an 'error' field in it.
+    */
    jsonResponse.error = false;
+   jsonResponse.errorCode = 0;
    jsonResponse.responseText = response.responseText;
-   if ( _method != 'HEAD') {
-     jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+   
+   /**
+    * Check the header, if application/json try and decode it,
+    * otherwise its just raw data, ie an attachment.
+    */
+   if ( response.responseHeaders.containsValue('application/json')) {
+   
+     var couchResp;
+     try {
+     
+       couchResp = JSON.decode(response.responseText);
+   
+     } catch (e) {
+     
+       jsonResponse.error = true;
+       jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+       errorAsJson.error = "JSON Decode Error";
+       errorAsJson.reason = "None";
+       jsonResponse.jsonCouchResponse = errorAsJson;
+       /* Set the response headers */
+      _allResponseHeaders = response.getAllResponseHeaders();
+       return;
+     
+     }
+     
+     if ( (couchResp is Map) &amp;&amp; (couchResp.containsKey('error')) ) {
+       
+       jsonResponse.error = true;
+       jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+       errorAsJson.error = "CouchDb Error";
+       errorAsJson.reason = couchResp['reason'];
+       jsonResponse.jsonCouchResponse = errorAsJson;
+       /* Set the response headers */
+       _allResponseHeaders = response.getAllResponseHeaders();
+       return;
+       
+     }
+     
+     /**
+      * Success response
+      */
+     if ( _method != 'HEAD') {
+       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+       jsonResponse.jsonCouchResponse = successAsJson;
+     } 
+     
+     
+   } else {
+     
+     jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+     successAsJson.ok = true;
+     successAsJson.contentType = response.responseHeaders['content-type'];
      jsonResponse.jsonCouchResponse = successAsJson;
+     
    }
-   jsonResponse.errorCode = null;
+   
    
    /* Set the response headers */
-   allResponseHeaders = response.getAllResponseHeaders();
+   _allResponseHeaders = response.getAllResponseHeaders();
    
  }
  
@@ -162,19 +225,6 @@ WiltNativeHTTPAdapter([this.completion]);
 </div>
 <div>
 <h3>Properties</h3>
-<div class="field"><h4 id="allResponseHeaders">
-<button class="show-code">Code</button>
-String         <strong>allResponseHeaders</strong> <a class="anchor-link"
-            href="#allResponseHeaders"
-            title="Permalink to WiltNativeHTTPAdapter.allResponseHeaders">#</a>
-        </h4>
-        <div class="doc">
-<p> All response headers </p>
-<pre class="source">
-String allResponseHeaders = null
-</pre>
-</div>
-</div>
 <div class="field"><h4 id="completion">
 <button class="show-code">Code</button>
 var         <strong>completion</strong> <a class="anchor-link"
@@ -198,6 +248,18 @@ JsonObject         <strong>jsonResponse</strong> <a class="anchor-link"
 <p>All responses are JSON Objects </p>
 <pre class="source">
 jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject()
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="responseHeaders">
+<button class="show-code">Code</button>
+final String         <strong>responseHeaders</strong> <a class="anchor-link"
+            href="#responseHeaders"
+            title="Permalink to WiltNativeHTTPAdapter.responseHeaders">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get responseHeaders =&gt; _allResponseHeaders;
 </pre>
 </div>
 </div>
@@ -269,7 +331,14 @@ void onError(html.ProgressEvent response){
  }
  
  /* Set the response headers */
- allResponseHeaders = req.getAllResponseHeaders();
+ _allResponseHeaders = req.getAllResponseHeaders();
+ 
+ /**
+  * Call the completer, in an error condition we might not get to
+  * whenComplete on the request
+  */
+ completion;
+
 }
 </pre>
 </div>
@@ -283,17 +352,72 @@ void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-link" hre
 <pre class="source">
 void onSuccess(html.HttpRequest response){
  
- /* Process the success response */
+ /**
+  *  Process the success response, note that an error response from CouchDB is 
+  *  treated as an error, not as a success with an 'error' field in it.
+  */
  jsonResponse.error = false;
+ jsonResponse.errorCode = 0;
  jsonResponse.responseText = response.responseText;
- if ( _method != 'HEAD') {
-   jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+ 
+ /**
+  * Check the header, if application/json try and decode it,
+  * otherwise its just raw data, ie an attachment.
+  */
+ if ( response.responseHeaders.containsValue('application/json')) {
+ 
+   var couchResp;
+   try {
+   
+     couchResp = JSON.decode(response.responseText);
+ 
+   } catch (e) {
+   
+     jsonResponse.error = true;
+     jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+     errorAsJson.error = "JSON Decode Error";
+     errorAsJson.reason = "None";
+     jsonResponse.jsonCouchResponse = errorAsJson;
+     /* Set the response headers */
+    _allResponseHeaders = response.getAllResponseHeaders();
+     return;
+   
+   }
+   
+   if ( (couchResp is Map) &amp;&amp; (couchResp.containsKey('error')) ) {
+     
+     jsonResponse.error = true;
+     jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+     errorAsJson.error = "CouchDb Error";
+     errorAsJson.reason = couchResp['reason'];
+     jsonResponse.jsonCouchResponse = errorAsJson;
+     /* Set the response headers */
+     _allResponseHeaders = response.getAllResponseHeaders();
+     return;
+     
+   }
+   
+   /**
+    * Success response
+    */
+   if ( _method != 'HEAD') {
+     jsonobject.JsonObject successAsJson = new jsonobject.JsonObject.fromJsonString(response.responseText);
+     jsonResponse.jsonCouchResponse = successAsJson;
+   } 
+   
+   
+ } else {
+   
+   jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+   successAsJson.ok = true;
+   successAsJson.contentType = response.responseHeaders['content-type'];
    jsonResponse.jsonCouchResponse = successAsJson;
+   
  }
- jsonResponse.errorCode = null;
+ 
  
  /* Set the response headers */
- allResponseHeaders = response.getAllResponseHeaders();
+ _allResponseHeaders = response.getAllResponseHeaders();
  
 }
 </pre>
@@ -304,7 +428,7 @@ void onSuccess(html.HttpRequest response){
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-10-14 11:24:07.891</div>
+          <div>This page was generated at 2014-01-14 08:15:56.800</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>

@@ -1,0 +1,534 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>WiltChangeNotificationEvent class / wilt Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wilt" data-type="WiltChangeNotificationEvent">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wilt.html">wilt</a> &rsaquo; <a href="../wilt/WiltChangeNotificationEvent.html">WiltChangeNotificationEvent</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>WiltChangeNotificationEvent</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class WiltChangeNotificationEvent {
+ 
+ /**
+  * Update event
+  * 
+  * A document has been created/updated
+  */
+ static const String UPDATE = "update";
+ 
+ /**
+  * Delete event
+  * 
+  * A document has been deleted
+  */
+ static const String DELETE = "delete";
+ 
+ /**
+  * Decode error event
+  * 
+  * The change notification recieved from CouchDB cannot be 
+  * transformed into valid JSON, this may be a temporary issue,
+  * the client must decide whether to continue on or re-initialise
+  * the change notification class.
+  */
+ static const String DECODE_ERROR = "decode";
+ 
+ /**
+  * CouchDb error event
+  * 
+  * The change notification recieved from CouchDB indicates an error.
+  */
+ static const String COUCHDB_ERROR = "couch";
+ 
+ /**
+  * Abort event
+  * 
+  * A fatal error in the HTTP client has been detected, the client must
+  * assume that on recieveing the event the change notification interface must
+  * be re-initialised.
+  */
+ static const String ABORT = "abort";
+ 
+ /**
+  * Last sequence number event
+  * 
+  * Sent by CouchDB when there are no changes, only the last sequence number is returned.
+  * 
+  */
+ static const String LAST_SEQUENCE = "sequence";
+ 
+ /**
+  * Type
+  * 
+  * Valid for all events
+  */
+ String _type = null;
+ String get type =&gt; _type;
+ 
+ /**
+  * Sequence Number
+  * 
+  * Valid for update, delete and sequence
+  * 
+  */
+ int _sequenceNumber = 0;
+ int get sequenceNumber =&gt; _sequenceNumber;
+ 
+ /**
+  * Document identifier
+  * 
+  * Valid for update and delete
+  */
+ String _docId = null;
+ String get docId =&gt; _docId;
+ 
+ /**
+  * Document revision
+  * 
+  * Valid for update and delete but optional
+  */
+ String _docRevision = null;
+ String get docRevision =&gt; _docRevision;
+ 
+ /**
+  * Document object
+  * 
+  * Valid for update and only if includeDocs is true
+  */
+ jsonobject.JsonObject _document = null;
+ jsonobject.JsonObject get  document =&gt; _document;
+ 
+ /**
+  * Exception string
+  * 
+  * Valid for abort and decode error
+  */
+ String _exception = null;
+ String get exception =&gt; _exception;
+ 
+ /**
+  * HTTP response text
+  * 
+  * Valid for decode error
+  */
+ String _httpResponseText = null;
+ String get httpResponseText =&gt; _httpResponseText;
+ 
+ /**
+  * Couch error
+  * 
+  * Valid for update and delete
+  */
+ String _couchError = null;
+ String get couchError =&gt; _couchError;
+ 
+ /**
+  * Couch reason
+  * 
+  * Valid for update and delete
+  */
+ String _couchReason = null;
+ String get couchReason =&gt; _couchReason;
+ 
+ /**
+  * Update event
+  */
+ WiltChangeNotificationEvent.update(this._docId,
+                                    this._docRevision,
+                                    this._sequenceNumber,
+                                    [this._document]) {
+   
+   _type = UPDATE;
+   
+ }
+ 
+ /**
+  * Delete event
+  */
+ WiltChangeNotificationEvent.delete(this._docId,
+                                    this._docRevision,
+                                    this._sequenceNumber){
+                                      
+   _type = DELETE;
+                                      
+                                    }
+ 
+ /**
+  * Decode error event
+  */
+ WiltChangeNotificationEvent.decodeError(this._httpResponseText,
+                                         this._exception) {
+   
+   _type = DECODE_ERROR;
+   
+ }
+ 
+ /**
+  * Abort event
+  */
+ WiltChangeNotificationEvent.abort(this._exception) {
+   
+   _type = ABORT;
+   
+ }
+ 
+ /**
+  * CouchDB error event
+  */
+ WiltChangeNotificationEvent.couchDbError(this._couchError,
+                                          this._couchReason) {
+   
+   _type = COUCHDB_ERROR;
+   
+ }
+ 
+/**
+ * Sequence number event
+ */
+ WiltChangeNotificationEvent.sequence(this._sequenceNumber) {
+   
+   _type = LAST_SEQUENCE;
+   
+ }
+ 
+}
+</pre>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="ABORT">
+<button class="show-code">Code</button>
+const String         <strong>ABORT</strong> <a class="anchor-link"
+            href="#ABORT"
+            title="Permalink to WiltChangeNotificationEvent.ABORT">#</a>
+        </h4>
+        <div class="doc">
+<p>Abort event</p>
+<p>A fatal error in the HTTP client has been detected, the client must
+assume that on recieveing the event the change notification interface must
+be re-initialised.</p>
+<pre class="source">
+static const String ABORT = "abort"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="COUCHDB_ERROR">
+<button class="show-code">Code</button>
+const String         <strong>COUCHDB_ERROR</strong> <a class="anchor-link"
+            href="#COUCHDB_ERROR"
+            title="Permalink to WiltChangeNotificationEvent.COUCHDB_ERROR">#</a>
+        </h4>
+        <div class="doc">
+<p>CouchDb error event</p>
+<p>The change notification recieved from CouchDB indicates an error.</p>
+<pre class="source">
+static const String COUCHDB_ERROR = "couch"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DECODE_ERROR">
+<button class="show-code">Code</button>
+const String         <strong>DECODE_ERROR</strong> <a class="anchor-link"
+            href="#DECODE_ERROR"
+            title="Permalink to WiltChangeNotificationEvent.DECODE_ERROR">#</a>
+        </h4>
+        <div class="doc">
+<p>Decode error event</p>
+<p>The change notification recieved from CouchDB cannot be 
+transformed into valid JSON, this may be a temporary issue,
+the client must decide whether to continue on or re-initialise
+the change notification class.</p>
+<pre class="source">
+static const String DECODE_ERROR = "decode"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DELETE">
+<button class="show-code">Code</button>
+const String         <strong>DELETE</strong> <a class="anchor-link"
+            href="#DELETE"
+            title="Permalink to WiltChangeNotificationEvent.DELETE">#</a>
+        </h4>
+        <div class="doc">
+<p>Delete event</p>
+<p>A document has been deleted</p>
+<pre class="source">
+static const String DELETE = "delete"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="LAST_SEQUENCE">
+<button class="show-code">Code</button>
+const String         <strong>LAST_SEQUENCE</strong> <a class="anchor-link"
+            href="#LAST_SEQUENCE"
+            title="Permalink to WiltChangeNotificationEvent.LAST_SEQUENCE">#</a>
+        </h4>
+        <div class="doc">
+<p>Last sequence number event</p>
+<p>Sent by CouchDB when there are no changes, only the last sequence number is returned.</p>
+<pre class="source">
+static const String LAST_SEQUENCE = "sequence"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="UPDATE">
+<button class="show-code">Code</button>
+const String         <strong>UPDATE</strong> <a class="anchor-link"
+            href="#UPDATE"
+            title="Permalink to WiltChangeNotificationEvent.UPDATE">#</a>
+        </h4>
+        <div class="doc">
+<p>Update event</p>
+<p>A document has been created/updated</p>
+<pre class="source">
+static const String UPDATE = "update"
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="abort">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.abort</strong>(String _exception) <a class="anchor-link" href="#abort"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.abort">#</a></h4>
+<div class="doc">
+<p>Abort event</p>
+<pre class="source">
+WiltChangeNotificationEvent.abort(this._exception) {
+ 
+ _type = ABORT;
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="couchDbError">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.couchDbError</strong>(String _couchError, String _couchReason) <a class="anchor-link" href="#couchDbError"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.couchDbError">#</a></h4>
+<div class="doc">
+<p>CouchDB error event</p>
+<pre class="source">
+WiltChangeNotificationEvent.couchDbError(this._couchError,
+                                        this._couchReason) {
+ 
+ _type = COUCHDB_ERROR;
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="decodeError">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.decodeError</strong>(String _httpResponseText, String _exception) <a class="anchor-link" href="#decodeError"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.decodeError">#</a></h4>
+<div class="doc">
+<p>Decode error event</p>
+<pre class="source">
+WiltChangeNotificationEvent.decodeError(this._httpResponseText,
+                                       this._exception) {
+ 
+ _type = DECODE_ERROR;
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="delete">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.delete</strong>(String _docId, String _docRevision, int _sequenceNumber) <a class="anchor-link" href="#delete"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.delete">#</a></h4>
+<div class="doc">
+<p>Delete event</p>
+<pre class="source">
+WiltChangeNotificationEvent.delete(this._docId,
+                                  this._docRevision,
+                                  this._sequenceNumber){
+                                    
+ _type = DELETE;
+                                    
+                                  }
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="sequence">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.sequence</strong>(int _sequenceNumber) <a class="anchor-link" href="#sequence"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.sequence">#</a></h4>
+<div class="doc">
+<p>Sequence number event</p>
+<pre class="source">
+WiltChangeNotificationEvent.sequence(this._sequenceNumber) {
+ 
+ _type = LAST_SEQUENCE;
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="update">
+<button class="show-code">Code</button>
+new <strong>WiltChangeNotificationEvent.update</strong>(String _docId, String _docRevision, int _sequenceNumber, [JsonObject _document]) <a class="anchor-link" href="#update"
+              title="Permalink to WiltChangeNotificationEvent.WiltChangeNotificationEvent.update">#</a></h4>
+<div class="doc">
+<p>Update event</p>
+<pre class="source">
+WiltChangeNotificationEvent.update(this._docId,
+                                  this._docRevision,
+                                  this._sequenceNumber,
+                                  [this._document]) {
+ 
+ _type = UPDATE;
+ 
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="couchError">
+<button class="show-code">Code</button>
+final String         <strong>couchError</strong> <a class="anchor-link"
+            href="#couchError"
+            title="Permalink to WiltChangeNotificationEvent.couchError">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get couchError =&gt; _couchError;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="couchReason">
+<button class="show-code">Code</button>
+final String         <strong>couchReason</strong> <a class="anchor-link"
+            href="#couchReason"
+            title="Permalink to WiltChangeNotificationEvent.couchReason">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get couchReason =&gt; _couchReason;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="docId">
+<button class="show-code">Code</button>
+final String         <strong>docId</strong> <a class="anchor-link"
+            href="#docId"
+            title="Permalink to WiltChangeNotificationEvent.docId">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get docId =&gt; _docId;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="docRevision">
+<button class="show-code">Code</button>
+final String         <strong>docRevision</strong> <a class="anchor-link"
+            href="#docRevision"
+            title="Permalink to WiltChangeNotificationEvent.docRevision">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get docRevision =&gt; _docRevision;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="document">
+<button class="show-code">Code</button>
+final JsonObject         <strong>document</strong> <a class="anchor-link"
+            href="#document"
+            title="Permalink to WiltChangeNotificationEvent.document">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+jsonobject.JsonObject get  document =&gt; _document;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="exception">
+<button class="show-code">Code</button>
+final String         <strong>exception</strong> <a class="anchor-link"
+            href="#exception"
+            title="Permalink to WiltChangeNotificationEvent.exception">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get exception =&gt; _exception;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="httpResponseText">
+<button class="show-code">Code</button>
+final String         <strong>httpResponseText</strong> <a class="anchor-link"
+            href="#httpResponseText"
+            title="Permalink to WiltChangeNotificationEvent.httpResponseText">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get httpResponseText =&gt; _httpResponseText;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="sequenceNumber">
+<button class="show-code">Code</button>
+final int         <strong>sequenceNumber</strong> <a class="anchor-link"
+            href="#sequenceNumber"
+            title="Permalink to WiltChangeNotificationEvent.sequenceNumber">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+int get sequenceNumber =&gt; _sequenceNumber;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="type">
+<button class="show-code">Code</button>
+final String         <strong>type</strong> <a class="anchor-link"
+            href="#type"
+            title="Permalink to WiltChangeNotificationEvent.type">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get type =&gt; _type;
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2014-01-14 08:15:56.865</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

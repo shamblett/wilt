@@ -39,26 +39,32 @@ class Wilt {
   *  URL constant for CouchDB SESSION function 
   */
  static const String SESSION = "/_session";
+ 
  /**
   *  URL constant for CouchDB STATS function 
   */
  static const String STATS = "/_stats";
+ 
  /**
   *  URL constant for CouchDB ALLDBS function 
   */
  static const String ALLDBS = "/_all_dbs";
+ 
  /**
   *  URL constant for CouchDB ALLDOCS function 
   */
  static const String ALLDOCS = "/_all_docs";
+ 
  /**
   *  URL constant for CouchDB BULKDOCS function 
   */
  static const String BULKDOCS = "/_bulk_docs";
+ 
  /**
   *  URL constant for CouchDB UUID function 
   */
  static const String UUIDS ="/_uuids";
+ 
  
  /**
   *
@@ -67,6 +73,7 @@ class Wilt {
   * 
   */
  static const String AUTH_BASIC = 'basic';
+ 
  /**
   * No authentication 
   */
@@ -75,23 +82,56 @@ class Wilt {
  /** 
   * Database name
   */
- String db = null; 
+ String _db = null; 
+ String get db =&gt; _db;
+ set db(String name) =&gt; _db = name;
+ 
+ /**
+  * Change notification database name
+  */
+ String changeNotificationDbName = null;
+ 
  /** 
   * Host name
   */
- String host = null;  
+ String _host = null;  
+ String get host =&gt; _host;
+ 
  /** 
   * Port number
   */
- String port = null;      
+ String _port = null; 
+ String get port =&gt; _port;
+ 
  /** 
   * HTTP scheme
   */
- String scheme = null;            
+ String _scheme = null; 
+ String get scheme =&gt; _scheme;
+ 
  /**
   * HTTP Adapter
   */
  WiltNativeHTTPAdapter _httpAdapter = null;
+ String get responseHeaders =&gt; _httpAdapter.responseHeaders;
+ 
+ /**
+  * Change notification 
+  */
+ _WiltChangeNotification _changeNotifier = null;
+ 
+ /**
+  * Change notification event stream
+  * 
+  * This is a broadcast stream so can support more than one listener.
+  * 
+  */
+ Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt; 
+                                _changeNotifier.changeNotification.stream;
+ /**
+  * Change notification paused state
+  */
+ bool get changeNotificationsPaused =&gt; _changeNotifier.pause;
  
  /**
   * Completion function 
@@ -110,10 +150,10 @@ class Wilt {
   *  Authentication, type
   */
  String authenticationType = AUTH_NONE;   
-  
- Wilt(this.host,
-      this.port,
-      this.scheme,
+   
+ Wilt(this._host,
+      this._port,
+      this._scheme,
       [this.clientCompletion = null]) {
    
    if ( (host == null) ||
@@ -312,14 +352,16 @@ class Wilt {
   * the current database added.
   */
  put( String url, 
-      String data) {
+      String data,
+      [Map headers]) {
      
      url = _conditionUrl(url);
    
    /* Perform the put */
    _httpRequest('PUT', 
                url,
-               data:data);
+               data:data,
+               headers:headers);
    
   }
  
@@ -745,7 +787,7 @@ class Wilt {
    
    /* Null the current database if we have deleted it */
    if ( name == db )
-     db = null;
+     _db = null;
    
    /* Perform the delete */
    _httpRequest('DELETE', 
@@ -753,6 +795,30 @@ class Wilt {
    
  }
  
+ /**
+  * Get information about a database
+  */
+ void getDatabaseInfo([String dbName = null]) {
+   
+   String name;
+   if ( dbName != null ) {
+     
+     name = dbName;
+     
+   } else {
+     
+     name = db;
+   }
+   
+   String url = "/$name";
+   
+   /**
+    * Perform the GET
+    */
+   _httpRequest('GET', 
+                 url);
+   
+ }
  /**
   * Get current session information from CouchDB
   */
@@ -786,6 +852,257 @@ class Wilt {
    
    _httpRequest('GET', 
                 url);
+   
+ }
+ 
+ /**
+  * Create an attachment on an existing document.
+  * contentType is in the form of a mime type e.g. 'image/png'
+  * If the document needs to be created as well as the attachment set the rev to ''
+  */
+ void createAttachment(String docId,
+                       String attachmentName,
+                       String rev,
+                       String contentType,
+                       String payload) {
+   
+  /**
+   * Check all parameters are supplied
+   */
+   if ( docId == null ) {
+   
+     throw new WiltException('createAttachment() expects a document id.');
+   }
+   
+   if ( attachmentName == null ) {
+     
+     throw new WiltException('createAttachment() expects an attachment name.');
+   }
+   
+   if ( rev == null ) {
+     
+     throw new WiltException('createAttachment() expects a revision.');
+   }
+   
+   if ( contentType == null ) {
+     
+     throw new WiltException('createAttachment() expects a content type.');
+   }
+   
+   if ( payload == null ) {
+     
+     throw new WiltException('createAttachment() expects a payload.');
+   }
+   
+   /**
+    * Set the headers
+    */
+   Map headers = new Map&lt;String,String&gt;();
+   headers["Content-Type"] = contentType;
+   
+   /**
+    * Make the PUT request
+    */
+   String url;
+   if ( rev != '' ) {
+     url = "$docId/$attachmentName?rev=$rev";
+   } else {
+     url = "$docId/$attachmentName";
+   }
+   put(url,
+       payload,
+       headers);
+   
+ }
+ 
+ /**
+  * Update an attachment on an existing document.
+  * contentType is in the form of a mime type e.g. 'image/png'
+  */
+ void updateAttachment(String docId,
+                       String attachmentName,
+                       String rev,
+                       String contentType,
+                       String payload) {
+   
+  /**
+   * Check all parameters are supplied
+   */
+   if ( docId == null ) {
+   
+     throw new WiltException('updateAttachment() expects a document id.');
+   }
+   
+   if ( attachmentName == null ) {
+     
+     throw new WiltException('updateAttachment() expects an attachment name.');
+   }
+   
+   if ( rev == null ) {
+     
+     throw new WiltException('updateAttachment() expects a revision.');
+   }
+   
+   if ( contentType == null ) {
+     
+     throw new WiltException('updateAttachment() expects a content type.');
+   }
+   
+   if ( payload == null ) {
+     
+     throw new WiltException('updateAttachment() expects a payload.');
+   }
+   
+   /**
+    * Set the headers
+    */
+   Map headers = new Map&lt;String,String&gt;();
+   headers["Content-Type"] = contentType;
+   
+   /**
+    * Make the PUT request
+    */
+   String url = "$docId/$attachmentName?rev=$rev";
+   put(url,
+       payload,
+       headers);
+   
+ }
+ 
+ /**
+  * Delete an attachment
+  */
+ void deleteAttachment(String docId,
+                       String attachmentName,
+                       String rev) {
+   
+   if ( docId == null ) {
+     
+     throw new WiltException('deleteAttachment() expects a document id.');
+   }
+   
+   if ( attachmentName == null ) {
+     
+     throw new WiltException('deleteAttachment() expects an attachment name.');
+   }
+   
+   if ( rev == null ) {
+     
+     throw new WiltException('deleteAttachment() expects a revision.');
+   }
+   
+   /**
+    * Make the DELETE request
+    */
+   String url = "$docId/$attachmentName?rev=$rev";
+   delete(url);
+   
+ }
+ 
+ /**
+  * Get an attachment
+  */
+ void getAttachment(String docId,
+                    String attachmentName) {
+   
+   
+   if ( docId == null ) {
+     
+     throw new WiltException('getAttachment() expects a document id.');
+   }
+   
+   if ( attachmentName == null ) {
+     
+     throw new WiltException('getAttachment() expects an attachment name.');
+   }
+   
+   /**
+    * Make the GET request
+    */
+   String url = "$docId/$attachmentName";
+   get(url);
+   
+ }
+ 
+ /**
+  * Change notification start, see the WiltChangeNotification class for more details
+  * 
+  * If a database name is not supplied the currently selected database is used.
+  */
+ void startChangeNotification([WiltChangeNotificationParameters parameters = null,
+                               String databaseName = null]) {
+   
+   String name;
+   if ( databaseName == null ) {
+     
+     name = db;
+     
+   } else {
+     
+     name = databaseName;
+   }
+   
+   changeNotificationDbName = name;
+   _changeNotifier = new _WiltChangeNotification(_host,
+                                                _port,
+                                                _scheme,
+                                                name,
+                                                parameters);
+ }
+ 
+ /**
+  * Change notification stop, see the WiltChangeNotification class for more details
+  * 
+  * Note that this destroys the internal changeNotifier object which can only be 
+  * reinstated by a call to startChangeNotification.
+  */
+ void stopChangeNotification() {
+   
+   _changeNotifier.stopNotifications();
+   _changeNotifier = null;
+   changeNotificationDbName = null;
+   
+ }
+ 
+ /**
+  * Change the parameter set for change notifications.
+  * 
+  * Note that database name, host, port and scheme are not changeable.
+  */
+ void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
+   
+
+   if ( parameters == null ) {
+     
+     throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
+   }
+   
+   if ( _changeNotifier == null ) {
+     
+     throw new WiltException('updateChangeNotificationParameters() no change notifier.');
+   }
+   
+   _changeNotifier.parameters = parameters;
+   
+ }
+ 
+ /**
+  * Pause change notifications
+  */
+ void pauseChangeNotifications() {
+   
+   _changeNotifier.pause = true;
+   _changeNotifier.stopNotifications();
+   
+ }
+ 
+ /**
+  * Restart change notifications after a pause
+  */
+ void restartChangeNotifications() {
+   
+   _changeNotifier.pause = false;
+   _changeNotifier.restartChangeNotifications();
    
  }
  
@@ -950,7 +1267,7 @@ static const String UUIDS ="/_uuids"
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Wilt</strong>(String host, String port, String scheme, [clientCompletion = null]) <a class="anchor-link" href="#"
+new <strong>Wilt</strong>(String _host, String _port, String _scheme, [clientCompletion = null]) <a class="anchor-link" href="#"
               title="Permalink to Wilt.Wilt">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -960,9 +1277,9 @@ through their identity. An <a class="crossref" href="../dart_core/Object.html">O
 only.</p>
 <div class="docs-inherited-from">docs inherited from Object </div></div>
 <pre class="source">
-Wilt(this.host,
-    this.port,
-    this.scheme,
+Wilt(this._host,
+    this._port,
+    this._scheme,
     [this.clientCompletion = null]) {
  
  if ( (host == null) ||
@@ -992,6 +1309,47 @@ String         <strong>authenticationType</strong> <a class="anchor-link"
 <p> Authentication, type</p>
 <pre class="source">
 String authenticationType = AUTH_NONE
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="changeNotification">
+<button class="show-code">Code</button>
+final Stream&lt;<a href="../wilt/WiltChangeNotificationEvent.html">WiltChangeNotificationEvent</a>&gt;         <strong>changeNotification</strong> <a class="anchor-link"
+            href="#changeNotification"
+            title="Permalink to Wilt.changeNotification">#</a>
+        </h4>
+        <div class="doc">
+<p>Change notification event stream</p>
+<p>This is a broadcast stream so can support more than one listener.</p>
+<pre class="source">
+Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt; 
+                              _changeNotifier.changeNotification.stream;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="changeNotificationDbName">
+<button class="show-code">Code</button>
+String         <strong>changeNotificationDbName</strong> <a class="anchor-link"
+            href="#changeNotificationDbName"
+            title="Permalink to Wilt.changeNotificationDbName">#</a>
+        </h4>
+        <div class="doc">
+<p>Change notification database name</p>
+<pre class="source">
+String changeNotificationDbName = null
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="changeNotificationsPaused">
+<button class="show-code">Code</button>
+final bool         <strong>changeNotificationsPaused</strong> <a class="anchor-link"
+            href="#changeNotificationsPaused"
+            title="Permalink to Wilt.changeNotificationsPaused">#</a>
+        </h4>
+        <div class="doc">
+<p>Change notification paused state</p>
+<pre class="source">
+bool get changeNotificationsPaused =&gt; _changeNotifier.pause;
 </pre>
 </div>
 </div>
@@ -1028,35 +1386,47 @@ String         <strong>db</strong> <a class="anchor-link"
             title="Permalink to Wilt.db">#</a>
         </h4>
         <div class="doc">
-<p>Database name</p>
 <pre class="source">
-String db = null
+String get db =&gt; _db;
+</pre>
+<pre class="source">
+set db(String name) =&gt; _db = name;
 </pre>
 </div>
 </div>
 <div class="field"><h4 id="host">
 <button class="show-code">Code</button>
-String         <strong>host</strong> <a class="anchor-link"
+final String         <strong>host</strong> <a class="anchor-link"
             href="#host"
             title="Permalink to Wilt.host">#</a>
         </h4>
         <div class="doc">
-<p>Host name</p>
 <pre class="source">
-String host = null
+String get host =&gt; _host;
 </pre>
 </div>
 </div>
 <div class="field"><h4 id="port">
 <button class="show-code">Code</button>
-String         <strong>port</strong> <a class="anchor-link"
+final String         <strong>port</strong> <a class="anchor-link"
             href="#port"
             title="Permalink to Wilt.port">#</a>
         </h4>
         <div class="doc">
-<p>Port number</p>
 <pre class="source">
-String port = null
+String get port =&gt; _port;
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="responseHeaders">
+<button class="show-code">Code</button>
+final String         <strong>responseHeaders</strong> <a class="anchor-link"
+            href="#responseHeaders"
+            title="Permalink to Wilt.responseHeaders">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+String get responseHeaders =&gt; _httpAdapter.responseHeaders;
 </pre>
 </div>
 </div>
@@ -1077,14 +1447,13 @@ set resultCompletion (var completion )  {
 </div>
 <div class="field"><h4 id="scheme">
 <button class="show-code">Code</button>
-String         <strong>scheme</strong> <a class="anchor-link"
+final String         <strong>scheme</strong> <a class="anchor-link"
             href="#scheme"
             title="Permalink to Wilt.scheme">#</a>
         </h4>
         <div class="doc">
-<p>HTTP scheme</p>
 <pre class="source">
-String scheme = null
+String get scheme =&gt; _scheme;
 </pre>
 </div>
 </div>
@@ -1229,6 +1598,72 @@ void copyDocument( String sourceId,
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="createAttachment">
+<button class="show-code">Code</button>
+void <strong>createAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#createAttachment"
+              title="Permalink to Wilt.createAttachment">#</a></h4>
+<div class="doc">
+<p>Create an attachment on an existing document.
+contentType is in the form of a mime type e.g. 'image/png'
+If the document needs to be created as well as the attachment set the rev to ''</p>
+<pre class="source">
+void createAttachment(String docId,
+                     String attachmentName,
+                     String rev,
+                     String contentType,
+                     String payload) {
+ 
+/**
+ * Check all parameters are supplied
+ */
+ if ( docId == null ) {
+ 
+   throw new WiltException('createAttachment() expects a document id.');
+ }
+ 
+ if ( attachmentName == null ) {
+   
+   throw new WiltException('createAttachment() expects an attachment name.');
+ }
+ 
+ if ( rev == null ) {
+   
+   throw new WiltException('createAttachment() expects a revision.');
+ }
+ 
+ if ( contentType == null ) {
+   
+   throw new WiltException('createAttachment() expects a content type.');
+ }
+ 
+ if ( payload == null ) {
+   
+   throw new WiltException('createAttachment() expects a payload.');
+ }
+ 
+ /**
+  * Set the headers
+  */
+ Map headers = new Map&lt;String,String&gt;();
+ headers["Content-Type"] = contentType;
+ 
+ /**
+  * Make the PUT request
+  */
+ String url;
+ if ( rev != '' ) {
+   url = "$docId/$attachmentName?rev=$rev";
+ } else {
+   url = "$docId/$attachmentName";
+ }
+ put(url,
+     payload,
+     headers);
+ 
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="createDatabase">
 <button class="show-code">Code</button>
 void <strong>createDatabase</strong>(String name) <a class="anchor-link" href="#createDatabase"
@@ -1280,6 +1715,42 @@ delete( String url) {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="deleteAttachment">
+<button class="show-code">Code</button>
+void <strong>deleteAttachment</strong>(String docId, String attachmentName, String rev) <a class="anchor-link" href="#deleteAttachment"
+              title="Permalink to Wilt.deleteAttachment">#</a></h4>
+<div class="doc">
+<p>Delete an attachment</p>
+<pre class="source">
+void deleteAttachment(String docId,
+                     String attachmentName,
+                     String rev) {
+ 
+ if ( docId == null ) {
+   
+   throw new WiltException('deleteAttachment() expects a document id.');
+ }
+ 
+ if ( attachmentName == null ) {
+   
+   throw new WiltException('deleteAttachment() expects an attachment name.');
+ }
+ 
+ if ( rev == null ) {
+   
+   throw new WiltException('deleteAttachment() expects a revision.');
+ }
+ 
+ /**
+  * Make the DELETE request
+  */
+ String url = "$docId/$attachmentName?rev=$rev";
+ delete(url);
+ 
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="deleteDatabase">
 <button class="show-code">Code</button>
 void <strong>deleteDatabase</strong>(String name) <a class="anchor-link" href="#deleteDatabase"
@@ -1304,7 +1775,7 @@ void deleteDatabase(String name) {
  
  /* Null the current database if we have deleted it */
  if ( name == db )
-   db = null;
+   _db = null;
  
  /* Perform the delete */
  _httpRequest('DELETE', 
@@ -1492,6 +1963,68 @@ void getAllDocs({bool includeDocs:false,
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="getAttachment">
+<button class="show-code">Code</button>
+void <strong>getAttachment</strong>(String docId, String attachmentName) <a class="anchor-link" href="#getAttachment"
+              title="Permalink to Wilt.getAttachment">#</a></h4>
+<div class="doc">
+<p>Get an attachment</p>
+<pre class="source">
+void getAttachment(String docId,
+                  String attachmentName) {
+ 
+ 
+ if ( docId == null ) {
+   
+   throw new WiltException('getAttachment() expects a document id.');
+ }
+ 
+ if ( attachmentName == null ) {
+   
+   throw new WiltException('getAttachment() expects an attachment name.');
+ }
+ 
+ /**
+  * Make the GET request
+  */
+ String url = "$docId/$attachmentName";
+ get(url);
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="getDatabaseInfo">
+<button class="show-code">Code</button>
+void <strong>getDatabaseInfo</strong>([String dbName = null]) <a class="anchor-link" href="#getDatabaseInfo"
+              title="Permalink to Wilt.getDatabaseInfo">#</a></h4>
+<div class="doc">
+<p>Get information about a database</p>
+<pre class="source">
+void getDatabaseInfo([String dbName = null]) {
+ 
+ String name;
+ if ( dbName != null ) {
+   
+   name = dbName;
+   
+ } else {
+   
+   name = db;
+ }
+ 
+ String url = "/$name";
+ 
+ /**
+  * Perform the GET
+  */
+ _httpRequest('GET', 
+               url);
+ 
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="getDocument">
 <button class="show-code">Code</button>
 void <strong>getDocument</strong>(String id, {String rev}) <a class="anchor-link" href="#getDocument"
@@ -1629,6 +2162,22 @@ if ( (user == null ) || (password == null) ) {
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="pauseChangeNotifications">
+<button class="show-code">Code</button>
+void <strong>pauseChangeNotifications</strong>() <a class="anchor-link" href="#pauseChangeNotifications"
+              title="Permalink to Wilt.pauseChangeNotifications">#</a></h4>
+<div class="doc">
+<p>Pause change notifications</p>
+<pre class="source">
+void pauseChangeNotifications() {
+ 
+ _changeNotifier.pause = true;
+ _changeNotifier.stopNotifications();
+ 
+}
+</pre>
+</div>
+</div>
 <div class="method"><h4 id="post">
 <button class="show-code">Code</button>
 dynamic <strong>post</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#post"
@@ -1734,21 +2283,23 @@ void postDocumentString(String document,
 </div>
 <div class="method"><h4 id="put">
 <button class="show-code">Code</button>
-dynamic <strong>put</strong>(String url, String data) <a class="anchor-link" href="#put"
+dynamic <strong>put</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#put"
               title="Permalink to Wilt.put">#</a></h4>
 <div class="doc">
 <p>Performs a HTTP PUT operation,, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
 put( String url, 
-    String data) {
+    String data,
+    [Map headers]) {
    
    url = _conditionUrl(url);
  
  /* Perform the put */
  _httpRequest('PUT', 
              url,
-             data:data);
+             data:data,
+             headers:headers);
  
 }
 </pre>
@@ -1815,12 +2366,165 @@ void putDocumentString(String id,
 </pre>
 </div>
 </div>
+<div class="method"><h4 id="restartChangeNotifications">
+<button class="show-code">Code</button>
+void <strong>restartChangeNotifications</strong>() <a class="anchor-link" href="#restartChangeNotifications"
+              title="Permalink to Wilt.restartChangeNotifications">#</a></h4>
+<div class="doc">
+<p>Restart change notifications after a pause</p>
+<pre class="source">
+void restartChangeNotifications() {
+ 
+ _changeNotifier.pause = false;
+ _changeNotifier.restartChangeNotifications();
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="startChangeNotification">
+<button class="show-code">Code</button>
+void <strong>startChangeNotification</strong>([<a href="../wilt/WiltChangeNotificationParameters.html">WiltChangeNotificationParameters</a> parameters = null, String databaseName = null]) <a class="anchor-link" href="#startChangeNotification"
+              title="Permalink to Wilt.startChangeNotification">#</a></h4>
+<div class="doc">
+<p>Change notification start, see the WiltChangeNotification class for more details</p>
+<p>If a database name is not supplied the currently selected database is used.</p>
+<pre class="source">
+void startChangeNotification([WiltChangeNotificationParameters parameters = null,
+                             String databaseName = null]) {
+ 
+ String name;
+ if ( databaseName == null ) {
+   
+   name = db;
+   
+ } else {
+   
+   name = databaseName;
+ }
+ 
+ changeNotificationDbName = name;
+ _changeNotifier = new _WiltChangeNotification(_host,
+                                              _port,
+                                              _scheme,
+                                              name,
+                                              parameters);
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="stopChangeNotification">
+<button class="show-code">Code</button>
+void <strong>stopChangeNotification</strong>() <a class="anchor-link" href="#stopChangeNotification"
+              title="Permalink to Wilt.stopChangeNotification">#</a></h4>
+<div class="doc">
+<p>Change notification stop, see the WiltChangeNotification class for more details</p>
+<p>Note that this destroys the internal changeNotifier object which can only be 
+reinstated by a call to startChangeNotification.</p>
+<pre class="source">
+void stopChangeNotification() {
+ 
+ _changeNotifier.stopNotifications();
+ _changeNotifier = null;
+ changeNotificationDbName = null;
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="updateAttachment">
+<button class="show-code">Code</button>
+void <strong>updateAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#updateAttachment"
+              title="Permalink to Wilt.updateAttachment">#</a></h4>
+<div class="doc">
+<p>Update an attachment on an existing document.
+contentType is in the form of a mime type e.g. 'image/png'</p>
+<pre class="source">
+void updateAttachment(String docId,
+                     String attachmentName,
+                     String rev,
+                     String contentType,
+                     String payload) {
+ 
+/**
+ * Check all parameters are supplied
+ */
+ if ( docId == null ) {
+ 
+   throw new WiltException('updateAttachment() expects a document id.');
+ }
+ 
+ if ( attachmentName == null ) {
+   
+   throw new WiltException('updateAttachment() expects an attachment name.');
+ }
+ 
+ if ( rev == null ) {
+   
+   throw new WiltException('updateAttachment() expects a revision.');
+ }
+ 
+ if ( contentType == null ) {
+   
+   throw new WiltException('updateAttachment() expects a content type.');
+ }
+ 
+ if ( payload == null ) {
+   
+   throw new WiltException('updateAttachment() expects a payload.');
+ }
+ 
+ /**
+  * Set the headers
+  */
+ Map headers = new Map&lt;String,String&gt;();
+ headers["Content-Type"] = contentType;
+ 
+ /**
+  * Make the PUT request
+  */
+ String url = "$docId/$attachmentName?rev=$rev";
+ put(url,
+     payload,
+     headers);
+ 
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="updateChangeNotificationParameters">
+<button class="show-code">Code</button>
+void <strong>updateChangeNotificationParameters</strong>(<a href="../wilt/WiltChangeNotificationParameters.html">WiltChangeNotificationParameters</a> parameters) <a class="anchor-link" href="#updateChangeNotificationParameters"
+              title="Permalink to Wilt.updateChangeNotificationParameters">#</a></h4>
+<div class="doc">
+<p>Change the parameter set for change notifications.</p>
+<p>Note that database name, host, port and scheme are not changeable.</p>
+<pre class="source">
+void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
+ 
+
+ if ( parameters == null ) {
+   
+   throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
+ }
+ 
+ if ( _changeNotifier == null ) {
+   
+   throw new WiltException('updateChangeNotificationParameters() no change notifier.');
+ }
+ 
+ _changeNotifier.parameters = parameters;
+ 
+}
+</pre>
+</div>
+</div>
 </div>
         </div>
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-10-14 11:24:07.987</div>
+          <div>This page was generated at 2014-01-14 08:15:56.995</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
