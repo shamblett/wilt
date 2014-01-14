@@ -74,6 +74,29 @@
  * Set-Cookie header from an AJAX request in the browser.
  * 
  * Document attachments of the 'standalone' type only are supported.
+ * 
+ * Change notification is performed in 'normal' mode with the notification request being sent to
+ * CouchDB as dictated by the heartbeat time in the notification changes parameters set. Change 
+ * notifications themselves are deleivered to the client on the changeNotification stream. An example 
+ * of using change notifications is shown below :-
+ * 
+ * wilting.db = databaseName;
+ * wilting.startChangeNotification()
+ * wilting.changeNotification.listen((e) {
+          
+        if ( e.type == WiltChangeNotificationEvent.UPDATE )
+        .......
+          
+      }); 
+      
+ *
+ * The events themselves are instances of the WiltChangeNotificationEvent class, see this class 
+ * for more details.
+ * 
+ * The change notification API also allows stopping of change notifications, pausing and restarting 
+ * and chaning the parameter set.
+ * 
+ * See the change notification methods for more information. 
  */
 
 part of wilt;
@@ -1071,6 +1094,7 @@ class Wilt {
   
   /**
    * Change notification start, see the WiltChangeNotification class for more details
+   * 
    * If a database name is not supplied the currently selected database is used.
    */
   void startChangeNotification([WiltChangeNotificationParameters parameters = null,
@@ -1096,6 +1120,9 @@ class Wilt {
   
   /**
    * Change notification stop, see the WiltChangeNotification class for more details
+   * 
+   * Note that this destroys the internal changeNotifier object which can only be 
+   * reinstated by a call to startChangeNotification.
    */
   void stopChangeNotification() {
     

@@ -42,6 +42,8 @@ Results
 In total you should have one new database containing 10 documents in total. Note if this is the case then any output
 in the Dart editor described above(excepting WILT: lines) can be ignored as the tests have passed.
 
+The test can take several seconds to run, please be patient
+
 
 
 

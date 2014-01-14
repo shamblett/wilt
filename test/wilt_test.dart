@@ -2254,7 +2254,7 @@ main() {
   });
   
   /* Group 7 - Change Notifications */
-  solo_group("Change Notification Tests - ", () {
+  group("Change Notification Tests - ", () {
   
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 

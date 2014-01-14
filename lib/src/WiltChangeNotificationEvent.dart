@@ -61,8 +61,7 @@ class WiltChangeNotificationEvent {
   /**
    * Last sequence number event
    * 
-   * Sent by CouchDb when there are no changes as such but we have asked for notifications,
-   * only the last sequence number is returned.
+   * Sent by CouchDB when there are no changes, only the last sequence number is returned.
    * 
    */
   static const String LAST_SEQUENCE = "sequence";
@@ -79,6 +78,7 @@ class WiltChangeNotificationEvent {
    * Sequence Number
    * 
    * Valid for update, delete and sequence
+   * 
    */
   int _sequenceNumber = 0;
   int get sequenceNumber => _sequenceNumber;
@@ -139,6 +139,9 @@ class WiltChangeNotificationEvent {
   String _couchReason = null;
   String get couchReason => _couchReason;
   
+  /**
+   * Update event
+   */
   WiltChangeNotificationEvent.update(this._docId,
                                      this._docRevision,
                                      this._sequenceNumber,
@@ -148,6 +151,9 @@ class WiltChangeNotificationEvent {
     
   }
   
+  /**
+   * Delete event
+   */
   WiltChangeNotificationEvent.delete(this._docId,
                                      this._docRevision,
                                      this._sequenceNumber){
@@ -156,7 +162,9 @@ class WiltChangeNotificationEvent {
                                        
                                      }
   
-  
+  /**
+   * Decode error event
+   */
   WiltChangeNotificationEvent.decodeError(this._httpResponseText,
                                           this._exception) {
     
@@ -164,12 +172,18 @@ class WiltChangeNotificationEvent {
     
   }
   
+  /**
+   * Abort event
+   */
   WiltChangeNotificationEvent.abort(this._exception) {
     
     _type = ABORT;
     
   }
   
+  /**
+   * CouchDB error event
+   */
   WiltChangeNotificationEvent.couchDbError(this._couchError,
                                            this._couchReason) {
     
@@ -177,7 +191,10 @@ class WiltChangeNotificationEvent {
     
   }
   
- WiltChangeNotificationEvent.sequence(this._sequenceNumber) {
+ /**
+  * Sequence number event
+  */
+  WiltChangeNotificationEvent.sequence(this._sequenceNumber) {
     
     _type = LAST_SEQUENCE;
     

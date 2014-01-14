@@ -12,8 +12,8 @@
  * 
  * 
  * The resulting notifications are turned into notification events and streamed to
- * the notification consumer. See the WiltChangeNotificationEvent class for further details.
- * 
+ * the notification consumer. as a stream of WiltChangeNotificationEvent objects, see 
+ * this class for further details.
  * 
  * CouchDb is initialized to supply the change notification stream in 'normal' mode, hence
  * this class requests the updates manually on a timed basis dependent on the heartberat period.
@@ -176,7 +176,7 @@ class _WiltChangeNotification {
   
   
   /**
-   * Database change update
+   * Database change updates
    */
   void processDbChange(Map change ) {
       
