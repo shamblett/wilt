@@ -709,6 +709,7 @@ main() {
     String putId2 = 'mytestid2';
     String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
+    String returnedDocRev;
     
     test("Create Database not authorized", () {  
       
@@ -949,7 +950,7 @@ main() {
        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
        expect(returnedDocId, putId);
-       String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+       returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
        expect(successResponse.title, equals("Created by a Put Request"));
        expect(successResponse.version, equals(2));
        expect(successResponse.author, equals("Me again"));
@@ -995,7 +996,7 @@ main() {
      
    }); 
    
-   test("Update document and check", () {  
+   test("Update document(PUT) and check", () {  
       
      var checkUpdater = expectAsync0((){
        
@@ -1018,7 +1019,7 @@ main() {
        /* Check the documents parameters */
        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
        String returnedDocId = successResponse.id;
-       expect(returnedDocId, equals(putId2));
+       expect(returnedDocId, equals(putId));
        String returnedDocRev = successResponse.rev;    
        expect(returnedDocRev, isNot(equals(docRev)));
        
@@ -1045,7 +1046,7 @@ main() {
        /* Check the documents parameters */
        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
-       expect(returnedDocId, putId2);
+       expect(returnedDocId, putId);
        String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
        docRev = returnedDocRev;
        expect(successResponse.title, equals("Created by a Put Request for checking"));
@@ -1059,7 +1060,7 @@ main() {
        String docString = WiltUserUtils.addDocumentRev(document,
                                                        returnedDocRev);
        wilting.resultCompletion = checkUpdater;
-       wilting.putDocumentString(putId2,
+       wilting.putDocumentString(putId,
                                  docString);
       
      });
@@ -1085,10 +1086,10 @@ main() {
        /* Get the documents id and re-get the document to check correctness */
        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
        String putDocId = successResponse.id;
-       expect(putDocId, equals(putId2));
+       expect(putDocId, equals(putId));
        /* Now get the document and check it */
        wilting.resultCompletion = checkCompleter;
-       wilting.getDocument(putId2);
+       wilting.getDocument(putId);
      
      });
      
@@ -1098,8 +1099,9 @@ main() {
      document.title = "Created by a Put Request for checking";
      document.version = 3;
      document.author = "Me also";
-     wilting.putDocument(putId2,
-                         document); 
+     wilting.putDocument(putId,
+                         document,
+                         returnedDocRev); 
      
    }); 
    
@@ -1291,7 +1293,7 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
         expect(successResponse.rows[2].id, equals(putId));
         
@@ -1330,7 +1332,7 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, isNot(equals(putId)));
         expect(successResponse.rows[0].id, isNot(equals(putId2)));
         int count = 0;
@@ -1376,15 +1378,14 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
-        expect(successResponse.rows[1].id, equals(putId2));
         int count = 0;
         for (final x in successResponse.rows ) {
           
           count++;
         }
-        expect(count, equals(2));
+        expect(count, equals(1));
         
       });
       
@@ -1421,15 +1422,14 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
-        expect(successResponse.rows[2].id, equals(putId));
         int count = 0;
         for (final x in successResponse.rows ) {
           
           count++;
         }
-        expect(count, equals(4));
+        expect(count, equals(3));
         
       });
       
@@ -1442,7 +1442,7 @@ main() {
     
     test("Get All Docs - key list", () {  
       
-      Wilt wilting = new Wilt(hostName, 
+      Wilt wilting = new Wilt(hostName,
           port,
           scheme);
       
@@ -1466,9 +1466,9 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
-        expect(successResponse.rows[1].id, equals(putId2));
+        expect(successResponse.rows[1].key, equals(putId2));
         int count = 0;
         for (final x in successResponse.rows ) {
           
@@ -1514,9 +1514,9 @@ main() {
         }
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(4));
+        expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(putId));
-        expect(successResponse.rows[0].id, equals(putId2));
+        expect(successResponse.rows[0].key, equals(putId2));
         int count = 0;
         for (final x in successResponse.rows ) {
           
@@ -2037,7 +2037,9 @@ main() {
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
-        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        testDocRev = successResponse.rev;
+        expect(testDocRev, anything);
+        expect(successResponse.id, 'attachmentTestDoc');
         String payload = res.responseText;
         expect(payload, equals(pngImage));
         String contentType = successResponse.contentType;
@@ -2288,7 +2290,7 @@ main() {
       var completer = expectAsync0((){
         
         wilting.stopChangeNotification();
-        expect(count,12);
+        expect(count,11);
         
       });
       
@@ -2324,7 +2326,7 @@ main() {
       
       var completer = expectAsync0((){
         
-        expect(count,12);
+        expect(count,11);
         
       });
       

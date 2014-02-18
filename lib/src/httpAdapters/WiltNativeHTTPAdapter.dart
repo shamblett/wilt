@@ -147,6 +147,8 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
       successAsJson.ok = true;
       successAsJson.contentType = response.responseHeaders['content-type'];
+      successAsJson.id = jsonResponse.jsonCouchResponse.id;
+      successAsJson.rev = jsonResponse.jsonCouchResponse.rev;
       jsonResponse.jsonCouchResponse = successAsJson;
       
     }

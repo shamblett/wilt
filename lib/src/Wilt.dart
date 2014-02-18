@@ -499,9 +499,14 @@ class Wilt {
   
   /**
    * PUT's to the specified  document.
+   * 
+   * For an update the revision must be specified, this can be in the
+   * document body as a _rev parameter or specified in the call in which
+   * case this will be added to the document body.
    */
   void putDocument(String id, 
-                   jsonobject.JsonObject document){
+                   jsonobject.JsonObject document,
+                   [String rev = null]){
     
     
     if( (id == null ) || (document == null)) {
@@ -509,14 +514,24 @@ class Wilt {
       throw new WiltException('putDocument() expects a document id and a document body.');
     }
 
+    /* Check for a revision */
     String jsonData = null;
+    
     try {
+      
+      if ( rev != null ) {
+      
+        jsonData = WiltUserUtils.addDocumentRev(document,
+                                                     rev);
+      } else {
      
-      jsonData = JSON.encode(document);
+        jsonData = JSON.encode(document);
+      }
     
     } catch(e) {
       
       throw new WiltException('putDocument() cannot stringify the document body, use putDocumentString');
+      
     }
     
     /* Perform the PUT */
@@ -531,7 +546,8 @@ class Wilt {
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
   void putDocumentString(String id, 
-                         String document){
+                         String document,
+                         [String rev = null]){
     
     
     if( (id == null ) || (document == null)) {
@@ -539,6 +555,9 @@ class Wilt {
       throw new WiltException('putDocumentString() expects a document id and a document body.');
     }
     
+    /* Check for a revision */
+    if ( rev != null ) id = "$id?rev=$rev";
+        
     /* Perform the PUT */
     put(id,
        document);
