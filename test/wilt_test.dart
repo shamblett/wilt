@@ -1855,7 +1855,7 @@ main() {
   });
   
   /* Group 6 - Attachment tests */
-  solo_group("Attachment Tests - ", () {
+  group("Attachment Tests - ", () {
   
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 
