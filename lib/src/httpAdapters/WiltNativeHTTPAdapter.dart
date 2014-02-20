@@ -59,6 +59,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
     html.HttpRequest req = response.target;
     
     /* Process the error response */
+    jsonResponse = new jsonobject.JsonObject();
     jsonResponse.error = true;
     jsonResponse.responseText = req.responseText;
     jsonResponse.errorCode = req.status;
@@ -92,6 +93,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
      *  Process the success response, note that an error response from CouchDB is 
      *  treated as an error, not as a success with an 'error' field in it.
      */
+    jsonResponse = new jsonobject.JsonObject();
     jsonResponse.error = false;
     jsonResponse.errorCode = 0;
     jsonResponse.responseText = response.responseText;
@@ -147,8 +149,6 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
       successAsJson.ok = true;
       successAsJson.contentType = response.responseHeaders['content-type'];
-      successAsJson.id = jsonResponse.jsonCouchResponse.id;
-      successAsJson.rev = jsonResponse.jsonCouchResponse.rev;
       jsonResponse.jsonCouchResponse = successAsJson;
       
     }

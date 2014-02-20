@@ -2042,9 +2042,6 @@ main() {
         
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
-        testDocRev = successResponse.rev;
-        expect(testDocRev, anything);
-        expect(successResponse.id, 'attachmentTestDoc');
         String payload = res.responseText;
         expect(payload, equals(pngImage));
         String contentType = successResponse.contentType;
