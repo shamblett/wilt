@@ -1855,7 +1855,7 @@ main() {
   });
   
   /* Group 6 - Attachment tests */
-  group("Attachment Tests - ", () {
+  solo_group("Attachment Tests - ", () {
   
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 
@@ -2014,6 +2014,11 @@ main() {
         expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("SJH"));
+        List attachments = WiltUserUtils.getAttachments(successResponse);
+        expect(attachments[0].name, 'attachmentName');
+        expect(attachments[0].data.stub, isTrue);
+        expect(attachments[0].data.content_type, 'image/png');
+        expect(attachments[0].data.length, anything);
         
       });
 

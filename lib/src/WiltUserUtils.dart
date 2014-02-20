@@ -81,5 +81,36 @@ class WiltUserUtils {
     
   }
   
+  /**
+   * Get a list of attachments from a document.
+   * 
+   * Returned Json Object contains the fields 'name' and 'data', the data
+   * being the attachment data returned from CouchDb.
+   * 
+   */
+  static List<jsonobject.JsonObject> getAttachments(jsonobject.JsonObject document) {
+    
+    List attachmentsList = new List<jsonobject.JsonObject>();
+    String docString = document.toString();
+    Map docMap = JSON.decode(docString);
+    if ( docMap.containsKey('_attachments')) {
+      
+      Map attachmentList = docMap['_attachments'];
+      attachmentList.keys.forEach((key){
+        
+        jsonobject.JsonObject jsonAttachmentData = new jsonobject.JsonObject.fromMap(
+                                                        attachmentList[key]);
+        jsonobject.JsonObject jsonAttachment = new jsonobject.JsonObject();
+        jsonAttachment.name = key;
+        jsonAttachment.data = jsonAttachmentData;
+        attachmentsList.add(jsonAttachment);
+        
+      });
+      
+    } 
+    
+    return attachmentsList;
+    
+  }
   
 }

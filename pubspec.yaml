@@ -1,6 +1,6 @@
 name: wilt
 author: S. Hamblett <steve.hamblett@linux.com>
-version: 2.2.0
+version: 2.2.1
 homepage: https://github.com/shamblett/wilt
 description: A browser based  CouchDB API  library based on the SAG CouchDB library for PHP
 documentation: http://oscf.org.uk/dart/api/wilt/index.html

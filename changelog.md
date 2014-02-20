@@ -1,4 +1,8 @@
 
+## 2.2.1
+
+Issue 5 fixed
+
 ## 2.2.0
 
 Issues 3 and 4 fixed.
