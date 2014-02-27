@@ -451,10 +451,13 @@ class Wilt {
  
   /**
    * Performs an HTTP GET operation for the supplied document id and
-   * optional revision. 
+   * optional revision. If withAttachments is set the the body of
+   * any attachments are also supplied, note this could make this 
+   * a large transfer.
    */
   void getDocument( String id, 
-                    {String rev}) {
+                    [ String rev = null,
+                      bool withAttachments = false]) {
         
     if( id == null ) {
       
@@ -467,6 +470,13 @@ class Wilt {
       url = _setURLParameter(url,
                              'rev',
                              rev);
+    }
+    
+    if ( withAttachments ) {
+      
+      url = _setURLParameter(url,
+                             'attachments',
+                             'true');
     }
     
     /* Perform the get */

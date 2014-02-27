@@ -8,6 +8,7 @@
 library wilt_test;
 
 import 'dart:async';
+import 'dart:html';
 
 import '../lib/wilt.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
@@ -2016,9 +2017,9 @@ main() {
         expect(successResponse.author, equals("SJH"));
         List attachments = WiltUserUtils.getAttachments(successResponse);
         expect(attachments[0].name, 'attachmentName');
-        expect(attachments[0].data.stub, isTrue);
         expect(attachments[0].data.content_type, 'image/png');
         expect(attachments[0].data.length, anything);
+        expect(window.atob(attachments[0].data.data), pngImage);
         
       });
 
@@ -2046,9 +2047,13 @@ main() {
         expect(payload, equals(pngImage));
         String contentType = successResponse.contentType;
         expect(contentType, equals('image/png'));
-        /* Now get the document to get the new revision  */
+        /* Now get the document to get the new revision along
+         * with its attachment data 
+         */
         wilting.resultCompletion = revisionCompleter;
-        wilting.getDocument('attachmentTestDoc');
+        wilting.getDocument('attachmentTestDoc',
+                            null,
+                            true);
       
       });
     
@@ -2260,6 +2265,11 @@ main() {
   /* Group 7 - Change Notifications */
   group("Change Notification Tests - ", () {
   
+    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'+
+        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr'+
+        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r'+
+        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+    
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, 
         port,
@@ -2307,11 +2317,12 @@ main() {
       
     });
     
-    test("Start Change Notification With Docs", () {  
+    test("Start Change Notification With Docs and Attachments", () {  
       
       wilting.db = databaseName;
       WiltChangeNotificationParameters parameters = new WiltChangeNotificationParameters();
       parameters.includeDocs = true;
+      parameters.includeAttachments = true;
       void wrapper() {
         
         wilting.startChangeNotification(parameters);
@@ -2345,8 +2356,15 @@ main() {
           
         }
         if ( e.docId == 'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
-        if ( e.docId == 'anotherAttachmentTestDoc') completer();
+        if ( e.docId == 'anotherAttachmentTestDoc') {
           
+          /* Only version 1.6 
+          List attachments = WiltUserUtils.getAttachments(e.document);
+          expect(attachments[0].data, pngImage); */
+          completer();
+          
+        } 
+        
       });
       
     });

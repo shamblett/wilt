@@ -120,7 +120,8 @@ class _WiltChangeNotification {
     String path = "$_dbName/_changes?"+
                    "&since=$sequence"+
                    "&descending=${_parameters.descending}"+
-                   "&include_docs=${_parameters.includeDocs}";
+                   "&include_docs=${_parameters.includeDocs}"+
+                   "&attachments=${_parameters.includeAttachments}";
                    
     String url = "$_scheme$_host:${_port.toString()}/$path";
    
