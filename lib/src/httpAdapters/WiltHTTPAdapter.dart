@@ -11,23 +11,16 @@
 part of wilt;
 
 abstract class WiltHTTPAdapter {
-  
-  
+
+
   WiltHTTPAdapter();
-  
+
   /*
    * Processes the HTTP request returning the server's response as
    * a JSON Object
    */
-  void httpRequest(String method, 
-                   String url, 
-                   [String data = null,
-                   Map headers = null]);
-  
-  /*
-   * Result Handling
-   */
-  void onError(html.ProgressEvent response);
-  void onSuccess(html.HttpRequest response);
-  
+  Future<jsonobject.JsonObject> httpRequest(String method, String url, [String
+      data = null, Map headers = null]);
+
+
 }

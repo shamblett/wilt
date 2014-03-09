@@ -22,51 +22,52 @@
 part of wilt;
 
 class _WiltChangeNotification {
-  
+
   /**
    * Parameters set
    */
-  WiltChangeNotificationParameters  _parameters = null;
+  WiltChangeNotificationParameters _parameters = null;
   WiltChangeNotificationParameters get parameters => _parameters;
-  set parameters(WiltChangeNotificationParameters parameters) => _parameters = parameters;
-  
+  set parameters(WiltChangeNotificationParameters parameters) => _parameters =
+      parameters;
+
   /**
    * Database name
    */
   String _dbName = null;
-  
+
   /** 
    * Host name
    */
-  String _host = null;  
-  
+  String _host = null;
+
   /** 
    * Port number
    */
-  String _port = null; 
-  
+  String _port = null;
+
   /** 
    * HTTP scheme
    */
-  String _scheme = null; 
-  
+  String _scheme = null;
+
   /**
    * Timer
    */
   Timer _timer = null;
-  
+
   /**
    * Since sequence number
    */
   int _sequence = 0;
-  
+
   /**
    * Paused indicator
    */
   bool _paused = false;
   bool get pause => _paused;
   set pause(bool flag) => _paused = flag;
-  
+
   /**
    * Change notification stream controller
    * 
@@ -74,214 +75,208 @@ class _WiltChangeNotification {
    */
   final _changeNotification = new StreamController.broadcast();
   get changeNotification => _changeNotification;
+
   
-  _WiltChangeNotification(this._host,
-                         this._port,
-                         this._scheme,
-                         [this._dbName,
-                          this._parameters]) {
-    
-    
-    if ( _parameters == null ) {
-      
+      _WiltChangeNotification(this._host, this._port, this._scheme, [this._dbName, this._parameters])
+      {
+
+
+    if (_parameters == null) {
+
       _parameters = new WiltChangeNotificationParameters();
-      
+
     }
-    
+
     _sequence = _parameters.since;
-    
+
     /**
      * Start the heartbeat timer
      */
-    Duration heartbeat = new Duration(milliseconds:_parameters.heartbeat);
-    _timer = new Timer.periodic(heartbeat,_requestChanges);
-    
+    Duration heartbeat = new Duration(milliseconds: _parameters.heartbeat);
+    _timer = new Timer.periodic(heartbeat, _requestChanges);
+
     /**
      * Start change notifications
      */
     _requestChanges(_timer);
-    
+
   }
-  
+
   /**
    *  Request the change notifications
    */
   void _requestChanges(Timer timer) {
-     
+
     /**
      * If paused return
      */
-    if ( _paused ) return;
-    
+    if (_paused) return;
+
     /**
      * Create the URL from the parameters
      */
     String sequence = _sequence.toString();
-    String path = "$_dbName/_changes?"+
-                   "&since=$sequence"+
-                   "&descending=${_parameters.descending}"+
-                   "&include_docs=${_parameters.includeDocs}"+
-                   "&attachments=${_parameters.includeAttachments}";
-                   
+    String path = "$_dbName/_changes?" + "&since=$sequence" +
+        "&descending=${_parameters.descending}" +
+        "&include_docs=${_parameters.includeDocs}" +
+        "&attachments=${_parameters.includeAttachments}";
+
     String url = "$_scheme$_host:${_port.toString()}/$path";
-   
+
     /**
      * Open the request
      */
     try {
-      
-      html.HttpRequest.getString(url)
-      ..then((result){
-                
+
+      html.HttpRequest.getString(url)..then((result) {
+
         /**
         * Process the change notification
         */
-        try {
-        
-          Map dbChange = JSON.decode(result);
-          processDbChange(dbChange);
-        
-        } catch (e) {
-        
+            try {
+
+              Map dbChange = JSON.decode(result);
+              processDbChange(dbChange);
+
+            } catch (e) {
+
           /**
           * Recoverable error, send the client an error event
           */
-          print( "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
-          WiltChangeNotificationEvent notification = new  
-              WiltChangeNotificationEvent.decodeError(result,
-                                                      e.toString());
-          
-          _changeNotification.add(notification);
-          
-        }
-        
-        
-      });
-      
-      
-      
+              print(
+                  "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
+              WiltChangeNotificationEvent notification =
+                  new WiltChangeNotificationEvent.decodeError(result, e.toString());
+
+              _changeNotification.add(notification);
+
+            }
+
+
+          });
+
+
+
     } catch (e) {
-      
+
       /**
        * Unrecoverable error, send the client an abort event
        */
-      print("WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}");
-      WiltChangeNotificationEvent notification = new  
-          WiltChangeNotificationEvent.abort(e.toString());
-      
+      print(
+          "WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}"
+          );
+      WiltChangeNotificationEvent notification =
+          new WiltChangeNotificationEvent.abort(e.toString());
+
       _changeNotification.add(notification);
-      
+
     }
-      
+
   }
-  
-  
+
+
   /**
    * Database change updates
    */
-  void processDbChange(Map change ) {
-      
+  void processDbChange(Map change) {
+
     /**
      * Check for an error response
      */
-    if ( change.containsKey('error') ) {
-      
-      WiltChangeNotificationEvent notification = new  
-          WiltChangeNotificationEvent.couchDbError(change['error'],
-                                                   change['reason']);
-      
+    if (change.containsKey('error')) {
+
+      WiltChangeNotificationEvent notification =
+          new WiltChangeNotificationEvent.couchDbError(change['error'], change['reason']);
+
       _changeNotification.add(notification);
-      
+
       return;
-      
+
     }
-    
+
     /**
      * Update the last sequence number
      */
     _sequence = change['last_seq'];
-    
+
     /**
      * Process the result list
      */
     List results = change['results'];
-    if ( results.isEmpty) {
-      
-      
-      WiltChangeNotificationEvent notification = new  
-          WiltChangeNotificationEvent.sequence(_sequence);
-      
+    if (results.isEmpty) {
+
+
+      WiltChangeNotificationEvent notification =
+          new WiltChangeNotificationEvent.sequence(_sequence);
+
       _changeNotification.add(notification);
-      
+
       return;
-      
+
     }
-    
+
     results.forEach((Map result) {
-      
+
       Map changes = result['changes'][0];
-      
+
       /**
        * Check for delete or update
        */
-      if ( result.containsKey('deleted') ) {
-        
-        WiltChangeNotificationEvent notification = new  
-            WiltChangeNotificationEvent.delete(result['id'],
-                                               changes['rev'],
-                                               result['seq']);
-        
+      if (result.containsKey('deleted')) {
+
+        WiltChangeNotificationEvent notification =
+            new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
+            result['seq']);
+
         _changeNotification.add(notification);
-        
+
       } else {
-        
+
         jsonobject.JsonObject document = null;
-        if ( result.containsKey('doc') ) {
-          
-          document = new  jsonobject.JsonObject.fromMap(result['doc']);
-          
+        if (result.containsKey('doc')) {
+
+          document = new jsonobject.JsonObject.fromMap(result['doc']);
+
         }
-        WiltChangeNotificationEvent notification = new  
-            WiltChangeNotificationEvent.update(result['id'],
-                                               changes['rev'],
-                                               result['seq'],
-                                               document);
-        
+        WiltChangeNotificationEvent notification =
+            new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
+            result['seq'], document);
+
         _changeNotification.add(notification);
-        
+
       }
-      
-      
+
+
     });
-    
-    
+
+
   }
-  
+
   /**
    * Stop change notifications
    */
   void stopNotifications() {
-    
+
     _timer.cancel();
-    
+
   }
-  
+
   /**
    * Restart change notifications
    */
   void restartChangeNotifications() {
-    
+
     /**
      * Start the heartbeat timer
      */
-    Duration heartbeat = new Duration(milliseconds:_parameters.heartbeat);
-    _timer = new Timer.periodic(heartbeat,_requestChanges);
-    
+    Duration heartbeat = new Duration(milliseconds: _parameters.heartbeat);
+    _timer = new Timer.periodic(heartbeat, _requestChanges);
+
     /**
      * Start change notifications
      */
     _requestChanges(_timer);
-    
+
   }
-                          
+
 }

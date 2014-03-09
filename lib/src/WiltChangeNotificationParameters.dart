@@ -11,7 +11,7 @@
 part of wilt;
 
 class WiltChangeNotificationParameters {
-  
+
   /**
    * Since
    * 
@@ -20,7 +20,7 @@ class WiltChangeNotificationParameters {
   int _since = 0;
   int get since => _since;
   set since(int value) => _since = value;
-   
+
   /**
    * Descending
    * 
@@ -29,7 +29,7 @@ class WiltChangeNotificationParameters {
   bool _descending = false;
   bool get descending => _descending;
   set descending(bool on) => _descending = on;
-  
+
   /**
    * Heartbeat
    * 
@@ -39,7 +39,7 @@ class WiltChangeNotificationParameters {
   int _heartbeat = 2000;
   int get heartbeat => _heartbeat;
   set heartbeat(int period) => _heartbeat = period;
-  
+
   /**
    * Include documents
    * 
@@ -49,7 +49,7 @@ class WiltChangeNotificationParameters {
   bool _includeDocs = false;
   bool get includeDocs => _includeDocs;
   set includeDocs(bool include) => _includeDocs = include;
-  
+
   /**
    * Include attachments
    * 
@@ -60,5 +60,5 @@ class WiltChangeNotificationParameters {
   bool _includeAttachments = false;
   bool get includeAttachments => _includeAttachments;
   set includeAttachments(bool include) => _includeAttachments = include;
-  
+
 }

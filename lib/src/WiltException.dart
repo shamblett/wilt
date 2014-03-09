@@ -11,10 +11,9 @@
 part of wilt;
 
 class WiltException implements Exception {
-  
+
   String _message = 'No Message Supplied';
   WiltException([this._message]);
-  
+
   String toString() => "WiltException: message = ${_message}";
 }
-
