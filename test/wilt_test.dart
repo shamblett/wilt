@@ -563,7 +563,7 @@ main() {
   });
 
   /* Group 4 - Single documents and database methods */
-  solo_group("4. Single documents and database - ", () {
+  group("4. Single documents and database - ", () {
 
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, port, scheme);
