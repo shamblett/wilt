@@ -132,7 +132,6 @@ class Wilt {
    */
   static const String UUIDS = "/_uuids";
 
-
   /**
    *
    * AUTH_BASIC denotes Basic HTTP authentication. 
@@ -146,6 +145,36 @@ class Wilt {
    */
   static const String AUTH_NONE = 'none';
 
+  /**
+   * Operation types and method definitions
+   */
+  static const GET = 'GET_GET';
+  static const HEAD = 'HEAD_HEAD';
+  static const POST = 'POST_POST';
+  static const PUT = 'PUT_PUT';
+  static const DELETE = 'DELETE_DELETE';
+  static const COPY = 'COPY_COPY';
+  static const GET_DOCUMENT = 'GET_DOCUMENT';
+  static const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
+  static const PUT_DOCUMENT = 'PUT_DOCUMENT';
+  static const POST_DOCUMENT = 'POST_DOCUMENT';
+  static const POST_DOCUMENT_STRING = 'POST_DOCUMENTSTRING';
+  static const COPY_DOCUMENT = 'COPY_DOCUMENT';
+  static const GET_ALLDOCS = 'GET_ALLDOCS';
+  static const BULK = 'POST_BULK';
+  static const BULK_STRING = 'POST_BULKSTRING';
+  static const CREATE_DATABASE = 'PUT_DATABASE';
+  static const DELETE_DATABASE = 'DELETE_DATABASE';
+  static const DATABASE_INFO = 'GET_DATABASEINFO';
+  static const GET_SESSION = 'GET_SESSION';
+  static const GET_STATS = 'GET_STATS';
+  static const GET_ALLDBS = 'GET_ALLDBS';
+  static const CREATE_ATTACHMENT = 'PUT_CREATEATTACH';
+  static const UPDATE_ATTACHMENT = 'PUT_UPDATEATTACH';
+  static const DELETE_ATTACHMENT = 'DELETE_ATTACH';
+  static const GET_ATTACHMENT = 'GET_ATTACH';
+  static const GENERATE_IDS = 'GET_IDS';
+  
   /** 
    * Database name
    */
