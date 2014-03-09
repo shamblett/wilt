@@ -23,12 +23,6 @@ part of wilt;
 
 class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
-
-  /**
-   * The method used 
-   */
-  String _method = null;
-
   /**
    *  Construction
    */
@@ -45,7 +39,6 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
     /**
      *  Initialise 
      */
-    _method = method;
     Completer completer = new Completer();
 
 
@@ -64,6 +57,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.successText = null;
       jsonResponse.errorText = null;
       jsonResponse.allResponseHeader = null;
+      jsonResponse.method = method;
       jsonResponse.responseText = response.responseText;
 
       /**
@@ -112,7 +106,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         /**
          * Success response
          */
-        if (_method != 'HEAD') {
+        if (method != 'HEAD') {
           jsonobject.JsonObject successAsJson =
               new jsonobject.JsonObject.fromJsonString(response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
@@ -149,11 +143,12 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
       /* Process the error response */
       jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      jsonResponse.method = method;
       jsonResponse.error = true;
       jsonResponse.successText = null;
       jsonResponse.responseText = req.responseText;
       jsonResponse.errorCode = req.status;
-      if ((req.status != 0) && (_method != 'HEAD')) {
+      if ((req.status != 0) && (method != 'HEAD')) {
         jsonobject.JsonObject errorAsJson =
             new jsonobject.JsonObject.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
