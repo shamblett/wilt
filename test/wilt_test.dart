@@ -563,7 +563,7 @@ main() {
   });
 
   /* Group 4 - Single documents and database methods */
-  group("4. Single documents and database - ", () {
+  solo_group("4. Single documents and database - ", () {
 
     /* Create our Wilt */
     Wilt wilting = new Wilt(hostName, port, scheme);
@@ -772,7 +772,7 @@ main() {
           logMessage("WILT::Reason is $reasonText");
           int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
-          String responseHeaders = wilting.responseHeaders;
+          String responseHeaders = res.responseHeaders;
           logMessage("WILT::Response headers are $responseHeaders");
 
         }

@@ -179,8 +179,7 @@ class Wilt {
   /**
    * HTTP Adapter
    */
-  WiltNativeHTTPAdapter _httpAdapter = null;
-  String get responseHeaders => _httpAdapter.responseHeaders;
+  WiltBrowserHTTPAdapter _httpAdapter = null;
 
   /**
    * Change notification 
@@ -242,7 +241,7 @@ class Wilt {
     }
 
     /* Get our HTTP adapter */
-    _httpAdapter = new WiltNativeHTTPAdapter();
+    _httpAdapter = new WiltBrowserHTTPAdapter();
   }
 
   /**

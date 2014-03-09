@@ -21,7 +21,7 @@
 
 part of wilt;
 
-class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
+class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
 
   /**
@@ -29,17 +29,10 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
    */
   String _method = null;
 
-
   /**
    *  Construction
    */
-  WiltNativeHTTPAdapter();
-
-  /**
-   *  All response headers 
-   */
-  String _allResponseHeaders = null;
-  String get responseHeaders => _allResponseHeaders;
+  WiltBrowserHTTPAdapter();
 
   /**
    * Processes the HTTP request, returning the server's response
@@ -70,6 +63,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
       jsonResponse.errorText = null;
+      jsonResponse.allResponseHeader = null;
       jsonResponse.responseText = response.responseText;
 
       /**
@@ -91,7 +85,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
           errorAsJson.reason = "None";
           jsonResponse.jsonCouchResponse = errorAsJson;
           /* Set the response headers */
-          _allResponseHeaders = response.getAllResponseHeaders();
+          jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
           /**
             * Complete the reequest
             */
@@ -107,7 +101,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
           errorAsJson.reason = couchResp['reason'];
           jsonResponse.jsonCouchResponse = errorAsJson;
           /* Set the response headers */
-          _allResponseHeaders = response.getAllResponseHeaders();
+          jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
           /**
            * Complete the reequest
            */
@@ -136,7 +130,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
 
 
       /* Set the response headers */
-      _allResponseHeaders = response.getAllResponseHeaders();
+      jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
       /**
        * Complete the request
        */
@@ -171,7 +165,7 @@ class WiltNativeHTTPAdapter implements WiltHTTPAdapter {
       }
 
       /* Set the response headers */
-      _allResponseHeaders = req.getAllResponseHeaders();
+      jsonResponse.allResponseHeaders = req.getAllResponseHeaders();
 
       /**
        * Complete the reequest
