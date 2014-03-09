@@ -50,5 +50,15 @@ class WiltChangeNotificationParameters {
   bool get includeDocs => _includeDocs;
   set includeDocs(bool include) => _includeDocs = include;
   
+  /**
+   * Include attachments
+   * 
+   * Include any associated document attachments with each result. 
+   * This will retrieve the body of the attachment in Base64 format
+   * as well as the stub data that is normally suppplied.
+   */
+  bool _includeAttachments = false;
+  bool get includeAttachments => _includeAttachments;
+  set includeAttachments(bool include) => _includeAttachments = include;
   
 }
