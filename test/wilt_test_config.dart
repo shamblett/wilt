@@ -8,12 +8,13 @@
 /* Global configuration, please edit */
 
 /* CouchDB server */
-final String hostName = "xxxx";
-final String port = "xxxx";
+final String hostName = "proxy.dicerati.com";
+final String port = "8080/couch-dart";
 final String scheme = "http://"; 
 
-/* Database to use for testing */
+/* Databases to use for testing */
 final String databaseName = 'wilttest';
+final String databaseNameFutures = 'wilttest_future';
 
 /**
  *  Authentication, set as you wish, note leaving userName and password null 
@@ -21,6 +22,6 @@ final String databaseName = 'wilttest';
  *  used.
  */
 
-final String userName = '';
-final String userPassword = '';
+final String userName = 'xxxxx';
+final String userPassword = 'xxxxx';
 

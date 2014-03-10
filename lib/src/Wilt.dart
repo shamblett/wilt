@@ -277,7 +277,7 @@ class Wilt {
    *  The internal HTTP request method. This wraps the
    *  HTTP adapter class. 
   */
-  void _httpRequest(String method, String url, {String data: null, Map headers:
+  Future<jsonobject.JsonObject> _httpRequest(String method, String url, {String data: null, Map headers:
       null}) {
 
 
@@ -310,14 +310,20 @@ class Wilt {
     }
 
     /* Execute the request*/
-    _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)..then(
+    Future<jsonobject.JsonObject> completion = _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)..then(
         (jsonResponse) {
 
-          _completionResponse = jsonResponse;
-          _clientCompletion();
-          return;
+          if ( _clientCompletion != null ) {
+            
+            _completionResponse = jsonResponse;
+            _clientCompletion();
+            return;
+         
+          }
 
-        });
+       });
+    
+    return completion;
 
   }
 
@@ -377,23 +383,23 @@ class Wilt {
    * This can be used for CouchDb functions that are not directly supported by Wilt,
    * e.g views, attachments and design documents.
    */
-  void httpRequest(String url, {String method: "GET"}) {
+  Future<jsonobject.JsonObject> httpRequest(String url, {String method: "GET"}) {
 
 
     /* Perform the request */
-    _httpRequest(method, url);
+    return _httpRequest(method, url);
   }
 
   /**
    * Performs an HTTP GET operation, the URL is conditioned and
    * the current database added.
    */
-  void get(String url) {
+  Future<jsonobject.JsonObject> get(String url) {
 
     url = _conditionUrl(url);
 
     /* Perform the get */
-    _httpRequest('GET', url);
+    return _httpRequest('GET', url);
 
 
   }
@@ -402,12 +408,12 @@ class Wilt {
    * Performs a HTTP HEAD operation, the URL is conditioned and
    * the current database added.
    */
-  head(String url) {
+  Future<jsonobject.JsonObject> head(String url) {
 
     url = _conditionUrl(url);
 
     /* Perform the head */
-    _httpRequest(HEAD, url);
+   return  _httpRequest(HEAD, url);
 
   }
 
@@ -415,12 +421,12 @@ class Wilt {
    * Performs a HTTP POST operation,, the URL is conditioned and
    * the current database added.
    */
-  post(String url, String data, [Map headers]) {
+  Future<jsonobject.JsonObject> post(String url, String data, [Map headers]) {
 
     url = _conditionUrl(url);
 
     /* Perform the post */
-    _httpRequest('POST', url, data: data, headers: headers);
+    return _httpRequest('POST', url, data: data, headers: headers);
 
   }
 
@@ -428,12 +434,12 @@ class Wilt {
    * Performs a HTTP PUT operation,, the URL is conditioned and
    * the current database added.
    */
-  put(String url, String data, [Map headers]) {
+  Future<jsonobject.JsonObject> put(String url, String data, [Map headers]) {
 
     url = _conditionUrl(url);
 
     /* Perform the put */
-    _httpRequest('PUT', url, data: data, headers: headers);
+    return _httpRequest('PUT', url, data: data, headers: headers);
 
   }
 
@@ -442,13 +448,13 @@ class Wilt {
    * the current database added.
    *
    */
-  delete(String url) {
+  Future<jsonobject.JsonObject> delete(String url) {
 
 
     url = _conditionUrl(url);
 
     /* Perform the delete */
-    _httpRequest('DELETE', url);
+   return  _httpRequest('DELETE', url);
 
   }
 
@@ -458,7 +464,7 @@ class Wilt {
    * any attachments are also supplied, note this could make this 
    * a large transfer.
    */
-  void getDocument(String id, [String rev = null, bool withAttachments = false])
+  Future<jsonobject.JsonObject> getDocument(String id, [String rev = null, bool withAttachments = false])
       {
 
     if (id == null) {
@@ -478,7 +484,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    _httpRequest('GET_DOCUMENT', url);
+   return  _httpRequest('GET_DOCUMENT', url);
 
 
   }
@@ -487,7 +493,7 @@ class Wilt {
   /**
    * DELETE's the specified document. Must have a revision.
    */
-  void deleteDocument(String id, String rev) {
+  Future<jsonobject.JsonObject> deleteDocument(String id, String rev) {
 
     if ((id == null) || (rev == null)) {
 
@@ -499,7 +505,7 @@ class Wilt {
     url = _setURLParameter(url, 'rev', rev);
 
     url = _conditionUrl(url);
-    _httpRequest('DELETE_DOCUMENT', url);
+    return _httpRequest('DELETE_DOCUMENT', url);
 
   }
 
@@ -511,7 +517,7 @@ class Wilt {
    * document body as a _rev parameter or specified in the call in which
    * case this will be added to the document body.
    */
-  void putDocument(String id, jsonobject.JsonObject document, [String rev =
+  Future<jsonobject.JsonObject> putDocument(String id, jsonobject.JsonObject document, [String rev =
       null]) {
 
 
@@ -542,7 +548,7 @@ class Wilt {
     }
 
     String url = _conditionUrl(id);
-    _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+   return  _httpRequest('PUT_DOCUMENT', url, data: jsonData);
 
 
   }
@@ -551,7 +557,7 @@ class Wilt {
    * PUT's to the specified  document where the document is supplied as 
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
-  void putDocumentString(String id, String document, [String rev = null]) {
+  Future<jsonobject.JsonObject> putDocumentString(String id, String document, [String rev = null]) {
 
 
     if ((id == null) || (document == null)) {
@@ -564,7 +570,7 @@ class Wilt {
     if (rev != null) id = "$id?rev=$rev";
 
     String url = _conditionUrl(id);
-    _httpRequest('PUT_DOCUMENT', url, data: document);
+    return _httpRequest('PUT_DOCUMENT', url, data: document);
 
 
 
@@ -574,7 +580,7 @@ class Wilt {
    * POST's the specified document.
    * An optional path to the document can be specified.
    */
-  void postDocument(jsonobject.JsonObject document, {String path: null}) {
+  Future<jsonobject.JsonObject> postDocument(jsonobject.JsonObject document, {String path: null}) {
 
 
     if (document == null) {
@@ -601,7 +607,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
+    return _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
 
 
   }
@@ -610,7 +616,7 @@ class Wilt {
    * POST's to the specified  document where the document is supplied as 
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
-  void postDocumentString(String document, {String path: null}) {
+  Future<jsonobject.JsonObject> postDocumentString(String document, {String path: null}) {
 
 
     if (document == null) {
@@ -626,7 +632,7 @@ class Wilt {
     headers["Content-Type"] = "application/json";
 
     url = _conditionUrl(url);
-    _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
+    return _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
 
 
   }
@@ -635,7 +641,7 @@ class Wilt {
    * Copies the source document to the destination document with an optional revision
    * NOTE this method uses the CouchDB COPY method which is not standard HTTP.
    */
-  void copyDocument(String sourceId, String destinationId, [String rev = null])
+  Future<jsonobject.JsonObject> copyDocument(String sourceId, String destinationId, [String rev = null])
       {
 
     if (sourceId == null) {
@@ -658,7 +664,7 @@ class Wilt {
     headers['Destination'] = destination;
 
     url = _conditionUrl(url);
-    _httpRequest('COPY_DOCUMENT', url, headers: headers);
+    return _httpRequest('COPY_DOCUMENT', url, headers: headers);
 
 
   }
@@ -668,7 +674,7 @@ class Wilt {
    * The parameters should be self explanatory and are addative.
    * Refer to the CouchDb documentation for further explanation.
    */
-  void getAllDocs({bool includeDocs: false, int limit: null, String startKey:
+  Future<jsonobject.JsonObject> getAllDocs({bool includeDocs: false, int limit: null, String startKey:
       null, String endKey: null, List<String> keys: null, bool descending: false}) {
 
 
@@ -721,7 +727,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    _httpRequest('GET_ALLDOCS', url);
+    return  _httpRequest('GET_ALLDOCS', url);
 
   }
 
@@ -729,7 +735,7 @@ class Wilt {
    * Bulk insert
    * Bulk inserts a list of documents
    */
-  void bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
+  Future<jsonobject.JsonObject> bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
 
 
     /* Validate the parameters */
@@ -766,7 +772,7 @@ class Wilt {
     headers["Content-Type"] = "application/json";
 
     url = _conditionUrl(url);
-    _httpRequest(BULK, url, data: docString, headers: headers);
+    return _httpRequest(BULK, url, data: docString, headers: headers);
 
   }
 
@@ -774,7 +780,7 @@ class Wilt {
    * Bulk insert JSON string version.
    * Must be used if '_id' and or '_rev' are needed in ANY of the documents
    */
-  void bulkString(String docs, [bool allOrNothing = false]) {
+  Future<jsonobject.JsonObject> bulkString(String docs, [bool allOrNothing = false]) {
 
 
     /* Validate the parameters */
@@ -796,14 +802,14 @@ class Wilt {
     headers["Content-Type"] = "application/json";
 
     url = _conditionUrl(url);
-    _httpRequest(BULK_STRING, url, data: docs, headers: headers);
+    return _httpRequest(BULK_STRING, url, data: docs, headers: headers);
 
   }
 
   /**
    * Creates a database with the specified name.
    */
-  void createDatabase(String name) {
+  Future<jsonobject.JsonObject> createDatabase(String name) {
 
     if ((name == null)) {
 
@@ -818,14 +824,14 @@ class Wilt {
 
     }
 
-    _httpRequest(CREATE_DATABASE, url);
+    return _httpRequest(CREATE_DATABASE, url);
 
   }
 
   /**
    * Deletes the specified database
    */
-  void deleteDatabase(String name) {
+  Future<jsonobject.JsonObject> deleteDatabase(String name) {
 
     if (name == null) {
 
@@ -843,14 +849,14 @@ class Wilt {
     /* Null the current database if we have deleted it */
     if (name == db) _db = null;
 
-    _httpRequest(DELETE_DATABASE, url);
+    return _httpRequest(DELETE_DATABASE, url);
 
   }
 
   /**
    * Get information about a database
    */
-  void getDatabaseInfo([String dbName = null]) {
+  Future<jsonobject.JsonObject> getDatabaseInfo([String dbName = null]) {
 
     String name;
     if (dbName != null) {
@@ -864,39 +870,39 @@ class Wilt {
 
     String url = "/$name";
 
-    _httpRequest(DATABASE_INFO, url);
+    return _httpRequest(DATABASE_INFO, url);
 
   }
   /**
    * Get current session information from CouchDB
    */
-  void getSession() {
+  Future<jsonobject.JsonObject> getSession() {
 
     String url = SESSION;
 
-    _httpRequest(GET_SESSION, url);
+   return _httpRequest(GET_SESSION, url);
 
   }
 
   /**
    * Get current stats from CouchDB
    */
-  void getStats() {
+  Future<jsonobject.JsonObject> getStats() {
 
     String url = STATS;
 
-    _httpRequest(GET_STATS, url);
+    return _httpRequest(GET_STATS, url);
 
   }
 
   /**
    * Get all the databases from CouchDB
    */
-  void getAllDbs() {
+  Future<jsonobject.JsonObject> getAllDbs() {
 
     String url = ALLDBS;
 
-    _httpRequest(GET_ALLDBS, url);
+    return _httpRequest(GET_ALLDBS, url);
 
   }
 
@@ -905,7 +911,7 @@ class Wilt {
    * contentType is in the form of a mime type e.g. 'image/png'
    * If the document needs to be created as well as the attachment set the rev to ''
    */
-  void createAttachment(String docId, String attachmentName, String rev, String
+  Future<jsonobject.JsonObject> createAttachment(String docId, String attachmentName, String rev, String
       contentType, String payload) {
 
     /**
@@ -953,7 +959,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
+    return _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
 
   }
 
@@ -961,7 +967,7 @@ class Wilt {
    * Update an attachment on an existing document.
    * contentType is in the form of a mime type e.g. 'image/png'
    */
-  void updateAttachment(String docId, String attachmentName, String rev, String
+  Future<jsonobject.JsonObject> updateAttachment(String docId, String attachmentName, String rev, String
       contentType, String payload) {
 
     /**
@@ -1002,14 +1008,14 @@ class Wilt {
     String url = "$docId/$attachmentName?rev=$rev";
 
     url = _conditionUrl(url);
-    _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
+    return _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
 
   }
 
   /**
    * Delete an attachment
    */
-  void deleteAttachment(String docId, String attachmentName, String rev) {
+  Future<jsonobject.JsonObject> deleteAttachment(String docId, String attachmentName, String rev) {
 
     if (docId == null) {
 
@@ -1030,14 +1036,14 @@ class Wilt {
     String url = "$docId/$attachmentName?rev=$rev";
 
     url = _conditionUrl(url);
-    _httpRequest(DELETE_ATTACHMENT, url);
+    return _httpRequest(DELETE_ATTACHMENT, url);
 
   }
 
   /**
    * Get an attachment
    */
-  void getAttachment(String docId, String attachmentName) {
+  Future<jsonobject.JsonObject> getAttachment(String docId, String attachmentName) {
 
 
     if (docId == null) {
@@ -1054,7 +1060,7 @@ class Wilt {
     String url = "$docId/$attachmentName";
 
     url = _conditionUrl(url);
-    _httpRequest(GET_ATTACHMENT, url);
+   return  _httpRequest(GET_ATTACHMENT, url);
 
   }
 
@@ -1166,7 +1172,7 @@ class Wilt {
    * Ask CouchDB to generate document Id's.
    * 
    */
-  void generateIds([int amount = 10]) {
+  Future<jsonobject.JsonObject> generateIds([int amount = 10]) {
 
     if (amount < 1) {
 
@@ -1177,7 +1183,7 @@ class Wilt {
 
     url = _setURLParameter(url, 'count', amount.toString());
 
-    _httpRequest(GENERATE_IDS, url);
+    return _httpRequest(GENERATE_IDS, url);
 
   }
 
