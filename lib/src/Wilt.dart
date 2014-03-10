@@ -174,7 +174,7 @@ class Wilt {
   static const DELETE_ATTACHMENT = 'DELETE_ATTACH';
   static const GET_ATTACHMENT = 'GET_ATTACH';
   static const GENERATE_IDS = 'GET_IDS';
-  
+
   /** 
    * Database name
    */
@@ -407,7 +407,7 @@ class Wilt {
     url = _conditionUrl(url);
 
     /* Perform the head */
-    _httpRequest('HEAD', url);
+    _httpRequest(HEAD, url);
 
   }
 
@@ -477,8 +477,9 @@ class Wilt {
       url = _setURLParameter(url, 'attachments', 'true');
     }
 
-    /* Perform the get */
-    get(url);
+    url = _conditionUrl(url);
+    _httpRequest('GET_DOCUMENT', url);
+
 
   }
 
@@ -497,8 +498,8 @@ class Wilt {
     String url = id;
     url = _setURLParameter(url, 'rev', rev);
 
-    /* Perform the delete */
-    delete(url);
+    url = _conditionUrl(url);
+    _httpRequest('DELETE_DOCUMENT', url);
 
   }
 
@@ -540,8 +541,8 @@ class Wilt {
 
     }
 
-    /* Perform the PUT */
-    put(id, jsonData);
+    String url = _conditionUrl(id);
+    _httpRequest('PUT_DOCUMENT', url, data: jsonData);
 
 
   }
@@ -562,8 +563,9 @@ class Wilt {
     /* Check for a revision */
     if (rev != null) id = "$id?rev=$rev";
 
-    /* Perform the PUT */
-    put(id, document);
+    String url = _conditionUrl(id);
+    _httpRequest('PUT_DOCUMENT', url, data: document);
+
 
 
   }
@@ -598,8 +600,8 @@ class Wilt {
           'postDocument() cannot stringify document body , use postDocumentString');
     }
 
-    /* Perform the POST */
-    post(url, jsonData, headers);
+    url = _conditionUrl(url);
+    _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
 
 
   }
@@ -623,9 +625,8 @@ class Wilt {
     Map headers = new Map<String, String>();
     headers["Content-Type"] = "application/json";
 
-    /* Perform the POST */
-    post(url, document, headers);
-
+    url = _conditionUrl(url);
+    _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
 
 
   }
@@ -649,7 +650,6 @@ class Wilt {
 
 
     String url = sourceId;
-    url = _conditionUrl(url);
 
     /* Create the special COPY header */
     Map headers = new Map<String, String>();
@@ -657,8 +657,8 @@ class Wilt {
     if (rev != null) destination = "$destinationId?rev=$rev";
     headers['Destination'] = destination;
 
-    /* Send the request */
-    _httpRequest('COPY', url, headers: headers);
+    url = _conditionUrl(url);
+    _httpRequest('COPY_DOCUMENT', url, headers: headers);
 
 
   }
@@ -720,8 +720,8 @@ class Wilt {
       url = _setURLParameter(url, 'keys', keyString);
     }
 
-    /* Action the request */
-    get(url);
+    url = _conditionUrl(url);
+    _httpRequest('GET_ALLDOCS', url);
 
   }
 
@@ -765,8 +765,8 @@ class Wilt {
     Map headers = new Map<String, String>();
     headers["Content-Type"] = "application/json";
 
-    /* Action the request */
-    post(url, docString, headers);
+    url = _conditionUrl(url);
+    _httpRequest(BULK, url, data: docString, headers: headers);
 
   }
 
@@ -795,8 +795,8 @@ class Wilt {
     Map headers = new Map<String, String>();
     headers["Content-Type"] = "application/json";
 
-    /* Action the request */
-    post(url, docs, headers);
+    url = _conditionUrl(url);
+    _httpRequest(BULK_STRING, url, data: docs, headers: headers);
 
   }
 
@@ -818,8 +818,7 @@ class Wilt {
 
     }
 
-    /* Perform the create */
-    _httpRequest('PUT', url);
+    _httpRequest(CREATE_DATABASE, url);
 
   }
 
@@ -844,8 +843,7 @@ class Wilt {
     /* Null the current database if we have deleted it */
     if (name == db) _db = null;
 
-    /* Perform the delete */
-    _httpRequest('DELETE', url);
+    _httpRequest(DELETE_DATABASE, url);
 
   }
 
@@ -866,10 +864,7 @@ class Wilt {
 
     String url = "/$name";
 
-    /**
-     * Perform the GET
-     */
-    _httpRequest('GET', url);
+    _httpRequest(DATABASE_INFO, url);
 
   }
   /**
@@ -879,7 +874,7 @@ class Wilt {
 
     String url = SESSION;
 
-    _httpRequest('GET', url);
+    _httpRequest(GET_SESSION, url);
 
   }
 
@@ -890,7 +885,7 @@ class Wilt {
 
     String url = STATS;
 
-    _httpRequest('GET', url);
+    _httpRequest(GET_STATS, url);
 
   }
 
@@ -901,7 +896,7 @@ class Wilt {
 
     String url = ALLDBS;
 
-    _httpRequest('GET', url);
+    _httpRequest(GET_ALLDBS, url);
 
   }
 
@@ -956,7 +951,9 @@ class Wilt {
     } else {
       url = "$docId/$attachmentName";
     }
-    put(url, payload, headers);
+
+    url = _conditionUrl(url);
+    _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
 
   }
 
@@ -1001,11 +998,11 @@ class Wilt {
     Map headers = new Map<String, String>();
     headers["Content-Type"] = contentType;
 
-    /**
-     * Make the PUT request
-     */
+
     String url = "$docId/$attachmentName?rev=$rev";
-    put(url, payload, headers);
+
+    url = _conditionUrl(url);
+    _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
 
   }
 
@@ -1029,11 +1026,11 @@ class Wilt {
       throw new WiltException('deleteAttachment() expects a revision.');
     }
 
-    /**
-     * Make the DELETE request
-     */
+
     String url = "$docId/$attachmentName?rev=$rev";
-    delete(url);
+
+    url = _conditionUrl(url);
+    _httpRequest(DELETE_ATTACHMENT, url);
 
   }
 
@@ -1053,11 +1050,11 @@ class Wilt {
       throw new WiltException('getAttachment() expects an attachment name.');
     }
 
-    /**
-     * Make the GET request
-     */
+
     String url = "$docId/$attachmentName";
-    get(url);
+
+    url = _conditionUrl(url);
+    _httpRequest(GET_ATTACHMENT, url);
 
   }
 
@@ -1180,8 +1177,7 @@ class Wilt {
 
     url = _setURLParameter(url, 'count', amount.toString());
 
-    /* Get the uuids */
-    _httpRequest('GET', url);
+    _httpRequest(GENERATE_IDS, url);
 
   }
 

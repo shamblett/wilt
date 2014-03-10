@@ -106,7 +106,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         /**
          * Success response
          */
-        if (method != 'HEAD') {
+        if (method != Wilt.HEAD) {
           jsonobject.JsonObject successAsJson =
               new jsonobject.JsonObject.fromJsonString(response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
@@ -148,7 +148,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.successText = null;
       jsonResponse.responseText = req.responseText;
       jsonResponse.errorCode = req.status;
-      if ((req.status != 0) && (method != 'HEAD')) {
+      if ((req.status != 0) && (method != Wilt.HEAD)) {
         jsonobject.JsonObject errorAsJson =
             new jsonobject.JsonObject.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
@@ -170,9 +170,15 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /**
-     *  Query couchdb over HTTP 
+     * Condition the input method string to get the HTTP method
      */
-    html.HttpRequest.request(url, method: method, withCredentials: false,
+    List temp = method.split('_');
+    String httpMethod = temp[0];
+    
+    /**
+     *  Query CouchDB over HTTP 
+     */
+    html.HttpRequest.request(url, method: httpMethod, withCredentials: false,
         responseType: null, requestHeaders: headers, sendData: data)
         ..then(onSuccess)
         ..catchError(onError);

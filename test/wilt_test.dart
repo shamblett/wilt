@@ -594,6 +594,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = localWilting.completionResponse;
+        expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -618,6 +619,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -649,6 +651,7 @@ main() {
       var checkCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.DELETE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -669,6 +672,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -702,6 +706,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.HEAD);
         try {
           expect(res.error, isTrue);
         } catch (e) {
@@ -731,6 +736,7 @@ main() {
       var checkCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -760,6 +766,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.POST_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -802,6 +809,7 @@ main() {
       var checkCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -831,6 +839,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -871,6 +880,7 @@ main() {
       var checkUpdater = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -938,6 +948,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -978,6 +989,7 @@ main() {
       var checkCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.DELETE_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1002,6 +1014,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1043,6 +1056,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.COPY_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1137,6 +1151,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1174,6 +1189,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1218,6 +1234,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1260,6 +1277,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1302,6 +1320,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1348,6 +1367,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1394,6 +1414,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.BULK);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1447,6 +1468,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.BULK_STRING);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1498,7 +1520,7 @@ main() {
 
   });
 
-  /* Group 5 - Information tests */
+  /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
 
     /* Create our Wilt */
@@ -1515,6 +1537,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_SESSION);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1545,6 +1568,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_STATS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1575,6 +1599,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1606,6 +1631,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1636,6 +1662,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ALLDBS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1666,6 +1693,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1693,7 +1721,7 @@ main() {
 
   });
 
-  /* Group 6 - Attachment tests */
+  /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
 
     /* Create our Wilt */
@@ -1722,6 +1750,7 @@ main() {
       var checkCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1753,6 +1782,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1793,6 +1823,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1825,6 +1856,7 @@ main() {
       var revisionCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1860,6 +1892,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1901,6 +1934,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.UPDATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1934,6 +1968,7 @@ main() {
       var revisionCompleter = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1964,6 +1999,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2004,6 +2040,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2036,6 +2073,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.CREATE_ATTACHMENT);
         expect(res.error, isTrue);
         int statusCode = res.errorCode;
         expect(statusCode, equals(409));
@@ -2054,6 +2092,7 @@ main() {
       var completer = expectAsync0(() {
 
         jsonobject.JsonObject res = wilting.completionResponse;
+        expect(res.method, Wilt.DELETE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2083,7 +2122,7 @@ main() {
 
   });
 
-  /* Group 7 - Change Notifications */
+  /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
 
     String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
