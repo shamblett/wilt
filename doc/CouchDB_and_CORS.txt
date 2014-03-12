@@ -24,11 +24,10 @@ a problem.
 CouchDB versions and CORS support
 =================================
 
-The current version of CouchDB(1.3.0) now supports CORS requests, it can be configured to accept a list of
+The current version of CouchDB(1.4.0..1.6.0) now supports CORS requests, it can be configured to accept a list of
 origins, request methods etc to allow the corrrct headers to be sent back to the browser when a CORS request is made.
-Previous versions didn't support CORS natively at all. 
 
-There is however still a problem with this, version 1.3.0 is not yet a 
+There is however still a problem with version 1.3.0 in that this is not yet a 
 full CORS implementation, you cannot for instance set the Allow Headers header to what you may wish as its not
 yet supported. This means that you can't tell the server to allow Authorization headers from the browser, which means
 you can't use Basic Auth with 1.3.0, its CORS implementation works only in Admin Party mode, which is not the
@@ -47,11 +46,15 @@ Proxying CouchDb
 =================
 
 The only real way to do this is to proxy access to your CouchDB instance using either Apache or Nginx say so you
-can control the headers sent back to the browser from the proxy server. Actual access to the CouchDB instance
+can control the headers sent back to the browser.
+
+This is known as a CORS proxy.
+
+Actual access to the CouchDB instance
 of course is now server to server, not browser to server so all CORS restrictions disappear. There are also dedicated
 CORS proxies on the web, these too can be used if you can gain access to them.
 
-Please google for setting this up, there are many articles on this. I've included an apache  vhosts file I've used 
+Please Google for setting this up, there are many articles on this. I've included an apache  vhosts file I've used 
 in testing to give a flavour of how to set this up. You can of course proxy to many CouchDB instances, whether they be local 
 or cloud based servers.
 
