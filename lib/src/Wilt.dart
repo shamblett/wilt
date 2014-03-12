@@ -177,7 +177,7 @@ class Wilt {
   String authenticationType = AUTH_NONE;
 
   /**
-   * PLease use the wilt_browser_client or wilt_server_client import files to 
+   * Please use the wilt_browser_client or wilt_server_client import files to 
    * instantiate a Wilt object for use in either the browser or server environment.
    * You can do this here but you must supply either a browser or server HTTP adapter
    * to use.
