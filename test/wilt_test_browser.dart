@@ -5,10 +5,9 @@
  * Copyright :  S.Hamblett@OSCF
  */
 
-library wilt_test_client_completion;
+library wilt_test_browser;
 
 import 'dart:html';
-
 import '../lib/wilt.dart';
 import '../lib/wilt_browser_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
@@ -87,8 +86,7 @@ main() {
       }
 
     });
-
-
+    
   });
 
   /* Group 2 - Basic methods parameter validation  */
@@ -659,11 +657,10 @@ main() {
 
 
   });
-
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
 
-    /* Create our WiltBrowserClient */
+    /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
@@ -690,9 +687,8 @@ main() {
 
       localWilting.login('freddy', 'freddypass');
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = localWilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -707,17 +703,17 @@ main() {
 
       });
 
-      localWilting.resultCompletion = completer;
-      localWilting.createDatabase(databaseNameClientCompletion);
+      localWilting.createDatabase(databaseNameClient)..then((res) {
+            completer(res);
+          });
 
     });
 
     /* Create the test database */
     test("Create Test Database", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -738,8 +734,10 @@ main() {
         expect(successResponse.ok, isTrue);
       });
 
-      wilting.resultCompletion = completer;
-      wilting.createDatabase(databaseNameClientCompletion);
+
+      wilting.createDatabase(databaseNameClient)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -747,9 +745,8 @@ main() {
     /* Create a database then delete it */
     test("Delete Database", () {
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -768,9 +765,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -788,23 +784,25 @@ main() {
         }
 
         /* Now delete it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.deleteDatabase("wiltdeleteme");
+        wilting.deleteDatabase("wiltdeleteme")..then((res) {
+              checkCompleter(res);
+            });
 
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.createDatabase("wiltdeleteme");
+
+      wilting.createDatabase("wiltdeleteme")..then((res) {
+            completer(res);
+          });
 
     });
 
 
     test("HEAD null URL", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.HEAD);
         try {
           expect(res.error, isTrue);
@@ -823,18 +821,18 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.head(null);
+      wilting.db = databaseNameClient;
+      wilting.head(null)..then((res) {
+            completer(res);
+          });
 
 
     });
 
     test("Create document(POST) and check", () {
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -862,9 +860,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.POST_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -888,26 +885,27 @@ main() {
         docId = successResponse.id;
         expect(docId, isNot(isEmpty));
         /* Now get the document and check it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.getDocument(docId);
+        wilting.getDocument(docId)..then((res) {
+              checkCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Post Request";
       document.version = 1;
       document.author = "Me";
-      wilting.postDocument(document);
+      wilting.postDocument(document)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Create document(PUT) and check", () {
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -935,9 +933,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -959,26 +956,27 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.getDocument(putId);
+        wilting.getDocument(putId)..then((res) {
+              checkCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request";
       document.version = 2;
       document.author = "Me again";
-      wilting.putDocument(putId, document);
+      wilting.putDocument(putId, document)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Update document(PUT) and check", () {
 
-      var checkUpdater = expectAsync0(() {
+      var checkUpdater = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1004,9 +1002,8 @@ main() {
 
       });
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1039,14 +1036,14 @@ main() {
         document.author = "Me also and again";
         String docString = WiltUserUtils.addDocumentRev(document, returnedDocRev
             );
-        wilting.resultCompletion = checkUpdater;
-        wilting.putDocumentString(putId, docString);
+        wilting.putDocumentString(putId, docString)..then((res) {
+              checkUpdater(res);
+            });
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1068,26 +1065,27 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.getDocument(putId);
+        wilting.getDocument(putId)..then((res) {
+              checkCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for checking";
       document.version = 3;
       document.author = "Me also";
-      wilting.putDocument(putId, document, returnedDocRev);
+      wilting.putDocument(putId, document, returnedDocRev)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Delete document and check ", () {
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1110,9 +1108,8 @@ main() {
         expect(putDocId, equals(putId3));
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1135,26 +1132,27 @@ main() {
         expect(putDocId, equals(putId3));
         String returnedDocRev = successResponse.rev;
         /* Now delete the document and check it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.deleteDocument(putId3, returnedDocRev);
+        wilting.deleteDocument(putId3, returnedDocRev)..then((res) {
+              checkCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for deleting";
       document.version = 1;
       document.author = "Its me again";
-      wilting.putDocument(putId3, document);
+      wilting.putDocument(putId3, document)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Copy document", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.COPY_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1178,9 +1176,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.copyDocument(putId, copyId);
+      wilting.db = databaseNameClient;
+      wilting.copyDocument(putId, copyId)..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -1189,9 +1188,8 @@ main() {
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1213,9 +1211,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      String url = "/$databaseNameClientCompletion/$putId";
-      wilting.httpRequest(url);
+      String url = "/$databaseNameClient/$putId";
+      wilting.httpRequest(url)..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -1225,7 +1224,7 @@ main() {
   group("5. Bulk Documents - ", () {
 
 
-    /* Create our WiltBrowserClient */
+    /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
@@ -1247,9 +1246,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1273,9 +1271,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAllDocs(includeDocs: true);
+      wilting.db = databaseNameClient;
+      wilting.getAllDocs(includeDocs: true)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1285,9 +1284,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1317,9 +1315,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAllDocs(limit: 1);
+      wilting.db = databaseNameClient;
+      wilting.getAllDocs(limit: 1)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1330,9 +1329,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1361,9 +1359,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAllDocs(startKey: putId);
+      wilting.db = databaseNameClient;
+      wilting.getAllDocs(startKey: putId)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1373,9 +1372,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1404,9 +1402,10 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAllDocs(endKey: putId2);
+      wilting.db = databaseNameClient;
+      wilting.getAllDocs(endKey: putId2)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1416,9 +1415,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1448,12 +1446,13 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
-      wilting.getAllDocs(keys: keyList);
+      wilting.getAllDocs(keys: keyList)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1463,9 +1462,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1495,12 +1493,13 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
-      wilting.getAllDocs(keys: keyList, descending: true);
+      wilting.getAllDocs(keys: keyList, descending: true)..then((res) {
+            completer(res);
+          });
 
 
     });
@@ -1510,9 +1509,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.BULK);
         try {
           expect(res.error, isFalse);
@@ -1536,8 +1534,8 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+
+      wilting.db = databaseNameClient;
       List docList = new List<jsonobject.JsonObject>();
       jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
@@ -1555,7 +1553,9 @@ main() {
       document3.attribute = "Doc 3 attribute";
       docList.add(document3);
 
-      wilting.bulk(docList);
+      wilting.bulk(docList)..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -1564,9 +1564,8 @@ main() {
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.BULK_STRING);
         try {
           expect(res.error, isFalse);
@@ -1590,8 +1589,8 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+
+      wilting.db = databaseNameClient;
 
       jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
@@ -1613,7 +1612,9 @@ main() {
       docList.add(doc2);
       docList.add(doc3);
       String docs = WiltUserUtils.createBulkInsertString(docList);
-      wilting.bulkString(docs);
+      wilting.bulkString(docs)..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -1622,7 +1623,7 @@ main() {
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
 
-    /* Create our WiltBrowserClient */
+    /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
@@ -1633,9 +1634,8 @@ main() {
 
     test("Get Session Information", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_SESSION);
         try {
           expect(res.error, isFalse);
@@ -1657,16 +1657,16 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.getSession();
+      wilting.getSession()..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get Stats Information", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_STATS);
         try {
           expect(res.error, isFalse);
@@ -1688,16 +1688,16 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.getStats();
+      wilting.getStats()..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get Database Information - default", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
@@ -1715,21 +1715,21 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.db_name, equals(databaseNameClientCompletion));
+        expect(successResponse.db_name, equals(databaseNameClient));
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getDatabaseInfo();
+      wilting.db = databaseNameClient;
+      wilting.getDatabaseInfo()..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get Database Information - specified", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
@@ -1747,20 +1747,20 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.db_name, equals(databaseNameClientCompletion));
+        expect(successResponse.db_name, equals(databaseNameClient));
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.getDatabaseInfo(databaseNameClientCompletion);
+      wilting.getDatabaseInfo(databaseNameClient)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get All DB's", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDBS);
         try {
           expect(res.error, isFalse);
@@ -1778,20 +1778,20 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.contains(databaseNameClientCompletion), isTrue);
+        expect(successResponse.contains(databaseNameClient), isTrue);
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.getAllDbs();
+      wilting.getAllDbs()..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Generate Ids", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
@@ -1813,8 +1813,9 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.generateIds(10);
+      wilting.generateIds(10)..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -1823,7 +1824,7 @@ main() {
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
 
-    /* Create our WiltBrowserClient */
+    /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
@@ -1846,9 +1847,8 @@ main() {
 
     test("Create document(PUT) for attachment tests and check", () {
 
-      var checkCompleter = expectAsync0(() {
+      var checkCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1878,9 +1878,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1902,26 +1901,27 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals('attachmentTestDoc'));
         /* Now get the document and check it */
-        wilting.resultCompletion = checkCompleter;
-        wilting.getDocument('attachmentTestDoc');
+        wilting.getDocument('attachmentTestDoc')..then((res) {
+              checkCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for attachment testing";
       document.version = 1;
       document.author = "SJH";
-      wilting.putDocument('attachmentTestDoc', document);
+      wilting.putDocument('attachmentTestDoc', document)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Create Attachment", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -1944,18 +1944,18 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       wilting.createAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImage);
+          testDocRev, 'image/png', pngImage)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get Create Attachment", () {
 
-      var revisionCompleter = expectAsync0(() {
+      var revisionCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1989,9 +1989,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2017,23 +2016,24 @@ main() {
         /* Now get the document to get the new revision along
          * with its attachment data 
          */
-        wilting.resultCompletion = revisionCompleter;
-        wilting.getDocument('attachmentTestDoc', null, true);
+        wilting.getDocument('attachmentTestDoc', null, true)..then((res) {
+              revisionCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAttachment('attachmentTestDoc', 'attachmentName');
+      wilting.db = databaseNameClient;
+      wilting.getAttachment('attachmentTestDoc', 'attachmentName')..then((res) {
+            completer(res);
+          });
 
 
     });
 
     test("Update Attachment", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.UPDATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2056,18 +2056,18 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       wilting.updateAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImageUpdate);
+          testDocRev, 'image/png', pngImageUpdate)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Get Update Attachment", () {
 
-      var revisionCompleter = expectAsync0(() {
+      var revisionCompleter = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -2096,9 +2096,8 @@ main() {
 
       });
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2123,23 +2122,24 @@ main() {
         String contentType = successResponse.contentType;
         expect(contentType, equals('image/png'));
         /* Now get the document to get the new revision  */
-        wilting.resultCompletion = revisionCompleter;
-        wilting.getDocument('attachmentTestDoc');
+        wilting.getDocument('attachmentTestDoc')..then((res) {
+              revisionCompleter(res);
+            });
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
-      wilting.getAttachment('attachmentTestDoc', 'attachmentName');
+      wilting.db = databaseNameClient;
+      wilting.getAttachment('attachmentTestDoc', 'attachmentName')..then((res) {
+            completer(res);
+          });
 
 
     });
 
     test("Create Attachment With New Document", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2161,18 +2161,18 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       wilting.createAttachment('anotherAttachmentTestDoc', 'attachmentName', '',
-          'image/png', pngImage);
+          'image/png', pngImage)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Create Attachment Invalid Revision", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         expect(res.error, isTrue);
         int statusCode = res.errorCode;
@@ -2180,18 +2180,18 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       wilting.createAttachment('attachmentTestDoc', 'anotherAttachmentName',
-          '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage);
+          '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage)..then((res) {
+            completer(res);
+          });
 
     });
 
     test("Delete Attachment", () {
 
-      var completer = expectAsync0(() {
+      var completer = expectAsync1((res) {
 
-        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2213,10 +2213,11 @@ main() {
 
       });
 
-      wilting.resultCompletion = completer;
-      wilting.db = databaseNameClientCompletion;
+      wilting.db = databaseNameClient;
       wilting.deleteAttachment('attachmentTestDoc', 'attachmentName', testDocRev
-          );
+          )..then((res) {
+            completer(res);
+          });
 
     });
 
@@ -2230,9 +2231,8 @@ main() {
         'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
         '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
-    /* Create our WiltBrowserClient */
+    /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
-    wilting.db = databaseNameClientCompletion;
 
     /* Login if we are using authentication */
     if (userName != null) {
@@ -2242,6 +2242,7 @@ main() {
 
     test("Start Change Notification", () {
 
+      wilting.db = databaseNameClient;
       void wrapper() {
 
         wilting.startChangeNotification();
@@ -2278,6 +2279,7 @@ main() {
 
     test("Start Change Notification With Docs and Attachments", () {
 
+      wilting.db = databaseNameClient;
       WiltChangeNotificationParameters parameters =
           new WiltChangeNotificationParameters();
       parameters.includeDocs = true;
