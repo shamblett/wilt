@@ -8,8 +8,8 @@
 library wilt;
 
 import 'dart:async';
-import 'dart:html' as html;
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 
 part 'src/Wilt.dart';
@@ -19,6 +19,6 @@ part 'src/WiltChangeNotificationParameters.dart';
 part 'src/WiltChangeNotificationEvent.dart';
 part 'src/WiltChangeNotification.dart';
 part 'src/httpAdapters/WiltHTTPAdapter.dart';
-part 'src/httpAdapters/WiltBrowserHTTPAdapter.dart';
+
 
 

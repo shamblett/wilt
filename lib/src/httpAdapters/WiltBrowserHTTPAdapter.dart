@@ -4,22 +4,14 @@
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
  *
- * Native CouchDB HTTP adapter for Wilt.
+ * Browser(dart:html) CouchDB HTTP adapter for Wilt.
  *  
- * This always returns a JSON Object for use by the completion function.
- * 
- * The format of the JSON Object returned is as follows :-
- * 
- * error              : true if an error has occured, false otherwise
- * responseText       : the response text from HTTP
- * errorCode          : the status code from HTTP
- * jsonCouchResponse  : The responseText from CouchDB as a JSON Object,
- *                      this should be interpreted by the caller depending
- *                      on the request issued,refer to the CouchDB documentation.
+ * This always returns a JSON Object the format of which is documented in
+ * the Result Interface document
  *                      
  */
 
-part of wilt;
+part of wiltBrowserClient;
 
 class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
@@ -185,6 +177,15 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
     return completer.future;
 
+  }
+  
+  /**
+    *  Specialised get for change notifications
+    */
+  Future<String>getString(String url) {
+    
+     return html.HttpRequest.getString(url);
+     
   }
 
 

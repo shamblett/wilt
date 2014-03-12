@@ -1,15 +1,16 @@
 /*
- * Packge : Wilt
+ * Package : WiltBrowserClient
  * Author : S. Hamblett <steve.hamblett@linux.com>
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
  */
 
-library wilt_test_futures;
+library wilt_test_client_completion;
 
 import 'dart:html';
 
 import '../lib/wilt.dart';
+import '../lib/wilt_browser_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_config.dart';
@@ -22,47 +23,71 @@ main() {
 
   /* Tests */
 
-  /* Group 1 - Wilt constructor tests */
+  /* Group 1 - WiltBrowserClient constructor tests */
   group("1. Constructor Tests - ", () {
 
     test("No hostname", () {
 
-      void wrapper() {
+      try {
+        WiltBrowserClient wilting = new WiltBrowserClient(null, port, scheme);
+      } catch (e) {
 
-        Wilt wilting = new Wilt(null, port, scheme);
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Bad construction - some or all required parameters are null'
+            );
 
       }
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
 
 
     });
 
     test("No port", () {
 
-      void wrapper() {
+      try {
+        WiltBrowserClient wilting = new WiltBrowserClient(hostName, null, scheme
+            );
+      } catch (e) {
 
-        Wilt wilting = new Wilt(hostName, null, scheme);
-
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Bad construction - some or all required parameters are null'
+            );
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
 
 
     });
 
     test("No Scheme", () {
 
-      void wrapper() {
+      try {
+        WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, null);
+      } catch (e) {
 
-        Wilt wilting = new Wilt(hostName, port, null);
-
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Bad construction - some or all required parameters are null'
+            );
       }
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+    });
 
+    test("No HTTP Adapter", () {
+
+      try {
+        WiltBrowserClient wilting = new WiltBrowserClient(hostName, port,
+            scheme, null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Bad construction - you must instantiate Wilt with a HTTP Adapter'
+            );
+      }
 
     });
+
 
   });
 
@@ -72,66 +97,73 @@ main() {
 
     test("No Database Set HEAD", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.head(null);
+
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), 'WiltException: message = No database specified');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("No Database Set GET", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.get(null);
-      }
+      } catch (e) {
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), 'WiltException: message = No database specified');
+      }
 
 
     });
 
     test("No Database Set POST", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.post(null, null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), 'WiltException: message = No database specified');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("No Database Set PUT", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.put(null, "1");
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), 'WiltException: message = No database specified');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("No Database Set DELETE", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.delete(null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), 'WiltException: message = No database specified');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
@@ -143,419 +175,485 @@ main() {
 
     test("Get Document no id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.getDocument(null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = getDocument() must have a document id');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
 
     test("Delete Document no id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.deleteDocument(null, null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteDocument() expects a document id and a revision.'
+            );
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Delete Document no rev", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.deleteDocument("1", null);
-      }
+      } catch (e) {
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteDocument() expects a document id and a revision.'
+            );
+      }
 
     });
 
     test("Put Document no id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         jsonobject.JsonObject doc;
         wilting.putDocument(null, doc);
-      }
+      } catch (e) {
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = putDocument() expects a document id and a document body.'
+            );
+      }
 
 
     });
 
     test("Put Document no data", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.putDocument("1", null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = putDocument() expects a document id and a document body.'
+            );
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Post Document no document body", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         jsonobject.JsonObject doc;
         wilting.postDocument(null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = postDocument() expects a document body.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Post Document String no document string", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         jsonobject.JsonObject doc;
         wilting.postDocumentString(null);
-      }
+      } catch (e) {
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = postDocumentString() expects a document body.');
+      }
 
 
     });
 
     test("Create Database no name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.createDatabase(null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createDatabase() expects a database name.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Delete Database no name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.deleteDatabase(null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteDatabase() expects a database name.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("All Docs invalid limit ", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.getAllDocs(limit: -1);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = getAllDocs() must have a positive limit');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Generate Ids invalid amount ", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.generateIds(-1);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = generateIds() expects a positive amount.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Copy document no source id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.copyDocument(null, '1');
-        ;
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = copyDocument () expects a source id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Copy document no destinationid", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.copyDocument('1', null);
+      } catch (e) {
 
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = copyDocument () expects a destination id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Login null user name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.login(null, "password");
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Login() expects a non null user name and password');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Login null password", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
         wilting.login("name", null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = Login() expects a non null user name and password');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Create Attachment no Doc Id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.createAttachment(null, 'name', 'rev', 'image/png', payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createAttachment() expects a document id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Create Attachment no Attachment name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.createAttachment('id', null, 'rev', 'image/png', payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createAttachment() expects an attachment name.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Create Attachment no Revision", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.createAttachment('id', 'name', null, 'image/png', payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createAttachment() expects a revision.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Create Attachment no Content Type", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.createAttachment('id', 'name', 'rev', null, payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createAttachment() expects a content type.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Create Attachment no Payload", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.createAttachment('id', 'name', 'rev', 'image/png', null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = createAttachment() expects a payload.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Update Attachment no Doc Id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = updateAttachment() expects a document id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Update Attachment no Attachment name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.updateAttachment('id', null, 'rev', 'image/png', payload);
-      }
+      } catch (e) {
 
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = updateAttachment() expects an attachment name.');
+      }
 
 
     });
 
     test("Update Attachment no Revision", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.updateAttachment('id', 'name', null, 'image/png', payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = updateAttachment() expects a revision.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Update Attachment no Content Type", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         String payload = 'Hello';
         wilting.updateAttachment('id', 'name', 'rev', null, payload);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = updateAttachment() expects a content type.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Update Attachment no Payload", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.updateAttachment('id', 'name', 'rev', 'image/png', null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = updateAttachment() expects a payload.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Delete Attachment no Doc Id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.deleteAttachment(null, 'name', 'rev');
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteAttachment() expects a document id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Delete Attachment no Attachment name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.deleteAttachment('id', null, 'rev');
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteAttachment() expects an attachment name.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Delete Attachment no Revision", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.deleteAttachment('id', 'name', null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = deleteAttachment() expects a revision.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Get Attachment no Doc Id", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.getAttachment(null, 'name');
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = getAttachment() expects a document id.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
     test("Get Attachment no Attachment name", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      void wrapper() {
+      try {
 
         wilting.getAttachment('id', null);
+      } catch (e) {
+
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(),
+            'WiltException: message = getAttachment() expects an attachment name.');
       }
-
-      expect(wrapper, throwsA(new isInstanceOf<WiltException>()));
-
 
     });
 
@@ -565,8 +663,8 @@ main() {
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
 
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, port, scheme);
+    /* Create our WiltBrowserClient */
+    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
     /* Login if we are using authentication */
@@ -587,12 +685,14 @@ main() {
     test("Create Database not authorized", () {
 
       /* Create a local wilting for this test */
-      Wilt localWilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient localWilting = new WiltBrowserClient(hostName, port,
+          scheme);
 
       localWilting.login('freddy', 'freddypass');
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = localWilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -607,17 +707,17 @@ main() {
 
       });
 
-      localWilting.createDatabase(databaseNameFutures)..then((res) {
-            completer(res);
-          });
+      localWilting.resultCompletion = completer;
+      localWilting.createDatabase(databaseNameClientCompletion);
 
     });
 
     /* Create the test database */
     test("Create Test Database", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -638,10 +738,8 @@ main() {
         expect(successResponse.ok, isTrue);
       });
 
-
-      wilting.createDatabase(databaseNameFutures)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.createDatabase(databaseNameClientCompletion);
 
 
     });
@@ -649,8 +747,9 @@ main() {
     /* Create a database then delete it */
     test("Delete Database", () {
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -669,8 +768,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
@@ -688,25 +788,23 @@ main() {
         }
 
         /* Now delete it */
-        wilting.deleteDatabase("wiltdeleteme")..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.deleteDatabase("wiltdeleteme");
 
 
       });
 
-
-      wilting.createDatabase("wiltdeleteme")..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.createDatabase("wiltdeleteme");
 
     });
 
 
     test("HEAD null URL", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.HEAD);
         try {
           expect(res.error, isTrue);
@@ -725,18 +823,18 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.head(null)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.head(null);
 
 
     });
 
     test("Create document(POST) and check", () {
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -764,8 +862,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.POST_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -789,27 +888,26 @@ main() {
         docId = successResponse.id;
         expect(docId, isNot(isEmpty));
         /* Now get the document and check it */
-        wilting.getDocument(docId)..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.getDocument(docId);
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Post Request";
       document.version = 1;
       document.author = "Me";
-      wilting.postDocument(document)..then((res) {
-            completer(res);
-          });
+      wilting.postDocument(document);
 
     });
 
     test("Create document(PUT) and check", () {
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -837,8 +935,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -860,27 +959,26 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
-        wilting.getDocument(putId)..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.getDocument(putId);
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request";
       document.version = 2;
       document.author = "Me again";
-      wilting.putDocument(putId, document)..then((res) {
-            completer(res);
-          });
+      wilting.putDocument(putId, document);
 
     });
 
     test("Update document(PUT) and check", () {
 
-      var checkUpdater = expectAsync1((res) {
+      var checkUpdater = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -906,8 +1004,9 @@ main() {
 
       });
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -940,14 +1039,14 @@ main() {
         document.author = "Me also and again";
         String docString = WiltUserUtils.addDocumentRev(document, returnedDocRev
             );
-        wilting.putDocumentString(putId, docString)..then((res) {
-              checkUpdater(res);
-            });
+        wilting.resultCompletion = checkUpdater;
+        wilting.putDocumentString(putId, docString);
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -969,27 +1068,26 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
-        wilting.getDocument(putId)..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.getDocument(putId);
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for checking";
       document.version = 3;
       document.author = "Me also";
-      wilting.putDocument(putId, document, returnedDocRev)..then((res) {
-            completer(res);
-          });
+      wilting.putDocument(putId, document, returnedDocRev);
 
     });
 
     test("Delete document and check ", () {
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1012,8 +1110,9 @@ main() {
         expect(putDocId, equals(putId3));
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1036,27 +1135,26 @@ main() {
         expect(putDocId, equals(putId3));
         String returnedDocRev = successResponse.rev;
         /* Now delete the document and check it */
-        wilting.deleteDocument(putId3, returnedDocRev)..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.deleteDocument(putId3, returnedDocRev);
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for deleting";
       document.version = 1;
       document.author = "Its me again";
-      wilting.putDocument(putId3, document)..then((res) {
-            completer(res);
-          });
+      wilting.putDocument(putId3, document);
 
     });
 
     test("Copy document", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.COPY_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1080,10 +1178,9 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.copyDocument(putId, copyId)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.copyDocument(putId, copyId);
 
     });
 
@@ -1092,8 +1189,9 @@ main() {
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1115,10 +1213,9 @@ main() {
 
       });
 
-      String url = "/$databaseNameFutures/$putId";
-      wilting.httpRequest(url)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      String url = "/$databaseNameClientCompletion/$putId";
+      wilting.httpRequest(url);
 
     });
 
@@ -1128,8 +1225,8 @@ main() {
   group("5. Bulk Documents - ", () {
 
 
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, port, scheme);
+    /* Create our WiltBrowserClient */
+    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
     if (userName != null) {
@@ -1147,11 +1244,12 @@ main() {
 
     test("Get All Docs  - Include docs", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1175,21 +1273,21 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAllDocs(includeDocs: true)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAllDocs(includeDocs: true);
 
 
     });
 
     test("Get All Docs  - limit", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1219,10 +1317,9 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAllDocs(limit: 1)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAllDocs(limit: 1);
 
 
     });
@@ -1230,11 +1327,12 @@ main() {
 
     test("Get All Docs  - start key", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1263,21 +1361,21 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAllDocs(startKey: putId)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAllDocs(startKey: putId);
 
 
     });
 
     test("Get All Docs  - end key", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1306,21 +1404,21 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAllDocs(endKey: putId2)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAllDocs(endKey: putId2);
 
 
     });
 
     test("Get All Docs - key list", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1350,24 +1448,24 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
-      wilting.getAllDocs(keys: keyList)..then((res) {
-            completer(res);
-          });
+      wilting.getAllDocs(keys: keyList);
 
 
     });
 
     test("Get All Docs  - descending", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
@@ -1397,24 +1495,24 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
-      wilting.getAllDocs(keys: keyList, descending: true)..then((res) {
-            completer(res);
-          });
+      wilting.getAllDocs(keys: keyList, descending: true);
 
 
     });
 
     test("Bulk Insert Auto Keys", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.BULK);
         try {
           expect(res.error, isFalse);
@@ -1438,8 +1536,8 @@ main() {
 
       });
 
-
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       List docList = new List<jsonobject.JsonObject>();
       jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
@@ -1457,19 +1555,18 @@ main() {
       document3.attribute = "Doc 3 attribute";
       docList.add(document3);
 
-      wilting.bulk(docList)..then((res) {
-            completer(res);
-          });
+      wilting.bulk(docList);
 
     });
 
     test("Bulk Insert Supplied Keys", () {
 
-      Wilt wilting = new Wilt(hostName, port, scheme);
+      WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.BULK_STRING);
         try {
           expect(res.error, isFalse);
@@ -1493,8 +1590,8 @@ main() {
 
       });
 
-
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
 
       jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
@@ -1516,9 +1613,7 @@ main() {
       docList.add(doc2);
       docList.add(doc3);
       String docs = WiltUserUtils.createBulkInsertString(docList);
-      wilting.bulkString(docs)..then((res) {
-            completer(res);
-          });
+      wilting.bulkString(docs);
 
     });
 
@@ -1527,8 +1622,8 @@ main() {
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
 
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, port, scheme);
+    /* Create our WiltBrowserClient */
+    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
     if (userName != null) {
@@ -1538,8 +1633,9 @@ main() {
 
     test("Get Session Information", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_SESSION);
         try {
           expect(res.error, isFalse);
@@ -1561,16 +1657,16 @@ main() {
 
       });
 
-      wilting.getSession()..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.getSession();
 
     });
 
     test("Get Stats Information", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_STATS);
         try {
           expect(res.error, isFalse);
@@ -1592,16 +1688,16 @@ main() {
 
       });
 
-      wilting.getStats()..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.getStats();
 
     });
 
     test("Get Database Information - default", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
@@ -1619,21 +1715,21 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.db_name, equals(databaseNameFutures));
+        expect(successResponse.db_name, equals(databaseNameClientCompletion));
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getDatabaseInfo()..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getDatabaseInfo();
 
     });
 
     test("Get Database Information - specified", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
@@ -1651,20 +1747,20 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.db_name, equals(databaseNameFutures));
+        expect(successResponse.db_name, equals(databaseNameClientCompletion));
 
       });
 
-      wilting.getDatabaseInfo(databaseNameFutures)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.getDatabaseInfo(databaseNameClientCompletion);
 
     });
 
     test("Get All DB's", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ALLDBS);
         try {
           expect(res.error, isFalse);
@@ -1682,20 +1778,20 @@ main() {
         }
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.contains(databaseNameFutures), isTrue);
+        expect(successResponse.contains(databaseNameClientCompletion), isTrue);
 
       });
 
-      wilting.getAllDbs()..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.getAllDbs();
 
     });
 
     test("Generate Ids", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
@@ -1717,9 +1813,8 @@ main() {
 
       });
 
-      wilting.generateIds(10)..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.generateIds(10);
 
     });
 
@@ -1728,8 +1823,8 @@ main() {
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
 
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, port, scheme);
+    /* Create our WiltBrowserClient */
+    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
     /* Login if we are using authentication */
     if (userName != null) {
@@ -1751,8 +1846,9 @@ main() {
 
     test("Create document(PUT) for attachment tests and check", () {
 
-      var checkCompleter = expectAsync1((res) {
+      var checkCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1782,8 +1878,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1805,27 +1902,26 @@ main() {
         String putDocId = successResponse.id;
         expect(putDocId, equals('attachmentTestDoc'));
         /* Now get the document and check it */
-        wilting.getDocument('attachmentTestDoc')..then((res) {
-              checkCompleter(res);
-            });
+        wilting.resultCompletion = checkCompleter;
+        wilting.getDocument('attachmentTestDoc');
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for attachment testing";
       document.version = 1;
       document.author = "SJH";
-      wilting.putDocument('attachmentTestDoc', document)..then((res) {
-            completer(res);
-          });
+      wilting.putDocument('attachmentTestDoc', document);
 
     });
 
     test("Create Attachment", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -1844,21 +1940,22 @@ main() {
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
+        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       wilting.createAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImage)..then((res) {
-            completer(res);
-          });
+          testDocRev, 'image/png', pngImage);
 
     });
 
     test("Get Create Attachment", () {
 
-      var revisionCompleter = expectAsync1((res) {
+      var revisionCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1892,8 +1989,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -1919,24 +2017,23 @@ main() {
         /* Now get the document to get the new revision along
          * with its attachment data 
          */
-        wilting.getDocument('attachmentTestDoc', null, true)..then((res) {
-              revisionCompleter(res);
-            });
+        wilting.resultCompletion = revisionCompleter;
+        wilting.getDocument('attachmentTestDoc', null, true);
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAttachment('attachmentTestDoc', 'attachmentName')..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAttachment('attachmentTestDoc', 'attachmentName');
 
 
     });
 
     test("Update Attachment", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.UPDATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -1959,18 +2056,18 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       wilting.updateAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImageUpdate)..then((res) {
-            completer(res);
-          });
+          testDocRev, 'image/png', pngImageUpdate);
 
     });
 
     test("Get Update Attachment", () {
 
-      var revisionCompleter = expectAsync1((res) {
+      var revisionCompleter = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
@@ -1999,8 +2096,9 @@ main() {
 
       });
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2025,24 +2123,23 @@ main() {
         String contentType = successResponse.contentType;
         expect(contentType, equals('image/png'));
         /* Now get the document to get the new revision  */
-        wilting.getDocument('attachmentTestDoc')..then((res) {
-              revisionCompleter(res);
-            });
+        wilting.resultCompletion = revisionCompleter;
+        wilting.getDocument('attachmentTestDoc');
 
       });
 
-      wilting.db = databaseNameFutures;
-      wilting.getAttachment('attachmentTestDoc', 'attachmentName')..then((res) {
-            completer(res);
-          });
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
+      wilting.getAttachment('attachmentTestDoc', 'attachmentName');
 
 
     });
 
     test("Create Attachment With New Document", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2064,18 +2161,18 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       wilting.createAttachment('anotherAttachmentTestDoc', 'attachmentName', '',
-          'image/png', pngImage)..then((res) {
-            completer(res);
-          });
+          'image/png', pngImage);
 
     });
 
     test("Create Attachment Invalid Revision", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         expect(res.error, isTrue);
         int statusCode = res.errorCode;
@@ -2083,18 +2180,18 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       wilting.createAttachment('attachmentTestDoc', 'anotherAttachmentName',
-          '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage)..then((res) {
-            completer(res);
-          });
+          '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage);
 
     });
 
     test("Delete Attachment", () {
 
-      var completer = expectAsync1((res) {
+      var completer = expectAsync0(() {
 
+        jsonobject.JsonObject res = wilting.completionResponse;
         expect(res.method, Wilt.DELETE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
@@ -2116,11 +2213,10 @@ main() {
 
       });
 
-      wilting.db = databaseNameFutures;
+      wilting.resultCompletion = completer;
+      wilting.db = databaseNameClientCompletion;
       wilting.deleteAttachment('attachmentTestDoc', 'attachmentName', testDocRev
-          )..then((res) {
-            completer(res);
-          });
+          );
 
     });
 
@@ -2134,8 +2230,9 @@ main() {
         'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
         '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
-    /* Create our Wilt */
-    Wilt wilting = new Wilt(hostName, port, scheme);
+    /* Create our WiltBrowserClient */
+    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
+    wilting.db = databaseNameClientCompletion;
 
     /* Login if we are using authentication */
     if (userName != null) {
@@ -2145,7 +2242,6 @@ main() {
 
     test("Start Change Notification", () {
 
-      wilting.db = databaseNameFutures;
       void wrapper() {
 
         wilting.startChangeNotification();
@@ -2182,7 +2278,6 @@ main() {
 
     test("Start Change Notification With Docs and Attachments", () {
 
-      wilting.db = databaseNameFutures;
       WiltChangeNotificationParameters parameters =
           new WiltChangeNotificationParameters();
       parameters.includeDocs = true;

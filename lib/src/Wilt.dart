@@ -13,7 +13,7 @@
  * Ref http://www.saggingcouch.com/ for details
  * 
  * It provides core functionality for the majority of CouchDB operations when using
- * CouchDB purely as a document store. Higher level operations on attachments, 
+ * CouchDB purely as a document store. Higher level operations on 
  * design documents and views are not directly supported but can be used if the client
  * supplies the url to use.
  * 
@@ -208,8 +208,10 @@ class Wilt {
   /**
    * HTTP Adapter
    */
-  WiltBrowserHTTPAdapter _httpAdapter = null;
-
+  WiltHTTPAdapter _httpAdapter = null;
+  set httpAdapter(WiltHTTPAdapter adapter)=>_httpAdapter = adapter;
+  WiltHTTPAdapter get httpAdapter  => _httpAdapter;
+  
   /**
    * Change notification 
    */
@@ -260,7 +262,7 @@ class Wilt {
    */
   String authenticationType = AUTH_NONE;
 
-  Wilt(this._host, this._port, this._scheme, [this._clientCompletion = null]) {
+  Wilt(this._host, this._port, this._scheme, this._httpAdapter, [this._clientCompletion = null]) {
 
     if ((host == null) || (port == null) || (scheme == null)) {
 
@@ -268,9 +270,12 @@ class Wilt {
           'Bad construction - some or all required parameters are null');
 
     }
+    
+    if  ( _httpAdapter == null) {
+      throw new WiltException(
+                'Bad construction - you must instantiate Wilt with a HTTP Adapter');
+    }
 
-    /* Get our HTTP adapter */
-    _httpAdapter = new WiltBrowserHTTPAdapter();
   }
 
   /**
@@ -297,7 +302,7 @@ class Wilt {
         case AUTH_BASIC:
 
           String authStringToEncode = "$_user:$_password";
-          String encodedAuthString = html.window.btoa(authStringToEncode);
+          String encodedAuthString = CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
           String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;
@@ -1083,7 +1088,7 @@ class Wilt {
     }
 
     changeNotificationDbName = name;
-    _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, name,
+    _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name,
         parameters);
   }
 

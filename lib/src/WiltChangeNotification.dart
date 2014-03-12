@@ -68,6 +68,8 @@ class _WiltChangeNotification {
   bool get pause => _paused;
   set pause(bool flag) => _paused = flag;
 
+  WiltHTTPAdapter _httpAdapter = null;
+  
   /**
    * Change notification stream controller
    * 
@@ -77,7 +79,7 @@ class _WiltChangeNotification {
   get changeNotification => _changeNotification;
 
   
-      _WiltChangeNotification(this._host, this._port, this._scheme, [this._dbName, this._parameters])
+      _WiltChangeNotification(this._host, this._port, this._scheme, this._httpAdapter, [this._dbName, this._parameters])
       {
 
 
@@ -128,7 +130,7 @@ class _WiltChangeNotification {
      */
     try {
 
-      html.HttpRequest.getString(url)..then((result) {
+      _httpAdapter.getString(url)..then((result) {
 
         /**
         * Process the change notification
