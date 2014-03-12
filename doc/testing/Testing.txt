@@ -6,11 +6,12 @@ Wilt comes with a suite of unit tests that can be found under the test directory
 The tests themselves use the unittest library which needs to be installed and are split 
 into test groups.
 
-The test suite contains 1 dart file, wilt_test.dart. This is run by being selected in
-the Dart editor and selecting run in Dartium.
+The test suite contains 3 dart files, wilt_test_browser.dart, wilt_test_browser_completion.dart and
+wilt_test_server.dart. These should be self explanatory, the completion interface is tested only in
+the browser for conciseness. 
 
-Please read the CouchDB_and_CORS document in docs before proceeding further unless you already have
-a working browser/CouchDB environment.
+For the browser tests please read the CouchDB_and_CORS document in docs before proceeding further 
+unless you already have a working browser/CouchDB environment.
 
 Configuration
 ==============
@@ -23,24 +24,20 @@ Running the tests
 
 Once the configuration is done the test suite can be run.
 
-The browser output itself should simply list the tests run, all of which should be passed, if there
+The browser/console output itself should simply list the tests run, all of which should be passed, if there
 is any other output such as stack traces etc. then something has failed.
-
-Note that test 24 will be marked as ERROR, this is expected.
 
 Lines that start with 'WILT:', are log lines from the test code itself when an error has been detected, hopefully
 the log entry should contain enogh information to allow debugging of the specific test.
 
 The test suit can't be repeated until the database it creates is deleted.
 
-You can use this test suite to check correctness of your browser and CouchDB environment as well as the
-Wilt code.
 
 Results
 ========
    
-In total you should have one new database containing 10 documents in total. Note if this is the case then any output
-in the Dart editor described above(excepting WILT: lines) can be ignored as the tests have passed.
+In total you should have one new database containing 11 documents. Note if this is the case then any 
+output in the Dart editor described above(excepting WILT: lines) can be ignored as the tests have passed.
 
 The test can take several seconds to run, please be patient
 
