@@ -8,8 +8,8 @@
 /* Global configuration, please edit */
 
 /* CouchDB server */
-final String hostName = "proxy.dicerati.com";
-final String port = "8080/couch-dart";
+final String hostName = "xxxxxx";
+final String port = "xxxx";
 final String serverPort = "5984";
 final String scheme = "http://"; 
 

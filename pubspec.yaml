@@ -8,8 +8,8 @@ environment:
 documentation: http://oscf.org.uk/dart/api/wilt/index.html
 dependencies:
   browser: '>=0.5.20 <0.5.21'
-  crypto: any
-  http: any
+  crypto: '>=0.9.0 <0.9.1'
+  http: '>=0.9.2+3 <0.9.3'
   json_object: '>=1.0.15'
 dev_dependencies:
   unittest: '>=0.9.0 <0.10.0'
