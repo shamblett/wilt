@@ -236,7 +236,6 @@ class Wilt {
             
             _completionResponse = jsonResponse;
             _clientCompletion();
-            return;
          
           }
 
