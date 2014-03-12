@@ -1,0 +1,54 @@
+
+Introduction
+============
+
+This document describes the properties present on the JsonObject result object returned from
+Wilt API calls whether future or completion based. The future based API returns the result as
+a parameter, the completion API assumes the client will get the result object from Wilt using
+the completionResponse getter. 
+
+Either way the result object will contain the following properties :-
+
+error  - true if CouchDB or HTTP has returned an error. Note that this does not include
+         CouchDb responses such as conflict, these are not server/transport errors as
+         such and may in fact be valid responses.
+
+errorCode - HTTP error code, set if error is true.
+
+errorText - HTTP/CouchDB error text, set if error is true.
+
+errorAsJson - has the 'error' and 'reason' properties, set if error is true.
+
+method - The operation type, see the predifined Wilt constants.
+
+allResponseHeader - the HTTP response headers.
+
+responseText - the raw response text for browser clients or body for server clients
+
+jsonCouchResponse - a JsonObject containing the following if error is false :-
+                    ok - true if an attachment
+                    contentType - set if an attachment
+                    The response from CouchDb, note that this is the object you can
+                    pass to WiltUserUtils to maniplulate document ids, revisions etc.
+                    
+                    
+The test suite contains many examples of the usage of this interface, especially see the
+results returned form bulk inserts and attachment tests to see a more detailed breakdown of
+this object.
+
+Basic usage is :-
+
+if ( res.error ) {
+
+         /* Process the error */
+         jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+         String errorText = errorResponse.error;
+         String reasonText = errorResponse.reason;
+         int statusCode = res.errorCode;
+         return;
+       }
+       
+       /* Get the success response*/
+       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+       .... do other stuff
+                      
