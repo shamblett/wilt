@@ -4,98 +4,12 @@
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
  *
- * The Wilt class provides core functionality for interacting with  CouchDB databases from
- * the browser.
+ * The Wilt class provides core functionality for interacting with CouchDB databases from
+ * both the browser and the server. Wilt should not be instantiated standalone but rather through
+ * inclusion of one of the wilt_browser_client or wilt_server_client files.
  * 
- * The class itself is based on the excellent Sag PHP CouchDB library and should be
- * familiar to any users of that library.
+ * Further documentation can be found in the docs folder.
  * 
- * Ref http://www.saggingcouch.com/ for details
- * 
- * It provides core functionality for the majority of CouchDB operations when using
- * CouchDB purely as a document store. Higher level operations on 
- * design documents and views are not directly supported but can be used if the client
- * supplies the url to use.
- * 
- * It can be used as a standalone CouchDB library but it is envisaged that it will
- * provide a core library for more advanced and/or specialised CouchDB client libraries to 
- * wrap around.
- * 
- * Results of API calls are returned via completion functions supplied by the client. 
- * Clients then call Wilt API's to determine the outcome of the request. This allows 
- * true async operation throughout the library.
- * 
- * An example of getting a document :-
- * 
- * void completer(){
-       
-       jsonobject.JsonObject res = wilting.completionResponse;
-       /* Check for error */
-       try {
-         expect(res.error, isFalse);
-       } catch(e) {
-         
-         jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-         String errorText = errorResponse.error;
-         String reasonText = errorResponse.reason;
-         int statusCode = res.errorCode;
-         return;
-       }
-       
-       /* Get the success response*/
-       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-       .......
-  }
-    Wilt wilting = new Wilt("localhost", 
-                            "5984",
-                            "http://");
-   wilting.db = "mydb";
-   wilting.resultCompletion = completer;
-   wilting.getDocument("myuniqueid");
-   .... do other stuff
- 
- *
- * Wilt depends on the JSON Object library for its response processing, at the moment this
- * causes problems with internal CouchDB identifiers such as '_rev', '_id' etc. This is overcome
- * by using functionality in the WiltUserUtils class to encode/decode these parameters.
- * 
- * See the API documentation for more details about individual methods, particularly the 
- * WiltNativeHTTPAdapter for the structure of the Wilt completion response.  
- * 
- * A WiltException is thrown if Wilt encounters any method parameter errors.  
- * 
- * Authentication is performed using the login() method. If you are using CouchDB in the 
- * 'Admin Party' mode there is no need to call the login method.
- * 
- * Only basic authentication is currently supported, even then you may hit CORS restrictions.
- * 
- * Cookie authentication is not supported and may never be due to restrictions on getting the 
- * Set-Cookie header from an AJAX request in the browser.
- * 
- * Document attachments of the 'standalone' type only are supported.
- * 
- * Change notification is performed in 'normal' mode with the notification request being sent to
- * CouchDB as dictated by the heartbeat time in the notification changes parameters set. Change 
- * notifications themselves are deleivered to the client on the changeNotification stream. An example 
- * of using change notifications is shown below :-
- * 
- * wilting.db = databaseName;
- * wilting.startChangeNotification()
- * wilting.changeNotification.listen((e) {
-          
-        if ( e.type == WiltChangeNotificationEvent.UPDATE )
-        .......
-          
-      }); 
-      
- *
- * The events themselves are instances of the WiltChangeNotificationEvent class, see this class 
- * for more details.
- * 
- * The change notification API also allows stopping of change notifications, pausing and restarting 
- * and chaning the parameter set.
- * 
- * See the change notification methods for more information. 
  */
 
 part of wilt;

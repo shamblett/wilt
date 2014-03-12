@@ -4,18 +4,35 @@ Usage
 
 Outwardly Wilt looks like a normal class based API library, however due to the asynchronous nature
 of HTTP requests in the Dart runtime no synchronous procedures are provided, results are passed back
-to the client by calling a client supplied callback(known as a completer) function. An annotated 
-example of this using Wilt to get a document by id is shown below:-
+to the client by a standard dart Futures based interface or by calling a client supplied callback
+(known as a completer) function. 
+
+The future interface always completes, if a completer has been registered this is also called. 
+Wilt returns the operation type performed in its results interface(see the Result Interface
+document for details), this allows a single completer function to be registered and a switch statement
+employed to for document/database operations. This is provided for users who do not want to use
+the future based API on each Wilt method.
+
+
+An annotated example of this using the WiltBrowserClient to get a document by id is shown below:-
+
+import '../lib/wilt.dart';
+import '../lib/wilt_browser_client.dart'; // Browser
+// or
+import '../lib/wilt_browser_server.dart'; // Browser
 
 main() {
 
 	/**
-	* The 'completer' function for the Wilt API call *
+	* The 'completer' function for the WiltBrowserClient API call *
 	*/
-	void completer(){
+	void completer(){ // Completion interface
+	void completer(res){ // Future interface
        
-        /* Check for error */
-       jsonobject.JsonObject res = wilting.completionResponse;     
+       // Only for the completion interface.
+       jsonobject.JsonObject res = wilting.completionResponse;
+        
+       /* Check for error */    
        if ( res.error ) {
          /* Process the error */
          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
@@ -32,23 +49,29 @@ main() {
     
     
     /**
-    * Instantiate a Wilt object.
+    * Instantiate a WiltBrowserClient object.
     */
-    Wilt wilting = new Wilt("localhost", 
+    WiltBrowserClient wilting = new Wilt("localhost", 
                             "5984",
                             "http://");
+                            // and you can register a global completer [completer]);
                             
     /* Set the database to use */
     wilting.db = "mydb";
     
     */ Set the completion function */
-    wilting.resultCompletion = completer;
+    wilting.resultCompletion = completer; //ONLY if you want the completion interface
     
     /* Call the wilt API */
-    wilting.getDocument("myuniqueid");
-   .... do other stuff 
+    wilting.getDocument("myuniqueid")..then((res) {
+            completer(res); // ONLY if you want the future interface //
+          });
+
 
  }
+
+This is exactly the same as Wilt on the server side, the wilting object in this case becomes
+a WiltServerClient.
 
 Things to note from the above code :-
 
@@ -64,12 +87,9 @@ Things to note from the above code :-
 4. Note the constructor, host, port and scheme must be supplied but can be empty, i.e '', we do not 
    always need a port for instance. If any of these are supplied as null Wilt will throw a WiltException.
    
-The structure of the completion response JSON Object from Wilt can be seen from the above code.
-If the error flag is set the jsonCouchResponse object contains the error text, reason and HTTP status 
-code as returned from HTTP for an HTTP error, or the error reason returned by CouchDB for the requested operation.
-otherwise the jsonCouchResponse contains a successful response from CouchDB.
-Note successful here means the request itself has worked both HTTP and CouchDb wise, i.e CouchDB has not returned 
-an 'error' indicator in its response.
+The structure of the completion response JSON Object from Wilt can be seen in the Result Interface 
+document.
+
 
 Using JSON Objects allows a more natural manipulation of CouchDB responses than just returning JSON
 strings(you can of course stringify the response if it suits you to do so). However CouchDB uses JSON 
@@ -79,10 +99,36 @@ API must be used over the methods that take JSON Objects. The class WiltUserUtil
 to manipulate JSON Objects with underscore properties.
 
 Wilt checks its API parameters when supplied, if required parameters are not supplied or numeric parameters
-are not valid Wilt will throw a WiltException with a message containing the failure reason. The Dart HTML library
+are not valid Wilt will throw a WiltException with a message containing the failure reason. Dart 
 can also throw exceptions, exception handling in these cases needs to be performed by the client, Wilt itself has
 no exception handling built in.
 
+Change Notifications
+====================
+
+Change notification is performed in 'normal' mode with the notification request being sent to
+CouchDB as dictated by the heartbeat time in the notification changes parameters set. Change 
+notifications themselves are deleivered to the client on the changeNotification stream. An example 
+of using change notifications is shown below :-
+
+  wilting.db = databaseName;
+  wilting.startChangeNotification()
+  wilting.changeNotification.listen((e) {
+          
+        if ( e.type == WiltChangeNotificationEvent.UPDATE )
+        .......
+          
+      }); 
+      
+ 
+The events themselves are instances of the WiltChangeNotificationEvent class, see this class 
+for more details. 
+The change notification API also allows stopping of change notifications, pausing and restarting 
+and changing the parameter set.
+
+Please see the change notification methods for more information. Note that unlike the reast of Wilts
+API these are not future based and operate immediately.
+ 
 Authentication
 ==============
 
@@ -96,12 +142,11 @@ Next Steps
 ===========
 
 Hopefully this should be enough to get you started with Wilt, if you are new to the CouchDB world
-please read the CouchDB_and_CORS.txt document for guidance in this area(probably wise to read this anyway).
+please read the CouchDB_and_CORS.txt document for guidance using Wilt in the browser environmen.
 
-The test suite contains numerous examples of using Wilt(one Wilt instantiation per test, one per group etc).
-Please have a look at this code for more detailed examples of Wilt usage. Note that to run the tests you will 
-need the unittest library installed. Please read the Testing.txt document in the doc/testing folder for further 
-information.
+The test suite contains numerous examples of using Wilt in both browser and server environments.
+
+Please have a look at this code for more detailed examples of Wilt usage.
 
 
 
