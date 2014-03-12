@@ -1,0 +1,1251 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>WiltServerClient class / wiltServerClient Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wiltServerClient" data-type="WiltServerClient">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wiltServerClient.html">wiltServerClient</a> &rsaquo; <a href="../wiltServerClient/WiltServerClient.html">WiltServerClient</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>WiltServerClient</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>The Wilt server client</p>
+<pre class="source">
+class WiltServerClient extends Wilt {
+ 
+ static WiltServerHTTPAdapter serverHttpAdapter = new WiltServerHTTPAdapter();
+   
+   WiltServerClient(host, port, scheme, [Object clientCompletion]): super(host, port,
+       scheme, serverHttpAdapter, clientCompletion) {
+
+   }
+
+}
+</pre>
+</div>
+<h3>Extends</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../wilt/Wilt.html">Wilt</a></span>&nbsp;&gt;&nbsp;<span class="type-box"><span class="icon-class"></span><strong>WiltServerClient</strong></span></p>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="serverHttpAdapter">
+<button class="show-code">Code</button>
+<a href="../wiltServerClient/WiltServerHTTPAdapter.html">WiltServerHTTPAdapter</a>         <strong>serverHttpAdapter</strong> <a class="anchor-link"
+            href="#serverHttpAdapter"
+            title="Permalink to WiltServerClient.serverHttpAdapter">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static WiltServerHTTPAdapter serverHttpAdapter = new WiltServerHTTPAdapter()
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>WiltServerClient</strong>(host, port, scheme, [Object clientCompletion]) <a class="anchor-link" href="#"
+              title="Permalink to WiltServerClient.WiltServerClient">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Please use the wilt<em>browser</em>client or wilt<em>server</em>client import files to 
+instantiate a Wilt object for use in either the browser or server environment.
+You can do this here but you must supply either a browser or server HTTP adapter
+to use.</p>
+<div class="docs-inherited-from">docs inherited from <a href="../wilt/Wilt.html">Wilt</a> </div></div>
+<pre class="source">
+WiltServerClient(host, port, scheme, [Object clientCompletion]): super(host, port,
+   scheme, serverHttpAdapter, clientCompletion) {
+
+}
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Properties</h3>
+<div class="field inherited"><h4 id="authenticationType">
+<button class="show-code">Code</button>
+String         <strong>authenticationType</strong> <a class="anchor-link"
+            href="#authenticationType"
+            title="Permalink to WiltServerClient.authenticationType">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p> Authentication, type</p>
+<pre class="source">
+String authenticationType = AUTH_NONE
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="changeNotification">
+<button class="show-code">Code</button>
+final Stream&lt;<a href="../wilt/WiltChangeNotificationEvent.html">WiltChangeNotificationEvent</a>&gt;         <strong>changeNotification</strong> <a class="anchor-link"
+            href="#changeNotification"
+            title="Permalink to WiltServerClient.changeNotification">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change notification event stream</p>
+<p>This is a broadcast stream so can support more than one listener.</p>
+<pre class="source">
+Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt;
+   _changeNotifier.changeNotification.stream;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="changeNotificationDbName">
+<button class="show-code">Code</button>
+String         <strong>changeNotificationDbName</strong> <a class="anchor-link"
+            href="#changeNotificationDbName"
+            title="Permalink to WiltServerClient.changeNotificationDbName">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change notification database name</p>
+<pre class="source">
+String changeNotificationDbName = null
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="changeNotificationsPaused">
+<button class="show-code">Code</button>
+final bool         <strong>changeNotificationsPaused</strong> <a class="anchor-link"
+            href="#changeNotificationsPaused"
+            title="Permalink to WiltServerClient.changeNotificationsPaused">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change notification paused state</p>
+<pre class="source">
+bool get changeNotificationsPaused =&gt; _changeNotifier.pause;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="completionResponse">
+<button class="show-code">Code</button>
+final JsonObject         <strong>completionResponse</strong> <a class="anchor-link"
+            href="#completionResponse"
+            title="Permalink to WiltServerClient.completionResponse">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+jsonobject.JsonObject get completionResponse =&gt; _completionResponse;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="db">
+<button class="show-code">Code</button>
+String         <strong>db</strong> <a class="anchor-link"
+            href="#db"
+            title="Permalink to WiltServerClient.db">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+String get db =&gt; _db;
+</pre>
+<pre class="source">
+set db(String name) =&gt; _db = name;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="host">
+<button class="show-code">Code</button>
+final String         <strong>host</strong> <a class="anchor-link"
+            href="#host"
+            title="Permalink to WiltServerClient.host">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+String get host =&gt; _host;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="httpAdapter">
+<button class="show-code">Code</button>
+<a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a>         <strong>httpAdapter</strong> <a class="anchor-link"
+            href="#httpAdapter"
+            title="Permalink to WiltServerClient.httpAdapter">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+WiltHTTPAdapter get httpAdapter  =&gt; _httpAdapter;
+</pre>
+<pre class="source">
+set httpAdapter(WiltHTTPAdapter adapter)=&gt;_httpAdapter = adapter;
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="port">
+<button class="show-code">Code</button>
+final String         <strong>port</strong> <a class="anchor-link"
+            href="#port"
+            title="Permalink to WiltServerClient.port">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+String get port =&gt; _port;
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="resultCompletion=">
+<button class="show-code">Code</button>
+dynamic <strong>set resultCompletion</strong>(completion) <a class="anchor-link" href="#resultCompletion="
+              title="Permalink to WiltServerClient.set resultCompletion">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p> Completion callback </p>
+<pre class="source">
+set resultCompletion(var completion) {
+
+ _clientCompletion = completion;
+}
+</pre>
+</div>
+</div>
+<div class="field inherited"><h4 id="scheme">
+<button class="show-code">Code</button>
+final String         <strong>scheme</strong> <a class="anchor-link"
+            href="#scheme"
+            title="Permalink to WiltServerClient.scheme">#</a>
+        </h4>
+        <div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<pre class="source">
+String get scheme =&gt; _scheme;
+</pre>
+</div>
+</div>
+</div>
+<div class="inherited">
+<h3>Methods</h3>
+<div class="method inherited"><h4 id="bulk">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>bulk</strong>(List&lt;JsonObject&gt; docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulk"
+              title="Permalink to WiltServerClient.bulk">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Bulk insert
+Bulk inserts a list of documents</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; bulk(List&lt;jsonobject.JsonObject&gt; docs, [bool allOrNothing = false]) {
+
+
+ /* Validate the parameters */
+ if (docs == null) {
+
+   throw new WiltException('bulk() must have a document list.');
+
+ }
+
+ String url = BULKDOCS;
+
+ if (allOrNothing) {
+
+   url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
+ }
+
+ /* Create the bulk insertion data structure */
+ Map documentMap = new Map&lt;String, List&gt;();
+ documentMap["docs"] = docs;
+ String docString = null;
+ try {
+
+   docString = JSON.encode(documentMap);
+
+ } catch (e) {
+
+   throw new WiltException(
+       'bulk() cannot stringify document list, use bulkString.');
+
+ }
+
+ /* Must set the content type for a post */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = "application/json";
+
+ url = _conditionUrl(url);
+ return _httpRequest(BULK, url, data: docString, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="bulkString">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>bulkString</strong>(String docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulkString"
+              title="Permalink to WiltServerClient.bulkString">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Bulk insert JSON string version.
+Must be used if '<em>id' and or '</em>rev' are needed in ANY of the documents</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; bulkString(String docs, [bool allOrNothing = false]) {
+
+
+ /* Validate the parameters */
+ if (docs == null) {
+
+   throw new WiltException('bulkString() must have a document string.');
+
+ }
+
+ String url = BULKDOCS;
+
+ if (allOrNothing) {
+
+   url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
+ }
+
+ /* Must set the content type for a post */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = "application/json";
+
+ url = _conditionUrl(url);
+ return _httpRequest(BULK_STRING, url, data: docs, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="copyDocument">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>copyDocument</strong>(String sourceId, String destinationId, [String rev = null]) <a class="anchor-link" href="#copyDocument"
+              title="Permalink to WiltServerClient.copyDocument">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Copies the source document to the destination document with an optional revision
+NOTE this method uses the CouchDB COPY method which is not standard HTTP.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; copyDocument(String sourceId, String destinationId, [String rev = null])
+   {
+
+ if (sourceId == null) {
+
+   throw new WiltException('copyDocument () expects a source id.');
+ }
+
+ if (destinationId == null) {
+
+   throw new WiltException('copyDocument () expects a destination id.');
+ }
+
+
+ String url = sourceId;
+
+ /* Create the special COPY header */
+ Map headers = new Map&lt;String, String&gt;();
+ String destination = destinationId;
+ if (rev != null) destination = "$destinationId?rev=$rev";
+ headers['Destination'] = destination;
+
+ url = _conditionUrl(url);
+ return _httpRequest('COPY_DOCUMENT', url, headers: headers);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="createAttachment">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>createAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#createAttachment"
+              title="Permalink to WiltServerClient.createAttachment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Create an attachment on an existing document.
+contentType is in the form of a mime type e.g. 'image/png'
+If the document needs to be created as well as the attachment set the rev to ''</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; createAttachment(String docId, String attachmentName, String rev, String
+   contentType, String payload) {
+
+ /**
+ * Check all parameters are supplied
+ */
+ if (docId == null) {
+
+   throw new WiltException('createAttachment() expects a document id.');
+ }
+
+ if (attachmentName == null) {
+
+   throw new WiltException('createAttachment() expects an attachment name.');
+ }
+
+ if (rev == null) {
+
+   throw new WiltException('createAttachment() expects a revision.');
+ }
+
+ if (contentType == null) {
+
+   throw new WiltException('createAttachment() expects a content type.');
+ }
+
+ if (payload == null) {
+
+   throw new WiltException('createAttachment() expects a payload.');
+ }
+
+ /**
+  * Set the headers
+  */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = contentType;
+
+ /**
+  * Make the PUT request
+  */
+ String url;
+ if (rev != '') {
+   url = "$docId/$attachmentName?rev=$rev";
+ } else {
+   url = "$docId/$attachmentName";
+ }
+
+ url = _conditionUrl(url);
+ return _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="createDatabase">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>createDatabase</strong>(String name) <a class="anchor-link" href="#createDatabase"
+              title="Permalink to WiltServerClient.createDatabase">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Creates a database with the specified name.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; createDatabase(String name) {
+
+ if ((name == null)) {
+
+   throw new WiltException('createDatabase() expects a database name.');
+ }
+
+ /* The first char of the URL should be a slash. */
+ String url = name;
+ if (!url.startsWith('/')) {
+
+   url = "/$url";
+
+ }
+
+ return _httpRequest(CREATE_DATABASE, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="delete">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>delete</strong>(String url) <a class="anchor-link" href="#delete"
+              title="Permalink to WiltServerClient.delete">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs a HTTP DELETE operation,, the URL is conditioned and
+the current database added.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; delete(String url) {
+
+
+ url = _conditionUrl(url);
+
+ /* Perform the delete */
+return  _httpRequest('DELETE', url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="deleteAttachment">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>deleteAttachment</strong>(String docId, String attachmentName, String rev) <a class="anchor-link" href="#deleteAttachment"
+              title="Permalink to WiltServerClient.deleteAttachment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Delete an attachment</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; deleteAttachment(String docId, String attachmentName, String rev) {
+
+ if (docId == null) {
+
+   throw new WiltException('deleteAttachment() expects a document id.');
+ }
+
+ if (attachmentName == null) {
+
+   throw new WiltException('deleteAttachment() expects an attachment name.');
+ }
+
+ if (rev == null) {
+
+   throw new WiltException('deleteAttachment() expects a revision.');
+ }
+
+
+ String url = "$docId/$attachmentName?rev=$rev";
+
+ url = _conditionUrl(url);
+ return _httpRequest(DELETE_ATTACHMENT, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="deleteDatabase">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>deleteDatabase</strong>(String name) <a class="anchor-link" href="#deleteDatabase"
+              title="Permalink to WiltServerClient.deleteDatabase">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Deletes the specified database</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; deleteDatabase(String name) {
+
+ if (name == null) {
+
+   throw new WiltException('deleteDatabase() expects a database name.');
+ }
+
+ /* The first char of the URL should be a slash. */
+ String url = name;
+ if (!url.startsWith('/')) {
+
+   url = "/$url";
+
+ }
+
+ /* Null the current database if we have deleted it */
+ if (name == db) _db = null;
+
+ return _httpRequest(DELETE_DATABASE, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="deleteDocument">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>deleteDocument</strong>(String id, String rev) <a class="anchor-link" href="#deleteDocument"
+              title="Permalink to WiltServerClient.deleteDocument">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>DELETE's the specified document. Must have a revision.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; deleteDocument(String id, String rev) {
+
+ if ((id == null) || (rev == null)) {
+
+   throw new WiltException(
+       'deleteDocument() expects a document id and a revision.');
+ }
+
+ String url = id;
+ url = _setURLParameter(url, 'rev', rev);
+
+ url = _conditionUrl(url);
+ return _httpRequest('DELETE_DOCUMENT', url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="generateIds">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>generateIds</strong>([int amount = 10]) <a class="anchor-link" href="#generateIds"
+              title="Permalink to WiltServerClient.generateIds">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Ask CouchDB to generate document Id's.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; generateIds([int amount = 10]) {
+
+ if (amount &lt; 1) {
+
+   throw new WiltException('generateIds() expects a positive amount.');
+ }
+
+ String url = UUIDS;
+
+ url = _setURLParameter(url, 'count', amount.toString());
+
+ return _httpRequest(GENERATE_IDS, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="get">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>get</strong>(String url) <a class="anchor-link" href="#get"
+              title="Permalink to WiltServerClient.get">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs an HTTP GET operation, the URL is conditioned and
+the current database added.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; get(String url) {
+
+ url = _conditionUrl(url);
+
+ /* Perform the get */
+ return _httpRequest('GET', url);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getAllDbs">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getAllDbs</strong>() <a class="anchor-link" href="#getAllDbs"
+              title="Permalink to WiltServerClient.getAllDbs">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get all the databases from CouchDB</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getAllDbs() {
+
+ String url = ALLDBS;
+
+ return _httpRequest(GET_ALLDBS, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getAllDocs">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getAllDocs</strong>({bool includeDocs: false, int limit: null, String startKey: null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) <a class="anchor-link" href="#getAllDocs"
+              title="Permalink to WiltServerClient.getAllDocs">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get all documents.
+The parameters should be self explanatory and are addative.
+Refer to the CouchDb documentation for further explanation.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getAllDocs({bool includeDocs: false, int limit: null, String startKey:
+   null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) {
+
+
+ /* Validate the parameters */
+ if ((limit != null) &amp;&amp; (limit &lt; 0)) {
+
+   throw new WiltException('getAllDocs() must have a positive limit');
+
+ }
+
+ String url = ALLDOCS;
+
+ /* Check the parameters and build the URL as needed */
+ if (includeDocs) {
+
+   url = _setURLParameter(url, 'include_docs', "true");
+
+ }
+
+ if (limit != null) {
+
+   url = _setURLParameter(url, 'limit', limit.toString());
+
+ }
+
+ if (startKey != null) {
+
+   String jsonStartkey = '"$startKey"';
+   url = _setURLParameter(url, 'startkey', jsonStartkey);
+
+ }
+
+ if (endKey != null) {
+
+   String jsonEndkey = '"$endKey"';
+   url = _setURLParameter(url, 'endkey', jsonEndkey);
+
+ }
+
+ if (descending) {
+
+   url = _setURLParameter(url, 'descending', descending.toString());
+
+ }
+
+ if (keys != null) {
+
+   String keyString = JSON.encode(keys);
+   url = _setURLParameter(url, 'keys', keyString);
+ }
+
+ url = _conditionUrl(url);
+ return  _httpRequest('GET_ALLDOCS', url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getAttachment">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getAttachment</strong>(String docId, String attachmentName) <a class="anchor-link" href="#getAttachment"
+              title="Permalink to WiltServerClient.getAttachment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get an attachment</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getAttachment(String docId, String attachmentName) {
+
+
+ if (docId == null) {
+
+   throw new WiltException('getAttachment() expects a document id.');
+ }
+
+ if (attachmentName == null) {
+
+   throw new WiltException('getAttachment() expects an attachment name.');
+ }
+
+
+ String url = "$docId/$attachmentName";
+
+ url = _conditionUrl(url);
+return  _httpRequest(GET_ATTACHMENT, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getDatabaseInfo">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getDatabaseInfo</strong>([String dbName = null]) <a class="anchor-link" href="#getDatabaseInfo"
+              title="Permalink to WiltServerClient.getDatabaseInfo">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get information about a database</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getDatabaseInfo([String dbName = null]) {
+
+ String name;
+ if (dbName != null) {
+
+   name = dbName;
+
+ } else {
+
+   name = db;
+ }
+
+ String url = "/$name";
+
+ return _httpRequest(DATABASE_INFO, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getDocument">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getDocument</strong>(String id, [String rev = null, bool withAttachments = false]) <a class="anchor-link" href="#getDocument"
+              title="Permalink to WiltServerClient.getDocument">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs an HTTP GET operation for the supplied document id and
+optional revision. If withAttachments is set the the body of
+any attachments are also supplied, note this could make this 
+a large transfer.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getDocument(String id, [String rev = null, bool withAttachments = false])
+   {
+
+ if (id == null) {
+
+   throw new WiltException('getDocument() must have a document id');
+ }
+
+ String url = id;
+ if (rev != null) {
+
+   url = _setURLParameter(url, 'rev', rev);
+ }
+
+ if (withAttachments) {
+
+   url = _setURLParameter(url, 'attachments', 'true');
+ }
+
+ url = _conditionUrl(url);
+return  _httpRequest('GET_DOCUMENT', url);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getSession">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getSession</strong>() <a class="anchor-link" href="#getSession"
+              title="Permalink to WiltServerClient.getSession">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get current session information from CouchDB</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getSession() {
+
+ String url = SESSION;
+
+return _httpRequest(GET_SESSION, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="getStats">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>getStats</strong>() <a class="anchor-link" href="#getStats"
+              title="Permalink to WiltServerClient.getStats">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Get current stats from CouchDB</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; getStats() {
+
+ String url = STATS;
+
+ return _httpRequest(GET_STATS, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="head">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>head</strong>(String url) <a class="anchor-link" href="#head"
+              title="Permalink to WiltServerClient.head">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs a HTTP HEAD operation, the URL is conditioned and
+the current database added.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; head(String url) {
+
+ url = _conditionUrl(url);
+
+ /* Perform the head */
+return  _httpRequest(HEAD, url);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="httpRequest">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>httpRequest</strong>(String url, {String method: "GET"}) <a class="anchor-link" href="#httpRequest"
+              title="Permalink to WiltServerClient.httpRequest">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Basic method where only a URL and a method is passed.
+Wilt applies no checks to this URL nor does it add the
+database, the format of this is entirely up to the user.</p>
+<p>This can be used for CouchDb functions that are not directly supported by Wilt,
+e.g views, attachments and design documents.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; httpRequest(String url, {String method: "GET"}) {
+
+
+ /* Perform the request */
+ return _httpRequest(method, url);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="login">
+<button class="show-code">Code</button>
+void <strong>login</strong>(String user, String password) <a class="anchor-link" href="#login"
+              title="Permalink to WiltServerClient.login">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Authentication.
+Updates the login credentials in Wilt that will be used for all further
+requests to CouchDB. Both user name and password must be set, even if one
+or the other is '' i.e empty. After logging in all communication with CouchDB
+is made using the selected auithentication method.</p>
+<pre class="source">
+void login(String user, String password) {
+
+
+ if ((user == null) || (password == null)) {
+
+   throw new WiltException(
+       'Login() expects a non null user name and password');
+ }
+
+ _user = user;
+ _password = password;
+ authenticationType = AUTH_BASIC;
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="pauseChangeNotifications">
+<button class="show-code">Code</button>
+void <strong>pauseChangeNotifications</strong>() <a class="anchor-link" href="#pauseChangeNotifications"
+              title="Permalink to WiltServerClient.pauseChangeNotifications">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Pause change notifications</p>
+<pre class="source">
+void pauseChangeNotifications() {
+
+ _changeNotifier.pause = true;
+ _changeNotifier.stopNotifications();
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="post">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>post</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#post"
+              title="Permalink to WiltServerClient.post">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs a HTTP POST operation,, the URL is conditioned and
+the current database added.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; post(String url, String data, [Map headers]) {
+
+ url = _conditionUrl(url);
+
+ /* Perform the post */
+ return _httpRequest('POST', url, data: data, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="postDocument">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>postDocument</strong>(JsonObject document, {String path: null}) <a class="anchor-link" href="#postDocument"
+              title="Permalink to WiltServerClient.postDocument">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>POST's the specified document.
+An optional path to the document can be specified.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; postDocument(jsonobject.JsonObject document, {String path: null}) {
+
+
+ if (document == null) {
+
+   throw new WiltException('postDocument() expects a document body.');
+ }
+
+ String url = "";
+ if (path != null) url = "$url/$path";
+
+ /* Set the content type for a post */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = "application/json";
+
+ String jsonData = null;
+ try {
+
+   jsonData = JSON.encode(document);
+
+ } catch (e) {
+
+   throw new WiltException(
+       'postDocument() cannot stringify document body , use postDocumentString');
+ }
+
+ url = _conditionUrl(url);
+ return _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="postDocumentString">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>postDocumentString</strong>(String document, {String path: null}) <a class="anchor-link" href="#postDocumentString"
+              title="Permalink to WiltServerClient.postDocumentString">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>POST's to the specified  document where the document is supplied as 
+a JSON string. Must be used if '<em>id' and or '</em>rev' are needed.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; postDocumentString(String document, {String path: null}) {
+
+
+ if (document == null) {
+
+   throw new WiltException('postDocumentString() expects a document body.');
+ }
+
+ String url = "";
+ if (path != null) url = "$url/$path";
+
+ /* Set the content type for a post */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = "application/json";
+
+ url = _conditionUrl(url);
+ return _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="put">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>put</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#put"
+              title="Permalink to WiltServerClient.put">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Performs a HTTP PUT operation,, the URL is conditioned and
+the current database added.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; put(String url, String data, [Map headers]) {
+
+ url = _conditionUrl(url);
+
+ /* Perform the put */
+ return _httpRequest('PUT', url, data: data, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="putDocument">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>putDocument</strong>(String id, JsonObject document, [String rev = null]) <a class="anchor-link" href="#putDocument"
+              title="Permalink to WiltServerClient.putDocument">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>PUT's to the specified  document.</p>
+<p>For an update the revision must be specified, this can be in the
+document body as a _rev parameter or specified in the call in which
+case this will be added to the document body.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; putDocument(String id, jsonobject.JsonObject document, [String rev =
+   null]) {
+
+
+ if ((id == null) || (document == null)) {
+
+   throw new WiltException(
+       'putDocument() expects a document id and a document body.');
+ }
+
+ /* Check for a revision */
+ String jsonData = null;
+
+ try {
+
+   if (rev != null) {
+
+     jsonData = WiltUserUtils.addDocumentRev(document, rev);
+   } else {
+
+     jsonData = JSON.encode(document);
+   }
+
+ } catch (e) {
+
+   throw new WiltException(
+       'putDocument() cannot stringify the document body, use putDocumentString');
+
+ }
+
+ String url = _conditionUrl(id);
+return  _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="putDocumentString">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>putDocumentString</strong>(String id, String document, [String rev = null]) <a class="anchor-link" href="#putDocumentString"
+              title="Permalink to WiltServerClient.putDocumentString">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>PUT's to the specified  document where the document is supplied as 
+a JSON string. Must be used if '<em>id' and or '</em>rev' are needed.</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; putDocumentString(String id, String document, [String rev = null]) {
+
+
+ if ((id == null) || (document == null)) {
+
+   throw new WiltException(
+       'putDocumentString() expects a document id and a document body.');
+ }
+
+ /* Check for a revision */
+ if (rev != null) id = "$id?rev=$rev";
+
+ String url = _conditionUrl(id);
+ return _httpRequest('PUT_DOCUMENT', url, data: document);
+
+
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="restartChangeNotifications">
+<button class="show-code">Code</button>
+void <strong>restartChangeNotifications</strong>() <a class="anchor-link" href="#restartChangeNotifications"
+              title="Permalink to WiltServerClient.restartChangeNotifications">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Restart change notifications after a pause</p>
+<pre class="source">
+void restartChangeNotifications() {
+
+ _changeNotifier.pause = false;
+ _changeNotifier.restartChangeNotifications();
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="startChangeNotification">
+<button class="show-code">Code</button>
+void <strong>startChangeNotification</strong>([<a href="../wilt/WiltChangeNotificationParameters.html">WiltChangeNotificationParameters</a> parameters = null, String databaseName = null]) <a class="anchor-link" href="#startChangeNotification"
+              title="Permalink to WiltServerClient.startChangeNotification">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change notification start, see the WiltChangeNotification class for more details</p>
+<p>If a database name is not supplied the currently selected database is used.</p>
+<pre class="source">
+void startChangeNotification([WiltChangeNotificationParameters parameters =
+   null, String databaseName = null]) {
+
+ String name;
+ if (databaseName == null) {
+
+   name = db;
+
+ } else {
+
+   name = databaseName;
+ }
+
+ changeNotificationDbName = name;
+ _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name,
+     parameters);
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="stopChangeNotification">
+<button class="show-code">Code</button>
+void <strong>stopChangeNotification</strong>() <a class="anchor-link" href="#stopChangeNotification"
+              title="Permalink to WiltServerClient.stopChangeNotification">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change notification stop, see the WiltChangeNotification class for more details</p>
+<p>Note that this destroys the internal changeNotifier object which can only be 
+reinstated by a call to startChangeNotification.</p>
+<pre class="source">
+void stopChangeNotification() {
+
+ _changeNotifier.stopNotifications();
+ _changeNotifier = null;
+ changeNotificationDbName = null;
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="updateAttachment">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>updateAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#updateAttachment"
+              title="Permalink to WiltServerClient.updateAttachment">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Update an attachment on an existing document.
+contentType is in the form of a mime type e.g. 'image/png'</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; updateAttachment(String docId, String attachmentName, String rev, String
+   contentType, String payload) {
+
+ /**
+ * Check all parameters are supplied
+ */
+ if (docId == null) {
+
+   throw new WiltException('updateAttachment() expects a document id.');
+ }
+
+ if (attachmentName == null) {
+
+   throw new WiltException('updateAttachment() expects an attachment name.');
+ }
+
+ if (rev == null) {
+
+   throw new WiltException('updateAttachment() expects a revision.');
+ }
+
+ if (contentType == null) {
+
+   throw new WiltException('updateAttachment() expects a content type.');
+ }
+
+ if (payload == null) {
+
+   throw new WiltException('updateAttachment() expects a payload.');
+ }
+
+ /**
+  * Set the headers
+  */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = contentType;
+
+
+ String url = "$docId/$attachmentName?rev=$rev";
+
+ url = _conditionUrl(url);
+ return _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
+
+}
+</pre>
+</div>
+</div>
+<div class="method inherited"><h4 id="updateChangeNotificationParameters">
+<button class="show-code">Code</button>
+void <strong>updateChangeNotificationParameters</strong>(<a href="../wilt/WiltChangeNotificationParameters.html">WiltChangeNotificationParameters</a> parameters) <a class="anchor-link" href="#updateChangeNotificationParameters"
+              title="Permalink to WiltServerClient.updateChangeNotificationParameters">#</a></h4>
+<div class="inherited-from">inherited from <a href="../wilt/Wilt.html">Wilt</a> </div><div class="doc">
+<p>Change the parameter set for change notifications.</p>
+<p>Note that database name, host, port and scheme are not changeable.</p>
+<pre class="source">
+void updateChangeNotificationParameters(WiltChangeNotificationParameters
+   parameters) {
+
+
+ if (parameters == null) {
+
+   throw new WiltException(
+       'updateChangeNotificationParameters() expects a parameter set.');
+ }
+
+ if (_changeNotifier == null) {
+
+   throw new WiltException(
+       'updateChangeNotificationParameters() no change notifier.');
+ }
+
+ _changeNotifier.parameters = parameters;
+
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2014-03-12 11:41:21.611</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

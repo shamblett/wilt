@@ -1,0 +1,661 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>WiltServerHTTPAdapter class / wiltServerClient Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="wiltServerClient" data-type="WiltServerHTTPAdapter">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../wiltServerClient.html">wiltServerClient</a> &rsaquo; <a href="../wiltServerClient/WiltServerHTTPAdapter.html">WiltServerHTTPAdapter</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>WiltServerHTTPAdapter</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<pre class="source">
+class WiltServerHTTPAdapter implements WiltHTTPAdapter {
+
+
+ /**
+  * HTTP client
+  */
+ http.Client _client;
+
+ /**
+  *  Construction
+  */
+ WiltServerHTTPAdapter() {
+
+   _client = new http.Client();
+ }
+
+ /**
+  * Processes the HTTP request, returning the server's response
+  * as a future
+  */
+ Future&lt;jsonobject.JsonObject&gt; httpRequest(String method, String url, [String
+     data = null, Map headers = null]) {
+
+
+   /**
+    *  Initialise 
+    */
+   Completer completer = new Completer();
+
+
+   /**
+    * Successful completion
+    */
+   void onSuccess(http.Response response) {
+
+     /**
+      *  Process the success response, note that an error response from CouchDB is 
+      *  treated as an error, not as a success with an 'error' field in it.
+      */
+     jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+     jsonResponse.error = false;
+     jsonResponse.errorCode = 0;
+     jsonResponse.successText = null;
+     jsonResponse.errorText = null;
+     jsonResponse.allResponseHeader = null;
+     jsonResponse.method = method;
+     jsonResponse.responseText = response.body;
+
+     /**
+      * Check the header, if application/json try and decode it,
+      * otherwise its just raw data, ie an attachment.
+      */
+     if (response.headers.containsValue('application/json')) {
+
+       var couchResp;
+       try {
+
+         couchResp = JSON.decode(response.body);
+
+       } catch (e) {
+
+         jsonResponse.error = true;
+         jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+         errorAsJson.error = "JSON Decode Error";
+         errorAsJson.reason = "None";
+         jsonResponse.jsonCouchResponse = errorAsJson;
+         /* Set the response headers */
+         jsonResponse.allResponseHeaders = response.headers;
+         /**
+           * Complete the reequest
+           */
+         if (!completer.isCompleted) completer.complete(jsonResponse);
+
+       }
+
+       if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {
+
+         jsonResponse.error = true;
+         jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+         errorAsJson.error = "CouchDb Error";
+         errorAsJson.reason = couchResp['reason'];
+         jsonResponse.jsonCouchResponse = errorAsJson;
+         /* Set the response headers */
+         jsonResponse.allResponseHeaders = response.headers;
+         /**
+          * Complete the reequest
+          */
+         if (!completer.isCompleted) completer.complete(jsonResponse);
+
+       }
+
+       /**
+        * Success response
+        */
+       if (method != Wilt.HEAD) {
+         jsonobject.JsonObject successAsJson =
+             new jsonobject.JsonObject.fromJsonString(response.body);
+         jsonResponse.jsonCouchResponse = successAsJson;
+       }
+
+
+     } else {
+
+       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+       successAsJson.ok = true;
+       successAsJson.contentType = response.headers['content-type'];
+       jsonResponse.jsonCouchResponse = successAsJson;
+
+     }
+
+
+     /* Set the response headers */
+     jsonResponse.allResponseHeaders = response.headers;
+     /**
+      * Complete the request
+      */
+     if (!completer.isCompleted) completer.complete(jsonResponse);
+
+
+   }
+
+   /**
+    * Successful completion for Copy
+   */
+   void onCopySuccess(http.StreamedResponse response) {
+
+     /**
+      *  Process the success response, note that an error response from CouchDB is 
+      *  treated as an error, not as a success with an 'error' field in it.
+      */
+     jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+     jsonResponse.error = false;
+     jsonResponse.errorCode = 0;
+     jsonResponse.successText = null;
+     jsonResponse.errorText = null;
+     jsonResponse.allResponseHeader = null;
+     jsonResponse.method = method;
+     response.stream.bytesToString(UTF8).then((String text) {
+
+       jsonResponse.responseText = text;
+
+       /**
+          * Check the header, if application/json try and decode it,
+          * otherwise its just raw data, ie an attachment.
+          */
+       if (response.headers.containsValue('application/json')) {
+
+         var couchResp;
+         try {
+
+           couchResp = JSON.decode(text);
+
+         } catch (e) {
+
+           jsonResponse.error = true;
+           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+           errorAsJson.error = "JSON Decode Error";
+           errorAsJson.reason = "None";
+           jsonResponse.jsonCouchResponse = errorAsJson;
+           /* Set the response headers */
+           jsonResponse.allResponseHeaders = response.headers;
+           /**
+               * Complete the reequest
+               */
+           if (!completer.isCompleted) completer.complete(jsonResponse);
+
+         }
+
+         if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {
+
+           jsonResponse.error = true;
+           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+           errorAsJson.error = "CouchDb Error";
+           errorAsJson.reason = couchResp['reason'];
+           jsonResponse.jsonCouchResponse = errorAsJson;
+           /* Set the response headers */
+           jsonResponse.allResponseHeaders = response.headers;
+           /**
+              * Complete the reequest
+              */
+           if (!completer.isCompleted) completer.complete(jsonResponse);
+
+         }
+
+         /**
+            * Success response
+            */
+         if (method != Wilt.HEAD) {
+           jsonobject.JsonObject successAsJson =
+               new jsonobject.JsonObject.fromJsonString(text);
+           jsonResponse.jsonCouchResponse = successAsJson;
+         }
+
+
+       } else {
+
+         jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+         successAsJson.ok = true;
+         successAsJson.contentType = response.headers['content-type'];
+         jsonResponse.jsonCouchResponse = successAsJson;
+
+       }
+
+
+       /* Set the response headers */
+       jsonResponse.allResponseHeaders = response.headers;
+       
+       /**
+        * Complete the request
+       */
+       if (!completer.isCompleted) completer.complete(jsonResponse);
+
+     });
+
+   }
+
+   /**
+    * Error completion
+    */
+   void onError(HttpException response) {
+
+     /* Process the error response */
+     jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+     jsonResponse.method = method;
+     jsonResponse.error = true;
+     jsonResponse.successText = null;
+     jsonResponse.errorCode = 0;
+     jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+     errorAsJson.error = "Invalid HTTP response";
+     errorAsJson.reason = response.message;
+     jsonResponse.jsonCouchResponse = errorAsJson;
+
+     /**
+      * Complete the reequest
+      */
+     if (!completer.isCompleted) completer.complete(jsonResponse);
+
+   }
+
+   /**
+    * Condition the input method string to get the HTTP method
+    */
+   List temp = method.split('_');
+   String httpMethod = temp[0];
+
+   /**
+    * Set the content type header correctly
+    */
+   if (headers.containsKey('Content-Type')) {
+
+     String contentType = headers['Content-Type'];
+     headers.remove('Content-Type');
+     headers['content-type'] = contentType;
+
+   }
+   /**
+    *  Query CouchDB over HTTP 
+    */
+   if (httpMethod == "GET") {
+     _client.get(url, headers: headers).then(onSuccess, onError: onError);
+   } else if (httpMethod == "PUT") {
+     _client.put(url, headers: headers, body: data).then(onSuccess, onError:
+         onError);
+   } else if (httpMethod == "POST") {
+     _client.post(url, headers: headers, body: data).then(onSuccess, onError:
+         onError);
+   } else if (httpMethod == "HEAD") {
+     _client.head(url, headers: headers).then(onSuccess, onError: onError);
+   } else if (httpMethod == "DELETE") {
+     _client.delete(url, headers: headers).then(onSuccess, onError: onError);
+   } else if (httpMethod == "COPY") {
+     Uri encodedUrl = Uri.parse(url);
+     var request = new http.Request("COPY", encodedUrl);
+     request.headers.addAll(headers);
+     _client.send(request).then(onCopySuccess, onError: onError);
+   }
+
+   return completer.future;
+
+ }
+
+ /**
+   *  Specialised get for change notifications
+   */
+ Future&lt;String&gt; getString(String url) {
+
+   Completer completer = new Completer&lt;String&gt;();
+   
+   _client.get(url).then((response) {
+     
+     completer.complete(response.body);
+     
+   });
+
+   return completer.future;
+ }
+
+
+}
+</pre>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+<button class="show-code">Code</button>
+new <strong>WiltServerHTTPAdapter</strong>() <a class="anchor-link" href="#"
+              title="Permalink to WiltServerHTTPAdapter.WiltServerHTTPAdapter">#</a></h4>
+<div class="doc">
+<p> Construction</p>
+<pre class="source">
+WiltServerHTTPAdapter() {
+
+ _client = new http.Client();
+}
+</pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="getString">
+<button class="show-code">Code</button>
+Future&lt;String&gt; <strong>getString</strong>(String url) <a class="anchor-link" href="#getString"
+              title="Permalink to WiltServerHTTPAdapter.getString">#</a></h4>
+<div class="doc">
+<p> Specialised get for change notifications</p>
+<pre class="source">
+Future&lt;String&gt; getString(String url) {
+
+ Completer completer = new Completer&lt;String&gt;();
+ 
+ _client.get(url).then((response) {
+   
+   completer.complete(response.body);
+   
+ });
+
+ return completer.future;
+}
+</pre>
+</div>
+</div>
+<div class="method"><h4 id="httpRequest">
+<button class="show-code">Code</button>
+Future&lt;JsonObject&gt; <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
+              title="Permalink to WiltServerHTTPAdapter.httpRequest">#</a></h4>
+<div class="doc">
+<p>Processes the HTTP request, returning the server's response
+as a future</p>
+<pre class="source">
+Future&lt;jsonobject.JsonObject&gt; httpRequest(String method, String url, [String
+   data = null, Map headers = null]) {
+
+
+ /**
+  *  Initialise 
+  */
+ Completer completer = new Completer();
+
+
+ /**
+  * Successful completion
+  */
+ void onSuccess(http.Response response) {
+
+   /**
+    *  Process the success response, note that an error response from CouchDB is 
+    *  treated as an error, not as a success with an 'error' field in it.
+    */
+   jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+   jsonResponse.error = false;
+   jsonResponse.errorCode = 0;
+   jsonResponse.successText = null;
+   jsonResponse.errorText = null;
+   jsonResponse.allResponseHeader = null;
+   jsonResponse.method = method;
+   jsonResponse.responseText = response.body;
+
+   /**
+    * Check the header, if application/json try and decode it,
+    * otherwise its just raw data, ie an attachment.
+    */
+   if (response.headers.containsValue('application/json')) {
+
+     var couchResp;
+     try {
+
+       couchResp = JSON.decode(response.body);
+
+     } catch (e) {
+
+       jsonResponse.error = true;
+       jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+       errorAsJson.error = "JSON Decode Error";
+       errorAsJson.reason = "None";
+       jsonResponse.jsonCouchResponse = errorAsJson;
+       /* Set the response headers */
+       jsonResponse.allResponseHeaders = response.headers;
+       /**
+         * Complete the reequest
+         */
+       if (!completer.isCompleted) completer.complete(jsonResponse);
+
+     }
+
+     if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {
+
+       jsonResponse.error = true;
+       jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+       errorAsJson.error = "CouchDb Error";
+       errorAsJson.reason = couchResp['reason'];
+       jsonResponse.jsonCouchResponse = errorAsJson;
+       /* Set the response headers */
+       jsonResponse.allResponseHeaders = response.headers;
+       /**
+        * Complete the reequest
+        */
+       if (!completer.isCompleted) completer.complete(jsonResponse);
+
+     }
+
+     /**
+      * Success response
+      */
+     if (method != Wilt.HEAD) {
+       jsonobject.JsonObject successAsJson =
+           new jsonobject.JsonObject.fromJsonString(response.body);
+       jsonResponse.jsonCouchResponse = successAsJson;
+     }
+
+
+   } else {
+
+     jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+     successAsJson.ok = true;
+     successAsJson.contentType = response.headers['content-type'];
+     jsonResponse.jsonCouchResponse = successAsJson;
+
+   }
+
+
+   /* Set the response headers */
+   jsonResponse.allResponseHeaders = response.headers;
+   /**
+    * Complete the request
+    */
+   if (!completer.isCompleted) completer.complete(jsonResponse);
+
+
+ }
+
+ /**
+  * Successful completion for Copy
+ */
+ void onCopySuccess(http.StreamedResponse response) {
+
+   /**
+    *  Process the success response, note that an error response from CouchDB is 
+    *  treated as an error, not as a success with an 'error' field in it.
+    */
+   jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+   jsonResponse.error = false;
+   jsonResponse.errorCode = 0;
+   jsonResponse.successText = null;
+   jsonResponse.errorText = null;
+   jsonResponse.allResponseHeader = null;
+   jsonResponse.method = method;
+   response.stream.bytesToString(UTF8).then((String text) {
+
+     jsonResponse.responseText = text;
+
+     /**
+        * Check the header, if application/json try and decode it,
+        * otherwise its just raw data, ie an attachment.
+        */
+     if (response.headers.containsValue('application/json')) {
+
+       var couchResp;
+       try {
+
+         couchResp = JSON.decode(text);
+
+       } catch (e) {
+
+         jsonResponse.error = true;
+         jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+         errorAsJson.error = "JSON Decode Error";
+         errorAsJson.reason = "None";
+         jsonResponse.jsonCouchResponse = errorAsJson;
+         /* Set the response headers */
+         jsonResponse.allResponseHeaders = response.headers;
+         /**
+             * Complete the reequest
+             */
+         if (!completer.isCompleted) completer.complete(jsonResponse);
+
+       }
+
+       if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {
+
+         jsonResponse.error = true;
+         jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+         errorAsJson.error = "CouchDb Error";
+         errorAsJson.reason = couchResp['reason'];
+         jsonResponse.jsonCouchResponse = errorAsJson;
+         /* Set the response headers */
+         jsonResponse.allResponseHeaders = response.headers;
+         /**
+            * Complete the reequest
+            */
+         if (!completer.isCompleted) completer.complete(jsonResponse);
+
+       }
+
+       /**
+          * Success response
+          */
+       if (method != Wilt.HEAD) {
+         jsonobject.JsonObject successAsJson =
+             new jsonobject.JsonObject.fromJsonString(text);
+         jsonResponse.jsonCouchResponse = successAsJson;
+       }
+
+
+     } else {
+
+       jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+       successAsJson.ok = true;
+       successAsJson.contentType = response.headers['content-type'];
+       jsonResponse.jsonCouchResponse = successAsJson;
+
+     }
+
+
+     /* Set the response headers */
+     jsonResponse.allResponseHeaders = response.headers;
+     
+     /**
+      * Complete the request
+     */
+     if (!completer.isCompleted) completer.complete(jsonResponse);
+
+   });
+
+ }
+
+ /**
+  * Error completion
+  */
+ void onError(HttpException response) {
+
+   /* Process the error response */
+   jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+   jsonResponse.method = method;
+   jsonResponse.error = true;
+   jsonResponse.successText = null;
+   jsonResponse.errorCode = 0;
+   jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+   errorAsJson.error = "Invalid HTTP response";
+   errorAsJson.reason = response.message;
+   jsonResponse.jsonCouchResponse = errorAsJson;
+
+   /**
+    * Complete the reequest
+    */
+   if (!completer.isCompleted) completer.complete(jsonResponse);
+
+ }
+
+ /**
+  * Condition the input method string to get the HTTP method
+  */
+ List temp = method.split('_');
+ String httpMethod = temp[0];
+
+ /**
+  * Set the content type header correctly
+  */
+ if (headers.containsKey('Content-Type')) {
+
+   String contentType = headers['Content-Type'];
+   headers.remove('Content-Type');
+   headers['content-type'] = contentType;
+
+ }
+ /**
+  *  Query CouchDB over HTTP 
+  */
+ if (httpMethod == "GET") {
+   _client.get(url, headers: headers).then(onSuccess, onError: onError);
+ } else if (httpMethod == "PUT") {
+   _client.put(url, headers: headers, body: data).then(onSuccess, onError:
+       onError);
+ } else if (httpMethod == "POST") {
+   _client.post(url, headers: headers, body: data).then(onSuccess, onError:
+       onError);
+ } else if (httpMethod == "HEAD") {
+   _client.head(url, headers: headers).then(onSuccess, onError: onError);
+ } else if (httpMethod == "DELETE") {
+   _client.delete(url, headers: headers).then(onSuccess, onError: onError);
+ } else if (httpMethod == "COPY") {
+   Uri encodedUrl = Uri.parse(url);
+   var request = new http.Request("COPY", encodedUrl);
+   request.headers.addAll(headers);
+   _client.send(request).then(onCopySuccess, onError: onError);
+ }
+
+ return completer.future;
+
+}
+</pre>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2014-03-12 11:41:21.575</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

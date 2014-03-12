@@ -34,31 +34,29 @@
 <div class="doc">
 <pre class="source">
 abstract class WiltHTTPAdapter {
- 
- 
+
+
  WiltHTTPAdapter();
- 
- /*
-  * Processes the HTTP request returning the server's response as
+
+ /**
+  * Processes the HTTP request returning the  HTTP response as
   * a JSON Object
   */
- void httpRequest(String method, 
-                  String url, 
-                  [String data = null,
-                  Map headers = null]);
- 
- /*
-  * Result Handling
-  */
- void onError(html.ProgressEvent response);
- void onSuccess(html.HttpRequest response);
- 
+ Future&lt;jsonobject.JsonObject&gt; httpRequest(String method, String url, [String
+     data = null, Map headers = null]);
+
+
+ /**
+ *  Specialised get for change notifications
+ */
+ Future&lt;String&gt; getString(String url);
+
 }
 </pre>
 </div>
 <h3>Subclasses</h3>
 <p>
-<span class="type-box"><span class="icon-class"></span><a href="../wilt/WiltNativeHTTPAdapter.html">WiltNativeHTTPAdapter</a></span></p>
+<span class="type-box"><span class="icon-class"></span><a href="../wiltBrowserClient/WiltBrowserHTTPAdapter.html">WiltBrowserHTTPAdapter</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../wiltServerClient/WiltServerHTTPAdapter.html">WiltServerHTTPAdapter</a></span></p>
 <div>
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
@@ -67,9 +65,9 @@ new <strong>WiltHTTPAdapter</strong>() <a class="anchor-link" href="#"
               title="Permalink to WiltHTTPAdapter.WiltHTTPAdapter">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
+<p>Creates a new <code>Object</code> instance.</p>
+<p><code>Object</code> instances have no meaningful state, and are only useful
+through their identity. An <code>Object</code> instance is equal to itself
 only.</p>
 <div class="docs-inherited-from">docs inherited from Object </div></div>
 <pre class="source">
@@ -80,22 +78,19 @@ WiltHTTPAdapter();
 </div>
 <div>
 <h3>Methods</h3>
+<div class="method"><h4 id="getString">
+abstract Future&lt;String&gt; <strong>getString</strong>(String url) <a class="anchor-link" href="#getString"
+              title="Permalink to WiltHTTPAdapter.getString">#</a></h4>
+<div class="doc">
+<p> Specialised get for change notifications</p>
+</div>
+</div>
 <div class="method"><h4 id="httpRequest">
-abstract void <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
+abstract Future&lt;JsonObject&gt; <strong>httpRequest</strong>(String method, String url, [String data = null, Map headers = null]) <a class="anchor-link" href="#httpRequest"
               title="Permalink to WiltHTTPAdapter.httpRequest">#</a></h4>
 <div class="doc">
-</div>
-</div>
-<div class="method"><h4 id="onError">
-abstract void <strong>onError</strong>(ProgressEvent response) <a class="anchor-link" href="#onError"
-              title="Permalink to WiltHTTPAdapter.onError">#</a></h4>
-<div class="doc">
-</div>
-</div>
-<div class="method"><h4 id="onSuccess">
-abstract void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-link" href="#onSuccess"
-              title="Permalink to WiltHTTPAdapter.onSuccess">#</a></h4>
-<div class="doc">
+<p>Processes the HTTP request returning the  HTTP response as
+a JSON Object</p>
 </div>
 </div>
 </div>
@@ -103,7 +98,7 @@ abstract void <strong>onSuccess</strong>(HttpRequest response) <a class="anchor-
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2014-01-14 08:15:56.835</div>
+          <div>This page was generated at 2014-03-12 11:41:21.290</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>

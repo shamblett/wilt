@@ -34,38 +34,37 @@
 <div class="doc">
 <pre class="source">
 class Wilt {
- 
+
  /**
   *  URL constant for CouchDB SESSION function 
   */
  static const String SESSION = "/_session";
- 
+
  /**
   *  URL constant for CouchDB STATS function 
   */
  static const String STATS = "/_stats";
- 
+
  /**
   *  URL constant for CouchDB ALLDBS function 
   */
  static const String ALLDBS = "/_all_dbs";
- 
+
  /**
   *  URL constant for CouchDB ALLDOCS function 
   */
  static const String ALLDOCS = "/_all_docs";
- 
+
  /**
   *  URL constant for CouchDB BULKDOCS function 
   */
  static const String BULKDOCS = "/_bulk_docs";
- 
+
  /**
   *  URL constant for CouchDB UUID function 
   */
- static const String UUIDS ="/_uuids";
- 
- 
+ static const String UUIDS = "/_uuids";
+
  /**
   *
   * AUTH_BASIC denotes Basic HTTP authentication. 
@@ -73,216 +72,252 @@ class Wilt {
   * 
   */
  static const String AUTH_BASIC = 'basic';
- 
+
  /**
   * No authentication 
   */
  static const String AUTH_NONE = 'none';
- 
+
+ /**
+  * Operation types and method definitions
+  */
+ static const GET = 'GET_GET';
+ static const HEAD = 'HEAD_HEAD';
+ static const POST = 'POST_POST';
+ static const PUT = 'PUT_PUT';
+ static const DELETE = 'DELETE_DELETE';
+ static const COPY = 'COPY_COPY';
+ static const GET_DOCUMENT = 'GET_DOCUMENT';
+ static const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
+ static const PUT_DOCUMENT = 'PUT_DOCUMENT';
+ static const POST_DOCUMENT = 'POST_DOCUMENT';
+ static const POST_DOCUMENT_STRING = 'POST_DOCUMENTSTRING';
+ static const COPY_DOCUMENT = 'COPY_DOCUMENT';
+ static const GET_ALLDOCS = 'GET_ALLDOCS';
+ static const BULK = 'POST_BULK';
+ static const BULK_STRING = 'POST_BULKSTRING';
+ static const CREATE_DATABASE = 'PUT_DATABASE';
+ static const DELETE_DATABASE = 'DELETE_DATABASE';
+ static const DATABASE_INFO = 'GET_DATABASEINFO';
+ static const GET_SESSION = 'GET_SESSION';
+ static const GET_STATS = 'GET_STATS';
+ static const GET_ALLDBS = 'GET_ALLDBS';
+ static const CREATE_ATTACHMENT = 'PUT_CREATEATTACH';
+ static const UPDATE_ATTACHMENT = 'PUT_UPDATEATTACH';
+ static const DELETE_ATTACHMENT = 'DELETE_ATTACH';
+ static const GET_ATTACHMENT = 'GET_ATTACH';
+ static const GENERATE_IDS = 'GET_IDS';
+
  /** 
   * Database name
   */
- String _db = null; 
+ String _db = null;
  String get db =&gt; _db;
  set db(String name) =&gt; _db = name;
- 
+
  /**
   * Change notification database name
   */
  String changeNotificationDbName = null;
- 
+
  /** 
   * Host name
   */
- String _host = null;  
+ String _host = null;
  String get host =&gt; _host;
- 
+
  /** 
   * Port number
   */
- String _port = null; 
+ String _port = null;
  String get port =&gt; _port;
- 
+
  /** 
   * HTTP scheme
   */
- String _scheme = null; 
+ String _scheme = null;
  String get scheme =&gt; _scheme;
- 
+
  /**
   * HTTP Adapter
   */
- WiltNativeHTTPAdapter _httpAdapter = null;
- String get responseHeaders =&gt; _httpAdapter.responseHeaders;
+ WiltHTTPAdapter _httpAdapter = null;
+ set httpAdapter(WiltHTTPAdapter adapter)=&gt;_httpAdapter = adapter;
+ WiltHTTPAdapter get httpAdapter  =&gt; _httpAdapter;
  
  /**
   * Change notification 
   */
  _WiltChangeNotification _changeNotifier = null;
- 
+
  /**
   * Change notification event stream
   * 
   * This is a broadcast stream so can support more than one listener.
   * 
   */
- Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt; 
-                                _changeNotifier.changeNotification.stream;
+ Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt;
+     _changeNotifier.changeNotification.stream;
  /**
   * Change notification paused state
   */
  bool get changeNotificationsPaused =&gt; _changeNotifier.pause;
- 
+
  /**
   * Completion function 
   */
- var clientCompletion = null;
- 
+ var _clientCompletion = null;
+
+ /**
+  *  Completion callback 
+  */
+ set resultCompletion(var completion) {
+
+   _clientCompletion = completion;
+ }
+
+ /**
+  *  Response getter for completion callbacks 
+  */
+ jsonobject.JsonObject _completionResponse;
+ jsonobject.JsonObject get completionResponse =&gt; _completionResponse;
+
  /**
   *  Authentication, user name
   */
- String _user = null; 
+ String _user = null;
  /**
   *  Authentication, user password
   */
- String _password = null;   
+ String _password = null;
  /**
   *  Authentication, type
   */
- String authenticationType = AUTH_NONE;   
-   
- Wilt(this._host,
-      this._port,
-      this._scheme,
-      [this.clientCompletion = null]) {
-   
-   if ( (host == null) ||
-        (port == null)  ||
-        (scheme == null )) {
-     
-     throw new WiltException('Bad construction - some or all required parameters are null');
-     
+ String authenticationType = AUTH_NONE;
+
+ /**
+  * Please use the wilt_browser_client or wilt_server_client import files to 
+  * instantiate a Wilt object for use in either the browser or server environment.
+  * You can do this here but you must supply either a browser or server HTTP adapter
+  * to use.
+  */
+ Wilt(this._host, this._port, this._scheme, this._httpAdapter, [this._clientCompletion = null]) {
+
+   if ((host == null) || (port == null) || (scheme == null)) {
+
+     throw new WiltException(
+         'Bad construction - some or all required parameters are null');
+
    }
    
-   /* Get our HTTP adapter */
-    _httpAdapter = new WiltNativeHTTPAdapter(this.clientCompletion);
+   if  ( _httpAdapter == null) {
+     throw new WiltException(
+               'Bad construction - you must instantiate Wilt with a HTTP Adapter');
+   }
+
  }
- 
+
  /**
   *  The internal HTTP request method. This wraps the
   *  HTTP adapter class. 
  */
- void _httpRequest( String method, 
-                    String url, 
-                    {String data:null, 
-                    Map headers:null}) {
-   
-   
+ Future&lt;jsonobject.JsonObject&gt; _httpRequest(String method, String url, {String data: null, Map headers:
+     null}) {
+
+
    /* Build the request for the HttpAdapter*/
-   Map wiltHeaders = new Map&lt;String,String&gt;();
+   Map wiltHeaders = new Map&lt;String, String&gt;();
    wiltHeaders["Accept"] = "application/json";
-   if ( headers != null ) wiltHeaders.addAll(headers);
-   
+   if (headers != null) wiltHeaders.addAll(headers);
+
    /* Build the URL */
    String wiltUrl = "$scheme$host:$port$url";
-   
+
    /* Check for authentication */
-   if ( _user != null ) {
-     
+   if (_user != null) {
+
      switch (authenticationType) {
-               
-       case AUTH_BASIC :
-         
+
+       case AUTH_BASIC:
+
          String authStringToEncode = "$_user:$_password";
-         String encodedAuthString = html.window.btoa(authStringToEncode);
+         String encodedAuthString = CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
          String authString = "Basic $encodedAuthString";
          wiltHeaders['Authorization'] = authString;
          break;
-         
-       case AUTH_NONE :
-         
+
+       case AUTH_NONE:
+
          break;
      }
-     
+
    }
-   
+
    /* Execute the request*/
-   _httpAdapter.httpRequest(method, 
-                            wiltUrl, 
-                            data, 
-                            wiltHeaders);
+   Future&lt;jsonobject.JsonObject&gt; completion = _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)..then(
+       (jsonResponse) {
+
+         if ( _clientCompletion != null ) {
+           
+           _completionResponse = jsonResponse;
+           _clientCompletion();
+        
+         }
+
+      });
    
+   return completion;
+
  }
- 
+
 
  /**
   * Takes a URL and key/value pair for a URL parameter and adds this
   * to the query parameters of the URL.
   */
- String _setURLParameter( String url, 
-                          String key, 
-                          String value) {
-   
+ String _setURLParameter(String url, String key, String value) {
+
    var originalUrl = Uri.parse(url);
    Map queryParams = originalUrl.queryParameters;
-   Map newQueryParams = new  Map&lt;String,String&gt;.from(queryParams);
+   Map newQueryParams = new Map&lt;String, String&gt;.from(queryParams);
    newQueryParams[key] = value;
-   
-   var newUrl = new Uri(scheme:originalUrl.scheme,
-                        userInfo:originalUrl.userInfo,
-                        host:originalUrl.host,
-                        port:originalUrl.port,
-                        path:originalUrl.path,
-                        queryParameters:newQueryParams);
-                        
-       
+
+   var newUrl = new Uri(scheme: originalUrl.scheme, userInfo:
+       originalUrl.userInfo, host: originalUrl.host, port: originalUrl.port, path:
+       originalUrl.path, queryParameters: newQueryParams);
+
+
    String returnUrl = newUrl.toString();
    return returnUrl/* Private */;
-   
+
  }
- 
+
  /**
   * Conditions the URL for use by Wilt and checks for 
   * a valid database by default.
   */
- String _conditionUrl(String url ) {
-   
-   if( db == null ) {
-     
+ String _conditionUrl(String url) {
+
+   if (db == null) {
+
      throw new WiltException('No database specified');
    }
-   
-   if (  url == null ) return '/';
-   
+
+   if (url == null) return '/';
+
    /* The first char of the URL should be a slash. */
-   if( !url.startsWith('/') ) {
-    
+   if (!url.startsWith('/')) {
+
      url = "/$url";
-     
+
    }
-   
-   if ( db != null )
-     url = "/$db$url";
-   
+
+   if (db != null) url = "/$db$url";
+
    return url;
-   
+
  }
- 
- /**
-  *  Completion callback 
-  */  
- set resultCompletion (var completion )  {
-   
-   clientCompletion = completion;
-   _httpAdapter.completion = completion;
- }
- 
- /**
-  *  Response getter for completion callbacks 
-  */
- jsonobject.JsonObject get completionResponse =&gt; _httpAdapter.jsonResponse;
-   
- 
+
  /**
   * Basic method where only a URL and a method is passed.
   * Wilt applies no checks to this URL nor does it add the
@@ -291,765 +326,710 @@ class Wilt {
   * This can be used for CouchDb functions that are not directly supported by Wilt,
   * e.g views, attachments and design documents.
   */
- void httpRequest(String url,
-                  {String method:"GET"} ){
-   
-   
+ Future&lt;jsonobject.JsonObject&gt; httpRequest(String url, {String method: "GET"}) {
+
+
    /* Perform the request */
-   _httpRequest(method,
-                url);
+   return _httpRequest(method, url);
  }
- 
+
  /**
   * Performs an HTTP GET operation, the URL is conditioned and
   * the current database added.
   */
- void get( String url) {
-       
-   url = _conditionUrl(url);
-   
-   /* Perform the get */
-   _httpRequest('GET', 
-                 url);
+ Future&lt;jsonobject.JsonObject&gt; get(String url) {
 
-   
-  }
- 
+   url = _conditionUrl(url);
+
+   /* Perform the get */
+   return _httpRequest('GET', url);
+
+
+ }
+
  /**
   * Performs a HTTP HEAD operation, the URL is conditioned and
   * the current database added.
   */
- head( String url) {
-   
+ Future&lt;jsonobject.JsonObject&gt; head(String url) {
+
    url = _conditionUrl(url);
-   
+
    /* Perform the head */
-   _httpRequest('HEAD', 
-                url);
-   
-  }
- 
+  return  _httpRequest(HEAD, url);
+
+ }
+
  /**
   * Performs a HTTP POST operation,, the URL is conditioned and
   * the current database added.
   */
- post( String url, 
-       String data,
-       [Map headers]) {
-   
+ Future&lt;jsonobject.JsonObject&gt; post(String url, String data, [Map headers]) {
+
    url = _conditionUrl(url);
-   
+
    /* Perform the post */
-   _httpRequest('POST', 
-                url,
-                data:data,
-                headers:headers);
-   
-  }
- 
+   return _httpRequest('POST', url, data: data, headers: headers);
+
+ }
+
  /**
   * Performs a HTTP PUT operation,, the URL is conditioned and
   * the current database added.
   */
- put( String url, 
-      String data,
-      [Map headers]) {
-     
-     url = _conditionUrl(url);
-   
+ Future&lt;jsonobject.JsonObject&gt; put(String url, String data, [Map headers]) {
+
+   url = _conditionUrl(url);
+
    /* Perform the put */
-   _httpRequest('PUT', 
-               url,
-               data:data,
-               headers:headers);
-   
-  }
- 
+   return _httpRequest('PUT', url, data: data, headers: headers);
+
+ }
+
  /**
   * Performs a HTTP DELETE operation,, the URL is conditioned and
   * the current database added.
   *
   */
- delete( String url) {
-  
-     
-    url = _conditionUrl(url);
-   
+ Future&lt;jsonobject.JsonObject&gt; delete(String url) {
+
+
+   url = _conditionUrl(url);
+
    /* Perform the delete */
-   _httpRequest('DELETE', 
-                url);
-   
-  }
+  return  _httpRequest('DELETE', url);
+
+ }
 
  /**
   * Performs an HTTP GET operation for the supplied document id and
-  * optional revision. 
+  * optional revision. If withAttachments is set the the body of
+  * any attachments are also supplied, note this could make this 
+  * a large transfer.
   */
- void getDocument( String id, 
-                   {String rev}) {
-       
-   if( id == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; getDocument(String id, [String rev = null, bool withAttachments = false])
+     {
+
+   if (id == null) {
+
      throw new WiltException('getDocument() must have a document id');
    }
-   
+
    String url = id;
-   if ( rev != null ) {
-     
-     url = _setURLParameter(url,
-                            'rev',
-                            rev);
+   if (rev != null) {
+
+     url = _setURLParameter(url, 'rev', rev);
    }
-   
-   /* Perform the get */
-   get(url);
-   
-  }
- 
- 
+
+   if (withAttachments) {
+
+     url = _setURLParameter(url, 'attachments', 'true');
+   }
+
+   url = _conditionUrl(url);
+  return  _httpRequest('GET_DOCUMENT', url);
+
+
+ }
+
+
  /**
   * DELETE's the specified document. Must have a revision.
   */
- void deleteDocument(String id, 
-                     String rev) {
- 
-   if( (id == null) || (rev == null) ) {
-   
-     throw new WiltException('deleteDocument() expects a document id and a revision.');
+ Future&lt;jsonobject.JsonObject&gt; deleteDocument(String id, String rev) {
+
+   if ((id == null) || (rev == null)) {
+
+     throw new WiltException(
+         'deleteDocument() expects a document id and a revision.');
    }
 
    String url = id;
-   url = _setURLParameter(url, 
-                          'rev', 
-                           rev);
-   
-   /* Perform the delete */
-  delete(url);
-   
+   url = _setURLParameter(url, 'rev', rev);
+
+   url = _conditionUrl(url);
+   return _httpRequest('DELETE_DOCUMENT', url);
+
  }
- 
- 
+
+
  /**
   * PUT's to the specified  document.
+  * 
+  * For an update the revision must be specified, this can be in the
+  * document body as a _rev parameter or specified in the call in which
+  * case this will be added to the document body.
   */
- void putDocument(String id, 
-                  jsonobject.JsonObject document){
-   
-   
-   if( (id == null ) || (document == null)) {
-     
-     throw new WiltException('putDocument() expects a document id and a document body.');
+ Future&lt;jsonobject.JsonObject&gt; putDocument(String id, jsonobject.JsonObject document, [String rev =
+     null]) {
+
+
+   if ((id == null) || (document == null)) {
+
+     throw new WiltException(
+         'putDocument() expects a document id and a document body.');
    }
 
+   /* Check for a revision */
    String jsonData = null;
+
    try {
-    
-     jsonData = JSON.encode(document);
-   
-   } catch(e) {
-     
-     throw new WiltException('putDocument() cannot stringify the document body, use putDocumentString');
+
+     if (rev != null) {
+
+       jsonData = WiltUserUtils.addDocumentRev(document, rev);
+     } else {
+
+       jsonData = JSON.encode(document);
+     }
+
+   } catch (e) {
+
+     throw new WiltException(
+         'putDocument() cannot stringify the document body, use putDocumentString');
+
    }
-   
-   /* Perform the PUT */
-   put(id,
-      jsonData);
-  
-   
+
+   String url = _conditionUrl(id);
+  return  _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+
+
  }
- 
+
  /**
   * PUT's to the specified  document where the document is supplied as 
   * a JSON string. Must be used if '_id' and or '_rev' are needed.
   */
- void putDocumentString(String id, 
-                        String document){
-   
-   
-   if( (id == null ) || (document == null)) {
-     
-     throw new WiltException('putDocumentString() expects a document id and a document body.');
+ Future&lt;jsonobject.JsonObject&gt; putDocumentString(String id, String document, [String rev = null]) {
+
+
+   if ((id == null) || (document == null)) {
+
+     throw new WiltException(
+         'putDocumentString() expects a document id and a document body.');
    }
-   
-   /* Perform the PUT */
-   put(id,
-      document);
-  
-   
+
+   /* Check for a revision */
+   if (rev != null) id = "$id?rev=$rev";
+
+   String url = _conditionUrl(id);
+   return _httpRequest('PUT_DOCUMENT', url, data: document);
+
+
+
  }
- 
+
  /**
   * POST's the specified document.
   * An optional path to the document can be specified.
   */
- void postDocument(jsonobject.JsonObject document, 
-                   {String path:null}) {
-   
-   
-   if( document == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; postDocument(jsonobject.JsonObject document, {String path: null}) {
+
+
+   if (document == null) {
+
      throw new WiltException('postDocument() expects a document body.');
    }
-   
+
    String url = "";
-   if ( path != null ) url = "$url/$path";
-   
+   if (path != null) url = "$url/$path";
+
    /* Set the content type for a post */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = "application/json";
-   
+
    String jsonData = null;
    try {
-    
+
      jsonData = JSON.encode(document);
-   
-   } catch(e) {
-     
-     throw new WiltException('postDocument() cannot stringify document body , use postDocumentString');
+
+   } catch (e) {
+
+     throw new WiltException(
+         'postDocument() cannot stringify document body , use postDocumentString');
    }
-   
-   /* Perform the POST */
-   post(url,
-        jsonData,
-        headers);
-   
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
+
+
  }
- 
+
  /**
   * POST's to the specified  document where the document is supplied as 
   * a JSON string. Must be used if '_id' and or '_rev' are needed.
   */
- void postDocumentString(String document,
-                         {String path:null}){
-   
-   
-   if( document == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; postDocumentString(String document, {String path: null}) {
+
+
+   if (document == null) {
+
      throw new WiltException('postDocumentString() expects a document body.');
    }
-   
+
    String url = "";
-   if ( path != null ) url = "$url/$path";
-   
+   if (path != null) url = "$url/$path";
+
    /* Set the content type for a post */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = "application/json";
-   
-   /* Perform the POST */
-   post(url,
-       document,
-       headers);
-   
-  
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
+
+
  }
- 
+
  /**
   * Copies the source document to the destination document with an optional revision
   * NOTE this method uses the CouchDB COPY method which is not standard HTTP.
   */
- void copyDocument( String sourceId,
-                    String destinationId,
-                    [String rev=null]) {
-   
-   if( sourceId == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; copyDocument(String sourceId, String destinationId, [String rev = null])
+     {
+
+   if (sourceId == null) {
+
      throw new WiltException('copyDocument () expects a source id.');
    }
-   
-   if( destinationId == null ) {
-     
+
+   if (destinationId == null) {
+
      throw new WiltException('copyDocument () expects a destination id.');
    }
-   
-   
+
+
    String url = sourceId;
-   url = _conditionUrl(url);
-   
+
    /* Create the special COPY header */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    String destination = destinationId;
-   if ( rev != null ) destination = "$destinationId?rev=$rev";
+   if (rev != null) destination = "$destinationId?rev=$rev";
    headers['Destination'] = destination;
-   
-   /* Send the request */
-   _httpRequest('COPY', 
-                url,
-                headers:headers);
-   
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest('COPY_DOCUMENT', url, headers: headers);
+
+
  }
- 
+
  /**
   * Get all documents.
   * The parameters should be self explanatory and are addative.
   * Refer to the CouchDb documentation for further explanation.
   */
- void getAllDocs({bool includeDocs:false,
-                  int limit:null,
-                  String startKey:null,
-                  String endKey:null,
-                  List&lt;String&gt; keys:null,
-                  bool descending:false}) {
-   
-   
+ Future&lt;jsonobject.JsonObject&gt; getAllDocs({bool includeDocs: false, int limit: null, String startKey:
+     null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) {
+
+
    /* Validate the parameters */
-   if ( (limit != null) &amp;&amp; (limit &lt; 0 ) ) {
-     
+   if ((limit != null) &amp;&amp; (limit &lt; 0)) {
+
      throw new WiltException('getAllDocs() must have a positive limit');
-     
+
    }
-     
+
    String url = ALLDOCS;
-   
+
    /* Check the parameters and build the URL as needed */
-   if ( includeDocs ) {
-     
-     url = _setURLParameter(url, 
-                           'include_docs', 
-                           "true");
-     
+   if (includeDocs) {
+
+     url = _setURLParameter(url, 'include_docs', "true");
+
    }
-   
-   if ( limit != null ) {
-     
-     url = _setURLParameter(url, 
-                            'limit', 
-                            limit.toString());
-     
+
+   if (limit != null) {
+
+     url = _setURLParameter(url, 'limit', limit.toString());
+
    }
-   
-   if ( startKey != null ) {
-     
+
+   if (startKey != null) {
+
      String jsonStartkey = '"$startKey"';
-     url = _setURLParameter(url,
-                            'startkey', 
-                            jsonStartkey);
-     
+     url = _setURLParameter(url, 'startkey', jsonStartkey);
+
    }
-   
-   if ( endKey != null ) {
-     
+
+   if (endKey != null) {
+
      String jsonEndkey = '"$endKey"';
-     url = _setURLParameter(url,
-                            'endkey', 
-                            jsonEndkey);
-     
+     url = _setURLParameter(url, 'endkey', jsonEndkey);
+
    }
-   
-   if ( descending  ) {
-     
-     url = _setURLParameter(url, 
-                            'descending', 
-                            descending.toString());
-     
+
+   if (descending) {
+
+     url = _setURLParameter(url, 'descending', descending.toString());
+
    }
-   
-   if ( keys != null ) {
-    
+
+   if (keys != null) {
+
      String keyString = JSON.encode(keys);
-     url = _setURLParameter(url, 
-                            'keys', 
-                            keyString);
-   } 
-     
-   /* Action the request */
-   get(url);
-   
+     url = _setURLParameter(url, 'keys', keyString);
+   }
+
+   url = _conditionUrl(url);
+   return  _httpRequest('GET_ALLDOCS', url);
+
  }
- 
+
  /**
   * Bulk insert
   * Bulk inserts a list of documents
   */
- void bulk(List&lt; jsonobject.JsonObject&gt; docs,
-           [ bool allOrNothing = false]) {
-   
-   
+ Future&lt;jsonobject.JsonObject&gt; bulk(List&lt;jsonobject.JsonObject&gt; docs, [bool allOrNothing = false]) {
+
+
    /* Validate the parameters */
-   if ( docs == null ) {
-     
+   if (docs == null) {
+
      throw new WiltException('bulk() must have a document list.');
-     
+
    }
-   
+
    String url = BULKDOCS;
-   
-   if ( allOrNothing ) {
-     
-     url = _setURLParameter(url,
-                            'all_or_nothing', 
-                            allOrNothing.toString());
+
+   if (allOrNothing) {
+
+     url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
    }
-   
+
    /* Create the bulk insertion data structure */
-   Map documentMap = new Map&lt;String,List&gt;();
+   Map documentMap = new Map&lt;String, List&gt;();
    documentMap["docs"] = docs;
    String docString = null;
-   try{
-    
+   try {
+
      docString = JSON.encode(documentMap);
-   
-   } catch(e) {
-     
-     throw new WiltException('bulk() cannot stringify document list, use bulkString.');
-     
+
+   } catch (e) {
+
+     throw new WiltException(
+         'bulk() cannot stringify document list, use bulkString.');
+
    }
-   
+
    /* Must set the content type for a post */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = "application/json";
-   
-   /* Action the request */
-   post(url,
-        docString,
-        headers);
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest(BULK, url, data: docString, headers: headers);
+
  }
- 
+
  /**
   * Bulk insert JSON string version.
   * Must be used if '_id' and or '_rev' are needed in ANY of the documents
   */
- void bulkString( String docs,
-           [ bool allOrNothing = false]) {
-   
-   
+ Future&lt;jsonobject.JsonObject&gt; bulkString(String docs, [bool allOrNothing = false]) {
+
+
    /* Validate the parameters */
-   if ( docs == null ) {
-     
+   if (docs == null) {
+
      throw new WiltException('bulkString() must have a document string.');
-     
+
    }
-   
+
    String url = BULKDOCS;
-   
-   if ( allOrNothing ) {
-     
-     url = _setURLParameter(url, 
-                            'all_or_nothing', 
-                             allOrNothing.toString());
+
+   if (allOrNothing) {
+
+     url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
    }
-   
+
    /* Must set the content type for a post */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = "application/json";
-   
-   /* Action the request */
-   post(url,
-        docs,
-        headers);
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest(BULK_STRING, url, data: docs, headers: headers);
+
  }
- 
+
  /**
   * Creates a database with the specified name.
   */
- void createDatabase(String name) {
-   
-   if( (name == null )) {
-     
+ Future&lt;jsonobject.JsonObject&gt; createDatabase(String name) {
+
+   if ((name == null)) {
+
      throw new WiltException('createDatabase() expects a database name.');
    }
-  
+
    /* The first char of the URL should be a slash. */
    String url = name;
-   if( !url.startsWith('/') ) {
-    
+   if (!url.startsWith('/')) {
+
      url = "/$url";
-     
-   } 
-   
-   /* Perform the create */
-   _httpRequest('PUT', 
-                url);
-   
+
+   }
+
+   return _httpRequest(CREATE_DATABASE, url);
+
  }
- 
+
  /**
   * Deletes the specified database
   */
- void deleteDatabase(String name) {
- 
-   if( name == null )  {
-   
+ Future&lt;jsonobject.JsonObject&gt; deleteDatabase(String name) {
+
+   if (name == null) {
+
      throw new WiltException('deleteDatabase() expects a database name.');
    }
-   
+
    /* The first char of the URL should be a slash. */
    String url = name;
-   if( !url.startsWith('/') ) {
-    
+   if (!url.startsWith('/')) {
+
      url = "/$url";
-     
-   } 
-   
+
+   }
+
    /* Null the current database if we have deleted it */
-   if ( name == db )
-     _db = null;
-   
-   /* Perform the delete */
-   _httpRequest('DELETE', 
-                url);
-   
+   if (name == db) _db = null;
+
+   return _httpRequest(DELETE_DATABASE, url);
+
  }
- 
+
  /**
   * Get information about a database
   */
- void getDatabaseInfo([String dbName = null]) {
-   
+ Future&lt;jsonobject.JsonObject&gt; getDatabaseInfo([String dbName = null]) {
+
    String name;
-   if ( dbName != null ) {
-     
+   if (dbName != null) {
+
      name = dbName;
-     
+
    } else {
-     
+
      name = db;
    }
-   
+
    String url = "/$name";
-   
-   /**
-    * Perform the GET
-    */
-   _httpRequest('GET', 
-                 url);
-   
+
+   return _httpRequest(DATABASE_INFO, url);
+
  }
  /**
   * Get current session information from CouchDB
   */
- void getSession() {
-   
+ Future&lt;jsonobject.JsonObject&gt; getSession() {
+
    String url = SESSION;
-                           
-   _httpRequest('GET', 
-                 url);
-   
+
+  return _httpRequest(GET_SESSION, url);
+
  }
- 
+
  /**
   * Get current stats from CouchDB
   */
- void getStats() {
-   
+ Future&lt;jsonobject.JsonObject&gt; getStats() {
+
    String url = STATS;
-   
-   _httpRequest('GET', 
-                url);
-   
+
+   return _httpRequest(GET_STATS, url);
+
  }
- 
+
  /**
   * Get all the databases from CouchDB
   */
- void getAllDbs() {
-   
+ Future&lt;jsonobject.JsonObject&gt; getAllDbs() {
+
    String url = ALLDBS;
-   
-   _httpRequest('GET', 
-                url);
-   
+
+   return _httpRequest(GET_ALLDBS, url);
+
  }
- 
+
  /**
   * Create an attachment on an existing document.
   * contentType is in the form of a mime type e.g. 'image/png'
   * If the document needs to be created as well as the attachment set the rev to ''
   */
- void createAttachment(String docId,
-                       String attachmentName,
-                       String rev,
-                       String contentType,
-                       String payload) {
-   
-  /**
+ Future&lt;jsonobject.JsonObject&gt; createAttachment(String docId, String attachmentName, String rev, String
+     contentType, String payload) {
+
+   /**
    * Check all parameters are supplied
    */
-   if ( docId == null ) {
-   
+   if (docId == null) {
+
      throw new WiltException('createAttachment() expects a document id.');
    }
-   
-   if ( attachmentName == null ) {
-     
+
+   if (attachmentName == null) {
+
      throw new WiltException('createAttachment() expects an attachment name.');
    }
-   
-   if ( rev == null ) {
-     
+
+   if (rev == null) {
+
      throw new WiltException('createAttachment() expects a revision.');
    }
-   
-   if ( contentType == null ) {
-     
+
+   if (contentType == null) {
+
      throw new WiltException('createAttachment() expects a content type.');
    }
-   
-   if ( payload == null ) {
-     
+
+   if (payload == null) {
+
      throw new WiltException('createAttachment() expects a payload.');
    }
-   
+
    /**
     * Set the headers
     */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = contentType;
-   
+
    /**
     * Make the PUT request
     */
    String url;
-   if ( rev != '' ) {
+   if (rev != '') {
      url = "$docId/$attachmentName?rev=$rev";
    } else {
      url = "$docId/$attachmentName";
    }
-   put(url,
-       payload,
-       headers);
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
+
  }
- 
+
  /**
   * Update an attachment on an existing document.
   * contentType is in the form of a mime type e.g. 'image/png'
   */
- void updateAttachment(String docId,
-                       String attachmentName,
-                       String rev,
-                       String contentType,
-                       String payload) {
-   
-  /**
+ Future&lt;jsonobject.JsonObject&gt; updateAttachment(String docId, String attachmentName, String rev, String
+     contentType, String payload) {
+
+   /**
    * Check all parameters are supplied
    */
-   if ( docId == null ) {
-   
+   if (docId == null) {
+
      throw new WiltException('updateAttachment() expects a document id.');
    }
-   
-   if ( attachmentName == null ) {
-     
+
+   if (attachmentName == null) {
+
      throw new WiltException('updateAttachment() expects an attachment name.');
    }
-   
-   if ( rev == null ) {
-     
+
+   if (rev == null) {
+
      throw new WiltException('updateAttachment() expects a revision.');
    }
-   
-   if ( contentType == null ) {
-     
+
+   if (contentType == null) {
+
      throw new WiltException('updateAttachment() expects a content type.');
    }
-   
-   if ( payload == null ) {
-     
+
+   if (payload == null) {
+
      throw new WiltException('updateAttachment() expects a payload.');
    }
-   
+
    /**
     * Set the headers
     */
-   Map headers = new Map&lt;String,String&gt;();
+   Map headers = new Map&lt;String, String&gt;();
    headers["Content-Type"] = contentType;
-   
-   /**
-    * Make the PUT request
-    */
+
+
    String url = "$docId/$attachmentName?rev=$rev";
-   put(url,
-       payload,
-       headers);
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
+
  }
- 
+
  /**
   * Delete an attachment
   */
- void deleteAttachment(String docId,
-                       String attachmentName,
-                       String rev) {
-   
-   if ( docId == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; deleteAttachment(String docId, String attachmentName, String rev) {
+
+   if (docId == null) {
+
      throw new WiltException('deleteAttachment() expects a document id.');
    }
-   
-   if ( attachmentName == null ) {
-     
+
+   if (attachmentName == null) {
+
      throw new WiltException('deleteAttachment() expects an attachment name.');
    }
-   
-   if ( rev == null ) {
-     
+
+   if (rev == null) {
+
      throw new WiltException('deleteAttachment() expects a revision.');
    }
-   
-   /**
-    * Make the DELETE request
-    */
+
+
    String url = "$docId/$attachmentName?rev=$rev";
-   delete(url);
-   
+
+   url = _conditionUrl(url);
+   return _httpRequest(DELETE_ATTACHMENT, url);
+
  }
- 
+
  /**
   * Get an attachment
   */
- void getAttachment(String docId,
-                    String attachmentName) {
-   
-   
-   if ( docId == null ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; getAttachment(String docId, String attachmentName) {
+
+
+   if (docId == null) {
+
      throw new WiltException('getAttachment() expects a document id.');
    }
-   
-   if ( attachmentName == null ) {
-     
+
+   if (attachmentName == null) {
+
      throw new WiltException('getAttachment() expects an attachment name.');
    }
-   
-   /**
-    * Make the GET request
-    */
+
+
    String url = "$docId/$attachmentName";
-   get(url);
-   
+
+   url = _conditionUrl(url);
+  return  _httpRequest(GET_ATTACHMENT, url);
+
  }
- 
+
  /**
   * Change notification start, see the WiltChangeNotification class for more details
   * 
   * If a database name is not supplied the currently selected database is used.
   */
- void startChangeNotification([WiltChangeNotificationParameters parameters = null,
-                               String databaseName = null]) {
-   
+ void startChangeNotification([WiltChangeNotificationParameters parameters =
+     null, String databaseName = null]) {
+
    String name;
-   if ( databaseName == null ) {
-     
+   if (databaseName == null) {
+
      name = db;
-     
+
    } else {
-     
+
      name = databaseName;
    }
-   
+
    changeNotificationDbName = name;
-   _changeNotifier = new _WiltChangeNotification(_host,
-                                                _port,
-                                                _scheme,
-                                                name,
-                                                parameters);
+   _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name,
+       parameters);
  }
- 
+
  /**
   * Change notification stop, see the WiltChangeNotification class for more details
   * 
@@ -1057,55 +1037,58 @@ class Wilt {
   * reinstated by a call to startChangeNotification.
   */
  void stopChangeNotification() {
-   
+
    _changeNotifier.stopNotifications();
    _changeNotifier = null;
    changeNotificationDbName = null;
-   
+
  }
- 
+
  /**
   * Change the parameter set for change notifications.
   * 
   * Note that database name, host, port and scheme are not changeable.
   */
- void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
-   
+ void updateChangeNotificationParameters(WiltChangeNotificationParameters
+     parameters) {
 
-   if ( parameters == null ) {
-     
-     throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
+
+   if (parameters == null) {
+
+     throw new WiltException(
+         'updateChangeNotificationParameters() expects a parameter set.');
    }
-   
-   if ( _changeNotifier == null ) {
-     
-     throw new WiltException('updateChangeNotificationParameters() no change notifier.');
+
+   if (_changeNotifier == null) {
+
+     throw new WiltException(
+         'updateChangeNotificationParameters() no change notifier.');
    }
-   
+
    _changeNotifier.parameters = parameters;
-   
+
  }
- 
+
  /**
   * Pause change notifications
   */
  void pauseChangeNotifications() {
-   
+
    _changeNotifier.pause = true;
    _changeNotifier.stopNotifications();
-   
+
  }
- 
+
  /**
   * Restart change notifications after a pause
   */
  void restartChangeNotifications() {
-   
+
    _changeNotifier.pause = false;
    _changeNotifier.restartChangeNotifications();
-   
+
  }
- 
+
  /**
   * Authentication.
   * Updates the login credentials in Wilt that will be used for all further
@@ -1113,48 +1096,47 @@ class Wilt {
   * or the other is '' i.e empty. After logging in all communication with CouchDB
   * is made using the selected auithentication method.
   */
- void login(String user, 
-            String password) {
-   
-   
-  if ( (user == null ) || (password == null) ) {
-    
-    throw new WiltException('Login() expects a non null user name and password');
-  }
-    
+ void login(String user, String password) {
+
+
+   if ((user == null) || (password == null)) {
+
+     throw new WiltException(
+         'Login() expects a non null user name and password');
+   }
+
    _user = user;
    _password = password;
    authenticationType = AUTH_BASIC;
-   
+
  }
- 
+
  /**
   * Ask CouchDB to generate document Id's.
   * 
   */
- void generateIds([int amount=10]) {
-   
-   if( amount &lt; 1 ) {
-     
+ Future&lt;jsonobject.JsonObject&gt; generateIds([int amount = 10]) {
+
+   if (amount &lt; 1) {
+
      throw new WiltException('generateIds() expects a positive amount.');
    }
-   
+
    String url = UUIDS;
-   
-   url = _setURLParameter(url, 
-                          'count', 
-                          amount.toString());
-   
-   /* Get the uuids */
-   _httpRequest('GET', 
-                 url);
-   
+
+   url = _setURLParameter(url, 'count', amount.toString());
+
+   return _httpRequest(GENERATE_IDS, url);
+
  }
- 
- 
+
+
 }
 </pre>
 </div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../wiltBrowserClient/WiltBrowserClient.html">WiltBrowserClient</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../wiltServerClient/WiltServerClient.html">WiltServerClient</a></span></p>
 <div>
 <h3>Static Properties</h3>
 <div class="field"><h4 id="ALLDBS">
@@ -1210,6 +1192,30 @@ static const String AUTH_NONE = 'none'
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="BULK">
+<button class="show-code">Code</button>
+const         <strong>BULK</strong> <a class="anchor-link"
+            href="#BULK"
+            title="Permalink to Wilt.BULK">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const BULK = 'POST_BULK'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="BULK_STRING">
+<button class="show-code">Code</button>
+const         <strong>BULK_STRING</strong> <a class="anchor-link"
+            href="#BULK_STRING"
+            title="Permalink to Wilt.BULK_STRING">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const BULK_STRING = 'POST_BULKSTRING'
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="BULKDOCS">
 <button class="show-code">Code</button>
 const String         <strong>BULKDOCS</strong> <a class="anchor-link"
@@ -1220,6 +1226,283 @@ const String         <strong>BULKDOCS</strong> <a class="anchor-link"
 <p> URL constant for CouchDB BULKDOCS function </p>
 <pre class="source">
 static const String BULKDOCS = "/_bulk_docs"
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="COPY">
+<button class="show-code">Code</button>
+const         <strong>COPY</strong> <a class="anchor-link"
+            href="#COPY"
+            title="Permalink to Wilt.COPY">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const COPY = 'COPY_COPY'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="COPY_DOCUMENT">
+<button class="show-code">Code</button>
+const         <strong>COPY_DOCUMENT</strong> <a class="anchor-link"
+            href="#COPY_DOCUMENT"
+            title="Permalink to Wilt.COPY_DOCUMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const COPY_DOCUMENT = 'COPY_DOCUMENT'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="CREATE_ATTACHMENT">
+<button class="show-code">Code</button>
+const         <strong>CREATE_ATTACHMENT</strong> <a class="anchor-link"
+            href="#CREATE_ATTACHMENT"
+            title="Permalink to Wilt.CREATE_ATTACHMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const CREATE_ATTACHMENT = 'PUT_CREATEATTACH'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="CREATE_DATABASE">
+<button class="show-code">Code</button>
+const         <strong>CREATE_DATABASE</strong> <a class="anchor-link"
+            href="#CREATE_DATABASE"
+            title="Permalink to Wilt.CREATE_DATABASE">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const CREATE_DATABASE = 'PUT_DATABASE'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DATABASE_INFO">
+<button class="show-code">Code</button>
+const         <strong>DATABASE_INFO</strong> <a class="anchor-link"
+            href="#DATABASE_INFO"
+            title="Permalink to Wilt.DATABASE_INFO">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const DATABASE_INFO = 'GET_DATABASEINFO'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DELETE">
+<button class="show-code">Code</button>
+const         <strong>DELETE</strong> <a class="anchor-link"
+            href="#DELETE"
+            title="Permalink to Wilt.DELETE">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const DELETE = 'DELETE_DELETE'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DELETE_ATTACHMENT">
+<button class="show-code">Code</button>
+const         <strong>DELETE_ATTACHMENT</strong> <a class="anchor-link"
+            href="#DELETE_ATTACHMENT"
+            title="Permalink to Wilt.DELETE_ATTACHMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const DELETE_ATTACHMENT = 'DELETE_ATTACH'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DELETE_DATABASE">
+<button class="show-code">Code</button>
+const         <strong>DELETE_DATABASE</strong> <a class="anchor-link"
+            href="#DELETE_DATABASE"
+            title="Permalink to Wilt.DELETE_DATABASE">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const DELETE_DATABASE = 'DELETE_DATABASE'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="DELETE_DOCUMENT">
+<button class="show-code">Code</button>
+const         <strong>DELETE_DOCUMENT</strong> <a class="anchor-link"
+            href="#DELETE_DOCUMENT"
+            title="Permalink to Wilt.DELETE_DOCUMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const DELETE_DOCUMENT = 'DELETE_DOCUMENT'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GENERATE_IDS">
+<button class="show-code">Code</button>
+const         <strong>GENERATE_IDS</strong> <a class="anchor-link"
+            href="#GENERATE_IDS"
+            title="Permalink to Wilt.GENERATE_IDS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GENERATE_IDS = 'GET_IDS'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET">
+<button class="show-code">Code</button>
+const         <strong>GET</strong> <a class="anchor-link"
+            href="#GET"
+            title="Permalink to Wilt.GET">#</a>
+        </h4>
+        <div class="doc">
+<p>Operation types and method definitions</p>
+<pre class="source">
+static const GET = 'GET_GET'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_ALLDBS">
+<button class="show-code">Code</button>
+const         <strong>GET_ALLDBS</strong> <a class="anchor-link"
+            href="#GET_ALLDBS"
+            title="Permalink to Wilt.GET_ALLDBS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_ALLDBS = 'GET_ALLDBS'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_ALLDOCS">
+<button class="show-code">Code</button>
+const         <strong>GET_ALLDOCS</strong> <a class="anchor-link"
+            href="#GET_ALLDOCS"
+            title="Permalink to Wilt.GET_ALLDOCS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_ALLDOCS = 'GET_ALLDOCS'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_ATTACHMENT">
+<button class="show-code">Code</button>
+const         <strong>GET_ATTACHMENT</strong> <a class="anchor-link"
+            href="#GET_ATTACHMENT"
+            title="Permalink to Wilt.GET_ATTACHMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_ATTACHMENT = 'GET_ATTACH'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_DOCUMENT">
+<button class="show-code">Code</button>
+const         <strong>GET_DOCUMENT</strong> <a class="anchor-link"
+            href="#GET_DOCUMENT"
+            title="Permalink to Wilt.GET_DOCUMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_DOCUMENT = 'GET_DOCUMENT'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_SESSION">
+<button class="show-code">Code</button>
+const         <strong>GET_SESSION</strong> <a class="anchor-link"
+            href="#GET_SESSION"
+            title="Permalink to Wilt.GET_SESSION">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_SESSION = 'GET_SESSION'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="GET_STATS">
+<button class="show-code">Code</button>
+const         <strong>GET_STATS</strong> <a class="anchor-link"
+            href="#GET_STATS"
+            title="Permalink to Wilt.GET_STATS">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const GET_STATS = 'GET_STATS'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="HEAD">
+<button class="show-code">Code</button>
+const         <strong>HEAD</strong> <a class="anchor-link"
+            href="#HEAD"
+            title="Permalink to Wilt.HEAD">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const HEAD = 'HEAD_HEAD'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="POST">
+<button class="show-code">Code</button>
+const         <strong>POST</strong> <a class="anchor-link"
+            href="#POST"
+            title="Permalink to Wilt.POST">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const POST = 'POST_POST'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="POST_DOCUMENT">
+<button class="show-code">Code</button>
+const         <strong>POST_DOCUMENT</strong> <a class="anchor-link"
+            href="#POST_DOCUMENT"
+            title="Permalink to Wilt.POST_DOCUMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const POST_DOCUMENT = 'POST_DOCUMENT'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="POST_DOCUMENT_STRING">
+<button class="show-code">Code</button>
+const         <strong>POST_DOCUMENT_STRING</strong> <a class="anchor-link"
+            href="#POST_DOCUMENT_STRING"
+            title="Permalink to Wilt.POST_DOCUMENT_STRING">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const POST_DOCUMENT_STRING = 'POST_DOCUMENTSTRING'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="PUT">
+<button class="show-code">Code</button>
+const         <strong>PUT</strong> <a class="anchor-link"
+            href="#PUT"
+            title="Permalink to Wilt.PUT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const PUT = 'PUT_PUT'
+</pre>
+</div>
+</div>
+<div class="field"><h4 id="PUT_DOCUMENT">
+<button class="show-code">Code</button>
+const         <strong>PUT_DOCUMENT</strong> <a class="anchor-link"
+            href="#PUT_DOCUMENT"
+            title="Permalink to Wilt.PUT_DOCUMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const PUT_DOCUMENT = 'PUT_DOCUMENT'
 </pre>
 </div>
 </div>
@@ -1249,6 +1532,18 @@ static const String STATS = "/_stats"
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="UPDATE_ATTACHMENT">
+<button class="show-code">Code</button>
+const         <strong>UPDATE_ATTACHMENT</strong> <a class="anchor-link"
+            href="#UPDATE_ATTACHMENT"
+            title="Permalink to Wilt.UPDATE_ATTACHMENT">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+static const UPDATE_ATTACHMENT = 'PUT_UPDATEATTACH'
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="UUIDS">
 <button class="show-code">Code</button>
 const String         <strong>UUIDS</strong> <a class="anchor-link"
@@ -1258,7 +1553,7 @@ const String         <strong>UUIDS</strong> <a class="anchor-link"
         <div class="doc">
 <p> URL constant for CouchDB UUID function </p>
 <pre class="source">
-static const String UUIDS ="/_uuids"
+static const String UUIDS = "/_uuids"
 </pre>
 </div>
 </div>
@@ -1267,31 +1562,28 @@ static const String UUIDS ="/_uuids"
 <h3>Constructors</h3>
 <div class="method"><h4 id="">
 <button class="show-code">Code</button>
-new <strong>Wilt</strong>(String _host, String _port, String _scheme, [clientCompletion = null]) <a class="anchor-link" href="#"
+new <strong>Wilt</strong>(String _host, String _port, String _scheme, <a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a> _httpAdapter, [_clientCompletion = null]) <a class="anchor-link" href="#"
               title="Permalink to Wilt.Wilt">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Creates a new <a class="crossref" href="../dart_core/Object.html">Object</a> instance.</p>
-<p><a class="crossref" href="../dart_core/Object.html">Object</a> instances have no meaningful state, and are only useful
-through their identity. An <a class="crossref" href="../dart_core/Object.html">Object</a> instance is equal to itself
-only.</p>
-<div class="docs-inherited-from">docs inherited from Object </div></div>
+<p>Please use the wilt<em>browser</em>client or wilt<em>server</em>client import files to 
+instantiate a Wilt object for use in either the browser or server environment.
+You can do this here but you must supply either a browser or server HTTP adapter
+to use.</p>
 <pre class="source">
-Wilt(this._host,
-    this._port,
-    this._scheme,
-    [this.clientCompletion = null]) {
- 
- if ( (host == null) ||
-      (port == null)  ||
-      (scheme == null )) {
-   
-   throw new WiltException('Bad construction - some or all required parameters are null');
-   
+Wilt(this._host, this._port, this._scheme, this._httpAdapter, [this._clientCompletion = null]) {
+
+ if ((host == null) || (port == null) || (scheme == null)) {
+
+   throw new WiltException(
+       'Bad construction - some or all required parameters are null');
+
  }
  
- /* Get our HTTP adapter */
-  _httpAdapter = new WiltNativeHTTPAdapter(this.clientCompletion);
+ if  ( _httpAdapter == null) {
+   throw new WiltException(
+             'Bad construction - you must instantiate Wilt with a HTTP Adapter');
+ }
+
 }
 </pre>
 </div>
@@ -1322,8 +1614,8 @@ final Stream&lt;<a href="../wilt/WiltChangeNotificationEvent.html">WiltChangeNot
 <p>Change notification event stream</p>
 <p>This is a broadcast stream so can support more than one listener.</p>
 <pre class="source">
-Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt; 
-                              _changeNotifier.changeNotification.stream;
+Stream&lt;WiltChangeNotificationEvent&gt; get changeNotification =&gt;
+   _changeNotifier.changeNotification.stream;
 </pre>
 </div>
 </div>
@@ -1353,19 +1645,6 @@ bool get changeNotificationsPaused =&gt; _changeNotifier.pause;
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="clientCompletion">
-<button class="show-code">Code</button>
-var         <strong>clientCompletion</strong> <a class="anchor-link"
-            href="#clientCompletion"
-            title="Permalink to Wilt.clientCompletion">#</a>
-        </h4>
-        <div class="doc">
-<p>Completion function </p>
-<pre class="source">
-var clientCompletion = null
-</pre>
-</div>
-</div>
 <div class="field"><h4 id="completionResponse">
 <button class="show-code">Code</button>
 final JsonObject         <strong>completionResponse</strong> <a class="anchor-link"
@@ -1373,9 +1652,8 @@ final JsonObject         <strong>completionResponse</strong> <a class="anchor-li
             title="Permalink to Wilt.completionResponse">#</a>
         </h4>
         <div class="doc">
-<p> Response getter for completion callbacks </p>
 <pre class="source">
-jsonobject.JsonObject get completionResponse =&gt; _httpAdapter.jsonResponse;
+jsonobject.JsonObject get completionResponse =&gt; _completionResponse;
 </pre>
 </div>
 </div>
@@ -1406,6 +1684,21 @@ String get host =&gt; _host;
 </pre>
 </div>
 </div>
+<div class="field"><h4 id="httpAdapter">
+<button class="show-code">Code</button>
+<a href="../wilt/WiltHTTPAdapter.html">WiltHTTPAdapter</a>         <strong>httpAdapter</strong> <a class="anchor-link"
+            href="#httpAdapter"
+            title="Permalink to Wilt.httpAdapter">#</a>
+        </h4>
+        <div class="doc">
+<pre class="source">
+WiltHTTPAdapter get httpAdapter  =&gt; _httpAdapter;
+</pre>
+<pre class="source">
+set httpAdapter(WiltHTTPAdapter adapter)=&gt;_httpAdapter = adapter;
+</pre>
+</div>
+</div>
 <div class="field"><h4 id="port">
 <button class="show-code">Code</button>
 final String         <strong>port</strong> <a class="anchor-link"
@@ -1418,18 +1711,6 @@ String get port =&gt; _port;
 </pre>
 </div>
 </div>
-<div class="field"><h4 id="responseHeaders">
-<button class="show-code">Code</button>
-final String         <strong>responseHeaders</strong> <a class="anchor-link"
-            href="#responseHeaders"
-            title="Permalink to Wilt.responseHeaders">#</a>
-        </h4>
-        <div class="doc">
-<pre class="source">
-String get responseHeaders =&gt; _httpAdapter.responseHeaders;
-</pre>
-</div>
-</div>
 <div class="method"><h4 id="resultCompletion=">
 <button class="show-code">Code</button>
 dynamic <strong>set resultCompletion</strong>(completion) <a class="anchor-link" href="#resultCompletion="
@@ -1437,10 +1718,9 @@ dynamic <strong>set resultCompletion</strong>(completion) <a class="anchor-link"
 <div class="doc">
 <p> Completion callback </p>
 <pre class="source">
-set resultCompletion (var completion )  {
- 
- clientCompletion = completion;
- _httpAdapter.completion = completion;
+set resultCompletion(var completion) {
+
+ _clientCompletion = completion;
 }
 </pre>
 </div>
@@ -1462,659 +1742,609 @@ String get scheme =&gt; _scheme;
 <h3>Methods</h3>
 <div class="method"><h4 id="bulk">
 <button class="show-code">Code</button>
-void <strong>bulk</strong>(List&lt;JsonObject&gt; docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulk"
+Future&lt;JsonObject&gt; <strong>bulk</strong>(List&lt;JsonObject&gt; docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulk"
               title="Permalink to Wilt.bulk">#</a></h4>
 <div class="doc">
 <p>Bulk insert
 Bulk inserts a list of documents</p>
 <pre class="source">
-void bulk(List&lt; jsonobject.JsonObject&gt; docs,
-         [ bool allOrNothing = false]) {
- 
- 
+Future&lt;jsonobject.JsonObject&gt; bulk(List&lt;jsonobject.JsonObject&gt; docs, [bool allOrNothing = false]) {
+
+
  /* Validate the parameters */
- if ( docs == null ) {
-   
+ if (docs == null) {
+
    throw new WiltException('bulk() must have a document list.');
-   
+
  }
- 
+
  String url = BULKDOCS;
- 
- if ( allOrNothing ) {
-   
-   url = _setURLParameter(url,
-                          'all_or_nothing', 
-                          allOrNothing.toString());
+
+ if (allOrNothing) {
+
+   url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
  }
- 
+
  /* Create the bulk insertion data structure */
- Map documentMap = new Map&lt;String,List&gt;();
+ Map documentMap = new Map&lt;String, List&gt;();
  documentMap["docs"] = docs;
  String docString = null;
- try{
-  
+ try {
+
    docString = JSON.encode(documentMap);
- 
- } catch(e) {
-   
-   throw new WiltException('bulk() cannot stringify document list, use bulkString.');
-   
+
+ } catch (e) {
+
+   throw new WiltException(
+       'bulk() cannot stringify document list, use bulkString.');
+
  }
- 
+
  /* Must set the content type for a post */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  headers["Content-Type"] = "application/json";
- 
- /* Action the request */
- post(url,
-      docString,
-      headers);
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest(BULK, url, data: docString, headers: headers);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="bulkString">
 <button class="show-code">Code</button>
-void <strong>bulkString</strong>(String docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulkString"
+Future&lt;JsonObject&gt; <strong>bulkString</strong>(String docs, [bool allOrNothing = false]) <a class="anchor-link" href="#bulkString"
               title="Permalink to Wilt.bulkString">#</a></h4>
 <div class="doc">
 <p>Bulk insert JSON string version.
 Must be used if '<em>id' and or '</em>rev' are needed in ANY of the documents</p>
 <pre class="source">
-void bulkString( String docs,
-         [ bool allOrNothing = false]) {
- 
- 
+Future&lt;jsonobject.JsonObject&gt; bulkString(String docs, [bool allOrNothing = false]) {
+
+
  /* Validate the parameters */
- if ( docs == null ) {
-   
+ if (docs == null) {
+
    throw new WiltException('bulkString() must have a document string.');
-   
+
  }
- 
+
  String url = BULKDOCS;
- 
- if ( allOrNothing ) {
-   
-   url = _setURLParameter(url, 
-                          'all_or_nothing', 
-                           allOrNothing.toString());
+
+ if (allOrNothing) {
+
+   url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
  }
- 
+
  /* Must set the content type for a post */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  headers["Content-Type"] = "application/json";
- 
- /* Action the request */
- post(url,
-      docs,
-      headers);
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest(BULK_STRING, url, data: docs, headers: headers);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="copyDocument">
 <button class="show-code">Code</button>
-void <strong>copyDocument</strong>(String sourceId, String destinationId, [String rev = null]) <a class="anchor-link" href="#copyDocument"
+Future&lt;JsonObject&gt; <strong>copyDocument</strong>(String sourceId, String destinationId, [String rev = null]) <a class="anchor-link" href="#copyDocument"
               title="Permalink to Wilt.copyDocument">#</a></h4>
 <div class="doc">
 <p>Copies the source document to the destination document with an optional revision
 NOTE this method uses the CouchDB COPY method which is not standard HTTP.</p>
 <pre class="source">
-void copyDocument( String sourceId,
-                  String destinationId,
-                  [String rev=null]) {
- 
- if( sourceId == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; copyDocument(String sourceId, String destinationId, [String rev = null])
+   {
+
+ if (sourceId == null) {
+
    throw new WiltException('copyDocument () expects a source id.');
  }
- 
- if( destinationId == null ) {
-   
+
+ if (destinationId == null) {
+
    throw new WiltException('copyDocument () expects a destination id.');
  }
- 
- 
+
+
  String url = sourceId;
- url = _conditionUrl(url);
- 
+
  /* Create the special COPY header */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  String destination = destinationId;
- if ( rev != null ) destination = "$destinationId?rev=$rev";
+ if (rev != null) destination = "$destinationId?rev=$rev";
  headers['Destination'] = destination;
- 
- /* Send the request */
- _httpRequest('COPY', 
-              url,
-              headers:headers);
- 
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest('COPY_DOCUMENT', url, headers: headers);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="createAttachment">
 <button class="show-code">Code</button>
-void <strong>createAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#createAttachment"
+Future&lt;JsonObject&gt; <strong>createAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#createAttachment"
               title="Permalink to Wilt.createAttachment">#</a></h4>
 <div class="doc">
 <p>Create an attachment on an existing document.
 contentType is in the form of a mime type e.g. 'image/png'
 If the document needs to be created as well as the attachment set the rev to ''</p>
 <pre class="source">
-void createAttachment(String docId,
-                     String attachmentName,
-                     String rev,
-                     String contentType,
-                     String payload) {
- 
-/**
+Future&lt;jsonobject.JsonObject&gt; createAttachment(String docId, String attachmentName, String rev, String
+   contentType, String payload) {
+
+ /**
  * Check all parameters are supplied
  */
- if ( docId == null ) {
- 
+ if (docId == null) {
+
    throw new WiltException('createAttachment() expects a document id.');
  }
- 
- if ( attachmentName == null ) {
-   
+
+ if (attachmentName == null) {
+
    throw new WiltException('createAttachment() expects an attachment name.');
  }
- 
- if ( rev == null ) {
-   
+
+ if (rev == null) {
+
    throw new WiltException('createAttachment() expects a revision.');
  }
- 
- if ( contentType == null ) {
-   
+
+ if (contentType == null) {
+
    throw new WiltException('createAttachment() expects a content type.');
  }
- 
- if ( payload == null ) {
-   
+
+ if (payload == null) {
+
    throw new WiltException('createAttachment() expects a payload.');
  }
- 
+
  /**
   * Set the headers
   */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  headers["Content-Type"] = contentType;
- 
+
  /**
   * Make the PUT request
   */
  String url;
- if ( rev != '' ) {
+ if (rev != '') {
    url = "$docId/$attachmentName?rev=$rev";
  } else {
    url = "$docId/$attachmentName";
  }
- put(url,
-     payload,
-     headers);
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest(CREATE_ATTACHMENT, url, data: payload, headers: headers);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="createDatabase">
 <button class="show-code">Code</button>
-void <strong>createDatabase</strong>(String name) <a class="anchor-link" href="#createDatabase"
+Future&lt;JsonObject&gt; <strong>createDatabase</strong>(String name) <a class="anchor-link" href="#createDatabase"
               title="Permalink to Wilt.createDatabase">#</a></h4>
 <div class="doc">
 <p>Creates a database with the specified name.</p>
 <pre class="source">
-void createDatabase(String name) {
- 
- if( (name == null )) {
-   
+Future&lt;jsonobject.JsonObject&gt; createDatabase(String name) {
+
+ if ((name == null)) {
+
    throw new WiltException('createDatabase() expects a database name.');
  }
 
  /* The first char of the URL should be a slash. */
  String url = name;
- if( !url.startsWith('/') ) {
-  
+ if (!url.startsWith('/')) {
+
    url = "/$url";
-   
- } 
- 
- /* Perform the create */
- _httpRequest('PUT', 
-              url);
- 
+
+ }
+
+ return _httpRequest(CREATE_DATABASE, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="delete">
 <button class="show-code">Code</button>
-dynamic <strong>delete</strong>(String url) <a class="anchor-link" href="#delete"
+Future&lt;JsonObject&gt; <strong>delete</strong>(String url) <a class="anchor-link" href="#delete"
               title="Permalink to Wilt.delete">#</a></h4>
 <div class="doc">
 <p>Performs a HTTP DELETE operation,, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
-delete( String url) {
+Future&lt;jsonobject.JsonObject&gt; delete(String url) {
 
-   
-  url = _conditionUrl(url);
- 
+
+ url = _conditionUrl(url);
+
  /* Perform the delete */
- _httpRequest('DELETE', 
-              url);
- 
+return  _httpRequest('DELETE', url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="deleteAttachment">
 <button class="show-code">Code</button>
-void <strong>deleteAttachment</strong>(String docId, String attachmentName, String rev) <a class="anchor-link" href="#deleteAttachment"
+Future&lt;JsonObject&gt; <strong>deleteAttachment</strong>(String docId, String attachmentName, String rev) <a class="anchor-link" href="#deleteAttachment"
               title="Permalink to Wilt.deleteAttachment">#</a></h4>
 <div class="doc">
 <p>Delete an attachment</p>
 <pre class="source">
-void deleteAttachment(String docId,
-                     String attachmentName,
-                     String rev) {
- 
- if ( docId == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; deleteAttachment(String docId, String attachmentName, String rev) {
+
+ if (docId == null) {
+
    throw new WiltException('deleteAttachment() expects a document id.');
  }
- 
- if ( attachmentName == null ) {
-   
+
+ if (attachmentName == null) {
+
    throw new WiltException('deleteAttachment() expects an attachment name.');
  }
- 
- if ( rev == null ) {
-   
+
+ if (rev == null) {
+
    throw new WiltException('deleteAttachment() expects a revision.');
  }
- 
- /**
-  * Make the DELETE request
-  */
+
+
  String url = "$docId/$attachmentName?rev=$rev";
- delete(url);
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest(DELETE_ATTACHMENT, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="deleteDatabase">
 <button class="show-code">Code</button>
-void <strong>deleteDatabase</strong>(String name) <a class="anchor-link" href="#deleteDatabase"
+Future&lt;JsonObject&gt; <strong>deleteDatabase</strong>(String name) <a class="anchor-link" href="#deleteDatabase"
               title="Permalink to Wilt.deleteDatabase">#</a></h4>
 <div class="doc">
 <p>Deletes the specified database</p>
 <pre class="source">
-void deleteDatabase(String name) {
+Future&lt;jsonobject.JsonObject&gt; deleteDatabase(String name) {
 
- if( name == null )  {
- 
+ if (name == null) {
+
    throw new WiltException('deleteDatabase() expects a database name.');
  }
- 
+
  /* The first char of the URL should be a slash. */
  String url = name;
- if( !url.startsWith('/') ) {
-  
+ if (!url.startsWith('/')) {
+
    url = "/$url";
-   
- } 
- 
+
+ }
+
  /* Null the current database if we have deleted it */
- if ( name == db )
-   _db = null;
- 
- /* Perform the delete */
- _httpRequest('DELETE', 
-              url);
- 
+ if (name == db) _db = null;
+
+ return _httpRequest(DELETE_DATABASE, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="deleteDocument">
 <button class="show-code">Code</button>
-void <strong>deleteDocument</strong>(String id, String rev) <a class="anchor-link" href="#deleteDocument"
+Future&lt;JsonObject&gt; <strong>deleteDocument</strong>(String id, String rev) <a class="anchor-link" href="#deleteDocument"
               title="Permalink to Wilt.deleteDocument">#</a></h4>
 <div class="doc">
 <p>DELETE's the specified document. Must have a revision.</p>
 <pre class="source">
-void deleteDocument(String id, 
-                   String rev) {
+Future&lt;jsonobject.JsonObject&gt; deleteDocument(String id, String rev) {
 
- if( (id == null) || (rev == null) ) {
- 
-   throw new WiltException('deleteDocument() expects a document id and a revision.');
+ if ((id == null) || (rev == null)) {
+
+   throw new WiltException(
+       'deleteDocument() expects a document id and a revision.');
  }
 
  String url = id;
- url = _setURLParameter(url, 
-                        'rev', 
-                         rev);
- 
- /* Perform the delete */
-delete(url);
- 
+ url = _setURLParameter(url, 'rev', rev);
+
+ url = _conditionUrl(url);
+ return _httpRequest('DELETE_DOCUMENT', url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="generateIds">
 <button class="show-code">Code</button>
-void <strong>generateIds</strong>([int amount = 10]) <a class="anchor-link" href="#generateIds"
+Future&lt;JsonObject&gt; <strong>generateIds</strong>([int amount = 10]) <a class="anchor-link" href="#generateIds"
               title="Permalink to Wilt.generateIds">#</a></h4>
 <div class="doc">
 <p>Ask CouchDB to generate document Id's.</p>
 <pre class="source">
-void generateIds([int amount=10]) {
- 
- if( amount &lt; 1 ) {
-   
+Future&lt;jsonobject.JsonObject&gt; generateIds([int amount = 10]) {
+
+ if (amount &lt; 1) {
+
    throw new WiltException('generateIds() expects a positive amount.');
  }
- 
+
  String url = UUIDS;
- 
- url = _setURLParameter(url, 
-                        'count', 
-                        amount.toString());
- 
- /* Get the uuids */
- _httpRequest('GET', 
-               url);
- 
+
+ url = _setURLParameter(url, 'count', amount.toString());
+
+ return _httpRequest(GENERATE_IDS, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="get">
 <button class="show-code">Code</button>
-void <strong>get</strong>(String url) <a class="anchor-link" href="#get"
+Future&lt;JsonObject&gt; <strong>get</strong>(String url) <a class="anchor-link" href="#get"
               title="Permalink to Wilt.get">#</a></h4>
 <div class="doc">
 <p>Performs an HTTP GET operation, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
-void get( String url) {
-     
- url = _conditionUrl(url);
- 
- /* Perform the get */
- _httpRequest('GET', 
-               url);
+Future&lt;jsonobject.JsonObject&gt; get(String url) {
 
- 
+ url = _conditionUrl(url);
+
+ /* Perform the get */
+ return _httpRequest('GET', url);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getAllDbs">
 <button class="show-code">Code</button>
-void <strong>getAllDbs</strong>() <a class="anchor-link" href="#getAllDbs"
+Future&lt;JsonObject&gt; <strong>getAllDbs</strong>() <a class="anchor-link" href="#getAllDbs"
               title="Permalink to Wilt.getAllDbs">#</a></h4>
 <div class="doc">
 <p>Get all the databases from CouchDB</p>
 <pre class="source">
-void getAllDbs() {
- 
+Future&lt;jsonobject.JsonObject&gt; getAllDbs() {
+
  String url = ALLDBS;
- 
- _httpRequest('GET', 
-              url);
- 
+
+ return _httpRequest(GET_ALLDBS, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getAllDocs">
 <button class="show-code">Code</button>
-void <strong>getAllDocs</strong>({bool includeDocs: false, int limit: null, String startKey: null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) <a class="anchor-link" href="#getAllDocs"
+Future&lt;JsonObject&gt; <strong>getAllDocs</strong>({bool includeDocs: false, int limit: null, String startKey: null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) <a class="anchor-link" href="#getAllDocs"
               title="Permalink to Wilt.getAllDocs">#</a></h4>
 <div class="doc">
 <p>Get all documents.
 The parameters should be self explanatory and are addative.
 Refer to the CouchDb documentation for further explanation.</p>
 <pre class="source">
-void getAllDocs({bool includeDocs:false,
-                int limit:null,
-                String startKey:null,
-                String endKey:null,
-                List&lt;String&gt; keys:null,
-                bool descending:false}) {
- 
- 
+Future&lt;jsonobject.JsonObject&gt; getAllDocs({bool includeDocs: false, int limit: null, String startKey:
+   null, String endKey: null, List&lt;String&gt; keys: null, bool descending: false}) {
+
+
  /* Validate the parameters */
- if ( (limit != null) &amp;&amp; (limit &lt; 0 ) ) {
-   
+ if ((limit != null) &amp;&amp; (limit &lt; 0)) {
+
    throw new WiltException('getAllDocs() must have a positive limit');
-   
+
  }
-   
+
  String url = ALLDOCS;
- 
+
  /* Check the parameters and build the URL as needed */
- if ( includeDocs ) {
-   
-   url = _setURLParameter(url, 
-                         'include_docs', 
-                         "true");
-   
+ if (includeDocs) {
+
+   url = _setURLParameter(url, 'include_docs', "true");
+
  }
- 
- if ( limit != null ) {
-   
-   url = _setURLParameter(url, 
-                          'limit', 
-                          limit.toString());
-   
+
+ if (limit != null) {
+
+   url = _setURLParameter(url, 'limit', limit.toString());
+
  }
- 
- if ( startKey != null ) {
-   
+
+ if (startKey != null) {
+
    String jsonStartkey = '"$startKey"';
-   url = _setURLParameter(url,
-                          'startkey', 
-                          jsonStartkey);
-   
+   url = _setURLParameter(url, 'startkey', jsonStartkey);
+
  }
- 
- if ( endKey != null ) {
-   
+
+ if (endKey != null) {
+
    String jsonEndkey = '"$endKey"';
-   url = _setURLParameter(url,
-                          'endkey', 
-                          jsonEndkey);
-   
+   url = _setURLParameter(url, 'endkey', jsonEndkey);
+
  }
- 
- if ( descending  ) {
-   
-   url = _setURLParameter(url, 
-                          'descending', 
-                          descending.toString());
-   
+
+ if (descending) {
+
+   url = _setURLParameter(url, 'descending', descending.toString());
+
  }
- 
- if ( keys != null ) {
-  
+
+ if (keys != null) {
+
    String keyString = JSON.encode(keys);
-   url = _setURLParameter(url, 
-                          'keys', 
-                          keyString);
- } 
-   
- /* Action the request */
- get(url);
- 
+   url = _setURLParameter(url, 'keys', keyString);
+ }
+
+ url = _conditionUrl(url);
+ return  _httpRequest('GET_ALLDOCS', url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getAttachment">
 <button class="show-code">Code</button>
-void <strong>getAttachment</strong>(String docId, String attachmentName) <a class="anchor-link" href="#getAttachment"
+Future&lt;JsonObject&gt; <strong>getAttachment</strong>(String docId, String attachmentName) <a class="anchor-link" href="#getAttachment"
               title="Permalink to Wilt.getAttachment">#</a></h4>
 <div class="doc">
 <p>Get an attachment</p>
 <pre class="source">
-void getAttachment(String docId,
-                  String attachmentName) {
- 
- 
- if ( docId == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; getAttachment(String docId, String attachmentName) {
+
+
+ if (docId == null) {
+
    throw new WiltException('getAttachment() expects a document id.');
  }
- 
- if ( attachmentName == null ) {
-   
+
+ if (attachmentName == null) {
+
    throw new WiltException('getAttachment() expects an attachment name.');
  }
- 
- /**
-  * Make the GET request
-  */
+
+
  String url = "$docId/$attachmentName";
- get(url);
- 
+
+ url = _conditionUrl(url);
+return  _httpRequest(GET_ATTACHMENT, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getDatabaseInfo">
 <button class="show-code">Code</button>
-void <strong>getDatabaseInfo</strong>([String dbName = null]) <a class="anchor-link" href="#getDatabaseInfo"
+Future&lt;JsonObject&gt; <strong>getDatabaseInfo</strong>([String dbName = null]) <a class="anchor-link" href="#getDatabaseInfo"
               title="Permalink to Wilt.getDatabaseInfo">#</a></h4>
 <div class="doc">
 <p>Get information about a database</p>
 <pre class="source">
-void getDatabaseInfo([String dbName = null]) {
- 
+Future&lt;jsonobject.JsonObject&gt; getDatabaseInfo([String dbName = null]) {
+
  String name;
- if ( dbName != null ) {
-   
+ if (dbName != null) {
+
    name = dbName;
-   
+
  } else {
-   
+
    name = db;
  }
- 
+
  String url = "/$name";
- 
- /**
-  * Perform the GET
-  */
- _httpRequest('GET', 
-               url);
- 
+
+ return _httpRequest(DATABASE_INFO, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getDocument">
 <button class="show-code">Code</button>
-void <strong>getDocument</strong>(String id, {String rev}) <a class="anchor-link" href="#getDocument"
+Future&lt;JsonObject&gt; <strong>getDocument</strong>(String id, [String rev = null, bool withAttachments = false]) <a class="anchor-link" href="#getDocument"
               title="Permalink to Wilt.getDocument">#</a></h4>
 <div class="doc">
 <p>Performs an HTTP GET operation for the supplied document id and
-optional revision. </p>
+optional revision. If withAttachments is set the the body of
+any attachments are also supplied, note this could make this 
+a large transfer.</p>
 <pre class="source">
-void getDocument( String id, 
-                 {String rev}) {
-     
- if( id == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; getDocument(String id, [String rev = null, bool withAttachments = false])
+   {
+
+ if (id == null) {
+
    throw new WiltException('getDocument() must have a document id');
  }
- 
+
  String url = id;
- if ( rev != null ) {
-   
-   url = _setURLParameter(url,
-                          'rev',
-                          rev);
+ if (rev != null) {
+
+   url = _setURLParameter(url, 'rev', rev);
  }
- 
- /* Perform the get */
- get(url);
- 
+
+ if (withAttachments) {
+
+   url = _setURLParameter(url, 'attachments', 'true');
+ }
+
+ url = _conditionUrl(url);
+return  _httpRequest('GET_DOCUMENT', url);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getSession">
 <button class="show-code">Code</button>
-void <strong>getSession</strong>() <a class="anchor-link" href="#getSession"
+Future&lt;JsonObject&gt; <strong>getSession</strong>() <a class="anchor-link" href="#getSession"
               title="Permalink to Wilt.getSession">#</a></h4>
 <div class="doc">
 <p>Get current session information from CouchDB</p>
 <pre class="source">
-void getSession() {
- 
+Future&lt;jsonobject.JsonObject&gt; getSession() {
+
  String url = SESSION;
-                         
- _httpRequest('GET', 
-               url);
- 
+
+return _httpRequest(GET_SESSION, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="getStats">
 <button class="show-code">Code</button>
-void <strong>getStats</strong>() <a class="anchor-link" href="#getStats"
+Future&lt;JsonObject&gt; <strong>getStats</strong>() <a class="anchor-link" href="#getStats"
               title="Permalink to Wilt.getStats">#</a></h4>
 <div class="doc">
 <p>Get current stats from CouchDB</p>
 <pre class="source">
-void getStats() {
- 
+Future&lt;jsonobject.JsonObject&gt; getStats() {
+
  String url = STATS;
- 
- _httpRequest('GET', 
-              url);
- 
+
+ return _httpRequest(GET_STATS, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="head">
 <button class="show-code">Code</button>
-dynamic <strong>head</strong>(String url) <a class="anchor-link" href="#head"
+Future&lt;JsonObject&gt; <strong>head</strong>(String url) <a class="anchor-link" href="#head"
               title="Permalink to Wilt.head">#</a></h4>
 <div class="doc">
 <p>Performs a HTTP HEAD operation, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
-head( String url) {
- 
+Future&lt;jsonobject.JsonObject&gt; head(String url) {
+
  url = _conditionUrl(url);
- 
+
  /* Perform the head */
- _httpRequest('HEAD', 
-              url);
- 
+return  _httpRequest(HEAD, url);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="httpRequest">
 <button class="show-code">Code</button>
-void <strong>httpRequest</strong>(String url, {String method: "GET"}) <a class="anchor-link" href="#httpRequest"
+Future&lt;JsonObject&gt; <strong>httpRequest</strong>(String url, {String method: "GET"}) <a class="anchor-link" href="#httpRequest"
               title="Permalink to Wilt.httpRequest">#</a></h4>
 <div class="doc">
 <p>Basic method where only a URL and a method is passed.
@@ -2123,13 +2353,11 @@ database, the format of this is entirely up to the user.</p>
 <p>This can be used for CouchDb functions that are not directly supported by Wilt,
 e.g views, attachments and design documents.</p>
 <pre class="source">
-void httpRequest(String url,
-                {String method:"GET"} ){
- 
- 
+Future&lt;jsonobject.JsonObject&gt; httpRequest(String url, {String method: "GET"}) {
+
+
  /* Perform the request */
- _httpRequest(method,
-              url);
+ return _httpRequest(method, url);
 }
 </pre>
 </div>
@@ -2145,19 +2373,19 @@ requests to CouchDB. Both user name and password must be set, even if one
 or the other is '' i.e empty. After logging in all communication with CouchDB
 is made using the selected auithentication method.</p>
 <pre class="source">
-void login(String user, 
-          String password) {
- 
- 
-if ( (user == null ) || (password == null) ) {
-  
-  throw new WiltException('Login() expects a non null user name and password');
-}
-  
+void login(String user, String password) {
+
+
+ if ((user == null) || (password == null)) {
+
+   throw new WiltException(
+       'Login() expects a non null user name and password');
+ }
+
  _user = user;
  _password = password;
  authenticationType = AUTH_BASIC;
- 
+
 }
 </pre>
 </div>
@@ -2170,198 +2398,198 @@ void <strong>pauseChangeNotifications</strong>() <a class="anchor-link" href="#p
 <p>Pause change notifications</p>
 <pre class="source">
 void pauseChangeNotifications() {
- 
+
  _changeNotifier.pause = true;
  _changeNotifier.stopNotifications();
- 
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="post">
 <button class="show-code">Code</button>
-dynamic <strong>post</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#post"
+Future&lt;JsonObject&gt; <strong>post</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#post"
               title="Permalink to Wilt.post">#</a></h4>
 <div class="doc">
 <p>Performs a HTTP POST operation,, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
-post( String url, 
-     String data,
-     [Map headers]) {
- 
+Future&lt;jsonobject.JsonObject&gt; post(String url, String data, [Map headers]) {
+
  url = _conditionUrl(url);
- 
+
  /* Perform the post */
- _httpRequest('POST', 
-              url,
-              data:data,
-              headers:headers);
- 
+ return _httpRequest('POST', url, data: data, headers: headers);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="postDocument">
 <button class="show-code">Code</button>
-void <strong>postDocument</strong>(JsonObject document, {String path: null}) <a class="anchor-link" href="#postDocument"
+Future&lt;JsonObject&gt; <strong>postDocument</strong>(JsonObject document, {String path: null}) <a class="anchor-link" href="#postDocument"
               title="Permalink to Wilt.postDocument">#</a></h4>
 <div class="doc">
 <p>POST's the specified document.
 An optional path to the document can be specified.</p>
 <pre class="source">
-void postDocument(jsonobject.JsonObject document, 
-                 {String path:null}) {
- 
- 
- if( document == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; postDocument(jsonobject.JsonObject document, {String path: null}) {
+
+
+ if (document == null) {
+
    throw new WiltException('postDocument() expects a document body.');
  }
- 
+
  String url = "";
- if ( path != null ) url = "$url/$path";
- 
+ if (path != null) url = "$url/$path";
+
  /* Set the content type for a post */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  headers["Content-Type"] = "application/json";
- 
+
  String jsonData = null;
  try {
-  
+
    jsonData = JSON.encode(document);
- 
- } catch(e) {
-   
-   throw new WiltException('postDocument() cannot stringify document body , use postDocumentString');
+
+ } catch (e) {
+
+   throw new WiltException(
+       'postDocument() cannot stringify document body , use postDocumentString');
  }
- 
- /* Perform the POST */
- post(url,
-      jsonData,
-      headers);
- 
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="postDocumentString">
 <button class="show-code">Code</button>
-void <strong>postDocumentString</strong>(String document, {String path: null}) <a class="anchor-link" href="#postDocumentString"
+Future&lt;JsonObject&gt; <strong>postDocumentString</strong>(String document, {String path: null}) <a class="anchor-link" href="#postDocumentString"
               title="Permalink to Wilt.postDocumentString">#</a></h4>
 <div class="doc">
 <p>POST's to the specified  document where the document is supplied as 
 a JSON string. Must be used if '<em>id' and or '</em>rev' are needed.</p>
 <pre class="source">
-void postDocumentString(String document,
-                       {String path:null}){
- 
- 
- if( document == null ) {
-   
+Future&lt;jsonobject.JsonObject&gt; postDocumentString(String document, {String path: null}) {
+
+
+ if (document == null) {
+
    throw new WiltException('postDocumentString() expects a document body.');
  }
- 
- String url = "";
- if ( path != null ) url = "$url/$path";
- 
- /* Set the content type for a post */
- Map headers = new Map&lt;String,String&gt;();
- headers["Content-Type"] = "application/json";
- 
- /* Perform the POST */
- post(url,
-     document,
-     headers);
- 
 
- 
+ String url = "";
+ if (path != null) url = "$url/$path";
+
+ /* Set the content type for a post */
+ Map headers = new Map&lt;String, String&gt;();
+ headers["Content-Type"] = "application/json";
+
+ url = _conditionUrl(url);
+ return _httpRequest('POST_DOCUMENT_STRING', url, data: document, headers: headers);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="put">
 <button class="show-code">Code</button>
-dynamic <strong>put</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#put"
+Future&lt;JsonObject&gt; <strong>put</strong>(String url, String data, [Map headers]) <a class="anchor-link" href="#put"
               title="Permalink to Wilt.put">#</a></h4>
 <div class="doc">
 <p>Performs a HTTP PUT operation,, the URL is conditioned and
 the current database added.</p>
 <pre class="source">
-put( String url, 
-    String data,
-    [Map headers]) {
-   
-   url = _conditionUrl(url);
- 
+Future&lt;jsonobject.JsonObject&gt; put(String url, String data, [Map headers]) {
+
+ url = _conditionUrl(url);
+
  /* Perform the put */
- _httpRequest('PUT', 
-             url,
-             data:data,
-             headers:headers);
- 
+ return _httpRequest('PUT', url, data: data, headers: headers);
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="putDocument">
 <button class="show-code">Code</button>
-void <strong>putDocument</strong>(String id, JsonObject document) <a class="anchor-link" href="#putDocument"
+Future&lt;JsonObject&gt; <strong>putDocument</strong>(String id, JsonObject document, [String rev = null]) <a class="anchor-link" href="#putDocument"
               title="Permalink to Wilt.putDocument">#</a></h4>
 <div class="doc">
 <p>PUT's to the specified  document.</p>
+<p>For an update the revision must be specified, this can be in the
+document body as a _rev parameter or specified in the call in which
+case this will be added to the document body.</p>
 <pre class="source">
-void putDocument(String id, 
-                jsonobject.JsonObject document){
- 
- 
- if( (id == null ) || (document == null)) {
-   
-   throw new WiltException('putDocument() expects a document id and a document body.');
+Future&lt;jsonobject.JsonObject&gt; putDocument(String id, jsonobject.JsonObject document, [String rev =
+   null]) {
+
+
+ if ((id == null) || (document == null)) {
+
+   throw new WiltException(
+       'putDocument() expects a document id and a document body.');
  }
 
+ /* Check for a revision */
  String jsonData = null;
- try {
-  
-   jsonData = JSON.encode(document);
- 
- } catch(e) {
-   
-   throw new WiltException('putDocument() cannot stringify the document body, use putDocumentString');
- }
- 
- /* Perform the PUT */
- put(id,
-    jsonData);
 
- 
+ try {
+
+   if (rev != null) {
+
+     jsonData = WiltUserUtils.addDocumentRev(document, rev);
+   } else {
+
+     jsonData = JSON.encode(document);
+   }
+
+ } catch (e) {
+
+   throw new WiltException(
+       'putDocument() cannot stringify the document body, use putDocumentString');
+
+ }
+
+ String url = _conditionUrl(id);
+return  _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="putDocumentString">
 <button class="show-code">Code</button>
-void <strong>putDocumentString</strong>(String id, String document) <a class="anchor-link" href="#putDocumentString"
+Future&lt;JsonObject&gt; <strong>putDocumentString</strong>(String id, String document, [String rev = null]) <a class="anchor-link" href="#putDocumentString"
               title="Permalink to Wilt.putDocumentString">#</a></h4>
 <div class="doc">
 <p>PUT's to the specified  document where the document is supplied as 
 a JSON string. Must be used if '<em>id' and or '</em>rev' are needed.</p>
 <pre class="source">
-void putDocumentString(String id, 
-                      String document){
- 
- 
- if( (id == null ) || (document == null)) {
-   
-   throw new WiltException('putDocumentString() expects a document id and a document body.');
- }
- 
- /* Perform the PUT */
- put(id,
-    document);
+Future&lt;jsonobject.JsonObject&gt; putDocumentString(String id, String document, [String rev = null]) {
 
- 
+
+ if ((id == null) || (document == null)) {
+
+   throw new WiltException(
+       'putDocumentString() expects a document id and a document body.');
+ }
+
+ /* Check for a revision */
+ if (rev != null) id = "$id?rev=$rev";
+
+ String url = _conditionUrl(id);
+ return _httpRequest('PUT_DOCUMENT', url, data: document);
+
+
+
 }
 </pre>
 </div>
@@ -2374,10 +2602,10 @@ void <strong>restartChangeNotifications</strong>() <a class="anchor-link" href="
 <p>Restart change notifications after a pause</p>
 <pre class="source">
 void restartChangeNotifications() {
- 
+
  _changeNotifier.pause = false;
  _changeNotifier.restartChangeNotifications();
- 
+
 }
 </pre>
 </div>
@@ -2390,25 +2618,22 @@ void <strong>startChangeNotification</strong>([<a href="../wilt/WiltChangeNotifi
 <p>Change notification start, see the WiltChangeNotification class for more details</p>
 <p>If a database name is not supplied the currently selected database is used.</p>
 <pre class="source">
-void startChangeNotification([WiltChangeNotificationParameters parameters = null,
-                             String databaseName = null]) {
- 
+void startChangeNotification([WiltChangeNotificationParameters parameters =
+   null, String databaseName = null]) {
+
  String name;
- if ( databaseName == null ) {
-   
+ if (databaseName == null) {
+
    name = db;
-   
+
  } else {
-   
+
    name = databaseName;
  }
- 
+
  changeNotificationDbName = name;
- _changeNotifier = new _WiltChangeNotification(_host,
-                                              _port,
-                                              _scheme,
-                                              name,
-                                              parameters);
+ _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name,
+     parameters);
 }
 </pre>
 </div>
@@ -2423,71 +2648,66 @@ void <strong>stopChangeNotification</strong>() <a class="anchor-link" href="#sto
 reinstated by a call to startChangeNotification.</p>
 <pre class="source">
 void stopChangeNotification() {
- 
+
  _changeNotifier.stopNotifications();
  _changeNotifier = null;
  changeNotificationDbName = null;
- 
+
 }
 </pre>
 </div>
 </div>
 <div class="method"><h4 id="updateAttachment">
 <button class="show-code">Code</button>
-void <strong>updateAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#updateAttachment"
+Future&lt;JsonObject&gt; <strong>updateAttachment</strong>(String docId, String attachmentName, String rev, String contentType, String payload) <a class="anchor-link" href="#updateAttachment"
               title="Permalink to Wilt.updateAttachment">#</a></h4>
 <div class="doc">
 <p>Update an attachment on an existing document.
 contentType is in the form of a mime type e.g. 'image/png'</p>
 <pre class="source">
-void updateAttachment(String docId,
-                     String attachmentName,
-                     String rev,
-                     String contentType,
-                     String payload) {
- 
-/**
+Future&lt;jsonobject.JsonObject&gt; updateAttachment(String docId, String attachmentName, String rev, String
+   contentType, String payload) {
+
+ /**
  * Check all parameters are supplied
  */
- if ( docId == null ) {
- 
+ if (docId == null) {
+
    throw new WiltException('updateAttachment() expects a document id.');
  }
- 
- if ( attachmentName == null ) {
-   
+
+ if (attachmentName == null) {
+
    throw new WiltException('updateAttachment() expects an attachment name.');
  }
- 
- if ( rev == null ) {
-   
+
+ if (rev == null) {
+
    throw new WiltException('updateAttachment() expects a revision.');
  }
- 
- if ( contentType == null ) {
-   
+
+ if (contentType == null) {
+
    throw new WiltException('updateAttachment() expects a content type.');
  }
- 
- if ( payload == null ) {
-   
+
+ if (payload == null) {
+
    throw new WiltException('updateAttachment() expects a payload.');
  }
- 
+
  /**
   * Set the headers
   */
- Map headers = new Map&lt;String,String&gt;();
+ Map headers = new Map&lt;String, String&gt;();
  headers["Content-Type"] = contentType;
- 
- /**
-  * Make the PUT request
-  */
+
+
  String url = "$docId/$attachmentName?rev=$rev";
- put(url,
-     payload,
-     headers);
- 
+
+ url = _conditionUrl(url);
+ return _httpRequest(UPDATE_ATTACHMENT, url, data: payload, headers: headers);
+
 }
 </pre>
 </div>
@@ -2500,21 +2720,24 @@ void <strong>updateChangeNotificationParameters</strong>(<a href="../wilt/WiltCh
 <p>Change the parameter set for change notifications.</p>
 <p>Note that database name, host, port and scheme are not changeable.</p>
 <pre class="source">
-void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
- 
+void updateChangeNotificationParameters(WiltChangeNotificationParameters
+   parameters) {
 
- if ( parameters == null ) {
-   
-   throw new WiltException('updateChangeNotificationParameters() expects a parameter set.');
+
+ if (parameters == null) {
+
+   throw new WiltException(
+       'updateChangeNotificationParameters() expects a parameter set.');
  }
- 
- if ( _changeNotifier == null ) {
-   
-   throw new WiltException('updateChangeNotificationParameters() no change notifier.');
+
+ if (_changeNotifier == null) {
+
+   throw new WiltException(
+       'updateChangeNotificationParameters() no change notifier.');
  }
- 
+
  _changeNotifier.parameters = parameters;
- 
+
 }
 </pre>
 </div>
@@ -2524,7 +2747,7 @@ void updateChangeNotificationParameters(WiltChangeNotificationParameters paramet
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2014-01-14 08:15:56.995</div>
+          <div>This page was generated at 2014-03-12 11:41:21.464</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
