@@ -14,8 +14,8 @@ final String serverPort = "5984";
 final String scheme = "http://"; 
 
 /* Databases to use for testing */
-final String databaseNameClientCompletion = 'wilttest_client_completion';
-final String databaseNameClient = 'wilttest_client';
+final String databaseNameClientCompletion = 'wilttest_browser_completion';
+final String databaseNameClient = 'wilttest_browser';
 final String databaseNameServer = 'wilttest_server';
 
 /**
