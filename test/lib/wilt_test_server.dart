@@ -7,8 +7,8 @@
 
 library wilt_test_server;
 
-import '../lib/wilt.dart';
-import '../lib/wilt_server_client.dart';
+import 'package:wilt/wilt.dart';
+import 'package:wilt/wilt_server_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';
 import 'package:crypto/crypto.dart';

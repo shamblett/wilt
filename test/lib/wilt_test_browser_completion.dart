@@ -9,8 +9,8 @@ library wilt_test_browser_completion;
 
 import 'dart:html';
 
-import '../lib/wilt.dart';
-import '../lib/wilt_browser_client.dart';
+import 'package:wilt/wilt.dart';
+import 'package:wilt/wilt_browser_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:unittest/unittest.dart';
 import 'package:unittest/html_config.dart';
