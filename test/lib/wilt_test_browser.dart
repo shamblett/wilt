@@ -32,29 +32,21 @@ main() {
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Bad construction - some or all required parameters are null'
-            );
+        expect(e.toString(), WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
 
       }
-
-
 
     });
 
     test("No port", () {
 
       try {
-        WiltBrowserClient wilting = new WiltBrowserClient(hostName, null, scheme
-            );
+        WiltBrowserClient wilting = new WiltBrowserClient(hostName, null, scheme);
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Bad construction - some or all required parameters are null'
-            );
+        expect(e.toString(), WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
       }
-
 
     });
 
@@ -65,9 +57,8 @@ main() {
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Bad construction - some or all required parameters are null'
-            );
+        expect(e.toString(), WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+
       }
 
     });
@@ -75,18 +66,15 @@ main() {
     test("No HTTP Adapter", () {
 
       try {
-        WiltBrowserClient wilting = new WiltBrowserClient(hostName, port,
-            scheme, null);
+        WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme, null);
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Bad construction - you must instantiate Wilt with a HTTP Adapter'
-            );
+        expect(e.toString(), WiltException.HEADER + WiltException.BAD_CONST_NO_ADAPTER);
       }
 
     });
-    
+
   });
 
   /* Group 2 - Basic methods parameter validation  */
@@ -97,14 +85,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.head(null);
-
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), 'WiltException: message = No database specified');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+      });
+
+      wilting.head(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -112,13 +102,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.get(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), 'WiltException: message = No database specified');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+      });
+
+      wilting.get(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
 
     });
@@ -127,13 +120,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.post(null, null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), 'WiltException: message = No database specified');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+      });
+
+      wilting.post(null, "1").then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -141,13 +137,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.put(null, "1");
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), 'WiltException: message = No database specified');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+      });
+
+      wilting.put(null, "1").then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -155,34 +154,39 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.delete(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), 'WiltException: message = No database specified');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+      });
+
+      wilting.delete(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
   });
 
   /* Group 3 - Document/Database methods parameter validation  */
-  group("3. Document/Database Parameter Validation - ", () {
+  solo_group("3. Document/Database Parameter Validation - ", () {
 
 
     test("Get Document no id", () {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.getDocument(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = getDocument() must have a document id');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.GET_DOC_NO_ID);
+      });
+
+      wilting.getDocument(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -191,15 +195,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.deleteDocument(null, null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteDocument() expects a document id and a revision.'
-            );
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+      });
+
+      wilting.deleteDocument(null, null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -207,15 +212,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.deleteDocument("1", null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteDocument() expects a document id and a revision.'
-            );
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+      });
+
+      wilting.deleteDocument('1', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -223,17 +229,18 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        jsonobject.JsonObject doc;
-        wilting.putDocument(null, doc);
-      } catch (e) {
 
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = putDocument() expects a document id and a document body.'
-            );
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+      });
 
+      jsonobject.JsonObject doc;
+      wilting.putDocument(null, doc).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -241,15 +248,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.putDocument("1", null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = putDocument() expects a document id and a document body.'
-            );
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+      });
+
+      wilting.putDocument('1', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -257,15 +265,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        jsonobject.JsonObject doc;
-        wilting.postDocument(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = postDocument() expects a document body.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.POST_DOC_NO_BODY);
+      });
+
+      wilting.postDocument(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -273,16 +282,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        jsonobject.JsonObject doc;
-        wilting.postDocumentString(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = postDocumentString() expects a document body.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.POST_DOC_STRING_NO_BODY);
+      });
 
+      wilting.postDocumentString(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -290,14 +299,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.createDatabase(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createDatabase() expects a database name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_DB_NO_NAME);
+      });
+
+      wilting.createDatabase(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -305,14 +316,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.deleteDatabase(null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteDatabase() expects a database name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_DB_NO_NAME);
+      });
+
+      wilting.deleteDatabase(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -320,14 +333,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.getAllDocs(limit: -1);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = getAllDocs() must have a positive limit');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.GET_ALL_DOCS_LIMIT);
+      });
+
+      wilting.getAllDocs(limit: -1).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -335,14 +350,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.generateIds(-1);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = generateIds() expects a positive amount.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.GEN_IDS_AMOUNT);
+      });
+
+      wilting.generateIds(-1).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -350,14 +367,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.copyDocument(null, '1');
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = copyDocument () expects a source id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.COPY_DOC_NO_SRC_ID);
+      });
+
+      wilting.copyDocument(null, '1').then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -365,14 +384,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-        wilting.copyDocument('1', null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = copyDocument () expects a destination id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.COPY_DOC_NO_DEST_ID);
+      });
+
+      wilting.copyDocument('1', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -385,8 +406,7 @@ main() {
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Login() expects a non null user name and password');
+        expect(e.toString(), WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
       }
 
     });
@@ -400,8 +420,7 @@ main() {
       } catch (e) {
 
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = Login() expects a non null user name and password');
+        expect(e.toString(), WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
       }
 
     });
@@ -410,16 +429,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.createAttachment(null, 'name', 'rev', 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createAttachment() expects a document id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_ATT_NO_DOC_ID);
+      });
+
+      String payload = 'Hello';
+      wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -427,16 +447,18 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
 
-        String payload = 'Hello';
-        wilting.createAttachment('id', null, 'rev', 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createAttachment() expects an attachment name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_ATT_NO_NAME);
+      });
+
+      String payload = 'Hello';
+      wilting.createAttachment('id', null, 'rev', 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -444,16 +466,18 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
 
-        String payload = 'Hello';
-        wilting.createAttachment('id', 'name', null, 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createAttachment() expects a revision.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_ATT_NO_REV);
+      });
+
+      String payload = 'Hello';
+      wilting.createAttachment('id', 'name', null, 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -461,16 +485,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.createAttachment('id', 'name', 'rev', null, payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createAttachment() expects a content type.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_ATT_NO_CONTENT_TYPE);
+      });
+
+      String payload = 'Hello';
+      wilting.createAttachment('id', 'name', 'rev', null, payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -478,15 +503,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.createAttachment('id', 'name', 'rev', 'image/png', null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = createAttachment() expects a payload.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.CREATE_ATT_NO_PAYLOAD);
+      });
+
+      wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -494,16 +520,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a document id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.UPDATE_ATT_NO_DOC_ID);
+      });
+
+      String payload = 'Hello';
+      wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -511,17 +538,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.updateAttachment('id', null, 'rev', 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = updateAttachment() expects an attachment name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.UPDATE_ATT_NO_NAME);
+      });
 
+      String payload = 'Hello';
+      wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -529,16 +556,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.updateAttachment('id', 'name', null, 'image/png', payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a revision.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.UPDATE_ATT_NO_REV);
+      });
+
+      String payload = 'Hello';
+      wilting.updateAttachment('id', 'name', null, 'image/png', payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -546,16 +574,17 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        String payload = 'Hello';
-        wilting.updateAttachment('id', 'name', 'rev', null, payload);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a content type.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
+      });
+
+      String payload = 'Hello';
+      wilting.updateAttachment('id', 'name', 'rev', null, payload).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -563,15 +592,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.updateAttachment('id', 'name', 'rev', 'image/png', null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a payload.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.UPDATE_ATT_NO_PAYLOAD);
+      });
+
+      wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -579,15 +609,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.deleteAttachment(null, 'name', 'rev');
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects a document id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_ATT_NO_DOC_ID);
+      });
+
+      wilting.deleteAttachment(null, 'name', 'rev').then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -595,15 +626,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.deleteAttachment('id', null, 'rev');
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects an attachment name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_ATT_NO_NAME);
+      });
+
+      wilting.deleteAttachment('id', null, 'rev').then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -611,15 +643,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.deleteAttachment('id', 'name', null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects a revision.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.DELETE_ATT_NO_REV);
+      });
+
+      wilting.deleteAttachment('id', 'name', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -627,15 +660,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.getAttachment(null, 'name');
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = getAttachment() expects a document id.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.GET_ATT_NO_DOC_ID);
+      });
+
+      wilting.getAttachment(null, 'name').then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -643,15 +677,16 @@ main() {
 
       WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
 
-      try {
-
-        wilting.getAttachment('id', null);
-      } catch (e) {
-
+      var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            'WiltException: message = getAttachment() expects an attachment name.');
-      }
+        expect(e.toString(), WiltException.HEADER + WiltException.GET_ATT_NO_NAME);
+      });
+
+      wilting.getAttachment('id', null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
 
     });
 
@@ -682,8 +717,7 @@ main() {
     test("Create Database not authorized", () {
 
       /* Create a local wilting for this test */
-      WiltBrowserClient localWilting = new WiltBrowserClient(hostName, port,
-          scheme);
+      WiltBrowserClient localWilting = new WiltBrowserClient(hostName, port, scheme);
 
       localWilting.login('freddy', 'freddypass');
 
@@ -696,8 +730,7 @@ main() {
 
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           expect(errorResponse.error, equals('unauthorized'));
-          expect(errorResponse.reason, equals('Name or password is incorrect.')
-              );
+          expect(errorResponse.reason, equals('Name or password is incorrect'));
           expect(res.errorCode, equals(401));
         }
 
@@ -1025,8 +1058,7 @@ main() {
         expect(returnedDocId, putId);
         String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         docRev = returnedDocRev;
-        expect(successResponse.title, equals(
-            "Created by a Put Request for checking"));
+        expect(successResponse.title, equals("Created by a Put Request for checking"));
         expect(successResponse.version, equals(3));
         expect(successResponse.author, equals("Me also"));
         /* Now alter the document using putDocument */
@@ -1034,8 +1066,7 @@ main() {
         document.title = "Created by a Put Request for updating ";
         document.version = 4;
         document.author = "Me also and again";
-        String docString = WiltUserUtils.addDocumentRev(document, returnedDocRev
-            );
+        String docString = WiltUserUtils.addDocumentRev(document, returnedDocRev);
         wilting.putDocumentString(putId, docString)..then((res) {
               checkUpdater(res);
             });
@@ -1835,15 +1866,9 @@ main() {
 
     /* Globals for the group */
     String testDocRev = null;
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' + 'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' + 'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' + '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
-    String pngImageUpdate = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl'
-        + 'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
+    String pngImageUpdate = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' + 'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' + 'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' + '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
 
     test("Create document(PUT) for attachment tests and check", () {
 
@@ -1854,8 +1879,7 @@ main() {
           expect(res.error, isFalse);
         } catch (e) {
 
-          logMessage(
-              "WILT::Create Document(PUT) for attachment tests and check updated");
+          logMessage("WILT::Create Document(PUT) for attachment tests and check updated");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
@@ -1871,8 +1895,7 @@ main() {
         String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title, equals(
-            "Created by a Put Request for attachment testing"));
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("SJH"));
 
@@ -1945,8 +1968,7 @@ main() {
       });
 
       wilting.db = databaseNameClient;
-      wilting.createAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImage)..then((res) {
+      wilting.createAttachment('attachmentTestDoc', 'attachmentName', testDocRev, 'image/png', pngImage)..then((res) {
             completer(res);
           });
 
@@ -1977,8 +1999,7 @@ main() {
         String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title, equals(
-            "Created by a Put Request for attachment testing"));
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("SJH"));
         List attachments = WiltUserUtils.getAttachments(successResponse);
@@ -2057,8 +2078,7 @@ main() {
       });
 
       wilting.db = databaseNameClient;
-      wilting.updateAttachment('attachmentTestDoc', 'attachmentName',
-          testDocRev, 'image/png', pngImageUpdate)..then((res) {
+      wilting.updateAttachment('attachmentTestDoc', 'attachmentName', testDocRev, 'image/png', pngImageUpdate)..then((res) {
             completer(res);
           });
 
@@ -2089,8 +2109,7 @@ main() {
         String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title, equals(
-            "Created by a Put Request for attachment testing"));
+        expect(successResponse.title, equals("Created by a Put Request for attachment testing"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("SJH"));
 
@@ -2162,8 +2181,7 @@ main() {
       });
 
       wilting.db = databaseNameClient;
-      wilting.createAttachment('anotherAttachmentTestDoc', 'attachmentName', '',
-          'image/png', pngImage)..then((res) {
+      wilting.createAttachment('anotherAttachmentTestDoc', 'attachmentName', '', 'image/png', pngImage)..then((res) {
             completer(res);
           });
 
@@ -2181,8 +2199,7 @@ main() {
       });
 
       wilting.db = databaseNameClient;
-      wilting.createAttachment('attachmentTestDoc', 'anotherAttachmentName',
-          '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage)..then((res) {
+      wilting.createAttachment('attachmentTestDoc', 'anotherAttachmentName', '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage)..then((res) {
             completer(res);
           });
 
@@ -2214,8 +2231,7 @@ main() {
       });
 
       wilting.db = databaseNameClient;
-      wilting.deleteAttachment('attachmentTestDoc', 'attachmentName', testDocRev
-          )..then((res) {
+      wilting.deleteAttachment('attachmentTestDoc', 'attachmentName', testDocRev)..then((res) {
             completer(res);
           });
 
@@ -2226,10 +2242,7 @@ main() {
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
 
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' + 'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' + 'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' + '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
     /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
@@ -2267,10 +2280,8 @@ main() {
       wilting.changeNotification.listen((e) {
 
         count++;
-        if (e.docId == 'mytestid2') expect(e.type,
-            WiltChangeNotificationEvent.UPDATE);
-        if (e.docId == 'mytestid3') expect(e.type,
-            WiltChangeNotificationEvent.DELETE);
+        if (e.docId == 'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
+        if (e.docId == 'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
 
       });
@@ -2280,8 +2291,7 @@ main() {
     test("Start Change Notification With Docs and Attachments", () {
 
       wilting.db = databaseNameClient;
-      WiltChangeNotificationParameters parameters =
-          new WiltChangeNotificationParameters();
+      WiltChangeNotificationParameters parameters = new WiltChangeNotificationParameters();
       parameters.includeDocs = true;
       parameters.includeAttachments = true;
       void wrapper() {
@@ -2316,8 +2326,7 @@ main() {
           expect(document.author, "Me also and again");
 
         }
-        if (e.docId == 'mytestid3') expect(e.type,
-            WiltChangeNotificationEvent.DELETE);
+        if (e.docId == 'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
 
           /* Only version 1.6 

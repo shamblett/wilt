@@ -202,7 +202,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteDocument() expects a document id and a revision.'
+            'WiltException: message = deleteDocument() expects a document id and a revision'
             );
       }
 
@@ -219,7 +219,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteDocument() expects a document id and a revision.'
+            'WiltException: message = deleteDocument() expects a document id and a revision'
             );
       }
 
@@ -237,7 +237,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = putDocument() expects a document id and a document body.'
+            'WiltException: message = putDocument() expects a document id and a document body'
             );
       }
 
@@ -255,7 +255,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = putDocument() expects a document id and a document body.'
+            'WiltException: message = putDocument() expects a document id and a document body'
             );
       }
 
@@ -273,7 +273,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = postDocument() expects a document body.');
+            'WiltException: message = postDocument() expects a document body');
       }
 
     });
@@ -290,7 +290,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = postDocumentString() expects a document body.');
+            'WiltException: message = postDocumentString() expects a document body');
       }
 
 
@@ -307,7 +307,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createDatabase() expects a database name.');
+            'WiltException: message = createDatabase() expects a database name');
       }
 
     });
@@ -323,7 +323,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteDatabase() expects a database name.');
+            'WiltException: message = deleteDatabase() expects a database name');
       }
 
     });
@@ -355,7 +355,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = generateIds() expects a positive amount.');
+            'WiltException: message = generateIds() expects a positive amount');
       }
 
     });
@@ -371,7 +371,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = copyDocument () expects a source id.');
+            'WiltException: message = copyDocument () expects a source id');
       }
 
     });
@@ -387,7 +387,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = copyDocument () expects a destination id.');
+            'WiltException: message = copyDocument () expects a destination id');
       }
 
     });
@@ -437,7 +437,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createAttachment() expects a document id.');
+            'WiltException: message = createAttachment() expects a document id');
       }
 
     });
@@ -455,7 +455,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createAttachment() expects an attachment name.');
+            'WiltException: message = createAttachment() expects an attachment name');
       }
 
     });
@@ -473,7 +473,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createAttachment() expects a revision.');
+            'WiltException: message = createAttachment() expects a revision');
       }
 
     });
@@ -491,7 +491,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createAttachment() expects a content type.');
+            'WiltException: message = createAttachment() expects a content type');
       }
 
     });
@@ -508,7 +508,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = createAttachment() expects a payload.');
+            'WiltException: message = createAttachment() expects a payload');
       }
 
     });
@@ -526,7 +526,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a document id.');
+            'WiltException: message = updateAttachment() expects a document id');
       }
 
     });
@@ -544,7 +544,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = updateAttachment() expects an attachment name.');
+            'WiltException: message = updateAttachment() expects an attachment name');
       }
 
 
@@ -563,7 +563,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a revision.');
+            'WiltException: message = updateAttachment() expects a revision');
       }
 
     });
@@ -581,7 +581,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a content type.');
+            'WiltException: message = updateAttachment() expects a content type');
       }
 
     });
@@ -598,7 +598,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = updateAttachment() expects a payload.');
+            'WiltException: message = updateAttachment() expects a payload');
       }
 
     });
@@ -615,7 +615,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects a document id.');
+            'WiltException: message = deleteAttachment() expects a document id');
       }
 
     });
@@ -632,7 +632,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects an attachment name.');
+            'WiltException: message = deleteAttachment() expects an attachment name');
       }
 
     });
@@ -649,7 +649,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = deleteAttachment() expects a revision.');
+            'WiltException: message = deleteAttachment() expects a revision');
       }
 
     });
@@ -666,7 +666,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = getAttachment() expects a document id.');
+            'WiltException: message = getAttachment() expects a document id');
       }
 
     });
@@ -683,7 +683,7 @@ main() {
 
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            'WiltException: message = getAttachment() expects an attachment name.');
+            'WiltException: message = getAttachment() expects an attachment name');
       }
 
     });

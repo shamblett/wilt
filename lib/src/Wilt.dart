@@ -123,9 +123,9 @@ class Wilt {
    * HTTP Adapter
    */
   WiltHTTPAdapter _httpAdapter = null;
-  set httpAdapter(WiltHTTPAdapter adapter)=>_httpAdapter = adapter;
-  WiltHTTPAdapter get httpAdapter  => _httpAdapter;
-  
+  set httpAdapter(WiltHTTPAdapter adapter) => _httpAdapter = adapter;
+  WiltHTTPAdapter get httpAdapter => _httpAdapter;
+
   /**
    * Change notification 
    */
@@ -137,8 +137,7 @@ class Wilt {
    * This is a broadcast stream so can support more than one listener.
    * 
    */
-  Stream<WiltChangeNotificationEvent> get changeNotification =>
-      _changeNotifier.changeNotification.stream;
+  Stream<WiltChangeNotificationEvent> get changeNotification => _changeNotifier.changeNotification.stream;
   /**
    * Change notification paused state
    */
@@ -186,14 +185,12 @@ class Wilt {
 
     if ((host == null) || (port == null) || (scheme == null)) {
 
-      throw new WiltException(
-          'Bad construction - some or all required parameters are null');
+      throw new WiltException(WiltException.BAD_CONST_PARAMS);
 
     }
-    
-    if  ( _httpAdapter == null) {
-      throw new WiltException(
-                'Bad construction - you must instantiate Wilt with a HTTP Adapter');
+
+    if (_httpAdapter == null) {
+      throw new WiltException(WiltException.BAD_CONST_NO_ADAPTER);
     }
 
   }
@@ -202,8 +199,7 @@ class Wilt {
    *  The internal HTTP request method. This wraps the
    *  HTTP adapter class. 
   */
-  Future<jsonobject.JsonObject> _httpRequest(String method, String url, {String data: null, Map headers:
-      null}) {
+  Future<jsonobject.JsonObject> _httpRequest(String method, String url, {String data: null, Map headers: null}) {
 
 
     /* Build the request for the HttpAdapter*/
@@ -235,18 +231,17 @@ class Wilt {
     }
 
     /* Execute the request*/
-    Future<jsonobject.JsonObject> completion = _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)..then(
-        (jsonResponse) {
+    Future<jsonobject.JsonObject> completion = _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)..then((jsonResponse) {
 
-          if ( _clientCompletion != null ) {
-            
+          if (_clientCompletion != null) {
+
             _completionResponse = jsonResponse;
             _clientCompletion();
-         
+
           }
 
-       });
-    
+        });
+
     return completion;
 
   }
@@ -263,9 +258,7 @@ class Wilt {
     Map newQueryParams = new Map<String, String>.from(queryParams);
     newQueryParams[key] = value;
 
-    var newUrl = new Uri(scheme: originalUrl.scheme, userInfo:
-        originalUrl.userInfo, host: originalUrl.host, port: originalUrl.port, path:
-        originalUrl.path, queryParameters: newQueryParams);
+    var newUrl = new Uri(scheme: originalUrl.scheme, userInfo: originalUrl.userInfo, host: originalUrl.host, port: originalUrl.port, path: originalUrl.path, queryParameters: newQueryParams);
 
 
     String returnUrl = newUrl.toString();
@@ -281,7 +274,8 @@ class Wilt {
 
     if (db == null) {
 
-      throw new WiltException('No database specified');
+      return WiltException.NO_DATABASE_SPECIFIED;
+
     }
 
     if (url == null) return '/';
@@ -296,6 +290,24 @@ class Wilt {
     if (db != null) url = "/$db$url";
 
     return url;
+
+  }
+
+  /**
+   * Raise an exception from a future API call.
+   * If we are using completion throw an exception as normal.
+   */
+  Future<WiltException> _raiseException(String name) {
+
+
+    if (_clientCompletion == null) {
+
+      return new Future.error(new WiltException(name));
+
+    } else {
+
+      throw new WiltException(name);
+    }
 
   }
 
@@ -318,9 +330,13 @@ class Wilt {
    * Performs an HTTP GET operation, the URL is conditioned and
    * the current database added.
    */
-  Future<jsonobject.JsonObject> get(String url) {
+  Future get(String url) {
 
     url = _conditionUrl(url);
+    if (url == WiltException.NO_DATABASE_SPECIFIED) {
+
+      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    }
 
     /* Perform the get */
     return _httpRequest('GET', url);
@@ -332,12 +348,16 @@ class Wilt {
    * Performs a HTTP HEAD operation, the URL is conditioned and
    * the current database added.
    */
-  Future<jsonobject.JsonObject> head(String url) {
+  Future head(String url) {
 
     url = _conditionUrl(url);
+    if (url == WiltException.NO_DATABASE_SPECIFIED) {
+
+      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    }
 
     /* Perform the head */
-   return  _httpRequest(HEAD, url);
+    return _httpRequest(HEAD, url);
 
   }
 
@@ -345,9 +365,13 @@ class Wilt {
    * Performs a HTTP POST operation,, the URL is conditioned and
    * the current database added.
    */
-  Future<jsonobject.JsonObject> post(String url, String data, [Map headers]) {
+  Future post(String url, String data, [Map headers]) {
 
     url = _conditionUrl(url);
+    if (url == WiltException.NO_DATABASE_SPECIFIED) {
+
+      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    }
 
     /* Perform the post */
     return _httpRequest('POST', url, data: data, headers: headers);
@@ -358,9 +382,13 @@ class Wilt {
    * Performs a HTTP PUT operation,, the URL is conditioned and
    * the current database added.
    */
-  Future<jsonobject.JsonObject> put(String url, String data, [Map headers]) {
+  Future put(String url, String data, [Map headers]) {
 
     url = _conditionUrl(url);
+    if (url == WiltException.NO_DATABASE_SPECIFIED) {
+
+      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    }
 
     /* Perform the put */
     return _httpRequest('PUT', url, data: data, headers: headers);
@@ -372,13 +400,17 @@ class Wilt {
    * the current database added.
    *
    */
-  Future<jsonobject.JsonObject> delete(String url) {
+  Future delete(String url) {
 
 
     url = _conditionUrl(url);
+    if (url == WiltException.NO_DATABASE_SPECIFIED) {
+
+      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    }
 
     /* Perform the delete */
-   return  _httpRequest('DELETE', url);
+    return _httpRequest('DELETE', url);
 
   }
 
@@ -388,12 +420,11 @@ class Wilt {
    * any attachments are also supplied, note this could make this 
    * a large transfer.
    */
-  Future<jsonobject.JsonObject> getDocument(String id, [String rev = null, bool withAttachments = false])
-      {
+  Future getDocument(String id, [String rev = null, bool withAttachments = false]) {
 
     if (id == null) {
 
-      throw new WiltException('getDocument() must have a document id');
+      return _raiseException(WiltException.GET_DOC_NO_ID);
     }
 
     String url = id;
@@ -408,7 +439,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-   return  _httpRequest('GET_DOCUMENT', url);
+    return _httpRequest('GET_DOCUMENT', url);
 
 
   }
@@ -417,12 +448,11 @@ class Wilt {
   /**
    * DELETE's the specified document. Must have a revision.
    */
-  Future<jsonobject.JsonObject> deleteDocument(String id, String rev) {
+  Future deleteDocument(String id, String rev) {
 
     if ((id == null) || (rev == null)) {
 
-      throw new WiltException(
-          'deleteDocument() expects a document id and a revision.');
+      return _raiseException(WiltException.DELETE_DOC_NO_ID_REV);
     }
 
     String url = id;
@@ -441,14 +471,12 @@ class Wilt {
    * document body as a _rev parameter or specified in the call in which
    * case this will be added to the document body.
    */
-  Future<jsonobject.JsonObject> putDocument(String id, jsonobject.JsonObject document, [String rev =
-      null]) {
+  Future putDocument(String id, jsonobject.JsonObject document, [String rev = null]) {
 
 
     if ((id == null) || (document == null)) {
 
-      throw new WiltException(
-          'putDocument() expects a document id and a document body.');
+      return _raiseException(WiltException.PUT_DOC_NO_ID_BODY);
     }
 
     /* Check for a revision */
@@ -466,13 +494,12 @@ class Wilt {
 
     } catch (e) {
 
-      throw new WiltException(
-          'putDocument() cannot stringify the document body, use putDocumentString');
+      return _raiseException(WiltException.PUT_DOC_CANT_STRINGIFY);
 
     }
 
     String url = _conditionUrl(id);
-   return  _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+    return _httpRequest('PUT_DOCUMENT', url, data: jsonData);
 
 
   }
@@ -481,13 +508,12 @@ class Wilt {
    * PUT's to the specified  document where the document is supplied as 
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
-  Future<jsonobject.JsonObject> putDocumentString(String id, String document, [String rev = null]) {
+  Future putDocumentString(String id, String document, [String rev = null]) {
 
 
     if ((id == null) || (document == null)) {
 
-      throw new WiltException(
-          'putDocumentString() expects a document id and a document body.');
+      return _raiseException(WiltException.PUT_DOC_STRING_NO_ID_BODY);
     }
 
     /* Check for a revision */
@@ -504,12 +530,12 @@ class Wilt {
    * POST's the specified document.
    * An optional path to the document can be specified.
    */
-  Future<jsonobject.JsonObject> postDocument(jsonobject.JsonObject document, {String path: null}) {
+  Future postDocument(jsonobject.JsonObject document, {String path: null}) {
 
 
     if (document == null) {
 
-      throw new WiltException('postDocument() expects a document body.');
+      return _raiseException(WiltException.POST_DOC_NO_BODY);
     }
 
     String url = "";
@@ -526,8 +552,7 @@ class Wilt {
 
     } catch (e) {
 
-      throw new WiltException(
-          'postDocument() cannot stringify document body , use postDocumentString');
+      return _raiseException(WiltException.POST_DOC_CANT_STRINGIFY);
     }
 
     url = _conditionUrl(url);
@@ -540,12 +565,12 @@ class Wilt {
    * POST's to the specified  document where the document is supplied as 
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
-  Future<jsonobject.JsonObject> postDocumentString(String document, {String path: null}) {
+  Future postDocumentString(String document, {String path: null}) {
 
 
     if (document == null) {
 
-      throw new WiltException('postDocumentString() expects a document body.');
+      return _raiseException(WiltException.POST_DOC_STRING_NO_BODY);
     }
 
     String url = "";
@@ -565,17 +590,16 @@ class Wilt {
    * Copies the source document to the destination document with an optional revision
    * NOTE this method uses the CouchDB COPY method which is not standard HTTP.
    */
-  Future<jsonobject.JsonObject> copyDocument(String sourceId, String destinationId, [String rev = null])
-      {
+  Future copyDocument(String sourceId, String destinationId, [String rev = null]) {
 
     if (sourceId == null) {
 
-      throw new WiltException('copyDocument () expects a source id.');
+      return _raiseException(WiltException.COPY_DOC_NO_SRC_ID);
     }
 
     if (destinationId == null) {
 
-      throw new WiltException('copyDocument () expects a destination id.');
+      return _raiseException(WiltException.COPY_DOC_NO_DEST_ID);
     }
 
 
@@ -598,14 +622,13 @@ class Wilt {
    * The parameters should be self explanatory and are addative.
    * Refer to the CouchDb documentation for further explanation.
    */
-  Future<jsonobject.JsonObject> getAllDocs({bool includeDocs: false, int limit: null, String startKey:
-      null, String endKey: null, List<String> keys: null, bool descending: false}) {
+  Future getAllDocs({bool includeDocs: false, int limit: null, String startKey: null, String endKey: null, List<String> keys: null, bool descending: false}) {
 
 
     /* Validate the parameters */
     if ((limit != null) && (limit < 0)) {
 
-      throw new WiltException('getAllDocs() must have a positive limit');
+      return _raiseException(WiltException.GET_ALL_DOCS_LIMIT);
 
     }
 
@@ -651,7 +674,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    return  _httpRequest('GET_ALLDOCS', url);
+    return _httpRequest('GET_ALLDOCS', url);
 
   }
 
@@ -659,13 +682,13 @@ class Wilt {
    * Bulk insert
    * Bulk inserts a list of documents
    */
-  Future<jsonobject.JsonObject> bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
+  Future bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
 
 
     /* Validate the parameters */
     if (docs == null) {
 
-      throw new WiltException('bulk() must have a document list.');
+      return _raiseException(WiltException.BULK_NO_DOC_LIST);
 
     }
 
@@ -686,8 +709,7 @@ class Wilt {
 
     } catch (e) {
 
-      throw new WiltException(
-          'bulk() cannot stringify document list, use bulkString.');
+      return _raiseException(WiltException.BULK_CANT_STRINGIFY);
 
     }
 
@@ -704,13 +726,13 @@ class Wilt {
    * Bulk insert JSON string version.
    * Must be used if '_id' and or '_rev' are needed in ANY of the documents
    */
-  Future<jsonobject.JsonObject> bulkString(String docs, [bool allOrNothing = false]) {
+  Future bulkString(String docs, [bool allOrNothing = false]) {
 
 
     /* Validate the parameters */
     if (docs == null) {
 
-      throw new WiltException('bulkString() must have a document string.');
+      return _raiseException(WiltException.BULK_STRING_NO_DOC);
 
     }
 
@@ -733,11 +755,12 @@ class Wilt {
   /**
    * Creates a database with the specified name.
    */
-  Future<jsonobject.JsonObject> createDatabase(String name) {
+  Future createDatabase(String name) {
 
     if ((name == null)) {
 
-      throw new WiltException('createDatabase() expects a database name.');
+      return _raiseException(WiltException.CREATE_DB_NO_NAME);
+
     }
 
     /* The first char of the URL should be a slash. */
@@ -755,11 +778,11 @@ class Wilt {
   /**
    * Deletes the specified database
    */
-  Future<jsonobject.JsonObject> deleteDatabase(String name) {
+  Future deleteDatabase(String name) {
 
     if (name == null) {
 
-      throw new WiltException('deleteDatabase() expects a database name.');
+      return _raiseException(WiltException.DELETE_DB_NO_NAME);
     }
 
     /* The first char of the URL should be a slash. */
@@ -780,7 +803,7 @@ class Wilt {
   /**
    * Get information about a database
    */
-  Future<jsonobject.JsonObject> getDatabaseInfo([String dbName = null]) {
+  Future getDatabaseInfo([String dbName = null]) {
 
     String name;
     if (dbName != null) {
@@ -800,18 +823,18 @@ class Wilt {
   /**
    * Get current session information from CouchDB
    */
-  Future<jsonobject.JsonObject> getSession() {
+  Future getSession() {
 
     String url = SESSION;
 
-   return _httpRequest(GET_SESSION, url);
+    return _httpRequest(GET_SESSION, url);
 
   }
 
   /**
    * Get current stats from CouchDB
    */
-  Future<jsonobject.JsonObject> getStats() {
+  Future getStats() {
 
     String url = STATS;
 
@@ -822,7 +845,7 @@ class Wilt {
   /**
    * Get all the databases from CouchDB
    */
-  Future<jsonobject.JsonObject> getAllDbs() {
+  Future getAllDbs() {
 
     String url = ALLDBS;
 
@@ -835,35 +858,34 @@ class Wilt {
    * contentType is in the form of a mime type e.g. 'image/png'
    * If the document needs to be created as well as the attachment set the rev to ''
    */
-  Future<jsonobject.JsonObject> createAttachment(String docId, String attachmentName, String rev, String
-      contentType, String payload) {
+  Future createAttachment(String docId, String attachmentName, String rev, String contentType, String payload) {
 
     /**
     * Check all parameters are supplied
     */
     if (docId == null) {
 
-      throw new WiltException('createAttachment() expects a document id.');
+      return _raiseException(WiltException.CREATE_ATT_NO_DOC_ID);
     }
 
     if (attachmentName == null) {
 
-      throw new WiltException('createAttachment() expects an attachment name.');
+      return _raiseException(WiltException.CREATE_ATT_NO_NAME);
     }
 
     if (rev == null) {
 
-      throw new WiltException('createAttachment() expects a revision.');
+      return _raiseException(WiltException.CREATE_ATT_NO_REV);
     }
 
     if (contentType == null) {
 
-      throw new WiltException('createAttachment() expects a content type.');
+      return _raiseException(WiltException.CREATE_ATT_NO_CONTENT_TYPE);
     }
 
     if (payload == null) {
 
-      throw new WiltException('createAttachment() expects a payload.');
+      return _raiseException(WiltException.CREATE_ATT_NO_PAYLOAD);
     }
 
     /**
@@ -891,35 +913,34 @@ class Wilt {
    * Update an attachment on an existing document.
    * contentType is in the form of a mime type e.g. 'image/png'
    */
-  Future<jsonobject.JsonObject> updateAttachment(String docId, String attachmentName, String rev, String
-      contentType, String payload) {
+  Future updateAttachment(String docId, String attachmentName, String rev, String contentType, String payload) {
 
     /**
     * Check all parameters are supplied
     */
     if (docId == null) {
 
-      throw new WiltException('updateAttachment() expects a document id.');
+      return _raiseException(WiltException.UPDATE_ATT_NO_DOC_ID);
     }
 
     if (attachmentName == null) {
 
-      throw new WiltException('updateAttachment() expects an attachment name.');
+      return _raiseException(WiltException.UPDATE_ATT_NO_NAME);
     }
 
     if (rev == null) {
 
-      throw new WiltException('updateAttachment() expects a revision.');
+      return _raiseException(WiltException.UPDATE_ATT_NO_REV);
     }
 
     if (contentType == null) {
 
-      throw new WiltException('updateAttachment() expects a content type.');
+      return _raiseException(WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
     }
 
     if (payload == null) {
 
-      throw new WiltException('updateAttachment() expects a payload.');
+      return _raiseException(WiltException.UPDATE_ATT_NO_PAYLOAD);
     }
 
     /**
@@ -939,21 +960,21 @@ class Wilt {
   /**
    * Delete an attachment
    */
-  Future<jsonobject.JsonObject> deleteAttachment(String docId, String attachmentName, String rev) {
+  Future deleteAttachment(String docId, String attachmentName, String rev) {
 
     if (docId == null) {
 
-      throw new WiltException('deleteAttachment() expects a document id.');
+      return _raiseException(WiltException.DELETE_ATT_NO_DOC_ID);
     }
 
     if (attachmentName == null) {
 
-      throw new WiltException('deleteAttachment() expects an attachment name.');
+      return _raiseException(WiltException.DELETE_ATT_NO_NAME);
     }
 
     if (rev == null) {
 
-      throw new WiltException('deleteAttachment() expects a revision.');
+      return _raiseException(WiltException.DELETE_ATT_NO_REV);
     }
 
 
@@ -967,24 +988,24 @@ class Wilt {
   /**
    * Get an attachment
    */
-  Future<jsonobject.JsonObject> getAttachment(String docId, String attachmentName) {
+  Future getAttachment(String docId, String attachmentName) {
 
 
     if (docId == null) {
 
-      throw new WiltException('getAttachment() expects a document id.');
+      return _raiseException(WiltException.GET_ATT_NO_DOC_ID);
     }
 
     if (attachmentName == null) {
 
-      throw new WiltException('getAttachment() expects an attachment name.');
+      return _raiseException(WiltException.GET_ATT_NO_NAME);
     }
 
 
     String url = "$docId/$attachmentName";
 
     url = _conditionUrl(url);
-   return  _httpRequest(GET_ATTACHMENT, url);
+    return _httpRequest(GET_ATTACHMENT, url);
 
   }
 
@@ -993,8 +1014,7 @@ class Wilt {
    * 
    * If a database name is not supplied the currently selected database is used.
    */
-  void startChangeNotification([WiltChangeNotificationParameters parameters =
-      null, String databaseName = null]) {
+  void startChangeNotification([WiltChangeNotificationParameters parameters = null, String databaseName = null]) {
 
     String name;
     if (databaseName == null) {
@@ -1007,8 +1027,7 @@ class Wilt {
     }
 
     changeNotificationDbName = name;
-    _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name,
-        parameters);
+    _changeNotifier = new _WiltChangeNotification(_host, _port, _scheme, _httpAdapter, name, parameters);
   }
 
   /**
@@ -1030,20 +1049,17 @@ class Wilt {
    * 
    * Note that database name, host, port and scheme are not changeable.
    */
-  void updateChangeNotificationParameters(WiltChangeNotificationParameters
-      parameters) {
+  void updateChangeNotificationParameters(WiltChangeNotificationParameters parameters) {
 
 
     if (parameters == null) {
 
-      throw new WiltException(
-          'updateChangeNotificationParameters() expects a parameter set.');
+      throw new WiltException(WiltException.UPDATE_CNP_NO_PARAMS);
     }
 
     if (_changeNotifier == null) {
 
-      throw new WiltException(
-          'updateChangeNotificationParameters() no change notifier.');
+      throw new WiltException(WiltException.UPDATE_CNP_NO_NOTIFIER);
     }
 
     _changeNotifier.parameters = parameters;
@@ -1082,8 +1098,7 @@ class Wilt {
 
     if ((user == null) || (password == null)) {
 
-      throw new WiltException(
-          'Login() expects a non null user name and password');
+      throw new WiltException(WiltException.LOGIN_WRONG_PARAMS);
     }
 
     _user = user;
@@ -1096,11 +1111,11 @@ class Wilt {
    * Ask CouchDB to generate document Id's.
    * 
    */
-  Future<jsonobject.JsonObject> generateIds([int amount = 10]) {
+  Future generateIds([int amount = 10]) {
 
     if (amount < 1) {
 
-      throw new WiltException('generateIds() expects a positive amount.');
+      return _raiseException(WiltException.GEN_IDS_AMOUNT);
     }
 
     String url = UUIDS;

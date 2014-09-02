@@ -1,6 +1,6 @@
 /* CouchDB server */
-final String hostName = "proxy.dicerati.com";
-final String port = "8080/couch-dart";
+final String hostName = "localhost";
+final String port = "5984";
 final String serverPort = "5984";
 final String scheme = "http://"; 
 
