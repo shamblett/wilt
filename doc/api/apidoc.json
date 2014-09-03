@@ -1,1 +1,0 @@
-{"name":"dart:","description":"Dart System Libraries","libraries":[{"name":"package:wilt/wilt.dart","refId":"wilt"},{"refId":"wiltBrowserClient"},{"refId":"wiltServerClient"}],"revision":"0","location":"0","dependencies":[]}
