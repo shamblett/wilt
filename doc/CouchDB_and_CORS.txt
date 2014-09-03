@@ -65,37 +65,36 @@ Apache Vhosts File
 # CouchDB
 #
 # Note:-
-# http://141.196.22.198:5984 is the CouchDB instance
-# http://127.0.0.1:3030 is your browser origin(you can use * for any)
+# http://127.0.0.1:5984 is the CouchDB instance
+# http://localhost:8080 is your browser origin(you can use * for any)
+# Your Vhost is listening on port 8085, you must add a Listen directive in
+# httpd.conf for this port e.g. 'Listen 8085'
 #
-<VirtualHost *:80>
-    <Proxy http://141.196.22.198:5984>
+<VirtualHost *:8085>
+    <Proxy http://127.0.0.1:5984>
         Order deny,allow
-        Allow from all 
-    </Proxy> 
+        Allow from all
+    </Proxy>
+
     RewriteEngine on
     RewriteCond %{REQUEST_METHOD} ^OPTIONS
-    Header set Access-Control-Allow-Origin http://127.0.0.1:3030
-	Header set Access-Control-Allow-Credentials true
-    Header set Access-Control-Allow-Headers Content-Type
-	Header merge Access-Control-Allow-Headers Authorization
-	Header merge Access-Control-Allow-Headers Destination
-	Header set Access-Control-Allow-Methods GET
-	Header merge Access-Control-Allow-Methods POST
-	Header merge Access-Control-Allow-Methods PUT 
-	Header merge Access-Control-Allow-Methods OPTIONS
-	Header merge Access-Control-Allow-Methods DELETE 
-	Header merge Access-Control-Allow-Methods HEAD 
-	Header merge Access-Control-Allow-Methods COPY
-    Header set Access-Control-Max-Age 3600 
-     
+    RewriteRule ^(.*)$ $1 [R=200,L]
+
+    Header always set Access-Control-Allow-Origin http://localhost:8080
+    Header always set Access-Control-Allow-Credentials true
+    Header always set Access-Control-Allow-Headers "x-requested-with, Content-Type, origin, authorization, accept, client-sec
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, OPTIONS, DELETE, HEAD, COPY"
+
+    Header set Access-Control-Max-Age 3600
+
     ProxyRequests off
     ProxyPreserveHost Off
     KeepAlive Off
 
-    ProxyPass / http://141.196.22.198:5984/ nocanon
-    ProxyPassReverse / http://141.196.22.198:5984/
+    ProxyPass / http://127.0.0.1:5984/ nocanon
+    ProxyPassReverse / http://127.0.0.1:5984/
 </VirtualHost>
+
 
 
 
