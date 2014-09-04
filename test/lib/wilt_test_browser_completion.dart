@@ -161,7 +161,7 @@ main() {
   });
 
   /* Group 3 - Document/Database methods parameter validation  */
-  solo_group("3. Document/Database Parameter Validation - ", () {
+  group("3. Document/Database Parameter Validation - ", () {
 
     var completer = (_) {};
     

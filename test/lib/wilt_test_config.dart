@@ -1,6 +1,6 @@
 /* CouchDB server */
 final String hostName = "localhost";
-final String port = "5984";
+final String port = "xxxx";
 final String serverPort = "5984";
 final String scheme = "http://"; 
 
@@ -15,5 +15,5 @@ final String databaseNameServer = 'wilttest_server';
  *  used.
  */
 
-final String userName = 'steve';
-final String userPassword = 'wij7hwip';
+final String userName = '';
+final String userPassword = '';

@@ -740,7 +740,7 @@ main() {
     });
 
     /* Create the test database */
-    solo_test("Create Test Database", () {
+    test("Create Test Database", () {
 
       var completer = expectAsync1((res) {
 

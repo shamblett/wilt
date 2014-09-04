@@ -1,4 +1,8 @@
 
+## 3.1.0
+
+Updates for Issues 13, 11 and 14
+
 ## 3.0.1
 
 Updates for Dart V1.5.3, all tests running.

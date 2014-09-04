@@ -64,8 +64,11 @@ main() {
     
     /* Call the wilt API */
     wilting.getDocument("myuniqueid")..then((res) {
-            completer(res); // ONLY if you want the future interface //
-          });
+            completer(res); 
+            //do something },// ONLY if you want the future interface //
+         onError:(WiltException e){
+         //handle error
+    });
 
 
  }
@@ -99,8 +102,9 @@ API must be used over the methods that take JSON Objects. The class WiltUserUtil
 to manipulate JSON Objects with underscore properties.
 
 Wilt checks its API parameters when supplied, if required parameters are not supplied or numeric parameters
-are not valid Wilt will throw a WiltException with a message containing the failure reason. Dart 
-can also throw exceptions, exception handling in these cases needs to be performed by the client, Wilt itself has
+are not valid Wilt will either raise a future error with a WiltException for future based API calls, or for
+non-future based ones and any calls using the completion interface will throw a WiltException with a message 
+containing the failure reason. Dart can also throw exceptions, exception handling in these cases needs to be performed by the client, Wilt itself has
 no exception handling built in.
 
 Change Notifications
