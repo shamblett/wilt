@@ -17,6 +17,10 @@
  * 
  * CouchDb is initialized to supply the change notification stream in 'normal' mode, hence
  * this class requests the updates manually on a timed basis dependent on the heartberat period.
+ * 
+ * Note that as form CouchDB 1.6.1 you must auth as an administrator with CouchDb
+ * to allow notificatons to work, if you do not supply auth credentials before 
+ * starting notifications an exception is raised. 
  */
 
 part of wilt;
