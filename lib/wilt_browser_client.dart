@@ -14,6 +14,7 @@ import 'dart:html' as html;
 import 'dart:convert';
 import 'dart:async';
 import 'package:json_object/json_object.dart' as jsonobject;
+import 'package:crypto/crypto.dart';
 
 part 'src/httpAdapters/WiltBrowserHTTPAdapter.dart';
 

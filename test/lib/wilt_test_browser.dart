@@ -2133,9 +2133,8 @@ main() {
             e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
           List attachments = WiltUserUtils.getAttachments(e.document);
-          List attachments = WiltUserUtils.getAttachments(e.document);
           expect(attachments[0].name, 'attachmentName');
-          expect(attachments[0].data.content_type, "image/png; charset=utf-8");
+          expect(attachments[0].data.content_type, "image/png");
           completer();
         }
       });

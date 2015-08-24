@@ -16,6 +16,21 @@ part of wiltBrowserClient;
 class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
   /**
+   * User for change notification authorization
+   */
+  String _user;
+
+  /**
+   * Password for change notification authorization
+   */
+  String _password;
+
+  /**
+   * Auth Type for change notification authorization
+   */
+  String _authType;
+
+  /**
    *  Construction
    */
   WiltBrowserHTTPAdapter();
@@ -24,15 +39,13 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
    * Processes the HTTP request, returning the server's response
    * as a future
    */
-  Future<jsonobject.JsonObject> httpRequest(String method, String url, [String
-      data = null, Map headers = null]) {
-
+  Future<jsonobject.JsonObject> httpRequest(String method, String url,
+      [String data = null, Map headers = null]) {
 
     /**
      *  Initialise 
      */
     Completer completer = new Completer();
-
 
     /**
      * Successful completion
@@ -57,14 +70,10 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
        * otherwise its just raw data, ie an attachment.
        */
       if (response.responseHeaders.containsValue('application/json')) {
-
         var couchResp;
         try {
-
           couchResp = JSON.decode(response.responseText);
-
         } catch (e) {
-
           jsonResponse.error = true;
           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "JSON Decode Error";
@@ -76,11 +85,9 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
             * Complete the reequest
             */
           if (!completer.isCompleted) completer.complete(jsonResponse);
-
         }
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
-
           jsonResponse.error = true;
           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "CouchDb Error";
@@ -92,7 +99,6 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
            * Complete the reequest
            */
           if (!completer.isCompleted) completer.complete(jsonResponse);
-
         }
 
         /**
@@ -103,17 +109,12 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
               new jsonobject.JsonObject.fromJsonString(response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
-
-
       } else {
-
         jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
         successAsJson.ok = true;
         successAsJson.contentType = response.responseHeaders['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
-
       }
-
 
       /* Set the response headers */
       jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
@@ -121,8 +122,6 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
        * Complete the request
        */
       if (!completer.isCompleted) completer.complete(jsonResponse);
-
-
     }
 
     /**
@@ -166,27 +165,61 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
      */
     List temp = method.split('_');
     String httpMethod = temp[0];
-    
+
     /**
      *  Query CouchDB over HTTP 
      */
-    html.HttpRequest.request(url, method: httpMethod, withCredentials: false,
-        responseType: null, requestHeaders: headers, sendData: data)
-        ..then(onSuccess)
-        ..catchError(onError);
+    html.HttpRequest.request(url,
+        method: httpMethod,
+        withCredentials: true,
+        responseType: null,
+        requestHeaders: headers,
+        sendData: data)
+      ..then(onSuccess)
+      ..catchError(onError);
+    
+    return completer.future;
+  }
+
+  /**
+   *  Specialised 'get' for change notifications
+   */
+  Future<String> getString(String url) {
+    Completer<String> completer = new Completer<String>();
+
+    /* Must have authentication */
+    Map wiltHeaders = new Map<String, String>();
+    wiltHeaders["Accept"] = "application/json";
+    if (_user != null) {
+      switch (_authType) {
+        case Wilt.AUTH_BASIC:
+          String authStringToEncode = "$_user:$_password";
+          String encodedAuthString =
+                        CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
+          String authString = "Basic $encodedAuthString";
+          wiltHeaders['Authorization'] = authString;
+          break;
+        case Wilt.AUTH_NONE:
+          break;
+      }
+    }
+
+    html.HttpRequest
+        .request(url,
+            method: 'GET', withCredentials: true, requestHeaders: wiltHeaders)
+        .then((request) {
+      completer.complete(request.responseText);
+    });
 
     return completer.future;
-
   }
-  
+
   /**
-    *  Specialised get for change notifications
-    */
-  Future<String>getString(String url) {
-    
-     return html.HttpRequest.getString(url);
-     
+   * Authentication parameters for change notification
+   */
+  void notificationAuthParams(String user, String password, String authType) {
+    _user = user;
+    _password = password;
+    _authType = authType;
   }
-
-
 }
