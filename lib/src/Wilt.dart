@@ -1120,7 +1120,7 @@ class Wilt {
 
     String url = UUIDS;
 
-    url = _setURLParameter(url, 'count', amount.toString());
+    url = url + "?count=${amount}";
 
     return _httpRequest(GENERATE_IDS, url);
 

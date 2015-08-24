@@ -1704,8 +1704,7 @@ main() {
         });
     });
 
-    /*Doesn't work in CouchDB 1.6
-    solo_test("Generate Ids", () {
+    test("Generate Ids", () {
 
       var completer = expectAsync1((res) {
 
@@ -1734,7 +1733,7 @@ main() {
             completer(res);
           });
 
-    });*/
+    });
 
   });
 
