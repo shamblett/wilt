@@ -273,7 +273,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   }
 
   /**
-    *  Specialised get for change notifications
+    *  Specialised 'get' for change notifications
     */
   Future<String> getString(String url) {
     Completer completer = new Completer<String>();
