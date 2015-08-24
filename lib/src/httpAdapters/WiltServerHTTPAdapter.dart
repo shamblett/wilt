@@ -15,6 +15,20 @@ part of wiltServerClient;
 
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
+  /**
+   * User for change notification authorization
+   */
+  String _user;
+
+  /**
+   * Password for change notification authorization
+   */
+  String _password;
+
+  /**
+   * Auth Type for change notification authorization
+   */
+  String _authType;
 
   /**
    * HTTP client
@@ -25,7 +39,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
    *  Construction
    */
   WiltServerHTTPAdapter() {
-
     _client = new http.Client();
   }
 
@@ -33,15 +46,13 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
    * Processes the HTTP request, returning the server's response
    * as a future
    */
-  Future<jsonobject.JsonObject> httpRequest(String method, String url, [String
-      data = null, Map headers = null]) {
-
+  Future<jsonobject.JsonObject> httpRequest(String method, String url,
+      [String data = null, Map headers = null]) {
 
     /**
      *  Initialise 
      */
     Completer completer = new Completer();
-
 
     /**
      * Successful completion
@@ -66,14 +77,10 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        * otherwise its just raw data, ie an attachment.
        */
       if (response.headers.containsValue('application/json')) {
-
         var couchResp;
         try {
-
           couchResp = JSON.decode(response.body);
-
         } catch (e) {
-
           jsonResponse.error = true;
           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "JSON Decode Error";
@@ -85,11 +92,9 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
             * Complete the reequest
             */
           if (!completer.isCompleted) completer.complete(jsonResponse);
-
         }
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
-
           jsonResponse.error = true;
           jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "CouchDb Error";
@@ -101,7 +106,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
            * Complete the reequest
            */
           if (!completer.isCompleted) completer.complete(jsonResponse);
-
         }
 
         /**
@@ -112,17 +116,12 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
               new jsonobject.JsonObject.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
-
-
       } else {
-
         jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
         successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
-
       }
-
 
       /* Set the response headers */
       jsonResponse.allResponseHeaders = response.headers;
@@ -130,8 +129,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        * Complete the request
        */
       if (!completer.isCompleted) completer.complete(jsonResponse);
-
-
     }
 
     /**
@@ -151,7 +148,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
       response.stream.bytesToString(UTF8).then((String text) {
-
         jsonResponse.responseText = text;
 
         /**
@@ -159,14 +155,10 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
            * otherwise its just raw data, ie an attachment.
            */
         if (response.headers.containsValue('application/json')) {
-
           var couchResp;
           try {
-
             couchResp = JSON.decode(text);
-
           } catch (e) {
-
             jsonResponse.error = true;
             jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
             errorAsJson.error = "JSON Decode Error";
@@ -178,11 +170,9 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
                 * Complete the reequest
                 */
             if (!completer.isCompleted) completer.complete(jsonResponse);
-
           }
 
           if ((couchResp is Map) && (couchResp.containsKey('error'))) {
-
             jsonResponse.error = true;
             jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
             errorAsJson.error = "CouchDb Error";
@@ -194,7 +184,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
                * Complete the reequest
                */
             if (!completer.isCompleted) completer.complete(jsonResponse);
-
           }
 
           /**
@@ -205,28 +194,21 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
                 new jsonobject.JsonObject.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
-
-
         } else {
-
           jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
           successAsJson.ok = true;
           successAsJson.contentType = response.headers['content-type'];
           jsonResponse.jsonCouchResponse = successAsJson;
-
         }
-
 
         /* Set the response headers */
         jsonResponse.allResponseHeaders = response.headers;
-        
+
         /**
          * Complete the request
         */
         if (!completer.isCompleted) completer.complete(jsonResponse);
-
       });
-
     }
 
     /**
@@ -249,7 +231,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        * Complete the reequest
        */
       if (!completer.isCompleted) completer.complete(jsonResponse);
-
     }
 
     /**
@@ -262,11 +243,9 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
      * Set the content type header correctly
      */
     if (headers.containsKey('Content-Type')) {
-
       String contentType = headers['Content-Type'];
       headers.remove('Content-Type');
       headers['content-type'] = contentType;
-
     }
     /**
      *  Query CouchDB over HTTP 
@@ -274,11 +253,11 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     if (httpMethod == "GET") {
       _client.get(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == "PUT") {
-      _client.put(url, headers: headers, body: data).then(onSuccess, onError:
-          onError);
+      _client.put(url, headers: headers, body: data).then(onSuccess,
+          onError: onError);
     } else if (httpMethod == "POST") {
-      _client.post(url, headers: headers, body: data).then(onSuccess, onError:
-          onError);
+      _client.post(url, headers: headers, body: data).then(onSuccess,
+          onError: onError);
     } else if (httpMethod == "HEAD") {
       _client.head(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == "DELETE") {
@@ -291,24 +270,45 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     return completer.future;
-
   }
 
   /**
     *  Specialised get for change notifications
     */
   Future<String> getString(String url) {
-
     Completer completer = new Completer<String>();
-    
-    _client.get(url).then((response) {
-      
+
+    /* Must have authentication */
+    Map wiltHeaders = new Map<String, String>();
+    wiltHeaders["Accept"] = "application/json";
+    if (_user != null) {
+      switch (_authType) {
+        case Wilt.AUTH_BASIC:
+          String authStringToEncode = "$_user:$_password";
+          String encodedAuthString =
+              CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
+          String authString = "Basic $encodedAuthString";
+          wiltHeaders['Authorization'] = authString;
+          break;
+
+        case Wilt.AUTH_NONE:
+          break;
+      }
+    }
+
+    _client.get(url, headers:wiltHeaders).then((response) {
       completer.complete(response.body);
-      
     });
 
     return completer.future;
   }
 
-
+  /**
+   * Authentication parameters for change notification
+   */
+  void notificationAuthParams(String user, String password, String authType) {
+    _user = user;
+    _password = password;
+    _authType = authType;
+  }
 }

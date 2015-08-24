@@ -11,21 +11,23 @@
 part of wilt;
 
 abstract class WiltHTTPAdapter {
-
-
+  
   WiltHTTPAdapter();
-
+  
   /**
    * Processes the HTTP request returning the  HTTP response as
    * a JSON Object
    */
-  Future<jsonobject.JsonObject> httpRequest(String method, String url, [String
-      data = null, Map headers = null]);
-
+  Future<jsonobject.JsonObject> httpRequest(String method, String url,
+      [String data = null, Map headers = null]);
 
   /**
   *  Specialised get for change notifications
   */
   Future<String> getString(String url);
 
+  /**
+   * Authentication parameters for change notification
+   */
+  void notificationAuthParams(String user, String password, String authType);
 }

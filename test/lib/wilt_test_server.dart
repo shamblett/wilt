@@ -708,7 +708,6 @@ main() {
     String docId = null;
     String docRev = null;
     String putId = 'mytestid';
-    String putId2 = 'mytestid2';
     String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
     String returnedDocRev;
@@ -1192,11 +1191,8 @@ main() {
     }
 
     /* Setup */
-    String docId = null;
-    String docRev = null;
     String putId = 'mytestid';
     String putId2 = 'mytestid2';
-    String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
 
     test("Get All Docs  - Include docs", () {
@@ -1705,14 +1701,11 @@ main() {
     });
 
     test("Generate Ids", () {
-
       var completer = expectAsync1((res) {
-
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
-
           logMessage("WILT::Generate Ids");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
@@ -1726,15 +1719,13 @@ main() {
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
-
       });
 
-      wilting.generateIds(10)..then((res) {
-            completer(res);
-          });
-
+      wilting.generateIds(10)
+        ..then((res) {
+          completer(res);
+        });
     });
-
   });
 
   /* Group 7 - Attachment tests */
@@ -2171,10 +2162,8 @@ main() {
         if (e.docId == 'mytestid3') expect(
             e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
-
-          /* Only version 1.6 
           List attachments = WiltUserUtils.getAttachments(e.document);
-          expect(attachments[0].data, pngImage); */
+          expect(attachments[0].data, pngImage);
           completer();
         }
       });
@@ -2196,8 +2185,6 @@ main() {
     });
 
     test("Check Notification Pause", () {
-      int resLength = -1;
-
       var completer = expectAsync0(() {
         expect(wilting.changeNotificationsPaused, true);
       });

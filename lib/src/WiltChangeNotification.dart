@@ -28,8 +28,8 @@ class _WiltChangeNotification {
    */
   WiltChangeNotificationParameters _parameters = null;
   WiltChangeNotificationParameters get parameters => _parameters;
-  set parameters(WiltChangeNotificationParameters parameters) => _parameters =
-      parameters;
+  set parameters(WiltChangeNotificationParameters parameters) =>
+      _parameters = parameters;
 
   /**
    * Database name
@@ -69,7 +69,7 @@ class _WiltChangeNotification {
   set pause(bool flag) => _paused = flag;
 
   WiltHTTPAdapter _httpAdapter = null;
-  
+
   /**
    * Change notification stream controller
    * 
@@ -78,15 +78,11 @@ class _WiltChangeNotification {
   final _changeNotification = new StreamController.broadcast();
   get changeNotification => _changeNotification;
 
-  
-      _WiltChangeNotification(this._host, this._port, this._scheme, this._httpAdapter, [this._dbName, this._parameters])
-      {
-
-
+  _WiltChangeNotification(
+      this._host, this._port, this._scheme, this._httpAdapter,
+      [this._dbName, this._parameters]) {
     if (_parameters == null) {
-
       _parameters = new WiltChangeNotificationParameters();
-
     }
 
     _sequence = _parameters.since;
@@ -101,7 +97,6 @@ class _WiltChangeNotification {
      * Start change notifications
      */
     _requestChanges(_timer);
-
   }
 
   /**
@@ -118,7 +113,8 @@ class _WiltChangeNotification {
      * Create the URL from the parameters
      */
     String sequence = _sequence.toString();
-    String path = "$_dbName/_changes?" + "&since=$sequence" +
+    String path = "$_dbName/_changes?" +
+        "&since=$sequence" +
         "&descending=${_parameters.descending}" +
         "&include_docs=${_parameters.includeDocs}" +
         "&attachments=${_parameters.includeAttachments}";
@@ -129,53 +125,42 @@ class _WiltChangeNotification {
      * Open the request
      */
     try {
-
-      _httpAdapter.getString(url)..then((result) {
-
-        /**
-        * Process the change notification
-        */
-            try {
-
-              Map dbChange = JSON.decode(result);
-              processDbChange(dbChange);
-
-            } catch (e) {
+      _httpAdapter.getString(url)
+        ..then((result) {
 
           /**
+        * Process the change notification
+        */
+          try {
+            Map dbChange = JSON.decode(result);
+            processDbChange(dbChange);
+          } catch (e) {
+
+            /**
           * Recoverable error, send the client an error event
           */
-              print(
-                  "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
-              WiltChangeNotificationEvent notification =
-                  new WiltChangeNotificationEvent.decodeError(result, e.toString());
+            print(
+                "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
+            WiltChangeNotificationEvent notification =
+                new WiltChangeNotificationEvent.decodeError(
+                    result, e.toString());
 
-              _changeNotification.add(notification);
-
-            }
-
-
-          });
-
-
-
+            _changeNotification.add(notification);
+          }
+        });
     } catch (e) {
 
       /**
        * Unrecoverable error, send the client an abort event
        */
       print(
-          "WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}"
-          );
+          "WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}");
       WiltChangeNotificationEvent notification =
           new WiltChangeNotificationEvent.abort(e.toString());
 
       _changeNotification.add(notification);
-
     }
-
   }
-
 
   /**
    * Database change updates
@@ -186,14 +171,13 @@ class _WiltChangeNotification {
      * Check for an error response
      */
     if (change.containsKey('error')) {
-
       WiltChangeNotificationEvent notification =
-          new WiltChangeNotificationEvent.couchDbError(change['error'], change['reason']);
+          new WiltChangeNotificationEvent.couchDbError(
+              change['error'], change['reason']);
 
       _changeNotification.add(notification);
 
       return;
-
     }
 
     /**
@@ -206,61 +190,45 @@ class _WiltChangeNotification {
      */
     List results = change['results'];
     if (results.isEmpty) {
-
-
       WiltChangeNotificationEvent notification =
           new WiltChangeNotificationEvent.sequence(_sequence);
 
       _changeNotification.add(notification);
 
       return;
-
     }
 
     results.forEach((Map result) {
-
       Map changes = result['changes'][0];
 
       /**
        * Check for delete or update
        */
       if (result.containsKey('deleted')) {
-
         WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
-            result['seq']);
+            new WiltChangeNotificationEvent.delete(
+                result['id'], changes['rev'], result['seq']);
 
         _changeNotification.add(notification);
-
       } else {
-
         jsonobject.JsonObject document = null;
         if (result.containsKey('doc')) {
-
           document = new jsonobject.JsonObject.fromMap(result['doc']);
-
         }
         WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
-            result['seq'], document);
+            new WiltChangeNotificationEvent.update(
+                result['id'], changes['rev'], result['seq'], document);
 
         _changeNotification.add(notification);
-
       }
-
-
     });
-
-
   }
 
   /**
    * Stop change notifications
    */
   void stopNotifications() {
-
     _timer.cancel();
-
   }
 
   /**
@@ -278,7 +246,5 @@ class _WiltChangeNotification {
      * Start change notifications
      */
     _requestChanges(_timer);
-
   }
-
 }
