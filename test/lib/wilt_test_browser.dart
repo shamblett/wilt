@@ -656,7 +656,21 @@ main() {
         completer(e);
       });
     });
+
+    test("Start Notifications no Auth Credentials", () {
+      WiltBrowserClient wilting =
+          new WiltBrowserClient(hostName, serverPort, scheme);
+
+      try {
+        wilting.startChangeNotification(null);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
+      }
+      ;
+    });
   });
+  
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
 
@@ -672,7 +686,6 @@ main() {
     String docId = null;
     String docRev = null;
     String putId = 'mytestid';
-    String putId2 = 'mytestid2';
     String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
     String returnedDocRev;
@@ -1156,11 +1169,9 @@ main() {
     }
 
     /* Setup */
-    String docId = null;
-    String docRev = null;
+
     String putId = 'mytestid';
     String putId2 = 'mytestid2';
-    String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
 
     test("Get All Docs  - Include docs", () {
@@ -2053,10 +2064,6 @@ main() {
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
     /* Create our Wilt */
     WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
@@ -2125,10 +2132,10 @@ main() {
         if (e.docId == 'mytestid3') expect(
             e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
-
-          /* Only version 1.6 
           List attachments = WiltUserUtils.getAttachments(e.document);
-          expect(attachments[0].data, pngImage); */
+          List attachments = WiltUserUtils.getAttachments(e.document);
+          expect(attachments[0].name, 'attachmentName');
+          expect(attachments[0].data.content_type, "image/png; charset=utf-8");
           completer();
         }
       });
@@ -2150,8 +2157,6 @@ main() {
     });
 
     test("Check Notification Pause", () {
-      int resLength = -1;
-
       var completer = expectAsync0(() {
         expect(wilting.changeNotificationsPaused, true);
       });

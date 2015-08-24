@@ -690,6 +690,20 @@ main() {
         completer(e);
       });
     });
+
+    test("Start Notifications no Auth Credentials", () {
+      WiltServerClient wilting =
+          new WiltServerClient(hostName, serverPort, scheme);
+
+      try {
+        wilting.startChangeNotification(null);
+      } catch (e) {
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(
+            e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
+      }
+      ;
+    });
   });
 
   /* Group 4 - Single documents and database methods */
@@ -2089,16 +2103,12 @@ main() {
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
     /* Create our Wilt */
     WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
-    /* Login if we are using authentication */
+    /* Login for change notification */
     if (userName != null) {
       wilting.login(userName, userPassword);
     }
@@ -2163,7 +2173,8 @@ main() {
             e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
           List attachments = WiltUserUtils.getAttachments(e.document);
-          expect(attachments[0].data, pngImage);
+          expect(attachments[0].name, 'attachmentName');
+          expect(attachments[0].data.content_type, "image/png; charset=utf-8");
           completer();
         }
       });
