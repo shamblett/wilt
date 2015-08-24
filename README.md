@@ -35,7 +35,6 @@ for further details.
 ## Contact
 
 Wilt is hosted [here](https://github.com/shamblett/wilt).
-API documents are [here](http://oscf.org.uk/dart/api/wilt/)
 Please use github to raise issues, any other queries you can direct to me
 at <steve.hamblett@linux.com>
 

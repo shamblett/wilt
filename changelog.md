@@ -1,4 +1,8 @@
 
+## 3.1.1
+
+Issue 17, CouchDb 1.6.1 updates
+
 ## 3.1.0
 
 Updates for Issues 13, 11 and 14
