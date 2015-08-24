@@ -12,6 +12,7 @@ library wiltServerClient;
 import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
+import 'package:crypto/crypto.dart';
 
 import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;
