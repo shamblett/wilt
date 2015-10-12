@@ -20,6 +20,7 @@ import 'package:wilt.dart';
 import 'package:wilt_browser_client.dart'; // Browser
 // or
 // import 'package:wilt_server_client.dart'; // Server
+import 'package:json_object/json_object.dart';
 
 main() {
 
@@ -30,12 +31,12 @@ main() {
 	void completer(res){ // Future interface
        
        // Only for the completion interface.
-       jsonobject.JsonObject res = wilting.completionResponse;
+       JsonObject res = wilting.completionResponse;
         
        /* Check for error */    
        if ( res.error ) {
          /* Process the error */
-         jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+         JsonObject errorResponse = res.jsonCouchResponse;
          String errorText = errorResponse.error;
          String reasonText = errorResponse.reason;
          int statusCode = res.errorCode;
@@ -43,7 +44,7 @@ main() {
        }
        
        /* Get the success response*/
-       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+       JsonObject successResponse = res.jsonCouchResponse;
        .... do other stuff
     }
     
