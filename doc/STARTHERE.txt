@@ -37,11 +37,11 @@ main() {
 	/**
 	* The 'completer' function for the WiltBrowserClient API call *
 	*/
-	void completer(){ // Completion interface
+	// void completer(){ // Completion interface
 	void completer(res){ // Future interface
        
        // Only for the completion interface.
-       JsonObject res = wilting.completionResponse;
+       // JsonObject res = wilting.completionResponse;
         
        /* Check for error */    
        if ( res.error ) {
@@ -59,7 +59,7 @@ main() {
     }
     
     /* Set the completion function */
-    wilting.resultCompletion = completer; //ONLY if you want the completion interface
+    // wilting.resultCompletion = completer; //ONLY if you want the completion interface
     
     /* Call the wilt API */
     wilting.getDocument("myuniqueid")..then((res) {
