@@ -59,7 +59,7 @@ main() {
     /* Set the database to use */
     wilting.db = "mydb";
     
-    */ Set the completion function */
+    /* Set the completion function */
     wilting.resultCompletion = completer; //ONLY if you want the completion interface
     
     /* Call the wilt API */
