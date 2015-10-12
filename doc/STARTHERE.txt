@@ -16,10 +16,10 @@ the future based API on each Wilt method.
 
 An annotated example of this using the WiltBrowserClient to get a document by id is shown below:-
 
-import '../lib/wilt.dart';
-import '../lib/wilt_browser_client.dart'; // Browser
+import 'package:wilt.dart';
+import 'package:wilt_browser_client.dart'; // Browser
 // or
-import '../lib/wilt_browser_server.dart'; // Browser
+// import 'package:wilt_server_client.dart'; // Server
 
 main() {
 
