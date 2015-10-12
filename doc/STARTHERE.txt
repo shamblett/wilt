@@ -51,7 +51,7 @@ main() {
     /**
     * Instantiate a WiltBrowserClient object.
     */
-    WiltBrowserClient wilting = new Wilt("localhost", 
+    WiltBrowserClient wilting = new WiltBrowserClient("localhost", 
                             "5984",
                             "http://");
                             // and you can register a global completer [completer]);
