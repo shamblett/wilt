@@ -23,6 +23,16 @@ import 'package:wilt_browser_client.dart'; // Browser
 import 'package:json_object/json_object.dart';
 
 main() {
+   /**
+    * Instantiate a WiltBrowserClient object.
+    */
+    WiltBrowserClient wilting = new WiltBrowserClient("localhost", 
+                            "5984",
+                            "http://");
+                            // and you can register a global completer [completer]);
+                            
+    /* Set the database to use */
+    wilting.db = "mydb";
 
 	/**
 	* The 'completer' function for the WiltBrowserClient API call *
@@ -47,18 +57,6 @@ main() {
        JsonObject successResponse = res.jsonCouchResponse;
        .... do other stuff
     }
-    
-    
-    /**
-    * Instantiate a WiltBrowserClient object.
-    */
-    WiltBrowserClient wilting = new WiltBrowserClient("localhost", 
-                            "5984",
-                            "http://");
-                            // and you can register a global completer [completer]);
-                            
-    /* Set the database to use */
-    wilting.db = "mydb";
     
     /* Set the completion function */
     wilting.resultCompletion = completer; //ONLY if you want the completion interface
