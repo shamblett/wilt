@@ -55,7 +55,7 @@ main() {
        
        /* Get the success response*/
        JsonObject successResponse = res.jsonCouchResponse;
-       .... do other stuff
+       // do other stuff
     }
     
     /* Set the completion function */
