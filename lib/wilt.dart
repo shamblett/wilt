@@ -12,13 +12,13 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 
-part 'src/Wilt.dart';
-part 'src/WiltException.dart';
-part 'src/WiltUserUtils.dart';
-part 'src/WiltChangeNotificationParameters.dart';
-part 'src/WiltChangeNotificationEvent.dart';
-part 'src/WiltChangeNotification.dart';
-part 'src/httpAdapters/WiltHTTPAdapter.dart';
+part 'src/wilt.dart';
+part 'src/wilt_exception.dart';
+part 'src/wilt_user_utils.dart';
+part 'src/wilt_change_notification_parameters.dart';
+part 'src/wilt_change_notification_event.dart';
+part 'src/wilt_change_notification.dart';
+part 'src/httpAdapters/wilt_http_adapter.dart';
 
 
 
