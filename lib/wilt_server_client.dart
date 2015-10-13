@@ -18,7 +18,7 @@ import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_object/json_object.dart' as jsonobject;
 
-part 'src/httpAdapters/WiltServerHTTPAdapter.dart';
+part 'src/httpAdapters/wilt_server_http_adapter.dart';
 
 /**
  * The Wilt server client
