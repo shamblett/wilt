@@ -16,26 +16,37 @@ the future based API on each Wilt method.
 
 An annotated example of this using the WiltBrowserClient to get a document by id is shown below:-
 
-import '../lib/wilt.dart';
-import '../lib/wilt_browser_client.dart'; // Browser
+import 'package:wilt.dart';
+import 'package:wilt_browser_client.dart'; // Browser
 // or
-import '../lib/wilt_browser_server.dart'; // Browser
+// import 'package:wilt_server_client.dart'; // Server
+import 'package:json_object/json_object.dart';
 
 main() {
+   /**
+    * Instantiate a WiltBrowserClient object.
+    */
+    WiltBrowserClient wilting = new WiltBrowserClient("localhost", 
+                            "5984",
+                            "http://");
+                            // and you can register a global completer [completer]);
+                            
+    /* Set the database to use */
+    wilting.db = "mydb";
 
 	/**
 	* The 'completer' function for the WiltBrowserClient API call *
 	*/
-	void completer(){ // Completion interface
+	// void completer(){ // Completion interface
 	void completer(res){ // Future interface
        
        // Only for the completion interface.
-       jsonobject.JsonObject res = wilting.completionResponse;
+       // JsonObject res = wilting.completionResponse;
         
        /* Check for error */    
        if ( res.error ) {
          /* Process the error */
-         jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+         JsonObject errorResponse = res.jsonCouchResponse;
          String errorText = errorResponse.error;
          String reasonText = errorResponse.reason;
          int statusCode = res.errorCode;
@@ -43,24 +54,12 @@ main() {
        }
        
        /* Get the success response*/
-       jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-       .... do other stuff
+       JsonObject successResponse = res.jsonCouchResponse;
+       // do other stuff
     }
     
-    
-    /**
-    * Instantiate a WiltBrowserClient object.
-    */
-    WiltBrowserClient wilting = new Wilt("localhost", 
-                            "5984",
-                            "http://");
-                            // and you can register a global completer [completer]);
-                            
-    /* Set the database to use */
-    wilting.db = "mydb";
-    
-    */ Set the completion function */
-    wilting.resultCompletion = completer; //ONLY if you want the completion interface
+    /* Set the completion function */
+    // wilting.resultCompletion = completer; //ONLY if you want the completion interface
     
     /* Call the wilt API */
     wilting.getDocument("myuniqueid")..then((res) {
