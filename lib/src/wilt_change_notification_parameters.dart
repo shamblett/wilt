@@ -55,7 +55,7 @@ class WiltChangeNotificationParameters {
    * 
    * Include any associated document attachments with each result. 
    * This will retrieve the body of the attachment in Base64 format
-   * as well as the stub data that is normally suppplied.
+   * as well as the stub data that is normally supplied.
    */
   bool _includeAttachments = false;
   bool get includeAttachments => _includeAttachments;

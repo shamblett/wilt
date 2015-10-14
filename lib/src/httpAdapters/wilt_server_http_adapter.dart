@@ -89,7 +89,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
           /* Set the response headers */
           jsonResponse.allResponseHeaders = response.headers;
           /**
-            * Complete the reequest
+            * Complete the request
             */
           if (!completer.isCompleted) completer.complete(jsonResponse);
         }
@@ -103,7 +103,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
           /* Set the response headers */
           jsonResponse.allResponseHeaders = response.headers;
           /**
-           * Complete the reequest
+           * Complete the request
            */
           if (!completer.isCompleted) completer.complete(jsonResponse);
         }
@@ -167,7 +167,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
             /* Set the response headers */
             jsonResponse.allResponseHeaders = response.headers;
             /**
-                * Complete the reequest
+                * Complete the request
                 */
             if (!completer.isCompleted) completer.complete(jsonResponse);
           }
@@ -228,7 +228,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.jsonCouchResponse = errorAsJson;
 
       /**
-       * Complete the reequest
+       * Complete the request
        */
       if (!completer.isCompleted) completer.complete(jsonResponse);
     }

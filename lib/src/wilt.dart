@@ -935,7 +935,7 @@ class Wilt {
    * Updates the login credentials in Wilt that will be used for all further
    * requests to CouchDB. Both user name and password must be set, even if one
    * or the other is '' i.e empty. After logging in all communication with CouchDB
-   * is made using the selected auithentication method.
+   * is made using the selected authentication method.
    */
   void login(String user, String password) {
     if ((user == null) || (password == null)) {
