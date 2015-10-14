@@ -16,7 +16,7 @@ import 'dart:async';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:crypto/crypto.dart';
 
-part 'src/httpAdapters/WiltBrowserHTTPAdapter.dart';
+part 'src/httpAdapters/wilt_browser_http_adapter.dart';
 
 /**
  * The Wilt browser client
