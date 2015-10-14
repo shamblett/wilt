@@ -82,7 +82,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
           /* Set the response headers */
           jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
           /**
-            * Complete the reequest
+            * Complete the request
             */
           if (!completer.isCompleted) completer.complete(jsonResponse);
         }
@@ -96,7 +96,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
           /* Set the response headers */
           jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
           /**
-           * Complete the reequest
+           * Complete the request
            */
           if (!completer.isCompleted) completer.complete(jsonResponse);
         }
@@ -154,7 +154,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.allResponseHeaders = req.getAllResponseHeaders();
 
       /**
-       * Complete the reequest
+       * Complete the request
        */
       if (!completer.isCompleted) completer.complete(jsonResponse);
 

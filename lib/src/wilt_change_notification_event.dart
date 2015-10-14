@@ -35,7 +35,7 @@ class WiltChangeNotificationEvent {
   /**
    * Decode error event
    * 
-   * The change notification recieved from CouchDB cannot be 
+   * The change notification received from CouchDB cannot be
    * transformed into valid JSON, this may be a temporary issue,
    * the client must decide whether to continue on or re-initialise
    * the change notification class.
@@ -45,7 +45,7 @@ class WiltChangeNotificationEvent {
   /**
    * CouchDb error event
    * 
-   * The change notification recieved from CouchDB indicates an error.
+   * The change notification received from CouchDB indicates an error.
    */
   static const String COUCHDB_ERROR = "couch";
   
@@ -53,7 +53,7 @@ class WiltChangeNotificationEvent {
    * Abort event
    * 
    * A fatal error in the HTTP client has been detected, the client must
-   * assume that on recieveing the event the change notification interface must
+   * assume that on receiving the event the change notification interface must
    * be re-initialised.
    */
   static const String ABORT = "abort";
