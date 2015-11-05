@@ -1,4 +1,8 @@
 
+## 3.1.2
+
+Update to latest HTTP package
+
 ## 3.1.1
 
 Issue 17, CouchDb 1.6.1 updates
