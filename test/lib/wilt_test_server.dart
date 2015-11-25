@@ -15,7 +15,6 @@ import 'package:crypto/crypto.dart';
 import 'wilt_test_config.dart';
 
 main() {
-
   /* Tests */
 
   /* Group 1 - WiltServerClient constructor tests */
@@ -413,9 +412,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .createAttachment(null, 'name', 'rev', 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -433,9 +431,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .createAttachment('id', null, 'rev', 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -453,9 +450,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .createAttachment('id', 'name', null, 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -473,9 +469,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .createAttachment('id', 'name', 'rev', null, payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.createAttachment('id', 'name', 'rev', null, payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -492,9 +487,8 @@ main() {
             WiltException.HEADER + WiltException.CREATE_ATT_NO_PAYLOAD);
       });
 
-      wilting
-          .createAttachment('id', 'name', 'rev', 'image/png', null)
-          .then((jsonobject.JsonObject res) {
+      wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -512,9 +506,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .updateAttachment(null, 'name', 'rev', 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -532,9 +525,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .updateAttachment('id', null, 'rev', 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -552,9 +544,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .updateAttachment('id', 'name', null, 'image/png', payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -572,9 +563,8 @@ main() {
       });
 
       String payload = 'Hello';
-      wilting
-          .updateAttachment('id', 'name', 'rev', null, payload)
-          .then((jsonobject.JsonObject res) {
+      wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -591,9 +581,8 @@ main() {
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_PAYLOAD);
       });
 
-      wilting
-          .updateAttachment('id', 'name', 'rev', 'image/png', null)
-          .then((jsonobject.JsonObject res) {
+      wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -610,9 +599,8 @@ main() {
             WiltException.HEADER + WiltException.DELETE_ATT_NO_DOC_ID);
       });
 
-      wilting
-          .deleteAttachment(null, 'name', 'rev')
-          .then((jsonobject.JsonObject res) {
+      wilting.deleteAttachment(null, 'name', 'rev').then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -629,9 +617,8 @@ main() {
             WiltException.HEADER + WiltException.DELETE_ATT_NO_NAME);
       });
 
-      wilting
-          .deleteAttachment('id', null, 'rev')
-          .then((jsonobject.JsonObject res) {
+      wilting.deleteAttachment('id', null, 'rev').then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -648,9 +635,8 @@ main() {
             WiltException.HEADER + WiltException.DELETE_ATT_NO_REV);
       });
 
-      wilting
-          .deleteAttachment('id', 'name', null)
-          .then((jsonobject.JsonObject res) {
+      wilting.deleteAttachment('id', 'name', null).then(
+          (jsonobject.JsonObject res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -699,8 +685,7 @@ main() {
         wilting.startChangeNotification(null);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(
-            e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
+        expect(e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
       }
       ;
     });
@@ -708,7 +693,6 @@ main() {
 
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
-
     /* Create our Wilt */
     WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
@@ -727,7 +711,6 @@ main() {
     String returnedDocRev;
 
     test("Create Database not authorized", () {
-
       /* Create a local wilting for this test */
       WiltServerClient localWilting =
           new WiltServerClient(hostName, serverPort, scheme);
@@ -1194,6 +1177,39 @@ main() {
 
   /* Group 5 - Bulk documents */
   group("5. Bulk Documents - ", () {
+    test("User Utils  - Various", () {
+      String id = "myId";
+      String rev = "1-765frd";
+      jsonobject.JsonObject record = new jsonobject.JsonObject();
+      record.name = "Steve";
+      record.tag = "MyTag";
+      jsonobject.JsonObject record2 = record;
+
+      record = WiltUserUtils.addDocumentIdJo(record, id);
+      String tmp = record.toString();
+      expect(tmp.contains('_id'), true);
+      expect(tmp.contains(id), true);
+
+      record = WiltUserUtils.addDocumentRevJo(record, rev);
+      tmp = record.toString();
+      expect(tmp.contains('_rev'), true);
+      expect(tmp.contains(rev), true);
+
+      record2 = WiltUserUtils.addDocumentIdRevJojsonobject(record, id, rev);
+      tmp = record.toString();
+      expect(tmp.contains('_rev'), true);
+      expect(tmp.contains(rev), true);
+      expect(tmp.contains('_id'), true);
+      expect(tmp.contains(id), true);
+
+      record2.name = "newName";
+      record2.tag = "2-uy6543";
+      List<jsonobject.JsonObject> jList = [record, record2];
+      String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
+      expect(bulk, isNotNull);
+      expect(bulk,
+          '{"docs":[ {"name":"Steve","tag":"MyTag","_id":"myId","_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543","_id":"myId","_rev":"1-765frd"}]}');
+    });
 
     /* Create our Wilt */
     WiltServerClient wilting =
@@ -1568,7 +1584,6 @@ main() {
 
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
-
     /* Create our Wilt */
     WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
@@ -1744,7 +1759,6 @@ main() {
 
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
-
     /* Create our Wilt */
     WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
@@ -1918,7 +1932,7 @@ main() {
         String contentType = successResponse.contentType;
         expect(contentType, equals('image/png; charset=utf-8'));
         /* Now get the document to get the new revision along
-         * with its attachment data 
+         * with its attachment data
          */
         wilting.getDocument('attachmentTestDoc', null, true)
           ..then((res) {
@@ -2103,7 +2117,6 @@ main() {
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
-
     /* Create our Wilt */
     WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
@@ -2132,10 +2145,10 @@ main() {
 
       wilting.changeNotification.listen((e) {
         count++;
-        if (e.docId == 'mytestid2') expect(
-            e.type, WiltChangeNotificationEvent.UPDATE);
-        if (e.docId == 'mytestid3') expect(
-            e.type, WiltChangeNotificationEvent.DELETE);
+        if (e.docId ==
+            'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
+        if (e.docId ==
+            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
       });
     });
@@ -2169,8 +2182,8 @@ main() {
           expect(document.version, 4);
           expect(document.author, "Me also and again");
         }
-        if (e.docId == 'mytestid3') expect(
-            e.type, WiltChangeNotificationEvent.DELETE);
+        if (e.docId ==
+            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
           List attachments = WiltUserUtils.getAttachments(e.document);
           expect(attachments[0].name, 'attachmentName');

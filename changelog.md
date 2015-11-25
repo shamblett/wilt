@@ -1,4 +1,8 @@
 
+## 3.2.0
+
+Issues 21, 22 and 23
+
 ## 3.1.2
 
 Update to latest HTTP package
