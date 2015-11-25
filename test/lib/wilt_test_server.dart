@@ -706,6 +706,7 @@ main() {
     String docId = null;
     String docRev = null;
     String putId = 'mytestid';
+    String putId2 = 'mytestid2';
     String putId3 = 'mytestid3';
     String copyId = 'mycopyid';
     String returnedDocRev;
@@ -1112,6 +1113,66 @@ main() {
       document.version = 1;
       document.author = "Its me again";
       wilting.putDocument(putId3, document)
+        ..then((res) {
+          completer(res);
+        });
+    });
+
+    test("Delete document preserve and check ", () {
+      var checkCompleter = expectAsync1((res) {
+        expect(res.method, Wilt.PUT_DOCUMENT);
+        try {
+          expect(res.error, isFalse);
+        } catch (e) {
+          logMessage("WILT::Delete document preserve and check deletion");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+        }
+
+        /* Check the document has been deleted */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String putDocId = successResponse.id;
+        expect(putDocId, equals(putId2));
+      });
+
+      var completer = expectAsync1((res) {
+        expect(res.method, Wilt.PUT_DOCUMENT);
+        try {
+          expect(res.error, isFalse);
+        } catch (e) {
+          logMessage("WILT::Delete document preserve and check");
+          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+        }
+
+        /* Get the documents id and re-get the document to check correctness */
+        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        String putDocId = successResponse.id;
+        expect(putDocId, equals(putId2));
+        String returnedDocRev = successResponse.rev;
+        /* Now delete the document and check it */
+        wilting.deleteDocument(putId2, returnedDocRev, true)
+          ..then((res) {
+            checkCompleter(res);
+          });
+      });
+
+      wilting.db = databaseNameServer;
+      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      document.title = "Created by a Put Request for preserve deleting";
+      document.version = 1;
+      document.author = "Its me again";
+      wilting.putDocument(putId2, document)
         ..then((res) {
           completer(res);
         });

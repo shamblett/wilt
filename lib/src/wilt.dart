@@ -15,47 +15,46 @@
 part of wilt;
 
 class Wilt {
-
   /**
-   *  URL constant for CouchDB SESSION function 
+   *  URL constant for CouchDB SESSION function
    */
   static const String SESSION = "/_session";
 
   /**
-   *  URL constant for CouchDB STATS function 
+   *  URL constant for CouchDB STATS function
    */
   static const String STATS = "/_stats";
 
   /**
-   *  URL constant for CouchDB ALLDBS function 
+   *  URL constant for CouchDB ALLDBS function
    */
   static const String ALLDBS = "/_all_dbs";
 
   /**
-   *  URL constant for CouchDB ALLDOCS function 
+   *  URL constant for CouchDB ALLDOCS function
    */
   static const String ALLDOCS = "/_all_docs";
 
   /**
-   *  URL constant for CouchDB BULKDOCS function 
+   *  URL constant for CouchDB BULKDOCS function
    */
   static const String BULKDOCS = "/_bulk_docs";
 
   /**
-   *  URL constant for CouchDB UUID function 
+   *  URL constant for CouchDB UUID function
    */
   static const String UUIDS = "/_uuids";
 
   /**
    *
-   * AUTH_BASIC denotes Basic HTTP authentication. 
+   * AUTH_BASIC denotes Basic HTTP authentication.
    * If login is called AUTH_BASIC is set, otherwise it defaults to AUTH_NONE
-   * 
+   *
    */
   static const String AUTH_BASIC = 'basic';
 
   /**
-   * No authentication 
+   * No authentication
    */
   static const String AUTH_NONE = 'none';
 
@@ -89,7 +88,7 @@ class Wilt {
   static const GET_ATTACHMENT = 'GET_ATTACH';
   static const GENERATE_IDS = 'GET_IDS';
 
-  /** 
+  /**
    * Database name
    */
   String _db = null;
@@ -101,19 +100,19 @@ class Wilt {
    */
   String changeNotificationDbName = null;
 
-  /** 
+  /**
    * Host name
    */
   String _host = null;
   String get host => _host;
 
-  /** 
+  /**
    * Port number
    */
   String _port = null;
   String get port => _port;
 
-  /** 
+  /**
    * HTTP scheme
    */
   String _scheme = null;
@@ -127,15 +126,15 @@ class Wilt {
   WiltHTTPAdapter get httpAdapter => _httpAdapter;
 
   /**
-   * Change notification 
+   * Change notification
    */
   _WiltChangeNotification _changeNotifier = null;
 
   /**
    * Change notification event stream
-   * 
+   *
    * This is a broadcast stream so can support more than one listener.
-   * 
+   *
    */
   Stream<WiltChangeNotificationEvent> get changeNotification =>
       _changeNotifier.changeNotification.stream;
@@ -145,19 +144,19 @@ class Wilt {
   bool get changeNotificationsPaused => _changeNotifier.pause;
 
   /**
-   * Completion function 
+   * Completion function
    */
   var _clientCompletion = null;
 
   /**
-   *  Completion callback 
+   *  Completion callback
    */
   set resultCompletion(var completion) {
     _clientCompletion = completion;
   }
 
   /**
-   *  Response getter for completion callbacks 
+   *  Response getter for completion callbacks
    */
   jsonobject.JsonObject _completionResponse;
   jsonobject.JsonObject get completionResponse => _completionResponse;
@@ -176,7 +175,7 @@ class Wilt {
   String authenticationType = AUTH_NONE;
 
   /**
-   * Please use the wilt_browser_client or wilt_server_client import files to 
+   * Please use the wilt_browser_client or wilt_server_client import files to
    * instantiate a Wilt object for use in either the browser or server environment.
    * You can do this here but you must supply either a browser or server HTTP adapter
    * to use.
@@ -194,11 +193,10 @@ class Wilt {
 
   /**
    *  The internal HTTP request method. This wraps the
-   *  HTTP adapter class. 
+   *  HTTP adapter class.
   */
   Future<jsonobject.JsonObject> _httpRequest(String method, String url,
       {String data: null, Map headers: null}) {
-
     /* Build the request for the HttpAdapter*/
     Map wiltHeaders = new Map<String, String>();
     wiltHeaders["Accept"] = "application/json";
@@ -224,8 +222,8 @@ class Wilt {
     }
 
     /* Execute the request*/
-    Future<jsonobject.JsonObject> completion = _httpAdapter.httpRequest(
-        method, wiltUrl, data, wiltHeaders)
+    Future<jsonobject.JsonObject> completion =
+    _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)
       ..then((jsonResponse) {
         if (_clientCompletion != null) {
           _completionResponse = jsonResponse;
@@ -259,7 +257,7 @@ class Wilt {
   }
 
   /**
-   * Conditions the URL for use by Wilt and checks for 
+   * Conditions the URL for use by Wilt and checks for
    * a valid database by default.
    */
   String _conditionUrl(String url) {
@@ -295,13 +293,12 @@ class Wilt {
    * Basic method where only a URL and a method is passed.
    * Wilt applies no checks to this URL nor does it add the
    * database, the format of this is entirely up to the user.
-   * 
+   *
    * This can be used for CouchDb functions that are not directly supported by Wilt,
    * e.g views, attachments and design documents.
    */
   Future<jsonobject.JsonObject> httpRequest(String url,
       {String method: "GET"}) {
-
     /* Perform the request */
     return _httpRequest(method, url);
   }
@@ -380,7 +377,7 @@ class Wilt {
   /**
    * Performs an HTTP GET operation for the supplied document id and
    * optional revision. If withAttachments is set the the body of
-   * any attachments are also supplied, note this could make this 
+   * any attachments are also supplied, note this could make this
    * a large transfer.
    */
   Future getDocument(String id,
@@ -404,22 +401,41 @@ class Wilt {
 
   /**
    * DELETE's the specified document. Must have a revision.
+   * If preserve is set to true the whole document is preserved
+   * and marked as deleted otherwise only a stub document is
+   * kept. Default is to not preserve.
    */
-  Future deleteDocument(String id, String rev) {
+  Future deleteDocument(String id, String rev, [bool preserve = false]) {
     if ((id == null) || (rev == null)) {
       return _raiseException(WiltException.DELETE_DOC_NO_ID_REV);
     }
+    Completer completer = new Completer();
 
-    String url = id;
-    url = _setURLParameter(url, 'rev', rev);
-
-    url = _conditionUrl(url);
-    return _httpRequest('DELETE_DOCUMENT', url);
+    /* Check the preserve flag */
+    if (preserve) {
+      getDocument(id).then((jsonobject.JsonObject res) {
+        if (res != null) {
+          jsonobject.JsonObject resp = res.jsonCouchResponse;
+          resp = WiltUserUtils.addDocumentDeleteJo(resp);
+          putDocument(id, resp).then((res1) {
+            completer.complete(res1);
+          });
+        } else {
+          completer.complete(null);
+        }
+      });
+      return completer.future;
+    } else {
+      String url = id;
+      url = _setURLParameter(url, 'rev', rev);
+      url = _conditionUrl(url);
+      return _httpRequest('DELETE_DOCUMENT', url);
+    }
   }
 
   /**
    * PUT's to the specified  document.
-   * 
+   *
    * For an update the revision must be specified, this can be in the
    * document body as a _rev parameter or specified in the call in which
    * case this will be added to the document body.
@@ -448,7 +464,7 @@ class Wilt {
   }
 
   /**
-   * PUT's to the specified  document where the document is supplied as 
+   * PUT's to the specified  document where the document is supplied as
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
   Future putDocumentString(String id, String document, [String rev = null]) {
@@ -491,7 +507,7 @@ class Wilt {
   }
 
   /**
-   * POST's to the specified  document where the document is supplied as 
+   * POST's to the specified  document where the document is supplied as
    * a JSON string. Must be used if '_id' and or '_rev' are needed.
    */
   Future postDocumentString(String document, {String path: null}) {
@@ -542,10 +558,12 @@ class Wilt {
    * The parameters should be self explanatory and are addative.
    * Refer to the CouchDb documentation for further explanation.
    */
-  Future getAllDocs({bool includeDocs: false, int limit: null,
-      String startKey: null, String endKey: null, List<String> keys: null,
+  Future getAllDocs({bool includeDocs: false,
+  int limit: null,
+  String startKey: null,
+  String endKey: null,
+  List<String> keys: null,
       bool descending: false}) {
-
     /* Validate the parameters */
     if ((limit != null) && (limit < 0)) {
       return _raiseException(WiltException.GET_ALL_DOCS_LIMIT);
@@ -590,7 +608,6 @@ class Wilt {
    * Bulk inserts a list of documents
    */
   Future bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
-
     /* Validate the parameters */
     if (docs == null) {
       return _raiseException(WiltException.BULK_NO_DOC_LIST);
@@ -625,7 +642,6 @@ class Wilt {
    * Must be used if '_id' and or '_rev' are needed in ANY of the documents
    */
   Future bulkString(String docs, [bool allOrNothing = false]) {
-
     /* Validate the parameters */
     if (docs == null) {
       return _raiseException(WiltException.BULK_STRING_NO_DOC);
@@ -697,6 +713,7 @@ class Wilt {
 
     return _httpRequest(DATABASE_INFO, url);
   }
+
   /**
    * Get current session information from CouchDB
    */
@@ -731,7 +748,6 @@ class Wilt {
    */
   Future createAttachment(String docId, String attachmentName, String rev,
       String contentType, String payload) {
-
     /**
     * Check all parameters are supplied
     */
@@ -782,7 +798,6 @@ class Wilt {
    */
   Future updateAttachment(String docId, String attachmentName, String rev,
       String contentType, String payload) {
-
     /**
     * Check all parameters are supplied
     */

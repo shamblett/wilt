@@ -72,6 +72,29 @@ class WiltUserUtils {
   }
 
   /**
+   * Adds a CouchDB _deleted to the JSON body of a document
+   */
+  static String addDocumentDeleted(jsonobject.JsonObject document) {
+    String temp = JSON.encode(document);
+    Map tempMap = JSON.decode(temp);
+    tempMap["_deleted"] = true;
+    return JSON.encode(tempMap);
+  }
+
+
+  /**
+   * Adds a CouchDB _deleted to the JSON body of a document
+   */
+  static jsonobject.JsonObject addDocumentDeleteJo(
+      jsonobject.JsonObject document) {
+    String temp = JSON.encode(document);
+    Map tempMap = JSON.decode(temp);
+    tempMap["_deleted"] = true;
+    return new jsonobject.JsonObject.fromMap(tempMap);
+  }
+
+
+  /**
    * Adds both a CouchDb _id and _rev to the JSON body of a document
    */
   static jsonobject.JsonObject addDocumentIdRevJojsonobject(
