@@ -176,8 +176,7 @@ main() {
 
       var completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(
-            e.toString(),
+        expect(e.toString(),
             WiltException.HEADER + WiltException.GET_DOC_REV_NO_ID);
       });
 
@@ -2228,13 +2227,15 @@ main() {
 
       var completer = expectAsync0(() {
         wilting.stopChangeNotification();
-        expect(count, 11);
+        expect(count, 12);
       });
 
       wilting.changeNotification.listen((e) {
         count++;
-        if (e.docId ==
-            'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
+        if (e.docId == 'mytestid2') expect(
+            (e.type == WiltChangeNotificationEvent.UPDATE) ||
+                (e.type == WiltChangeNotificationEvent.DELETE),
+            true);
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
@@ -2258,18 +2259,22 @@ main() {
       int count = 0;
 
       var completer = expectAsync0(() {
-        expect(count, 11);
+        expect(count, 12);
       });
 
       wilting.changeNotification.listen((e) {
         count++;
         if (e.docId == 'mytestid2') {
-          expect(e.type, WiltChangeNotificationEvent.UPDATE);
-          jsonobject.JsonObject document = e.document;
-          expect(document.title, "Created by a Put Request for updating ");
-          expect(document.version, 4);
-          expect(document.author, "Me also and again");
+          if (e.type == WiltChangeNotificationEvent.UPDATE) {
+            jsonobject.JsonObject document = e.document;
+            expect(document.title, "Created by a Put Request for updating ");
+            expect(document.version, 4);
+            expect(document.author, "Me also and again");
+          } else {
+            expect(e.type == WiltChangeNotificationEvent.DELETE, true);
+          }
         }
+
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
