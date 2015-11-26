@@ -170,6 +170,24 @@ main() {
       });
     });
 
+    test("Get Document Revision no id", () {
+      WiltServerClient wilting =
+      new WiltServerClient(hostName, serverPort, scheme);
+
+      var completer = expectAsync1((e) {
+        expect(e.runtimeType.toString(), 'WiltException');
+        expect(
+            e.toString(),
+            WiltException.HEADER + WiltException.GET_DOC_REV_NO_ID);
+      });
+
+      wilting.getDocumentRevision(null).then((jsonobject.JsonObject res) {
+        // nothing to do
+      }, onError: (WiltException e) {
+        completer(e);
+      });
+    });
+
     test("Delete Document no id", () {
       WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
@@ -982,6 +1000,7 @@ main() {
         expect(returnedDocId, equals(putId));
         String returnedDocRev = successResponse.rev;
         expect(returnedDocRev, isNot(equals(docRev)));
+        docRev = returnedDocRev;
       });
 
       var checkCompleter = expectAsync1((res) {
@@ -1055,6 +1074,14 @@ main() {
       wilting.putDocument(putId, document, returnedDocRev)
         ..then((res) {
           completer(res);
+        });
+    });
+
+    test("Get document revision and check ", () {
+      wilting.db = databaseNameServer;
+      wilting.getDocumentRevision(putId)
+        ..then((rev) {
+          expect(rev == docRev, true);
         });
     });
 

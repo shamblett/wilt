@@ -46,6 +46,11 @@ class Wilt {
   static const String UUIDS = "/_uuids";
 
   /**
+   * Etag header
+   */
+  static const ETAG = 'etag';
+
+  /**
    *
    * AUTH_BASIC denotes Basic HTTP authentication.
    * If login is called AUTH_BASIC is set, otherwise it defaults to AUTH_NONE
@@ -397,6 +402,33 @@ class Wilt {
 
     url = _conditionUrl(url);
     return _httpRequest('GET_DOCUMENT', url);
+  }
+
+  /**
+   * Gets a documents current revision, returns null if
+   * the document does not exist.
+   */
+  Future getDocumentRevision(String id) {
+    if (id == null) {
+      return _raiseException(WiltException.GET_DOC_REV_NO_ID);
+    }
+
+    Completer completer = new Completer();
+    head(id).then((res) {
+      jsonobject.JsonObject headers =
+      new jsonobject.JsonObject.fromMap(res.allResponseHeaders);
+      if (headers != null) {
+        if (headers.containsKey(ETAG)) {
+          String ver = headers.etag;
+          ver = ver.substring(1, ver.length - 1);
+          completer.complete(ver);
+        } else {
+          completer.complete(null);
+        }
+      }
+    });
+
+    return completer.future;
   }
 
   /**

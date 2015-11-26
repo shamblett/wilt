@@ -949,6 +949,7 @@ main() {
         expect(returnedDocId, equals(putId));
         String returnedDocRev = successResponse.rev;
         expect(returnedDocRev, isNot(equals(docRev)));
+        docRev = returnedDocRev;
       });
 
       var checkCompleter = expectAsync1((res) {
@@ -1022,6 +1023,14 @@ main() {
       wilting.putDocument(putId, document, returnedDocRev)
         ..then((res) {
           completer(res);
+        });
+    });
+
+    test("Get document revision and check ", () {
+      wilting.db = databaseNameServer;
+      wilting.getDocumentRevision(putId)
+        ..then((rev) {
+          expect(rev == docRev, true);
         });
     });
 

@@ -11,11 +11,12 @@
 part of wilt;
 
 class WiltException implements Exception {
-
   /* Exception message strings */
   static const HEADER = 'WiltException: ';
   static const NO_DATABASE_SPECIFIED = 'No database specified';
   static const GET_DOC_NO_ID = 'getDocument() must have a document id';
+  static const GET_DOC_REV_NO_ID =
+      'getDocumentRevision() must have a document id';
   static const DELETE_DOC_NO_ID_REV =
       'deleteDocument() expects a document id and a revision';
   static const PUT_DOC_NO_ID_BODY =
