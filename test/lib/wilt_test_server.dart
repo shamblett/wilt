@@ -2274,7 +2274,6 @@ main() {
             expect(e.type == WiltChangeNotificationEvent.DELETE, true);
           }
         }
-
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {

@@ -1758,16 +1758,12 @@ main() {
         });
     });
 
-    /* Doesnt work in CouchDb 1.6
     test("Generate Ids", () {
-
       var completer = expectAsync1((res) {
-
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
-
           logMessage("WILT::Generate Ids");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
@@ -1781,14 +1777,13 @@ main() {
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
-
       });
 
-      wilting.generateIds(10)..then((res) {
-            completer(res);
-          });
-
-    });*/
+      wilting.generateIds(10)
+        ..then((res) {
+          completer(res);
+        });
+    });
   });
 
   /* Group 7 - Attachment tests */
@@ -2171,13 +2166,15 @@ main() {
 
       var completer = expectAsync0(() {
         wilting.stopChangeNotification();
-        expect(count, 11);
+        expect(count, 12);
       });
 
       wilting.changeNotification.listen((e) {
         count++;
-        if (e.docId ==
-            'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
+        if (e.docId == 'mytestid2') expect(
+            (e.type == WiltChangeNotificationEvent.UPDATE) ||
+                (e.type == WiltChangeNotificationEvent.DELETE),
+            true);
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
@@ -2201,17 +2198,20 @@ main() {
       int count = 0;
 
       var completer = expectAsync0(() {
-        expect(count, 11);
+        expect(count, 12);
       });
 
       wilting.changeNotification.listen((e) {
         count++;
         if (e.docId == 'mytestid2') {
-          expect(e.type, WiltChangeNotificationEvent.UPDATE);
-          jsonobject.JsonObject document = e.document;
-          expect(document.title, "Created by a Put Request for updating ");
-          expect(document.version, 4);
-          expect(document.author, "Me also and again");
+          if (e.type == WiltChangeNotificationEvent.UPDATE) {
+            jsonobject.JsonObject document = e.document;
+            expect(document.title, "Created by a Put Request for updating ");
+            expect(document.version, 4);
+            expect(document.author, "Me also and again");
+          } else {
+            expect(e.type == WiltChangeNotificationEvent.DELETE, true);
+          }
         }
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);

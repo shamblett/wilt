@@ -1588,17 +1588,12 @@ main() {
       wilting.getAllDbs();
     });
 
-    /* Doesnt work in CouchDB 1.6
     test("Generate Ids", () {
-
-      var completer = expectAsync0(() {
-
-        jsonobject.JsonObject res = wilting.completionResponse;
+      var completer = expectAsync1((res) {
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
-
           logMessage("WILT::Generate Ids");
           jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           String errorText = errorResponse.error;
@@ -1612,13 +1607,11 @@ main() {
 
         jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
-
       });
 
       wilting.resultCompletion = completer;
       wilting.generateIds(10);
-
-    });*/
+    });
   });
 
   /* Group 7 - Attachment tests */
@@ -1963,130 +1956,6 @@ main() {
       wilting.db = databaseNameClientCompletion;
       wilting.deleteAttachment(
           'attachmentTestDoc', 'attachmentName', testDocRev);
-    });
-  });
-
-  /* Group 8 - Change Notifications */
-  group("Change Notification Tests - ", () {
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
-
-    /* Create our WiltBrowserClient */
-    WiltBrowserClient wilting = new WiltBrowserClient(hostName, port, scheme);
-    wilting.db = databaseNameClientCompletion;
-
-    /* Login if we are using authentication */
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
-
-    test("Start Change Notification", () {
-      void wrapper() {
-        wilting.startChangeNotification();
-      }
-
-      expect(wrapper, returnsNormally);
-    });
-
-    test("Check Change Notifications", () {
-      int count = 0;
-
-      var completer = expectAsync0(() {
-        wilting.stopChangeNotification();
-        expect(count, 11);
-      });
-
-      wilting.changeNotification.listen((e) {
-        count++;
-        if (e.docId ==
-            'mytestid2') expect(e.type, WiltChangeNotificationEvent.UPDATE);
-        if (e.docId ==
-            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
-        if (e.docId == 'anotherAttachmentTestDoc') completer();
-      });
-    });
-
-    test("Start Change Notification With Docs and Attachments", () {
-      WiltChangeNotificationParameters parameters =
-      new WiltChangeNotificationParameters();
-      parameters.includeDocs = true;
-      parameters.includeAttachments = true;
-      void wrapper() {
-        wilting.startChangeNotification(parameters);
-      }
-
-      expect(wrapper, returnsNormally);
-    });
-
-    test("Check Change Notifications With Docs", () {
-      int count = 0;
-
-      var completer = expectAsync0(() {
-        expect(count, 11);
-      });
-
-      wilting.changeNotification.listen((e) {
-        count++;
-        if (e.docId == 'mytestid2') {
-          expect(e.type, WiltChangeNotificationEvent.UPDATE);
-          jsonobject.JsonObject document = e.document;
-          expect(document.title, "Created by a Put Request for updating ");
-          expect(document.version, 4);
-          expect(document.author, "Me also and again");
-        }
-        if (e.docId ==
-            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
-        if (e.docId == 'anotherAttachmentTestDoc') {
-          /* Only version 1.6
-          List attachments = WiltUserUtils.getAttachments(e.document);
-          expect(attachments[0].data, pngImage); */
-          completer();
-        }
-      });
-    });
-
-    test("Notification Pause", () {
-      int count = 0;
-
-      var completer = expectAsync0(() {
-        expect(count, 3);
-        wilting.pauseChangeNotifications();
-      });
-
-      wilting.changeNotification.listen((e) {
-        count++;
-        expect(e.type, WiltChangeNotificationEvent.LAST_SEQUENCE);
-        if (count == 3) completer();
-      });
-    });
-
-    test("Check Notification Pause", () {
-      int resLength = -1;
-
-      var completer = expectAsync0(() {
-        expect(wilting.changeNotificationsPaused, true);
-      });
-
-      completer();
-    });
-
-    test("Notification Restart", () {
-      int count = 0;
-
-      var completer = expectAsync0(() {
-        expect(wilting.changeNotificationsPaused, false);
-        expect(count, 3);
-        wilting.stopChangeNotification();
-      });
-
-      wilting.restartChangeNotifications();
-      wilting.changeNotification.listen((e) {
-        count++;
-        expect(e.type, WiltChangeNotificationEvent.LAST_SEQUENCE);
-        if (count == 3) completer();
-      });
     });
   });
 }
