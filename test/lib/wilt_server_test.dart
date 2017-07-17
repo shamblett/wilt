@@ -5,23 +5,29 @@
  * Copyright :  S.Hamblett@OSCF
  */
 
-library wilt_test_server;
+library wilt_server_test;
 
 import 'package:wilt/wilt.dart';
 import 'package:wilt/wilt_server_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:crypto/crypto.dart';
 import 'wilt_test_config.dart';
 
-main() {
+void main() {
+
+  /* Helper functions */
+  void logMessage(String message) {
+    print(message);
+  }
+
   /* Tests */
 
   /* Group 1 - WiltServerClient constructor tests */
   group("1. Constructor Tests - ", () {
     test("No hostname", () {
       try {
-        WiltServerClient wilting =
+        final WiltServerClient wilting =
             new WiltServerClient(null, serverPort, scheme);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -32,7 +38,7 @@ main() {
 
     test("No port", () {
       try {
-        WiltServerClient wilting = new WiltServerClient(hostName, null, scheme);
+        final WiltServerClient wilting = new WiltServerClient(hostName, null, scheme);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
@@ -42,7 +48,7 @@ main() {
 
     test("No Scheme", () {
       try {
-        WiltServerClient wilting =
+        final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, null);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -53,7 +59,7 @@ main() {
 
     test("No HTTP Adapter", () {
       try {
-        WiltServerClient wilting =
+        final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, scheme, null);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -66,10 +72,10 @@ main() {
   /* Group 2 - Basic methods parameter validation  */
   group("2. Basic Methods Parameter Validation - ", () {
     test("No Database Set HEAD", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
@@ -83,10 +89,10 @@ main() {
     });
 
     test("No Database Set GET", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
@@ -100,10 +106,10 @@ main() {
     });
 
     test("No Database Set POST", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
@@ -117,10 +123,10 @@ main() {
     });
 
     test("No Database Set PUT", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
@@ -134,10 +140,10 @@ main() {
     });
 
     test("No Database Set DELETE", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
@@ -154,10 +160,10 @@ main() {
   /* Group 3 - Document/Database methods parameter validation  */
   group("3. Document/Database Parameter Validation - ", () {
     test("Get Document no id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
             e.toString(), WiltException.HEADER + WiltException.GET_DOC_NO_ID);
@@ -171,10 +177,10 @@ main() {
     });
 
     test("Get Document Revision no id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
       new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.GET_DOC_REV_NO_ID);
@@ -188,10 +194,10 @@ main() {
     });
 
     test("Delete Document no id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
@@ -205,10 +211,10 @@ main() {
     });
 
     test("Delete Document no rev", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
@@ -222,10 +228,10 @@ main() {
     });
 
     test("Put Document no id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
@@ -240,10 +246,10 @@ main() {
     });
 
     test("Put Document no data", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
@@ -257,10 +263,10 @@ main() {
     });
 
     test("Post Document no document body", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.POST_DOC_NO_BODY);
@@ -274,10 +280,10 @@ main() {
     });
 
     test("Post Document String no document string", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.POST_DOC_STRING_NO_BODY);
@@ -291,10 +297,10 @@ main() {
     });
 
     test("Create Database no name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_DB_NO_NAME);
@@ -308,10 +314,10 @@ main() {
     });
 
     test("Delete Database no name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_DB_NO_NAME);
@@ -325,10 +331,10 @@ main() {
     });
 
     test("All Docs invalid limit ", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.GET_ALL_DOCS_LIMIT);
@@ -342,10 +348,10 @@ main() {
     });
 
     test("Generate Ids invalid amount ", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
             e.toString(), WiltException.HEADER + WiltException.GEN_IDS_AMOUNT);
@@ -359,10 +365,10 @@ main() {
     });
 
     test("Copy document no source id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.COPY_DOC_NO_SRC_ID);
@@ -376,10 +382,10 @@ main() {
     });
 
     test("Copy document no destinationid", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.COPY_DOC_NO_DEST_ID);
@@ -393,7 +399,7 @@ main() {
     });
 
     test("Login null user name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
       try {
@@ -406,7 +412,7 @@ main() {
     });
 
     test("Login null password", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
       try {
@@ -419,16 +425,16 @@ main() {
     });
 
     test("Create Attachment no Doc Id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_ATT_NO_DOC_ID);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -438,16 +444,16 @@ main() {
     });
 
     test("Create Attachment no Attachment name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_ATT_NO_NAME);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -457,16 +463,16 @@ main() {
     });
 
     test("Create Attachment no Revision", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_ATT_NO_REV);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -476,16 +482,16 @@ main() {
     });
 
     test("Create Attachment no Content Type", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_ATT_NO_CONTENT_TYPE);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.createAttachment('id', 'name', 'rev', null, payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -495,10 +501,10 @@ main() {
     });
 
     test("Create Attachment no Payload", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.CREATE_ATT_NO_PAYLOAD);
@@ -513,16 +519,16 @@ main() {
     });
 
     test("Update Attachment no Doc Id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_DOC_ID);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -532,16 +538,16 @@ main() {
     });
 
     test("Update Attachment no Attachment name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_NAME);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -551,16 +557,16 @@ main() {
     });
 
     test("Update Attachment no Revision", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_REV);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -570,16 +576,16 @@ main() {
     });
 
     test("Update Attachment no Content Type", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
       });
 
-      String payload = 'Hello';
+      final String payload = 'Hello';
       wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
           (jsonobject.JsonObject res) {
         // nothing to do
@@ -589,10 +595,10 @@ main() {
     });
 
     test("Update Attachment no Payload", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.UPDATE_ATT_NO_PAYLOAD);
@@ -607,10 +613,10 @@ main() {
     });
 
     test("Delete Attachment no Doc Id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_ATT_NO_DOC_ID);
@@ -625,10 +631,10 @@ main() {
     });
 
     test("Delete Attachment no Attachment name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_ATT_NO_NAME);
@@ -643,10 +649,10 @@ main() {
     });
 
     test("Delete Attachment no Revision", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.DELETE_ATT_NO_REV);
@@ -661,10 +667,10 @@ main() {
     });
 
     test("Get Attachment no Doc Id", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
             WiltException.HEADER + WiltException.GET_ATT_NO_DOC_ID);
@@ -678,10 +684,10 @@ main() {
     });
 
     test("Get Attachment no Attachment name", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((e) {
+      final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
             e.toString(), WiltException.HEADER + WiltException.GET_ATT_NO_NAME);
@@ -695,7 +701,7 @@ main() {
     });
 
     test("Start Notifications no Auth Credentials", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
       try {
@@ -704,14 +710,13 @@ main() {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
       }
-      ;
     });
   });
 
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
     /* Create our Wilt */
-    WiltServerClient wilting =
+    final WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
     /* Login if we are using authentication */
@@ -720,27 +725,27 @@ main() {
     }
 
     /*Group setup */
-    String docId = null;
-    String docRev = null;
-    String putId = 'mytestid';
-    String putId2 = 'mytestid2';
-    String putId3 = 'mytestid3';
-    String copyId = 'mycopyid';
+    String docId;
+    String docRev;
+    final String putId = 'mytestid';
+    final String putId2 = 'mytestid2';
+    final String putId3 = 'mytestid3';
+    final String copyId = 'mycopyid';
     String returnedDocRev;
 
     test("Create Database not authorized", () {
       /* Create a local wilting for this test */
-      WiltServerClient localWilting =
+      final WiltServerClient localWilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
       localWilting.login('freddy', 'freddypass');
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
           expect(errorResponse.error, equals('unauthorized'));
           expect(
               errorResponse.reason, equals('Name or password is incorrect.'));
@@ -756,22 +761,22 @@ main() {
 
     /* Create the test database */
     test("Create Test Database", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Test Database Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -783,34 +788,34 @@ main() {
 
     /* Create a database then delete it */
     test("Delete Database", () {
-      var checkCompleter = expectAsync1((res) {
+      final  checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.DELETE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete Database check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_DATABASE);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Database Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
@@ -828,18 +833,18 @@ main() {
     });
 
     test("HEAD null URL", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.HEAD);
         try {
           expect(res.error, isTrue);
         } catch (e) {
           logMessage("WILT::Head null URL");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
       });
@@ -852,48 +857,48 @@ main() {
     });
 
     test("Create document(POST) and check", () {
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(POST) and check creation");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, docId);
-        String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        final String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title, equals("Created by a Post Request"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("Me"));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.POST_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(POST) and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         docId = successResponse.id;
         expect(docId, isNot(isEmpty));
         /* Now get the document and check it */
@@ -904,7 +909,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Post Request";
       document.version = 1;
       document.author = "Me";
@@ -915,24 +920,24 @@ main() {
     });
 
     test("Create document(PUT) and check", () {
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(PUT) and check updated");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
         returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title, equals("Created by a Put Request"));
@@ -940,24 +945,24 @@ main() {
         expect(successResponse.author, equals("Me again"));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Put Document and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
         wilting.getDocument(putId)
@@ -967,7 +972,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request";
       document.version = 2;
       document.author = "Me again";
@@ -978,60 +983,60 @@ main() {
     });
 
     test("Update document(PUT) and check", () {
-      var checkUpdater = expectAsync1((res) {
+      final checkUpdater = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check updated");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = successResponse.id;
         expect(returnedDocId, equals(putId));
-        String returnedDocRev = successResponse.rev;
+        final String returnedDocRev = successResponse.rev;
         expect(returnedDocRev, isNot(equals(docRev)));
         docRev = returnedDocRev;
       });
 
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check created");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final  returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
-        String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        final String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         docRev = returnedDocRev;
         expect(successResponse.title,
             equals("Created by a Put Request for checking"));
         expect(successResponse.version, equals(3));
         expect(successResponse.author, equals("Me also"));
         /* Now alter the document using putDocument */
-        jsonobject.JsonObject document = new jsonobject.JsonObject();
+        final jsonobject.JsonObject document = new jsonobject.JsonObject();
         document.title = "Created by a Put Request for updating ";
         document.version = 4;
         document.author = "Me also and again";
-        String docString =
+        final String docString =
             WiltUserUtils.addDocumentRev(document, returnedDocRev);
         wilting.putDocumentString(putId, docString)
           ..then((res) {
@@ -1039,24 +1044,24 @@ main() {
           });
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
         wilting.getDocument(putId)
@@ -1066,7 +1071,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for checking";
       document.version = 3;
       document.author = "Me also";
@@ -1085,47 +1090,47 @@ main() {
     });
 
     test("Delete document and check ", () {
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.DELETE_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document and check deletion");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the document has been deleted */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
-        String returnedDocRev = successResponse.rev;
+        final String returnedDocRev = successResponse.rev;
         /* Now delete the document and check it */
         wilting.deleteDocument(putId3, returnedDocRev)
           ..then((res) {
@@ -1134,7 +1139,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for deleting";
       document.version = 1;
       document.author = "Its me again";
@@ -1145,47 +1150,47 @@ main() {
     });
 
     test("Delete document preserve and check ", () {
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document preserve and check deletion");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the document has been deleted */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document preserve and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
-        String returnedDocRev = successResponse.rev;
+        final String returnedDocRev = successResponse.rev;
         /* Now delete the document and check it */
         wilting.deleteDocument(putId2, returnedDocRev, true)
           ..then((res) {
@@ -1194,7 +1199,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for preserve deleting";
       document.version = 1;
       document.author = "Its me again";
@@ -1205,24 +1210,24 @@ main() {
     });
 
     test("Copy document", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.COPY_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Copy document");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the copied document */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String copyDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String copyDocId = successResponse.id;
         expect(copyDocId, equals(copyId));
       });
 
@@ -1235,26 +1240,26 @@ main() {
 
     /* Raw HTTP Request */
     test("Raw HTTP Request", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Raw HTTP Request failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
       });
 
-      String url = "/$databaseNameServer/$putId";
+      final String url = "/$databaseNameServer/$putId";
       wilting.httpRequest(url)
         ..then((res) {
           completer(res);
@@ -1265,8 +1270,8 @@ main() {
   /* Group 5 - Bulk documents */
   group("5. Bulk Documents - ", () {
     test("User Utils  - Various", () {
-      String id = "myId";
-      String rev = "1-765frd";
+      final String id = "myId";
+      final String rev = "1-765frd";
       jsonobject.JsonObject record = new jsonobject.JsonObject();
       record.name = "Steve";
       record.tag = "MyTag";
@@ -1291,15 +1296,15 @@ main() {
 
       record2.name = "newName";
       record2.tag = "2-uy6543";
-      List<jsonobject.JsonObject> jList = [record, record2];
-      String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
+      final List<jsonobject.JsonObject> jList = [record, record2];
+      final String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
       expect(bulk, isNotNull);
       expect(bulk,
           '{"docs":[ {"name":"Steve","tag":"MyTag","_id":"myId","_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543","_id":"myId","_rev":"1-765frd"}]}');
     });
 
     /* Create our Wilt */
-    WiltServerClient wilting =
+    final WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
     /* Login if we are using authentication */
@@ -1308,31 +1313,31 @@ main() {
     }
 
     /* Setup */
-    String putId = 'mytestid';
-    String putId2 = 'mytestid2';
-    String copyId = 'mycopyid';
+    final String putId = 'mytestid';
+    final String putId2 = 'mytestid2';
+    final String copyId = 'mycopyid';
 
     test("Get All Docs  - Include docs", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - Include docs");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
         expect(successResponse.rows[2].id, equals(putId));
@@ -1349,26 +1354,26 @@ main() {
     });
 
     test("Get All Docs  - limit", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - limit");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, isNot(equals(putId)));
         expect(successResponse.rows[0].id, isNot(equals(putId2)));
@@ -1390,26 +1395,26 @@ main() {
     });
 
     test("Get All Docs  - start key", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - start key");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
         int count = 0;
@@ -1430,26 +1435,26 @@ main() {
     });
 
     test("Get All Docs  - end key", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Get All Docs  - end key");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
         int count = 0;
@@ -1470,26 +1475,26 @@ main() {
     });
 
     test("Get All Docs - key list", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Get All Docs  - key list");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
         expect(successResponse.rows[1].key, equals(putId2));
@@ -1504,7 +1509,7 @@ main() {
         wilting.login(userName, userPassword);
       }
       wilting.db = databaseNameServer;
-      List keyList = new List<String>();
+      final List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
       wilting.getAllDocs(keys: keyList)
@@ -1514,26 +1519,26 @@ main() {
     });
 
     test("Get All Docs  - descending", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDOCS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - descending");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(putId));
         expect(successResponse.rows[0].key, equals(putId2));
@@ -1548,7 +1553,7 @@ main() {
         wilting.login(userName, userPassword);
       }
       wilting.db = databaseNameServer;
-      List keyList = new List<String>();
+      final List keyList = new List<String>();
       keyList.add(putId);
       keyList.add(putId2);
       wilting.getAllDocs(keys: keyList, descending: true)
@@ -1558,26 +1563,26 @@ main() {
     });
 
     test("Bulk Insert Auto Keys", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.BULK);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Bulk Insert Auto Keys");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse[0].ok, isTrue);
         expect(successResponse[1].ok, isTrue);
         expect(successResponse[2].ok, isTrue);
@@ -1587,18 +1592,18 @@ main() {
         wilting.login(userName, userPassword);
       }
       wilting.db = databaseNameServer;
-      List docList = new List<jsonobject.JsonObject>();
-      jsonobject.JsonObject document1 = new jsonobject.JsonObject();
+      final List docList = new List<jsonobject.JsonObject>();
+      final jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
       document1.version = 1;
       document1.attribute = "Doc 1 attribute";
       docList.add(document1);
-      jsonobject.JsonObject document2 = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document2 = new jsonobject.JsonObject();
       document2.title = "Document 2";
       document2.version = 2;
       document2.attribute = "Doc 2 attribute";
       docList.add(document2);
-      jsonobject.JsonObject document3 = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document3 = new jsonobject.JsonObject();
       document3.title = "Document 3";
       document3.version = 3;
       document3.attribute = "Doc 3 attribute";
@@ -1611,26 +1616,26 @@ main() {
     });
 
     test("Bulk Insert Supplied Keys", () {
-      WiltServerClient wilting =
+      final WiltServerClient wilting =
           new WiltServerClient(hostName, serverPort, scheme);
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.BULK_STRING);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Bulk Insert Supplied Keys");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse[0].id, equals("MyBulkId1"));
         expect(successResponse[1].id, equals("MyBulkId2"));
         expect(successResponse[2].id, equals("MyBulkId3"));
@@ -1642,26 +1647,26 @@ main() {
       }
       wilting.db = databaseNameServer;
 
-      jsonobject.JsonObject document1 = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document1 = new jsonobject.JsonObject();
       document1.title = "Document 1";
       document1.version = 1;
       document1.attribute = "Doc 1 attribute";
-      String doc1 = WiltUserUtils.addDocumentId(document1, "MyBulkId1");
-      jsonobject.JsonObject document2 = new jsonobject.JsonObject();
+      final String doc1 = WiltUserUtils.addDocumentId(document1, "MyBulkId1");
+      final jsonobject.JsonObject document2 = new jsonobject.JsonObject();
       document2.title = "Document 2";
       document2.version = 2;
       document2.attribute = "Doc 2 attribute";
-      String doc2 = WiltUserUtils.addDocumentId(document2, "MyBulkId2");
-      jsonobject.JsonObject document3 = new jsonobject.JsonObject();
+      final String doc2 = WiltUserUtils.addDocumentId(document2, "MyBulkId2");
+      final jsonobject.JsonObject document3 = new jsonobject.JsonObject();
       document3.title = "Document 3";
       document3.version = 3;
       document3.attribute = "Doc 3 attribute";
-      String doc3 = WiltUserUtils.addDocumentId(document3, "MyBulkId3");
-      List docList = new List<String>();
+      final String doc3 = WiltUserUtils.addDocumentId(document3, "MyBulkId3");
+      final List docList = new List<String>();
       docList.add(doc1);
       docList.add(doc2);
       docList.add(doc3);
-      String docs = WiltUserUtils.createBulkInsertString(docList);
+      final String docs = WiltUserUtils.createBulkInsertString(docList);
       wilting.bulkString(docs)
         ..then((res) {
           completer(res);
@@ -1672,7 +1677,7 @@ main() {
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
     /* Create our Wilt */
-    WiltServerClient wilting =
+    final WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
     /* Login if we are using authentication */
@@ -1681,23 +1686,23 @@ main() {
     }
 
     test("Get Session Information", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_SESSION);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Session Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -1708,23 +1713,23 @@ main() {
     });
 
     test("Get Stats Information", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_STATS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Stats Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.couchdb, isNotNull);
       });
 
@@ -1735,23 +1740,23 @@ main() {
     });
 
     test("Get Database Information - default", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Database Information - default");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.db_name, equals(databaseNameServer));
       });
 
@@ -1763,23 +1768,23 @@ main() {
     });
 
     test("Get Database Information - specified", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.DATABASE_INFO);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Database Information - specified");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.db_name, equals(databaseNameServer));
       });
 
@@ -1790,23 +1795,23 @@ main() {
     });
 
     test("Get All DB's", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ALLDBS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Db's Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.contains(databaseNameServer), isTrue);
       });
 
@@ -1817,23 +1822,23 @@ main() {
     });
 
     test("Generate Ids", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GENERATE_IDS);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Generate Ids");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
       });
 
@@ -1847,7 +1852,7 @@ main() {
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
     /* Create our Wilt */
-    WiltServerClient wilting =
+    final WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
     /* Login if we are using authentication */
@@ -1856,38 +1861,38 @@ main() {
     }
 
     /* Globals for the group */
-    String testDocRev = null;
-    String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
+    String testDocRev;
+    final String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
         'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
         'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
         '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
-    String pngImageUpdate =
+    final String pngImageUpdate =
         'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
             'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
             'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
             '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
 
     test("Create document(PUT) for attachment tests and check", () {
-      var checkCompleter = expectAsync1((res) {
+      final checkCompleter = expectAsync1((res) {
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage(
               "WILT::Create Document(PUT) for attachment tests and check updated");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
@@ -1896,24 +1901,24 @@ main() {
         expect(successResponse.author, equals("SJH"));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.PUT_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Put Document for attachment tests and check");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String putDocId = successResponse.id;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String putDocId = successResponse.id;
         expect(putDocId, equals('attachmentTestDoc'));
         /* Now get the document and check it */
         wilting.getDocument('attachmentTestDoc')
@@ -1923,7 +1928,7 @@ main() {
       });
 
       wilting.db = databaseNameServer;
-      jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObject document = new jsonobject.JsonObject();
       document.title = "Created by a Put Request for attachment testing";
       document.version = 1;
       document.author = "SJH";
@@ -1934,23 +1939,23 @@ main() {
     });
 
     test("Create Attachment", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
       });
@@ -1964,59 +1969,59 @@ main() {
     });
 
     test("Get Create Attachment", () {
-      var revisionCompleter = expectAsync1((res) {
+      final revisionCompleter = expectAsync1((res) {
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Create Attachment Get Document Revision");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
             equals("Created by a Put Request for attachment testing"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("SJH"));
-        List attachments = WiltUserUtils.getAttachments(successResponse);
+        final List attachments = WiltUserUtils.getAttachments(successResponse);
         expect(attachments[0].name, 'attachmentName');
         expect(attachments[0].data.content_type, 'image/png; charset=utf-8');
         expect(attachments[0].data.length, anything);
-        List bytes = CryptoUtils.base64StringToBytes(attachments[0].data.data);
+        final List bytes = CryptoUtils.base64StringToBytes(attachments[0].data.data);
         expect(bytes, pngImage.codeUnits);
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Create Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
-        String payload = res.responseText;
+        final String payload = res.responseText;
         expect(payload, equals(pngImage));
-        String contentType = successResponse.contentType;
+        final String contentType = successResponse.contentType;
         expect(contentType, equals('image/png; charset=utf-8'));
         /* Now get the document to get the new revision along
          * with its attachment data
@@ -2035,23 +2040,23 @@ main() {
     });
 
     test("Update Attachment", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.UPDATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2064,24 +2069,24 @@ main() {
     });
 
     test("Get Update Attachment", () {
-      var revisionCompleter = expectAsync1((res) {
+      final revisionCompleter = expectAsync1((res) {
         expect(res.method, Wilt.GET_DOCUMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Update Attachment Get Document Revision");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
         }
 
         /* Check the documents parameters */
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
@@ -2090,28 +2095,28 @@ main() {
         expect(successResponse.author, equals("SJH"));
       });
 
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.GET_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Update Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        String payload = res.responseText;
+        final String payload = res.responseText;
         expect(payload, equals(pngImageUpdate));
-        String contentType = successResponse.contentType;
+        final String contentType = successResponse.contentType;
         expect(contentType, equals('image/png; charset=utf-8'));
         /* Now get the document to get the new revision  */
         wilting.getDocument('attachmentTestDoc')
@@ -2128,23 +2133,23 @@ main() {
     });
 
     test("Create Attachment With New Document", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2157,10 +2162,10 @@ main() {
     });
 
     test("Create Attachment Invalid Revision", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.CREATE_ATTACHMENT);
         expect(res.error, isTrue);
-        int statusCode = res.errorCode;
+        final int statusCode = res.errorCode;
         expect(statusCode, equals(0));
       });
 
@@ -2173,23 +2178,23 @@ main() {
     });
 
     test("Delete Attachment", () {
-      var completer = expectAsync1((res) {
+      final completer = expectAsync1((res) {
         expect(res.method, Wilt.DELETE_ATTACHMENT);
         try {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete Attachment Failed");
-          jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          String errorText = errorResponse.error;
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
-          String reasonText = errorResponse.reason;
+          final String reasonText = errorResponse.reason;
           logMessage("WILT::Reason is $reasonText");
-          int statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
           return;
         }
 
-        jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2205,7 +2210,7 @@ main() {
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
     /* Create our Wilt */
-    WiltServerClient wilting =
+    final WiltServerClient wilting =
         new WiltServerClient(hostName, serverPort, scheme);
 
     /* Login for change notification */
@@ -2225,7 +2230,7 @@ main() {
     test("Check Change Notifications", () {
       int count = 0;
 
-      var completer = expectAsync0(() {
+      final completer = expectAsync0(() {
         wilting.stopChangeNotification();
         expect(count, 12);
       });
@@ -2244,7 +2249,7 @@ main() {
 
     test("Start Change Notification With Docs and Attachments", () {
       wilting.db = databaseNameServer;
-      WiltChangeNotificationParameters parameters =
+      final WiltChangeNotificationParameters parameters =
           new WiltChangeNotificationParameters();
       parameters.includeDocs = true;
       parameters.includeAttachments = true;
@@ -2258,7 +2263,7 @@ main() {
     test("Check Change Notifications With Docs", () {
       int count = 0;
 
-      var completer = expectAsync0(() {
+      final completer = expectAsync0(() {
         expect(count, 12);
       });
 
@@ -2266,7 +2271,7 @@ main() {
         count++;
         if (e.docId == 'mytestid2') {
           if (e.type == WiltChangeNotificationEvent.UPDATE) {
-            jsonobject.JsonObject document = e.document;
+            final jsonobject.JsonObject document = e.document;
             expect(document.title, "Created by a Put Request for updating ");
             expect(document.version, 4);
             expect(document.author, "Me also and again");
@@ -2277,7 +2282,7 @@ main() {
         if (e.docId ==
             'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
-          List attachments = WiltUserUtils.getAttachments(e.document);
+          final List attachments = WiltUserUtils.getAttachments(e.document);
           expect(attachments[0].name, 'attachmentName');
           expect(attachments[0].data.content_type, "image/png; charset=utf-8");
           completer();
@@ -2288,7 +2293,7 @@ main() {
     test("Notification Pause", () {
       int count = 0;
 
-      var completer = expectAsync0(() {
+      final completer = expectAsync0(() {
         expect(count, 3);
         wilting.pauseChangeNotifications();
       });
@@ -2301,7 +2306,7 @@ main() {
     });
 
     test("Check Notification Pause", () {
-      var completer = expectAsync0(() {
+      final completer = expectAsync0(() {
         expect(wilting.changeNotificationsPaused, true);
       });
 
@@ -2311,7 +2316,7 @@ main() {
     test("Notification Restart", () {
       int count = 0;
 
-      var completer = expectAsync0(() {
+      final completer = expectAsync0(() {
         expect(wilting.changeNotificationsPaused, false);
         expect(count, 3);
         wilting.stopChangeNotification();

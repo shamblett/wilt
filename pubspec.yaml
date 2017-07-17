@@ -3,12 +3,14 @@ version: 3.2.1
 author: S. Hamblett <steve.hamblett@linux.com>
 description: A browser/server based  CouchDB library
 homepage: https://github.com/shamblett/wilt
+
 environment:
   sdk: '>=1.0.0 <2.0.0-dev.infinity'
 
 dependencies:
   browser: any
   crypto: '>=2.0.1 <3.0.0'
+  cryptoutils: '>=0.2.1 <=3.0.0'
   http: '>=0.11.3+13'
   json_object: '>=1.0.19+1'
 
