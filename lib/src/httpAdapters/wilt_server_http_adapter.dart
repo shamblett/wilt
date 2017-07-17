@@ -11,7 +11,7 @@
  *                      
  */
 
-part of wiltServerClient;
+part of wilt_server_client;
 
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   /// User for change notification authorization

@@ -29,7 +29,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -40,7 +40,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -50,7 +50,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -61,7 +61,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_NO_ADAPTER);
+            WiltException.header + WiltException.badConstNoAdapter);
       }
     });
   });
@@ -79,7 +79,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       }
     });
 
@@ -92,7 +92,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       }
     });
 
@@ -105,7 +105,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       }
     });
 
@@ -118,7 +118,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       }
     });
 
@@ -131,7 +131,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       }
     });
   });
@@ -149,7 +149,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GET_DOC_NO_ID);
+            e.toString(), WiltException.header + WiltException.getDocNoId);
       }
     });
 
@@ -162,7 +162,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+            WiltException.header + WiltException.deleteDocNoIdRev);
       }
     });
 
@@ -175,7 +175,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+            WiltException.header + WiltException.deleteDocNoIdRev);
       }
     });
 
@@ -189,7 +189,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+            WiltException.header + WiltException.putDocNoIdBody);
       }
     });
 
@@ -202,7 +202,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+            WiltException.header + WiltException.putDocNoIdBody);
       }
     });
 
@@ -216,7 +216,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.POST_DOC_NO_BODY);
+            WiltException.header + WiltException.postDocNoBody);
       }
     });
 
@@ -230,7 +230,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.POST_DOC_STRING_NO_BODY);
+            WiltException.header + WiltException.postDocStringNoBody);
       }
     });
 
@@ -243,7 +243,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_DB_NO_NAME);
+            WiltException.header + WiltException.createDbNoName);
       }
     });
 
@@ -256,7 +256,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DB_NO_NAME);
+            WiltException.header + WiltException.deleteDbNoName);
       }
     });
 
@@ -269,7 +269,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.GET_ALL_DOCS_LIMIT);
+            WiltException.header + WiltException.getAllDocsLimit);
       }
     });
 
@@ -282,7 +282,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GEN_IDS_AMOUNT);
+            e.toString(), WiltException.header + WiltException.genIdsAmount);
       }
     });
 
@@ -295,7 +295,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.COPY_DOC_NO_SRC_ID);
+            WiltException.header + WiltException.copyDocNoSrcId);
       }
     });
 
@@ -308,7 +308,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.COPY_DOC_NO_DEST_ID);
+            WiltException.header + WiltException.copyDocNoDestId);
       }
     });
 
@@ -321,7 +321,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
+            WiltException.header + WiltException.loginWrongParams);
       }
     });
 
@@ -334,7 +334,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
+            WiltException.header + WiltException.loginWrongParams);
       }
     });
 
@@ -348,7 +348,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.createAttNoDocId);
       }
     });
 
@@ -362,7 +362,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_NAME);
+            WiltException.header + WiltException.createAttNoName);
       }
     });
 
@@ -376,7 +376,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_REV);
+            WiltException.header + WiltException.createAttNoRev);
       }
     });
 
@@ -390,7 +390,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_CONTENT_TYPE);
+            WiltException.header + WiltException.createAttNoContentType);
       }
     });
 
@@ -403,7 +403,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_PAYLOAD);
+            WiltException.header + WiltException.createAttNoPayload);
       }
     });
 
@@ -417,7 +417,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.updateAttNoDocId);
       }
     });
 
@@ -431,7 +431,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_NAME);
+            WiltException.header + WiltException.updateAttNoName);
       }
     });
 
@@ -445,7 +445,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_REV);
+            WiltException.header + WiltException.updateAttNoRev);
       }
     });
 
@@ -459,7 +459,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
+            WiltException.header + WiltException.updateAttNoContentType);
       }
     });
 
@@ -472,7 +472,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_PAYLOAD);
+            WiltException.header + WiltException.updateAttNoPayload);
       }
     });
 
@@ -485,7 +485,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.deleteAttNoDocId);
       }
     });
 
@@ -498,7 +498,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_NAME);
+            WiltException.header + WiltException.deleteAttNoName);
       }
     });
 
@@ -511,7 +511,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_REV);
+            WiltException.header + WiltException.deleteAttNoRev);
       }
     });
 
@@ -524,7 +524,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.GET_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.getAttNoDocId);
       }
     });
 
@@ -537,7 +537,7 @@ main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GET_ATT_NO_NAME);
+            e.toString(), WiltException.header + WiltException.getAttNoName);
       }
     });
   });

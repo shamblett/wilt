@@ -11,7 +11,7 @@
  *                      
  */
 
-part of wiltBrowserClient;
+part of wilt_browser_client;
 
 class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
   /// User for change notification authorization

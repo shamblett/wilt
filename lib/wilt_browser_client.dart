@@ -7,7 +7,7 @@
  * An instance of Wilt specialised for use in the browser
  */
 
-library wiltBrowserClient;
+library wilt_browser_client;
 
 import 'package:wilt/wilt.dart';
 import 'dart:html' as html;
@@ -18,16 +18,11 @@ import 'package:cryptoutils/cryptoutils.dart';
 
 part 'src/httpAdapters/wilt_browser_http_adapter.dart';
 
-/**
- * The Wilt browser client
- */
+/// The Wilt browser client
 class WiltBrowserClient extends Wilt {
- 
-  static WiltBrowserHTTPAdapter browserHttpAdapter = new WiltBrowserHTTPAdapter();
-  
-  WiltBrowserClient(host, port, scheme, [Object clientCompletion]): super(host, port,
-      scheme, browserHttpAdapter, clientCompletion) {
+  static WiltBrowserHTTPAdapter browserHttpAdapter =
+      new WiltBrowserHTTPAdapter();
 
-  }
-
+  WiltBrowserClient(host, port, scheme, [Object clientCompletion])
+      : super(host, port, scheme, browserHttpAdapter, clientCompletion);
 }

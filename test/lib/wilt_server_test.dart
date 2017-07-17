@@ -32,7 +32,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -44,7 +44,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -56,7 +56,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_PARAMS);
+            WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -68,7 +68,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.BAD_CONST_NO_ADAPTER);
+            WiltException.header + WiltException.badConstNoAdapter);
       }
     });
   });
@@ -82,7 +82,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       });
 
       wilting.head(null).then((jsonobject.JsonObject res) {
@@ -99,7 +99,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       });
 
       wilting.get(null).then((jsonobject.JsonObject res) {
@@ -116,7 +116,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       });
 
       wilting.post(null, "1").then((jsonobject.JsonObject res) {
@@ -133,7 +133,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       });
 
       wilting.put(null, "1").then((jsonobject.JsonObject res) {
@@ -150,7 +150,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.NO_DATABASE_SPECIFIED);
+            WiltException.header + WiltException.noDatabaseSpecified);
       });
 
       wilting.delete(null).then((jsonobject.JsonObject res) {
@@ -170,7 +170,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GET_DOC_NO_ID);
+            e.toString(), WiltException.header + WiltException.getDocNoId);
       });
 
       wilting.getDocument(null).then((jsonobject.JsonObject res) {
@@ -187,7 +187,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.GET_DOC_REV_NO_ID);
+            WiltException.header + WiltException.getDocRevNoId);
       });
 
       wilting.getDocumentRevision(null).then((jsonobject.JsonObject res) {
@@ -204,7 +204,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+            WiltException.header + WiltException.deleteDocNoIdRev);
       });
 
       wilting.deleteDocument(null, null).then((jsonobject.JsonObject res) {
@@ -221,7 +221,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DOC_NO_ID_REV);
+            WiltException.header + WiltException.deleteDocNoIdRev);
       });
 
       wilting.deleteDocument('1', null).then((jsonobject.JsonObject res) {
@@ -238,7 +238,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+            WiltException.header + WiltException.putDocNoIdBody);
       });
 
       jsonobject.JsonObject doc;
@@ -256,7 +256,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.PUT_DOC_NO_ID_BODY);
+            WiltException.header + WiltException.putDocNoIdBody);
       });
 
       wilting.putDocument('1', null).then((jsonobject.JsonObject res) {
@@ -273,7 +273,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.POST_DOC_NO_BODY);
+            WiltException.header + WiltException.postDocNoBody);
       });
 
       wilting.postDocument(null).then((jsonobject.JsonObject res) {
@@ -290,7 +290,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.POST_DOC_STRING_NO_BODY);
+            WiltException.header + WiltException.postDocStringNoBody);
       });
 
       wilting.postDocumentString(null).then((jsonobject.JsonObject res) {
@@ -307,7 +307,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_DB_NO_NAME);
+            WiltException.header + WiltException.createDbNoName);
       });
 
       wilting.createDatabase(null).then((jsonobject.JsonObject res) {
@@ -324,7 +324,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_DB_NO_NAME);
+            WiltException.header + WiltException.deleteDbNoName);
       });
 
       wilting.deleteDatabase(null).then((jsonobject.JsonObject res) {
@@ -341,7 +341,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.GET_ALL_DOCS_LIMIT);
+            WiltException.header + WiltException.getAllDocsLimit);
       });
 
       wilting.getAllDocs(limit: -1).then((jsonobject.JsonObject res) {
@@ -358,7 +358,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GEN_IDS_AMOUNT);
+            e.toString(), WiltException.header + WiltException.genIdsAmount);
       });
 
       wilting.generateIds(-1).then((jsonobject.JsonObject res) {
@@ -375,7 +375,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.COPY_DOC_NO_SRC_ID);
+            WiltException.header + WiltException.copyDocNoSrcId);
       });
 
       wilting.copyDocument(null, '1').then((jsonobject.JsonObject res) {
@@ -392,7 +392,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.COPY_DOC_NO_DEST_ID);
+            WiltException.header + WiltException.copyDocNoDestId);
       });
 
       wilting.copyDocument('1', null).then((jsonobject.JsonObject res) {
@@ -411,7 +411,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
+            WiltException.header + WiltException.loginWrongParams);
       }
     });
 
@@ -424,7 +424,7 @@ void main() {
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.LOGIN_WRONG_PARAMS);
+            WiltException.header + WiltException.loginWrongParams);
       }
     });
 
@@ -435,7 +435,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.createAttNoDocId);
       });
 
       final String payload = 'Hello';
@@ -454,7 +454,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_NAME);
+            WiltException.header + WiltException.createAttNoName);
       });
 
       final String payload = 'Hello';
@@ -473,7 +473,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_REV);
+            WiltException.header + WiltException.createAttNoRev);
       });
 
       final String payload = 'Hello';
@@ -492,7 +492,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_CONTENT_TYPE);
+            WiltException.header + WiltException.createAttNoContentType);
       });
 
       final String payload = 'Hello';
@@ -511,7 +511,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.CREATE_ATT_NO_PAYLOAD);
+            WiltException.header + WiltException.createAttNoPayload);
       });
 
       wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
@@ -529,7 +529,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.updateAttNoDocId);
       });
 
       final String payload = 'Hello';
@@ -548,7 +548,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_NAME);
+            WiltException.header + WiltException.updateAttNoName);
       });
 
       final String payload = 'Hello';
@@ -567,7 +567,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_REV);
+            WiltException.header + WiltException.updateAttNoRev);
       });
 
       final String payload = 'Hello';
@@ -586,7 +586,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
+            WiltException.header + WiltException.updateAttNoContentType);
       });
 
       final String payload = 'Hello';
@@ -605,7 +605,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.UPDATE_ATT_NO_PAYLOAD);
+            WiltException.header + WiltException.updateAttNoPayload);
       });
 
       wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
@@ -623,7 +623,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.deleteAttNoDocId);
       });
 
       wilting.deleteAttachment(null, 'name', 'rev').then(
@@ -641,7 +641,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_NAME);
+            WiltException.header + WiltException.deleteAttNoName);
       });
 
       wilting.deleteAttachment('id', null, 'rev').then(
@@ -659,7 +659,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.DELETE_ATT_NO_REV);
+            WiltException.header + WiltException.deleteAttNoRev);
       });
 
       wilting.deleteAttachment('id', 'name', null).then(
@@ -677,7 +677,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
-            WiltException.HEADER + WiltException.GET_ATT_NO_DOC_ID);
+            WiltException.header + WiltException.getAttNoDocId);
       });
 
       wilting.getAttachment(null, 'name').then((jsonobject.JsonObject res) {
@@ -694,7 +694,7 @@ void main() {
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.HEADER + WiltException.GET_ATT_NO_NAME);
+            e.toString(), WiltException.header + WiltException.getAttNoName);
       });
 
       wilting.getAttachment('id', null).then((jsonobject.JsonObject res) {
@@ -712,7 +712,7 @@ void main() {
         wilting.startChangeNotification(null);
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(), WiltException.HEADER + WiltException.CN_NO_AUTH);
+        expect(e.toString(), WiltException.header + WiltException.cnNoAuth);
       }
     });
   });
@@ -2253,11 +2253,11 @@ void main() {
         count++;
         if (e.docId == 'mytestid2')
           expect(
-              (e.type == WiltChangeNotificationEvent.UPDATE) ||
-                  (e.type == WiltChangeNotificationEvent.DELETE),
+              (e.type == WiltChangeNotificationEvent.updatee) ||
+                  (e.type == WiltChangeNotificationEvent.deletee),
               true);
         if (e.docId == 'mytestid3')
-          expect(e.type, WiltChangeNotificationEvent.DELETE);
+          expect(e.type, WiltChangeNotificationEvent.deletee);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
       });
     });
@@ -2285,17 +2285,17 @@ void main() {
       wilting.changeNotification.listen((e) {
         count++;
         if (e.docId == 'mytestid2') {
-          if (e.type == WiltChangeNotificationEvent.UPDATE) {
+          if (e.type == WiltChangeNotificationEvent.updatee) {
             final jsonobject.JsonObject document = e.document;
             expect(document.title, "Created by a Put Request for updating ");
             expect(document.version, 4);
             expect(document.author, "Me also and again");
           } else {
-            expect(e.type == WiltChangeNotificationEvent.DELETE, true);
+            expect(e.type == WiltChangeNotificationEvent.deletee, true);
           }
         }
         if (e.docId == 'mytestid3')
-          expect(e.type, WiltChangeNotificationEvent.DELETE);
+          expect(e.type, WiltChangeNotificationEvent.deletee);
         if (e.docId == 'anotherAttachmentTestDoc') {
           final List attachments = WiltUserUtils.getAttachments(e.document);
           expect(attachments[0].name, 'attachmentName');
@@ -2315,7 +2315,7 @@ void main() {
 
       wilting.changeNotification.listen((e) {
         count++;
-        expect(e.type, WiltChangeNotificationEvent.LAST_SEQUENCE);
+        expect(e.type, WiltChangeNotificationEvent.lastSequence);
         if (count == 3) completer();
       });
     });
@@ -2340,7 +2340,7 @@ void main() {
       wilting.restartChangeNotifications();
       wilting.changeNotification.listen((e) {
         count++;
-        expect(e.type, WiltChangeNotificationEvent.LAST_SEQUENCE);
+        expect(e.type, WiltChangeNotificationEvent.lastSequence);
         if (count == 3) completer();
       });
     });

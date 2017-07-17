@@ -78,11 +78,11 @@ class Wilt {
   Wilt(this._host, this._port, this._scheme, this._httpAdapter,
       [this._clientCompletion = null]) {
     if ((host == null) || (port == null) || (scheme == null)) {
-      throw new WiltException(WiltException.BAD_CONST_PARAMS);
+      throw new WiltException(WiltException.badConstParams);
     }
 
     if (_httpAdapter == null) {
-      throw new WiltException(WiltException.BAD_CONST_NO_ADAPTER);
+      throw new WiltException(WiltException.badConstNoAdapter);
     }
   }
 
@@ -208,7 +208,7 @@ class Wilt {
   /// a valid database by default.
   String _conditionUrl(String url) {
     if (db == null) {
-      return WiltException.NO_DATABASE_SPECIFIED;
+      return WiltException.noDatabaseSpecified;
     }
     if (url == null) return '/';
     String urlRet = url;
@@ -247,8 +247,8 @@ class Wilt {
   /// the current database added.
   Future get(String url) {
     final String url1 = _conditionUrl(url);
-    if (url1 == WiltException.NO_DATABASE_SPECIFIED) {
-      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    if (url1 == WiltException.noDatabaseSpecified) {
+      return _raiseException(WiltException.noDatabaseSpecified);
     }
 
     /* Perform the get */
@@ -259,8 +259,8 @@ class Wilt {
   /// the current database added.
   Future head(String url) {
     final String url1 = _conditionUrl(url);
-    if (url1 == WiltException.NO_DATABASE_SPECIFIED) {
-      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    if (url1 == WiltException.noDatabaseSpecified) {
+      return _raiseException(WiltException.noDatabaseSpecified);
     }
 
     /* Perform the head */
@@ -271,8 +271,8 @@ class Wilt {
   /// the current database added.
   Future post(String url, String data, [Map headers]) {
     final String url1 = _conditionUrl(url);
-    if (url1 == WiltException.NO_DATABASE_SPECIFIED) {
-      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    if (url1 == WiltException.noDatabaseSpecified) {
+      return _raiseException(WiltException.noDatabaseSpecified);
     }
 
     /* Perform the post */
@@ -283,8 +283,8 @@ class Wilt {
   /// the current database added.
   Future put(String url, String data, [Map headers]) {
     final String url1 = _conditionUrl(url);
-    if (url == WiltException.NO_DATABASE_SPECIFIED) {
-      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    if (url == WiltException.noDatabaseSpecified) {
+      return _raiseException(WiltException.noDatabaseSpecified);
     }
 
     /* Perform the put */
@@ -295,8 +295,8 @@ class Wilt {
   /// the current database added.
   Future delete(String url) {
     final String url1 = _conditionUrl(url);
-    if (url == WiltException.NO_DATABASE_SPECIFIED) {
-      return _raiseException(WiltException.NO_DATABASE_SPECIFIED);
+    if (url == WiltException.noDatabaseSpecified) {
+      return _raiseException(WiltException.noDatabaseSpecified);
     }
 
     /* Perform the delete */
@@ -310,7 +310,7 @@ class Wilt {
   Future getDocument(String id,
       [String rev = null, bool withAttachments = false]) {
     if (id == null) {
-      return _raiseException(WiltException.GET_DOC_NO_ID);
+      return _raiseException(WiltException.getDocNoId);
     }
 
     String url = id;
@@ -330,7 +330,7 @@ class Wilt {
   /// the document does not exist.
   Future getDocumentRevision(String id) {
     if (id == null) {
-      return _raiseException(WiltException.GET_DOC_REV_NO_ID);
+      return _raiseException(WiltException.getDocRevNoId);
     }
 
     final Completer completer = new Completer();
@@ -357,7 +357,7 @@ class Wilt {
   /// kept. Default is to not preserve.
   Future deleteDocument(String id, String rev, [bool preserve = false]) {
     if ((id == null) || (rev == null)) {
-      return _raiseException(WiltException.DELETE_DOC_NO_ID_REV);
+      return _raiseException(WiltException.deleteDocNoIdRev);
     }
     final Completer completer = new Completer();
 
@@ -391,7 +391,7 @@ class Wilt {
   Future putDocument(String id, jsonobject.JsonObject document,
       [String rev = null]) {
     if ((id == null) || (document == null)) {
-      return _raiseException(WiltException.PUT_DOC_NO_ID_BODY);
+      return _raiseException(WiltException.putDocNoIdBody);
     }
 
     /* Check for a revision */
@@ -404,7 +404,7 @@ class Wilt {
         jsonData = JSON.encode(document);
       }
     } catch (e) {
-      return _raiseException(WiltException.PUT_DOC_CANT_STRINGIFY);
+      return _raiseException(WiltException.putDocCantStringify);
     }
 
     final String url = _conditionUrl(id);
@@ -415,7 +415,7 @@ class Wilt {
   /// a JSON string. Must be used if '_id' and or '_rev' are needed.
   Future putDocumentString(String id, String document, [String rev = null]) {
     if ((id == null) || (document == null)) {
-      return _raiseException(WiltException.PUT_DOC_STRING_NO_ID_BODY);
+      return _raiseException(WiltException.putDocStringNoIdBody);
     }
 
     /* Check for a revision */
@@ -431,7 +431,7 @@ class Wilt {
   /// An optional path to the document can be specified.
   Future postDocument(jsonobject.JsonObject document, {String path: null}) {
     if (document == null) {
-      return _raiseException(WiltException.POST_DOC_NO_BODY);
+      return _raiseException(WiltException.postDocNoBody);
     }
 
     String url = "";
@@ -445,7 +445,7 @@ class Wilt {
     try {
       jsonData = JSON.encode(document);
     } catch (e) {
-      return _raiseException(WiltException.POST_DOC_CANT_STRINGIFY);
+      return _raiseException(WiltException.postDocCantStringify);
     }
 
     url = _conditionUrl(url);
@@ -456,7 +456,7 @@ class Wilt {
   /// a JSON string. Must be used if '_id' and or '_rev' are needed.
   Future postDocumentString(String document, {String path: null}) {
     if (document == null) {
-      return _raiseException(WiltException.POST_DOC_STRING_NO_BODY);
+      return _raiseException(WiltException.postDocStringNoBody);
     }
 
     String url = "";
@@ -476,11 +476,11 @@ class Wilt {
   Future copyDocument(String sourceId, String destinationId,
       [String rev = null]) {
     if (sourceId == null) {
-      return _raiseException(WiltException.COPY_DOC_NO_SRC_ID);
+      return _raiseException(WiltException.copyDocNoSrcId);
     }
 
     if (destinationId == null) {
-      return _raiseException(WiltException.COPY_DOC_NO_DEST_ID);
+      return _raiseException(WiltException.copyDocNoDestId);
     }
 
     String url = sourceId;
@@ -507,7 +507,7 @@ class Wilt {
       bool descending: false}) {
     /* Validate the parameters */
     if ((limit != null) && (limit < 0)) {
-      return _raiseException(WiltException.GET_ALL_DOCS_LIMIT);
+      return _raiseException(WiltException.getAllDocsLimit);
     }
 
     String url = alldocs;
@@ -549,7 +549,7 @@ class Wilt {
   Future bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
     /* Validate the parameters */
     if (docs == null) {
-      return _raiseException(WiltException.BULK_NO_DOC_LIST);
+      return _raiseException(WiltException.bulkNoDocList);
     }
 
     String url = bulkdocs;
@@ -565,7 +565,7 @@ class Wilt {
     try {
       docString = JSON.encode(documentMap);
     } catch (e) {
-      return _raiseException(WiltException.BULK_CANT_STRINGIFY);
+      return _raiseException(WiltException.bulkCantStringify);
     }
 
     /* Must set the content type for a post */
@@ -581,7 +581,7 @@ class Wilt {
   Future bulkString(String docs, [bool allOrNothing = false]) {
     /* Validate the parameters */
     if (docs == null) {
-      return _raiseException(WiltException.BULK_STRING_NO_DOC);
+      return _raiseException(WiltException.bulkStringNoDoc);
     }
 
     String url = bulkdocs;
@@ -601,7 +601,7 @@ class Wilt {
   /// Creates a database with the specified name.
   Future createDatabase(String name) {
     if ((name == null)) {
-      return _raiseException(WiltException.CREATE_DB_NO_NAME);
+      return _raiseException(WiltException.createDbNoName);
     }
 
     /* The first char of the URL should be a slash. */
@@ -616,7 +616,7 @@ class Wilt {
   /// Deletes the specified database
   Future deleteDatabase(String name) {
     if (name == null) {
-      return _raiseException(WiltException.DELETE_DB_NO_NAME);
+      return _raiseException(WiltException.deleteDbNoName);
     }
 
     /* The first char of the URL should be a slash. */
@@ -675,23 +675,23 @@ class Wilt {
     * Check all parameters are supplied
     */
     if (docId == null) {
-      return _raiseException(WiltException.CREATE_ATT_NO_DOC_ID);
+      return _raiseException(WiltException.createAttNoDocId);
     }
 
     if (attachmentName == null) {
-      return _raiseException(WiltException.CREATE_ATT_NO_NAME);
+      return _raiseException(WiltException.createAttNoName);
     }
 
     if (rev == null) {
-      return _raiseException(WiltException.CREATE_ATT_NO_REV);
+      return _raiseException(WiltException.createAttNoRev);
     }
 
     if (contentType == null) {
-      return _raiseException(WiltException.CREATE_ATT_NO_CONTENT_TYPE);
+      return _raiseException(WiltException.createAttNoContentType);
     }
 
     if (payload == null) {
-      return _raiseException(WiltException.CREATE_ATT_NO_PAYLOAD);
+      return _raiseException(WiltException.createAttNoPayload);
     }
 
     /**
@@ -723,23 +723,23 @@ class Wilt {
     * Check all parameters are supplied
     */
     if (docId == null) {
-      return _raiseException(WiltException.UPDATE_ATT_NO_DOC_ID);
+      return _raiseException(WiltException.updateAttNoDocId);
     }
 
     if (attachmentName == null) {
-      return _raiseException(WiltException.UPDATE_ATT_NO_NAME);
+      return _raiseException(WiltException.updateAttNoName);
     }
 
     if (rev == null) {
-      return _raiseException(WiltException.UPDATE_ATT_NO_REV);
+      return _raiseException(WiltException.updateAttNoRev);
     }
 
     if (contentType == null) {
-      return _raiseException(WiltException.UPDATE_ATT_NO_CONTENT_TYPE);
+      return _raiseException(WiltException.updateAttNoContentType);
     }
 
     if (payload == null) {
-      return _raiseException(WiltException.UPDATE_ATT_NO_PAYLOAD);
+      return _raiseException(WiltException.updateAttNoPayload);
     }
 
     /**
@@ -758,15 +758,15 @@ class Wilt {
   /// Delete an attachment
   Future deleteAttachment(String docId, String attachmentName, String rev) {
     if (docId == null) {
-      return _raiseException(WiltException.DELETE_ATT_NO_DOC_ID);
+      return _raiseException(WiltException.deleteAttNoDocId);
     }
 
     if (attachmentName == null) {
-      return _raiseException(WiltException.DELETE_ATT_NO_NAME);
+      return _raiseException(WiltException.deleteAttNoName);
     }
 
     if (rev == null) {
-      return _raiseException(WiltException.DELETE_ATT_NO_REV);
+      return _raiseException(WiltException.deleteAttNoRev);
     }
 
     String url = "$docId/$attachmentName?rev=$rev";
@@ -778,11 +778,11 @@ class Wilt {
   /// Get an attachment
   Future getAttachment(String docId, String attachmentName) {
     if (docId == null) {
-      return _raiseException(WiltException.GET_ATT_NO_DOC_ID);
+      return _raiseException(WiltException.getAttNoDocId);
     }
 
     if (attachmentName == null) {
-      return _raiseException(WiltException.GET_ATT_NO_NAME);
+      return _raiseException(WiltException.getAttNoName);
     }
 
     String url = "$docId/$attachmentName";
@@ -800,7 +800,7 @@ class Wilt {
       [WiltChangeNotificationParameters parameters = null,
       String databaseName = null]) {
     if (_user == null) {
-      throw new WiltException(WiltException.CN_NO_AUTH);
+      throw new WiltException(WiltException.cnNoAuth);
     }
     String name;
     if (databaseName == null) {
@@ -830,11 +830,11 @@ class Wilt {
   void updateChangeNotificationParameters(
       WiltChangeNotificationParameters parameters) {
     if (parameters == null) {
-      throw new WiltException(WiltException.UPDATE_CNP_NO_PARAMS);
+      throw new WiltException(WiltException.updateCnpNoParams);
     }
 
     if (_changeNotifier == null) {
-      throw new WiltException(WiltException.UPDATE_CNP_NO_NOTIFIER);
+      throw new WiltException(WiltException.updateCnpNoNotifier);
     }
 
     _changeNotifier.parameters = parameters;
@@ -859,7 +859,7 @@ class Wilt {
   /// is made using the selected authentication method.
   void login(String user, String password) {
     if ((user == null) || (password == null)) {
-      throw new WiltException(WiltException.LOGIN_WRONG_PARAMS);
+      throw new WiltException(WiltException.loginWrongParams);
     }
 
     _user = user;
@@ -873,7 +873,7 @@ class Wilt {
   /// Ask CouchDB to generate document Id's.
   Future generateIds([int amount = 10]) {
     if (amount < 1) {
-      return _raiseException(WiltException.GEN_IDS_AMOUNT);
+      return _raiseException(WiltException.genIdsAmount);
     }
 
     String url = uuids;

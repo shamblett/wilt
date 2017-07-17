@@ -7,7 +7,7 @@
  * An instance of Wilt specialised for use in the server.
  */
 
-library wiltServerClient;
+library wilt_server_client;
 
 import 'dart:io';
 import 'dart:convert';
@@ -20,16 +20,10 @@ import 'package:json_object/json_object.dart' as jsonobject;
 
 part 'src/httpAdapters/wilt_server_http_adapter.dart';
 
-/**
- * The Wilt server client
- */
+/// The Wilt server client
 class WiltServerClient extends Wilt {
-  
   static WiltServerHTTPAdapter serverHttpAdapter = new WiltServerHTTPAdapter();
-    
-    WiltServerClient(host, port, scheme, [Object clientCompletion]): super(host, port,
-        scheme, serverHttpAdapter, clientCompletion) {
 
-    }
-
+  WiltServerClient(host, port, scheme, [Object clientCompletion])
+      : super(host, port, scheme, serverHttpAdapter, clientCompletion);
 }
