@@ -14,56 +14,39 @@
 part of wiltServerClient;
 
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
-
-  /**
-   * User for change notification authorization
-   */
+  /// User for change notification authorization
   String _user;
 
-  /**
-   * Password for change notification authorization
-   */
+  /// Password for change notification authorization
   String _password;
 
-  /**
-   * Auth Type for change notification authorization
-   */
+  /// Auth Type for change notification authorization
   String _authType;
 
-  /**
-   * HTTP client
-   */
+  /// HTTP client
   http.Client _client;
 
-  /**
-   *  Construction
-   */
+  /// Construction
   WiltServerHTTPAdapter() {
     _client = new http.Client();
   }
 
-  /**
-   * Processes the HTTP request, returning the server's response
-   * as a future
-   */
+  /// Processes the HTTP request, returning the server's response
+  /// as a future
   Future<jsonobject.JsonObject> httpRequest(String method, String url,
       [String data = null, Map headers = null]) {
-
     /**
-     *  Initialise 
+     *  Initialise
      */
-    Completer completer = new Completer();
+    final Completer completer = new Completer();
 
-    /**
-     * Successful completion
-     */
+    /// Successful completion
     void onSuccess(http.Response response) {
-
       /**
-       *  Process the success response, note that an error response from CouchDB is 
+       *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -82,7 +65,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
           couchResp = JSON.decode(response.body);
         } catch (e) {
           jsonResponse.error = true;
-          jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "JSON Decode Error";
           errorAsJson.reason = "None";
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -96,7 +79,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
           jsonResponse.error = true;
-          jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
           errorAsJson.error = "CouchDb Error";
           errorAsJson.reason = couchResp['reason'];
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -111,13 +94,13 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
         /**
          * Success response
          */
-        if (method != Wilt.HEAD) {
-          jsonobject.JsonObject successAsJson =
+        if (method != Wilt.headd) {
+          final jsonobject.JsonObject successAsJson =
               new jsonobject.JsonObject.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
-        jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+        final jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
         successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
@@ -131,16 +114,13 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       if (!completer.isCompleted) completer.complete(jsonResponse);
     }
 
-    /**
-     * Successful completion for Copy
-    */
+    /// Successful completion for Copy
     void onCopySuccess(http.StreamedResponse response) {
-
       /**
-       *  Process the success response, note that an error response from CouchDB is 
+       *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -160,7 +140,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
             couchResp = JSON.decode(text);
           } catch (e) {
             jsonResponse.error = true;
-            jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+            final jsonobject.JsonObject errorAsJson =
+                new jsonobject.JsonObject();
             errorAsJson.error = "JSON Decode Error";
             errorAsJson.reason = "None";
             jsonResponse.jsonCouchResponse = errorAsJson;
@@ -174,7 +155,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
           if ((couchResp is Map) && (couchResp.containsKey('error'))) {
             jsonResponse.error = true;
-            jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+            final jsonobject.JsonObject errorAsJson =
+                new jsonobject.JsonObject();
             errorAsJson.error = "CouchDb Error";
             errorAsJson.reason = couchResp['reason'];
             jsonResponse.jsonCouchResponse = errorAsJson;
@@ -189,13 +171,14 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
           /**
              * Success response
              */
-          if (method != Wilt.HEAD) {
-            jsonobject.JsonObject successAsJson =
+          if (method != Wilt.headd) {
+            final jsonobject.JsonObject successAsJson =
                 new jsonobject.JsonObject.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
         } else {
-          jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObject successAsJson =
+              new jsonobject.JsonObject();
           successAsJson.ok = true;
           successAsJson.contentType = response.headers['content-type'];
           jsonResponse.jsonCouchResponse = successAsJson;
@@ -211,18 +194,15 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       });
     }
 
-    /**
-     * Error completion
-     */
+    /// Error completion
     void onError(HttpException response) {
-
       /* Process the error response */
-      jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
       jsonResponse.method = method;
       jsonResponse.error = true;
       jsonResponse.successText = null;
       jsonResponse.errorCode = 0;
-      jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+      final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
       errorAsJson.error = "Invalid HTTP response";
       errorAsJson.reason = response.message;
       jsonResponse.jsonCouchResponse = errorAsJson;
@@ -236,35 +216,37 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     /**
      * Condition the input method string to get the HTTP method
      */
-    List temp = method.split('_');
-    String httpMethod = temp[0];
+    final List temp = method.split('_');
+    final String httpMethod = temp[0];
 
     /**
      * Set the content type header correctly
      */
     if (headers.containsKey('Content-Type')) {
-      String contentType = headers['Content-Type'];
+      final String contentType = headers['Content-Type'];
       headers.remove('Content-Type');
       headers['content-type'] = contentType;
     }
     /**
-     *  Query CouchDB over HTTP 
+     *  Query CouchDB over HTTP
      */
     if (httpMethod == "GET") {
       _client.get(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == "PUT") {
-      _client.put(url, headers: headers, body: data).then(onSuccess,
-          onError: onError);
+      _client
+          .put(url, headers: headers, body: data)
+          .then(onSuccess, onError: onError);
     } else if (httpMethod == "POST") {
-      _client.post(url, headers: headers, body: data).then(onSuccess,
-          onError: onError);
+      _client
+          .post(url, headers: headers, body: data)
+          .then(onSuccess, onError: onError);
     } else if (httpMethod == "HEAD") {
       _client.head(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == "DELETE") {
       _client.delete(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == "COPY") {
-      Uri encodedUrl = Uri.parse(url);
-      var request = new http.Request("COPY", encodedUrl);
+      final Uri encodedUrl = Uri.parse(url);
+      final request = new http.Request("COPY", encodedUrl);
       request.headers.addAll(headers);
       _client.send(request).then(onCopySuccess, onError: onError);
     }
@@ -272,40 +254,36 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     return completer.future;
   }
 
-  /**
-    *  Specialised 'get' for change notifications
-    */
+  /// Specialised 'get' for change notifications
   Future<String> getString(String url) {
-    Completer completer = new Completer<String>();
+    final Completer completer = new Completer<String>();
 
     /* Must have authentication */
-    Map wiltHeaders = new Map<String, String>();
+    final Map wiltHeaders = new Map<String, String>();
     wiltHeaders["Accept"] = "application/json";
     if (_user != null) {
       switch (_authType) {
-        case Wilt.AUTH_BASIC:
-          String authStringToEncode = "$_user:$_password";
-          String encodedAuthString =
+        case Wilt.authBasic:
+          final String authStringToEncode = "$_user:$_password";
+          final String encodedAuthString =
               CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
-          String authString = "Basic $encodedAuthString";
+          final String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;
 
-        case Wilt.AUTH_NONE:
+        case Wilt.authNone:
           break;
       }
     }
 
-    _client.get(url, headers:wiltHeaders).then((response) {
+    _client.get(url, headers: wiltHeaders).then((response) {
       completer.complete(response.body);
     });
 
     return completer.future;
   }
 
-  /**
-   * Authentication parameters for change notification
-   */
+  /// Authentication parameters for change notification
   void notificationAuthParams(String user, String password, String authType) {
     _user = user;
     _password = password;

@@ -11,11 +11,10 @@ import 'package:wilt/wilt.dart';
 import 'package:wilt/wilt_server_client.dart';
 import 'package:json_object/json_object.dart' as jsonobject;
 import 'package:test/test.dart';
-import 'package:crypto/crypto.dart';
+import 'package:cryptoutils/cryptoutils.dart';
 import 'wilt_test_config.dart';
 
 void main() {
-
   /* Helper functions */
   void logMessage(String message) {
     print(message);
@@ -29,6 +28,7 @@ void main() {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(null, serverPort, scheme);
+        wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
@@ -38,7 +38,9 @@ void main() {
 
     test("No port", () {
       try {
-        final WiltServerClient wilting = new WiltServerClient(hostName, null, scheme);
+        final WiltServerClient wilting =
+            new WiltServerClient(hostName, null, scheme);
+        wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
@@ -50,6 +52,7 @@ void main() {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, null);
+        wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
@@ -61,6 +64,7 @@ void main() {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, scheme, null);
+        wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(e.toString(),
@@ -178,7 +182,7 @@ void main() {
 
     test("Get Document Revision no id", () {
       final WiltServerClient wilting =
-      new WiltServerClient(hostName, serverPort, scheme);
+          new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -741,7 +745,7 @@ void main() {
       localWilting.login('freddy', 'freddypass');
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_DATABASE);
+        expect(res.method, Wilt.createDatabasee);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -762,7 +766,7 @@ void main() {
     /* Create the test database */
     test("Create Test Database", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_DATABASE);
+        expect(res.method, Wilt.createDatabasee);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -788,8 +792,8 @@ void main() {
 
     /* Create a database then delete it */
     test("Delete Database", () {
-      final  checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.DELETE_DATABASE);
+      final checkCompleter = expectAsync1((res) {
+        expect(res.method, Wilt.deleteDatabasee);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -805,7 +809,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_DATABASE);
+        expect(res.method, Wilt.createDatabasee);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -834,7 +838,7 @@ void main() {
 
     test("HEAD null URL", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.HEAD);
+        expect(res.method, Wilt.headd);
         try {
           expect(res.error, isTrue);
         } catch (e) {
@@ -858,7 +862,7 @@ void main() {
 
     test("Create document(POST) and check", () {
       final checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.GET_DOCUMENT);
+        expect(res.method, Wilt.getDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -874,16 +878,18 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, docId);
-        final String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        final String returnedDocRev =
+            WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title, equals("Created by a Post Request"));
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals("Me"));
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.POST_DOCUMENT);
+        expect(res.method, Wilt.postDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -921,7 +927,7 @@ void main() {
 
     test("Create document(PUT) and check", () {
       final checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.GET_DOCUMENT);
+        expect(res.method, Wilt.getDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -937,7 +943,8 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
         returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title, equals("Created by a Put Request"));
@@ -946,7 +953,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -984,7 +991,7 @@ void main() {
 
     test("Update document(PUT) and check", () {
       final checkUpdater = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1023,9 +1030,10 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final  returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
-        final String returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+        final String returnedDocRev =
+            WiltUserUtils.getDocumentRev(successResponse);
         docRev = returnedDocRev;
         expect(successResponse.title,
             equals("Created by a Put Request for checking"));
@@ -1045,7 +1053,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1091,7 +1099,7 @@ void main() {
 
     test("Delete document and check ", () {
       final checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.DELETE_DOCUMENT);
+        expect(res.method, Wilt.deleteDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1112,7 +1120,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1151,7 +1159,7 @@ void main() {
 
     test("Delete document preserve and check ", () {
       final checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1172,7 +1180,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1211,7 +1219,7 @@ void main() {
 
     test("Copy document", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.COPY_DOCUMENT);
+        expect(res.method, Wilt.copyDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1255,7 +1263,8 @@ void main() {
         }
 
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
       });
 
@@ -1322,7 +1331,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1358,7 +1367,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1399,7 +1408,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1439,7 +1448,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1479,7 +1488,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1523,7 +1532,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDOCS);
+        expect(res.method, Wilt.getAllDocss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1567,7 +1576,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.BULK);
+        expect(res.method, Wilt.bulkk);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1620,7 +1629,7 @@ void main() {
           new WiltServerClient(hostName, serverPort, scheme);
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.BULK_STRING);
+        expect(res.method, Wilt.bulkStringg);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1687,7 +1696,7 @@ void main() {
 
     test("Get Session Information", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_SESSION);
+        expect(res.method, Wilt.getSessionn);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1714,7 +1723,7 @@ void main() {
 
     test("Get Stats Information", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_STATS);
+        expect(res.method, Wilt.getStatss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1741,7 +1750,7 @@ void main() {
 
     test("Get Database Information - default", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.DATABASE_INFO);
+        expect(res.method, Wilt.databaseInfo);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1769,7 +1778,7 @@ void main() {
 
     test("Get Database Information - specified", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.DATABASE_INFO);
+        expect(res.method, Wilt.databaseInfo);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1796,7 +1805,7 @@ void main() {
 
     test("Get All DB's", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ALLDBS);
+        expect(res.method, Wilt.getAllDbss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1823,7 +1832,7 @@ void main() {
 
     test("Generate Ids", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GENERATE_IDS);
+        expect(res.method, Wilt.generateIdss);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1862,10 +1871,11 @@ void main() {
 
     /* Globals for the group */
     String testDocRev;
-    final String pngImage = 'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
-        'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
-        'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
-        '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
+    final String pngImage =
+        'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
+            'BMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDr' +
+            'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
+            '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
     final String pngImageUpdate =
         'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABl' +
@@ -1875,7 +1885,7 @@ void main() {
 
     test("Create document(PUT) for attachment tests and check", () {
       final checkCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.GET_DOCUMENT);
+        expect(res.method, Wilt.getDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1892,7 +1902,8 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
@@ -1902,7 +1913,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.PUT_DOCUMENT);
+        expect(res.method, Wilt.putDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1940,7 +1951,7 @@ void main() {
 
     test("Create Attachment", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_ATTACHMENT);
+        expect(res.method, Wilt.createAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1970,7 +1981,7 @@ void main() {
 
     test("Get Create Attachment", () {
       final revisionCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.GET_DOCUMENT);
+        expect(res.method, Wilt.getDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -1986,7 +1997,8 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
@@ -1997,12 +2009,13 @@ void main() {
         expect(attachments[0].name, 'attachmentName');
         expect(attachments[0].data.content_type, 'image/png; charset=utf-8');
         expect(attachments[0].data.length, anything);
-        final List bytes = CryptoUtils.base64StringToBytes(attachments[0].data.data);
+        final List bytes =
+            CryptoUtils.base64StringToBytes(attachments[0].data.data);
         expect(bytes, pngImage.codeUnits);
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ATTACHMENT);
+        expect(res.method, Wilt.getAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2041,7 +2054,7 @@ void main() {
 
     test("Update Attachment", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.UPDATE_ATTACHMENT);
+        expect(res.method, Wilt.updateAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2070,7 +2083,7 @@ void main() {
 
     test("Get Update Attachment", () {
       final revisionCompleter = expectAsync1((res) {
-        expect(res.method, Wilt.GET_DOCUMENT);
+        expect(res.method, Wilt.getDocumentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2086,7 +2099,8 @@ void main() {
 
         /* Check the documents parameters */
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        final String returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+        final String returnedDocId =
+            WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         expect(successResponse.title,
@@ -2096,7 +2110,7 @@ void main() {
       });
 
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.GET_ATTACHMENT);
+        expect(res.method, Wilt.getAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2134,7 +2148,7 @@ void main() {
 
     test("Create Attachment With New Document", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_ATTACHMENT);
+        expect(res.method, Wilt.createAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2163,7 +2177,7 @@ void main() {
 
     test("Create Attachment Invalid Revision", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.CREATE_ATTACHMENT);
+        expect(res.method, Wilt.createAttachmentt);
         expect(res.error, isTrue);
         final int statusCode = res.errorCode;
         expect(statusCode, equals(0));
@@ -2179,7 +2193,7 @@ void main() {
 
     test("Delete Attachment", () {
       final completer = expectAsync1((res) {
-        expect(res.method, Wilt.DELETE_ATTACHMENT);
+        expect(res.method, Wilt.deleteAttachmentt);
         try {
           expect(res.error, isFalse);
         } catch (e) {
@@ -2237,12 +2251,13 @@ void main() {
 
       wilting.changeNotification.listen((e) {
         count++;
-        if (e.docId == 'mytestid2') expect(
-            (e.type == WiltChangeNotificationEvent.UPDATE) ||
-                (e.type == WiltChangeNotificationEvent.DELETE),
-            true);
-        if (e.docId ==
-            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
+        if (e.docId == 'mytestid2')
+          expect(
+              (e.type == WiltChangeNotificationEvent.UPDATE) ||
+                  (e.type == WiltChangeNotificationEvent.DELETE),
+              true);
+        if (e.docId == 'mytestid3')
+          expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') completer();
       });
     });
@@ -2279,8 +2294,8 @@ void main() {
             expect(e.type == WiltChangeNotificationEvent.DELETE, true);
           }
         }
-        if (e.docId ==
-            'mytestid3') expect(e.type, WiltChangeNotificationEvent.DELETE);
+        if (e.docId == 'mytestid3')
+          expect(e.type, WiltChangeNotificationEvent.DELETE);
         if (e.docId == 'anotherAttachmentTestDoc') {
           final List attachments = WiltUserUtils.getAttachments(e.document);
           expect(attachments[0].name, 'attachmentName');
