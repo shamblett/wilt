@@ -1,4 +1,8 @@
 
+## 3.3.0
+Update to latest packages/Dart environment.
+Retire the completion tests.
+
 ## 3.2.0
 
 Issues 15, 21, 22 and 23.
