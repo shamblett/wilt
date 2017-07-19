@@ -5,7 +5,6 @@ final String serverPort = "5984";
 final String scheme = "http://";
 
 /* Databases to use for testing */
-final String databaseNameClientCompletion = 'wilttest_browser_completion';
 final String databaseNameClient = 'wilttest_browser';
 final String databaseNameServer = 'wilttest_server';
 
@@ -13,5 +12,5 @@ final String databaseNameServer = 'wilttest_server';
 /// implies no authentication, i.e admin party, if set Basic authentication is
 /// used.
 
-final String userName = 'admin';
-final String userPassword = 'setacrepes';
+final String userName = '';
+final String userPassword = '';
