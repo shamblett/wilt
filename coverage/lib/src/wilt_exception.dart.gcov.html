@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - lib/src/wilt_exception.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">lib/src</a> - wilt_exception.dart<span style="font-size: 80%;"> (source / <a href="wilt_exception.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntryHi">100.0 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Packge : Wilt
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 04/06/2013
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett@OSCF
+<span class="lineNum">       6 </span>            :  *
+<span class="lineNum">       7 </span>            :  * This exception is thrown when Wilt has an internal error, such as an invalid
+<span class="lineNum">       8 </span>            :  * parameter being passed to a function.
+<span class="lineNum">       9 </span>            :  */
+<span class="lineNum">      10 </span>            : 
+<span class="lineNum">      11 </span>            : part of wilt;
+<span class="lineNum">      12 </span>            : 
+<span class="lineNum">      13 </span>            : class WiltException implements Exception {
+<span class="lineNum">      14 </span>            :   /* Exception message strings */
+<span class="lineNum">      15 </span>            :   static const String header = 'WiltException: ';
+<span class="lineNum">      16 </span>            :   static const String noDatabaseSpecified = 'No database specified';
+<span class="lineNum">      17 </span>            :   static const String getDocNoId = 'getDocument() must have a document id';
+<span class="lineNum">      18 </span>            :   static const String getDocRevNoId =
+<span class="lineNum">      19 </span>            :       'getDocumentRevision() must have a document id';
+<span class="lineNum">      20 </span>            :   static const String deleteDocNoIdRev =
+<span class="lineNum">      21 </span>            :       'deleteDocument() expects a document id and a revision';
+<span class="lineNum">      22 </span>            :   static const String putDocNoIdBody =
+<span class="lineNum">      23 </span>            :       'putDocument() expects a document id and a document body';
+<span class="lineNum">      24 </span>            :   static const String putDocCantStringify =
+<span class="lineNum">      25 </span>            :       'putDocument() cannot stringify the document body, use putDocumentString';
+<span class="lineNum">      26 </span>            :   static const String putDocStringNoIdBody =
+<span class="lineNum">      27 </span>            :       'putDocumentString() expects a document id and a document body';
+<span class="lineNum">      28 </span>            :   static const String postDocNoBody = 'postDocument() expects a document body';
+<span class="lineNum">      29 </span>            :   static const String postDocCantStringify =
+<span class="lineNum">      30 </span>            :       'postDocument() cannot stringify document body , use postDocumentString';
+<span class="lineNum">      31 </span>            :   static const String postDocStringNoBody =
+<span class="lineNum">      32 </span>            :       'postDocumentString() expects a document body';
+<span class="lineNum">      33 </span>            :   static const String copyDocNoSrcId = 'copyDocument () expects a source id';
+<span class="lineNum">      34 </span>            :   static const String copyDocNoDestId =
+<span class="lineNum">      35 </span>            :       'copyDocument () expects a destination id';
+<span class="lineNum">      36 </span>            :   static const String getAllDocsLimit =
+<span class="lineNum">      37 </span>            :       'getAllDocs() must have a positive limit';
+<span class="lineNum">      38 </span>            :   static const String bulkNoDocList = 'bulk() must have a document list';
+<span class="lineNum">      39 </span>            :   static const String bulkCantStringify =
+<span class="lineNum">      40 </span>            :       'bulk() cannot stringify document list, use bulkString';
+<span class="lineNum">      41 </span>            :   static const String bulkStringNoDoc =
+<span class="lineNum">      42 </span>            :       'bulkString() must have a document string';
+<span class="lineNum">      43 </span>            :   static const String createDbNoName =
+<span class="lineNum">      44 </span>            :       'createDatabase() expects a database name';
+<span class="lineNum">      45 </span>            :   static const String deleteDbNoName =
+<span class="lineNum">      46 </span>            :       'deleteDatabase() expects a database name';
+<span class="lineNum">      47 </span>            :   static const String createAttNoDocId =
+<span class="lineNum">      48 </span>            :       'createAttachment() expects a document id';
+<span class="lineNum">      49 </span>            :   static const String createAttNoName =
+<span class="lineNum">      50 </span>            :       'createAttachment() expects an attachment name';
+<span class="lineNum">      51 </span>            :   static const String createAttNoRev = 'createAttachment() expects a revision';
+<span class="lineNum">      52 </span>            :   static const String createAttNoContentType =
+<span class="lineNum">      53 </span>            :       'createAttachment() expects a content type';
+<span class="lineNum">      54 </span>            :   static const String createAttNoPayload =
+<span class="lineNum">      55 </span>            :       'createAttachment() expects a payload';
+<span class="lineNum">      56 </span>            :   static const String updateAttNoDocId =
+<span class="lineNum">      57 </span>            :       'updateAttachment() expects a document id';
+<span class="lineNum">      58 </span>            :   static const String updateAttNoName =
+<span class="lineNum">      59 </span>            :       'updateAttachment() expects an attachment name';
+<span class="lineNum">      60 </span>            :   static const String updateAttNoRev = 'updateAttachment() expects a revision';
+<span class="lineNum">      61 </span>            :   static const String updateAttNoContentType =
+<span class="lineNum">      62 </span>            :       'updateAttachment() expects a content type';
+<span class="lineNum">      63 </span>            :   static const String updateAttNoPayload =
+<span class="lineNum">      64 </span>            :       'updateAttachment() expects a payload';
+<span class="lineNum">      65 </span>            :   static const String deleteAttNoDocId =
+<span class="lineNum">      66 </span>            :       'deleteAttachment() expects a document id';
+<span class="lineNum">      67 </span>            :   static const String deleteAttNoName =
+<span class="lineNum">      68 </span>            :       'deleteAttachment() expects an attachment name';
+<span class="lineNum">      69 </span>            :   static const String deleteAttNoRev = 'deleteAttachment() expects a revision';
+<span class="lineNum">      70 </span>            :   static const String getAttNoDocId = 'getAttachment() expects a document id';
+<span class="lineNum">      71 </span>            :   static const String getAttNoName =
+<span class="lineNum">      72 </span>            :       'getAttachment() expects an attachment name';
+<span class="lineNum">      73 </span>            :   static const String updateCnpNoParams =
+<span class="lineNum">      74 </span>            :       'updateChangeNotificationParameters() expects a parameter set';
+<span class="lineNum">      75 </span>            :   static const String updateCnpNoNotifier =
+<span class="lineNum">      76 </span>            :       'updateChangeNotificationParameters() no change notifier';
+<span class="lineNum">      77 </span>            :   static const String loginWrongParams =
+<span class="lineNum">      78 </span>            :       'Login() expects a non null user name and password';
+<span class="lineNum">      79 </span>            :   static const String genIdsAmount = 'generateIds() expects a positive amount';
+<span class="lineNum">      80 </span>            :   static const String badConstParams =
+<span class="lineNum">      81 </span>            :       'Bad construction - some or all required parameters are null';
+<span class="lineNum">      82 </span>            :   static const String badConstNoAdapter =
+<span class="lineNum">      83 </span>            :       'Bad construction - you must instantiate Wilt with a HTTP Adapter';
+<span class="lineNum">      84 </span>            :   static const String cnNoAuth = &quot;Change Notifications must be authorized&quot;;
+<span class="lineNum">      85 </span>            : 
+<span class="lineNum">      86 </span>            :   /* Construction */
+<span class="lineNum">      87 </span>            :   String _message = 'No Message Supplied';
+<span class="lineNum">      88 </span><span class="lineCov">          1 :   WiltException([this._message]);</span>
+<span class="lineNum">      89 </span>            : 
+<span class="lineNum">      90 </span><span class="lineCov">          3 :   String toString() =&gt; header + &quot;${_message}&quot;;</span>
+<span class="lineNum">      91 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - lib/src/httpAdapters/wilt_server_http_adapter.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../../index.html">top level</a> - <a href="index.html">lib/src/httpAdapters</a> - wilt_server_http_adapter.dart<span style="font-size: 80%;"> (source / <a href="wilt_server_http_adapter.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">106</td>
+            <td class="headerCovTableEntry">125</td>
+            <td class="headerCovTableEntryMed">84.8 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Packge : Wilt
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 04/06/2013
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett@OSCF
+<span class="lineNum">       6 </span>            :  *
+<span class="lineNum">       7 </span>            :  * Browser(dart:html) CouchDB HTTP adapter for Wilt.
+<span class="lineNum">       8 </span>            :  *  
+<span class="lineNum">       9 </span>            :  * This always returns a JSON Object the format of which is documented in
+<span class="lineNum">      10 </span>            :  * the Result Interface document
+<span class="lineNum">      11 </span>            :  *                      
+<span class="lineNum">      12 </span>            :  */
+<span class="lineNum">      13 </span>            : 
+<span class="lineNum">      14 </span>            : part of wilt_server_client;
+<span class="lineNum">      15 </span>            : 
+<span class="lineNum">      16 </span>            : class WiltServerHTTPAdapter implements WiltHTTPAdapter {
+<span class="lineNum">      17 </span>            :   /// User for change notification authorization
+<span class="lineNum">      18 </span>            :   String _user;
+<span class="lineNum">      19 </span>            : 
+<span class="lineNum">      20 </span>            :   /// Password for change notification authorization
+<span class="lineNum">      21 </span>            :   String _password;
+<span class="lineNum">      22 </span>            : 
+<span class="lineNum">      23 </span>            :   /// Auth Type for change notification authorization
+<span class="lineNum">      24 </span>            :   String _authType;
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            :   /// HTTP client
+<span class="lineNum">      27 </span>            :   http.Client _client;
+<span class="lineNum">      28 </span>            : 
+<span class="lineNum">      29 </span>            :   /// Construction
+<span class="lineNum">      30 </span><span class="lineCov">          1 :   WiltServerHTTPAdapter() {</span>
+<span class="lineNum">      31 </span><span class="lineCov">          2 :     _client = new http.Client();</span>
+<span class="lineNum">      32 </span>            :   }
+<span class="lineNum">      33 </span>            : 
+<span class="lineNum">      34 </span>            :   /// Processes the HTTP request, returning the server's response
+<span class="lineNum">      35 </span>            :   /// as a future
+<span class="lineNum">      36 </span>            :   Future&lt;jsonobject.JsonObject&gt; httpRequest(String method, String url,
+<span class="lineNum">      37 </span>            :       [String data = null, Map headers = null]) {
+<span class="lineNum">      38 </span>            :     /**
+<span class="lineNum">      39 </span>            :      *  Initialise
+<span class="lineNum">      40 </span>            :      */
+<span class="lineNum">      41 </span><span class="lineCov">          1 :     final Completer completer = new Completer();</span>
+<span class="lineNum">      42 </span>            : 
+<span class="lineNum">      43 </span>            :     /// Successful completion
+<span class="lineNum">      44 </span>            :     void onSuccess(http.Response response) {
+<span class="lineNum">      45 </span>            :       /**
+<span class="lineNum">      46 </span>            :        *  Process the success response, note that an error response from CouchDB is
+<span class="lineNum">      47 </span>            :        *  treated as an error, not as a success with an 'error' field in it.
+<span class="lineNum">      48 </span>            :        */
+<span class="lineNum">      49 </span><span class="lineCov">          1 :       final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();</span>
+<span class="lineNum">      50 </span><span class="lineCov">          1 :       jsonResponse.error = false;</span>
+<span class="lineNum">      51 </span><span class="lineCov">          1 :       jsonResponse.errorCode = 0;</span>
+<span class="lineNum">      52 </span><span class="lineCov">          1 :       jsonResponse.successText = null;</span>
+<span class="lineNum">      53 </span><span class="lineCov">          1 :       jsonResponse.errorText = null;</span>
+<span class="lineNum">      54 </span><span class="lineCov">          1 :       jsonResponse.allResponseHeader = null;</span>
+<span class="lineNum">      55 </span><span class="lineCov">          1 :       jsonResponse.method = method;</span>
+<span class="lineNum">      56 </span><span class="lineCov">          2 :       jsonResponse.responseText = response.body;</span>
+<span class="lineNum">      57 </span>            : 
+<span class="lineNum">      58 </span>            :       /**
+<span class="lineNum">      59 </span>            :        * Check the header, if application/json try and decode it,
+<span class="lineNum">      60 </span>            :        * otherwise its just raw data, ie an attachment.
+<span class="lineNum">      61 </span>            :        */
+<span class="lineNum">      62 </span><span class="lineCov">          2 :       if (response.headers.containsValue('application/json')) {</span>
+<span class="lineNum">      63 </span>            :         var couchResp;
+<span class="lineNum">      64 </span>            :         try {
+<span class="lineNum">      65 </span><span class="lineCov">          2 :           couchResp = JSON.decode(response.body);</span>
+<span class="lineNum">      66 </span>            :         } catch (e) {
+<span class="lineNum">      67 </span><span class="lineCov">          1 :           jsonResponse.error = true;</span>
+<span class="lineNum">      68 </span><span class="lineCov">          1 :           final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();</span>
+<span class="lineNum">      69 </span><span class="lineCov">          1 :           errorAsJson.error = &quot;JSON Decode Error&quot;;</span>
+<span class="lineNum">      70 </span><span class="lineCov">          1 :           errorAsJson.reason = &quot;None&quot;;</span>
+<span class="lineNum">      71 </span><span class="lineCov">          1 :           jsonResponse.jsonCouchResponse = errorAsJson;</span>
+<span class="lineNum">      72 </span>            :           /* Set the response headers */
+<span class="lineNum">      73 </span><span class="lineCov">          2 :           jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">      74 </span>            :           /**
+<span class="lineNum">      75 </span>            :             * Complete the request
+<span class="lineNum">      76 </span>            :             */
+<span class="lineNum">      77 </span><span class="lineCov">          2 :           if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">      78 </span>            :         }
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span><span class="lineCov">          2 :         if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {</span>
+<span class="lineNum">      81 </span><span class="lineCov">          1 :           jsonResponse.error = true;</span>
+<span class="lineNum">      82 </span><span class="lineCov">          1 :           final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();</span>
+<span class="lineNum">      83 </span><span class="lineCov">          1 :           errorAsJson.error = &quot;CouchDb Error&quot;;</span>
+<span class="lineNum">      84 </span><span class="lineCov">          2 :           errorAsJson.reason = couchResp['reason'];</span>
+<span class="lineNum">      85 </span><span class="lineCov">          1 :           jsonResponse.jsonCouchResponse = errorAsJson;</span>
+<span class="lineNum">      86 </span>            :           /* Set the response headers */
+<span class="lineNum">      87 </span><span class="lineCov">          2 :           jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">      88 </span>            :           /**
+<span class="lineNum">      89 </span>            :            * Complete the request
+<span class="lineNum">      90 </span>            :            */
+<span class="lineNum">      91 </span><span class="lineCov">          2 :           if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">      92 </span>            :         }
+<span class="lineNum">      93 </span>            : 
+<span class="lineNum">      94 </span>            :         /**
+<span class="lineNum">      95 </span>            :          * Success response
+<span class="lineNum">      96 </span>            :          */
+<span class="lineNum">      97 </span><span class="lineCov">          1 :         if (method != Wilt.headd) {</span>
+<span class="lineNum">      98 </span>            :           final jsonobject.JsonObject successAsJson =
+<span class="lineNum">      99 </span><span class="lineCov">          2 :               new jsonobject.JsonObject.fromJsonString(response.body);</span>
+<span class="lineNum">     100 </span><span class="lineCov">          1 :           jsonResponse.jsonCouchResponse = successAsJson;</span>
+<span class="lineNum">     101 </span>            :         }
+<span class="lineNum">     102 </span>            :       } else {
+<span class="lineNum">     103 </span><span class="lineCov">          1 :         final jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();</span>
+<span class="lineNum">     104 </span><span class="lineCov">          1 :         successAsJson.ok = true;</span>
+<span class="lineNum">     105 </span><span class="lineCov">          3 :         successAsJson.contentType = response.headers['content-type'];</span>
+<span class="lineNum">     106 </span><span class="lineCov">          1 :         jsonResponse.jsonCouchResponse = successAsJson;</span>
+<span class="lineNum">     107 </span>            :       }
+<span class="lineNum">     108 </span>            : 
+<span class="lineNum">     109 </span>            :       /* Set the response headers */
+<span class="lineNum">     110 </span><span class="lineCov">          2 :       jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">     111 </span>            :       /**
+<span class="lineNum">     112 </span>            :        * Complete the request
+<span class="lineNum">     113 </span>            :        */
+<span class="lineNum">     114 </span><span class="lineCov">          2 :       if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">     115 </span>            :     }
+<span class="lineNum">     116 </span>            : 
+<span class="lineNum">     117 </span>            :     /// Successful completion for Copy
+<span class="lineNum">     118 </span>            :     void onCopySuccess(http.StreamedResponse response) {
+<span class="lineNum">     119 </span>            :       /**
+<span class="lineNum">     120 </span>            :        *  Process the success response, note that an error response from CouchDB is
+<span class="lineNum">     121 </span>            :        *  treated as an error, not as a success with an 'error' field in it.
+<span class="lineNum">     122 </span>            :        */
+<span class="lineNum">     123 </span><span class="lineCov">          1 :       final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();</span>
+<span class="lineNum">     124 </span><span class="lineCov">          1 :       jsonResponse.error = false;</span>
+<span class="lineNum">     125 </span><span class="lineCov">          1 :       jsonResponse.errorCode = 0;</span>
+<span class="lineNum">     126 </span><span class="lineCov">          1 :       jsonResponse.successText = null;</span>
+<span class="lineNum">     127 </span><span class="lineCov">          1 :       jsonResponse.errorText = null;</span>
+<span class="lineNum">     128 </span><span class="lineCov">          1 :       jsonResponse.allResponseHeader = null;</span>
+<span class="lineNum">     129 </span><span class="lineCov">          1 :       jsonResponse.method = method;</span>
+<span class="lineNum">     130 </span><span class="lineCov">          3 :       response.stream.bytesToString(UTF8).then((String text) {</span>
+<span class="lineNum">     131 </span><span class="lineCov">          1 :         jsonResponse.responseText = text;</span>
+<span class="lineNum">     132 </span>            : 
+<span class="lineNum">     133 </span>            :         /**
+<span class="lineNum">     134 </span>            :            * Check the header, if application/json try and decode it,
+<span class="lineNum">     135 </span>            :            * otherwise its just raw data, ie an attachment.
+<span class="lineNum">     136 </span>            :            */
+<span class="lineNum">     137 </span><span class="lineCov">          2 :         if (response.headers.containsValue('application/json')) {</span>
+<span class="lineNum">     138 </span>            :           var couchResp;
+<span class="lineNum">     139 </span>            :           try {
+<span class="lineNum">     140 </span><span class="lineCov">          1 :             couchResp = JSON.decode(text);</span>
+<span class="lineNum">     141 </span>            :           } catch (e) {
+<span class="lineNum">     142 </span><span class="lineNoCov">          0 :             jsonResponse.error = true;</span>
+<span class="lineNum">     143 </span>            :             final jsonobject.JsonObject errorAsJson =
+<span class="lineNum">     144 </span><span class="lineNoCov">          0 :                 new jsonobject.JsonObject();</span>
+<span class="lineNum">     145 </span><span class="lineNoCov">          0 :             errorAsJson.error = &quot;JSON Decode Error&quot;;</span>
+<span class="lineNum">     146 </span><span class="lineNoCov">          0 :             errorAsJson.reason = &quot;None&quot;;</span>
+<span class="lineNum">     147 </span><span class="lineNoCov">          0 :             jsonResponse.jsonCouchResponse = errorAsJson;</span>
+<span class="lineNum">     148 </span>            :             /* Set the response headers */
+<span class="lineNum">     149 </span><span class="lineNoCov">          0 :             jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">     150 </span>            :             /**
+<span class="lineNum">     151 </span>            :                 * Complete the request
+<span class="lineNum">     152 </span>            :                 */
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :             if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">     154 </span>            :           }
+<span class="lineNum">     155 </span>            : 
+<span class="lineNum">     156 </span><span class="lineCov">          2 :           if ((couchResp is Map) &amp;&amp; (couchResp.containsKey('error'))) {</span>
+<span class="lineNum">     157 </span><span class="lineNoCov">          0 :             jsonResponse.error = true;</span>
+<span class="lineNum">     158 </span>            :             final jsonobject.JsonObject errorAsJson =
+<span class="lineNum">     159 </span><span class="lineNoCov">          0 :                 new jsonobject.JsonObject();</span>
+<span class="lineNum">     160 </span><span class="lineNoCov">          0 :             errorAsJson.error = &quot;CouchDb Error&quot;;</span>
+<span class="lineNum">     161 </span><span class="lineNoCov">          0 :             errorAsJson.reason = couchResp['reason'];</span>
+<span class="lineNum">     162 </span><span class="lineNoCov">          0 :             jsonResponse.jsonCouchResponse = errorAsJson;</span>
+<span class="lineNum">     163 </span>            :             /* Set the response headers */
+<span class="lineNum">     164 </span><span class="lineNoCov">          0 :             jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">     165 </span>            :             /**
+<span class="lineNum">     166 </span>            :                * Complete the reequest
+<span class="lineNum">     167 </span>            :                */
+<span class="lineNum">     168 </span><span class="lineNoCov">          0 :             if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">     169 </span>            :           }
+<span class="lineNum">     170 </span>            : 
+<span class="lineNum">     171 </span>            :           /**
+<span class="lineNum">     172 </span>            :              * Success response
+<span class="lineNum">     173 </span>            :              */
+<span class="lineNum">     174 </span><span class="lineCov">          1 :           if (method != Wilt.headd) {</span>
+<span class="lineNum">     175 </span>            :             final jsonobject.JsonObject successAsJson =
+<span class="lineNum">     176 </span><span class="lineCov">          1 :                 new jsonobject.JsonObject.fromJsonString(text);</span>
+<span class="lineNum">     177 </span><span class="lineCov">          1 :             jsonResponse.jsonCouchResponse = successAsJson;</span>
+<span class="lineNum">     178 </span>            :           }
+<span class="lineNum">     179 </span>            :         } else {
+<span class="lineNum">     180 </span>            :           final jsonobject.JsonObject successAsJson =
+<span class="lineNum">     181 </span><span class="lineNoCov">          0 :               new jsonobject.JsonObject();</span>
+<span class="lineNum">     182 </span><span class="lineNoCov">          0 :           successAsJson.ok = true;</span>
+<span class="lineNum">     183 </span><span class="lineNoCov">          0 :           successAsJson.contentType = response.headers['content-type'];</span>
+<span class="lineNum">     184 </span><span class="lineNoCov">          0 :           jsonResponse.jsonCouchResponse = successAsJson;</span>
+<span class="lineNum">     185 </span>            :         }
+<span class="lineNum">     186 </span>            : 
+<span class="lineNum">     187 </span>            :         /* Set the response headers */
+<span class="lineNum">     188 </span><span class="lineCov">          2 :         jsonResponse.allResponseHeaders = response.headers;</span>
+<span class="lineNum">     189 </span>            : 
+<span class="lineNum">     190 </span>            :         /**
+<span class="lineNum">     191 </span>            :          * Complete the request
+<span class="lineNum">     192 </span>            :         */
+<span class="lineNum">     193 </span><span class="lineCov">          2 :         if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">     194 </span>            :       });
+<span class="lineNum">     195 </span>            :     }
+<span class="lineNum">     196 </span>            : 
+<span class="lineNum">     197 </span>            :     /// Error completion
+<span class="lineNum">     198 </span>            :     void onError(http.ClientException response) {
+<span class="lineNum">     199 </span>            :       /* Process the error response */
+<span class="lineNum">     200 </span><span class="lineCov">          1 :       final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();</span>
+<span class="lineNum">     201 </span><span class="lineCov">          1 :       jsonResponse.method = method;</span>
+<span class="lineNum">     202 </span><span class="lineCov">          1 :       jsonResponse.error = true;</span>
+<span class="lineNum">     203 </span><span class="lineCov">          1 :       jsonResponse.successText = null;</span>
+<span class="lineNum">     204 </span><span class="lineCov">          1 :       jsonResponse.errorCode = 0;</span>
+<span class="lineNum">     205 </span><span class="lineCov">          1 :       final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();</span>
+<span class="lineNum">     206 </span><span class="lineCov">          1 :       errorAsJson.error = &quot;Invalid HTTP response&quot;;</span>
+<span class="lineNum">     207 </span><span class="lineCov">          2 :       errorAsJson.reason = response.message;</span>
+<span class="lineNum">     208 </span><span class="lineCov">          1 :       jsonResponse.jsonCouchResponse = errorAsJson;</span>
+<span class="lineNum">     209 </span>            : 
+<span class="lineNum">     210 </span>            :       /**
+<span class="lineNum">     211 </span>            :        * Complete the request
+<span class="lineNum">     212 </span>            :        */
+<span class="lineNum">     213 </span><span class="lineCov">          2 :       if (!completer.isCompleted) completer.complete(jsonResponse);</span>
+<span class="lineNum">     214 </span>            :     }
+<span class="lineNum">     215 </span>            : 
+<span class="lineNum">     216 </span>            :     /**
+<span class="lineNum">     217 </span>            :      * Condition the input method string to get the HTTP method
+<span class="lineNum">     218 </span>            :      */
+<span class="lineNum">     219 </span><span class="lineCov">          1 :     final List temp = method.split('_');</span>
+<span class="lineNum">     220 </span><span class="lineCov">          1 :     final String httpMethod = temp[0];</span>
+<span class="lineNum">     221 </span>            : 
+<span class="lineNum">     222 </span>            :     /**
+<span class="lineNum">     223 </span>            :      * Set the content type header correctly
+<span class="lineNum">     224 </span>            :      */
+<span class="lineNum">     225 </span><span class="lineCov">          1 :     if (headers.containsKey('Content-Type')) {</span>
+<span class="lineNum">     226 </span><span class="lineCov">          1 :       final String contentType = headers['Content-Type'];</span>
+<span class="lineNum">     227 </span><span class="lineCov">          1 :       headers.remove('Content-Type');</span>
+<span class="lineNum">     228 </span><span class="lineCov">          1 :       headers['content-type'] = contentType;</span>
+<span class="lineNum">     229 </span>            :     }
+<span class="lineNum">     230 </span>            :     /**
+<span class="lineNum">     231 </span>            :      *  Query CouchDB over HTTP
+<span class="lineNum">     232 </span>            :      */
+<span class="lineNum">     233 </span><span class="lineCov">          1 :     if (httpMethod == &quot;GET&quot;) {</span>
+<span class="lineNum">     234 </span><span class="lineCov">          3 :       _client.get(url, headers: headers).then(onSuccess, onError: onError);</span>
+<span class="lineNum">     235 </span><span class="lineCov">          1 :     } else if (httpMethod == &quot;PUT&quot;) {</span>
+<span class="lineNum">     236 </span><span class="lineCov">          1 :       _client</span>
+<span class="lineNum">     237 </span><span class="lineCov">          1 :           .put(url, headers: headers, body: data)</span>
+<span class="lineNum">     238 </span><span class="lineCov">          1 :           .then(onSuccess, onError: onError);</span>
+<span class="lineNum">     239 </span><span class="lineCov">          1 :     } else if (httpMethod == &quot;POST&quot;) {</span>
+<span class="lineNum">     240 </span><span class="lineCov">          1 :       _client</span>
+<span class="lineNum">     241 </span><span class="lineCov">          1 :           .post(url, headers: headers, body: data)</span>
+<span class="lineNum">     242 </span><span class="lineCov">          1 :           .then(onSuccess, onError: onError);</span>
+<span class="lineNum">     243 </span><span class="lineCov">          1 :     } else if (httpMethod == &quot;HEAD&quot;) {</span>
+<span class="lineNum">     244 </span><span class="lineCov">          3 :       _client.head(url, headers: headers).then(onSuccess, onError: onError);</span>
+<span class="lineNum">     245 </span><span class="lineCov">          1 :     } else if (httpMethod == &quot;DELETE&quot;) {</span>
+<span class="lineNum">     246 </span><span class="lineCov">          3 :       _client.delete(url, headers: headers).then(onSuccess, onError: onError);</span>
+<span class="lineNum">     247 </span><span class="lineCov">          1 :     } else if (httpMethod == &quot;COPY&quot;) {</span>
+<span class="lineNum">     248 </span><span class="lineCov">          1 :       final Uri encodedUrl = Uri.parse(url);</span>
+<span class="lineNum">     249 </span><span class="lineCov">          1 :       final request = new http.Request(&quot;COPY&quot;, encodedUrl);</span>
+<span class="lineNum">     250 </span><span class="lineCov">          2 :       request.headers.addAll(headers);</span>
+<span class="lineNum">     251 </span><span class="lineCov">          3 :       _client.send(request).then(onCopySuccess, onError: onError);</span>
+<span class="lineNum">     252 </span>            :     }
+<span class="lineNum">     253 </span>            : 
+<span class="lineNum">     254 </span><span class="lineCov">          1 :     return completer.future;</span>
+<span class="lineNum">     255 </span>            :   }
+<span class="lineNum">     256 </span>            : 
+<span class="lineNum">     257 </span>            :   /// Specialised 'get' for change notifications
+<span class="lineNum">     258 </span>            :   Future&lt;String&gt; getString(String url) {
+<span class="lineNum">     259 </span><span class="lineCov">          1 :     final Completer completer = new Completer&lt;String&gt;();</span>
+<span class="lineNum">     260 </span>            : 
+<span class="lineNum">     261 </span>            :     /* Must have authentication */
+<span class="lineNum">     262 </span><span class="lineCov">          1 :     final Map wiltHeaders = new Map&lt;String, String&gt;();</span>
+<span class="lineNum">     263 </span><span class="lineCov">          1 :     wiltHeaders[&quot;Accept&quot;] = &quot;application/json&quot;;</span>
+<span class="lineNum">     264 </span><span class="lineCov">          1 :     if (_user != null) {</span>
+<span class="lineNum">     265 </span><span class="lineCov">          1 :       switch (_authType) {</span>
+<span class="lineNum">     266 </span><span class="lineCov">          1 :         case Wilt.authBasic:</span>
+<span class="lineNum">     267 </span><span class="lineCov">          3 :           final String authStringToEncode = &quot;$_user:$_password&quot;;</span>
+<span class="lineNum">     268 </span>            :           final String encodedAuthString =
+<span class="lineNum">     269 </span><span class="lineCov">          2 :               CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);</span>
+<span class="lineNum">     270 </span><span class="lineCov">          1 :           final String authString = &quot;Basic $encodedAuthString&quot;;</span>
+<span class="lineNum">     271 </span><span class="lineCov">          1 :           wiltHeaders['Authorization'] = authString;</span>
+<span class="lineNum">     272 </span>            :           break;
+<span class="lineNum">     273 </span>            : 
+<span class="lineNum">     274 </span><span class="lineNoCov">          0 :         case Wilt.authNone:</span>
+<span class="lineNum">     275 </span>            :           break;
+<span class="lineNum">     276 </span>            :       }
+<span class="lineNum">     277 </span>            :     }
+<span class="lineNum">     278 </span>            : 
+<span class="lineNum">     279 </span><span class="lineCov">          3 :     _client.get(url, headers: wiltHeaders).then((response) {</span>
+<span class="lineNum">     280 </span><span class="lineCov">          2 :       completer.complete(response.body);</span>
+<span class="lineNum">     281 </span>            :     });
+<span class="lineNum">     282 </span>            : 
+<span class="lineNum">     283 </span><span class="lineCov">          1 :     return completer.future;</span>
+<span class="lineNum">     284 </span>            :   }
+<span class="lineNum">     285 </span>            : 
+<span class="lineNum">     286 </span>            :   /// Authentication parameters for change notification
+<span class="lineNum">     287 </span>            :   void notificationAuthParams(String user, String password, String authType) {
+<span class="lineNum">     288 </span><span class="lineCov">          1 :     _user = user;</span>
+<span class="lineNum">     289 </span><span class="lineCov">          1 :     _password = password;</span>
+<span class="lineNum">     290 </span><span class="lineCov">          1 :     _authType = authType;</span>
+<span class="lineNum">     291 </span>            :   }
+<span class="lineNum">     292 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>

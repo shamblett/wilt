@@ -1,0 +1,299 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.lcov - lib/src/wilt_change_notification.dart</title>
+  <link rel="stylesheet" type="text/css" href="../../gcov.css">
+</head>
+
+<body>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="title">LCOV - code coverage report</td></tr>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+
+    <tr>
+      <td width="100%">
+        <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="35%" class="headerValue"><a href="../../index.html">top level</a> - <a href="index.html">lib/src</a> - wilt_change_notification.dart<span style="font-size: 80%;"> (source / <a href="wilt_change_notification.dart.func.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="15%"></td>
+            <td width="10%" class="headerCovTableHead">Hit</td>
+            <td width="10%" class="headerCovTableHead">Total</td>
+            <td width="15%" class="headerCovTableHead">Coverage</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.lcov</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntry">43</td>
+            <td class="headerCovTableEntry">57</td>
+            <td class="headerCovTableEntryMed">75.4 %</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Date:</td>
+            <td class="headerValue">2017-07-19</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntry">0</td>
+            <td class="headerCovTableEntryHi">-</td>
+          </tr>
+          <tr><td><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+  </table>
+
+  <table cellpadding=0 cellspacing=0 border=0>
+    <tr>
+      <td><br></td>
+    </tr>
+    <tr>
+      <td>
+<pre class="sourceHeading">          Line data    Source code</pre>
+<pre class="source">
+<a name="1"><span class="lineNum">       1 </span>            : /*</a>
+<span class="lineNum">       2 </span>            :  * Packge : Wilt
+<span class="lineNum">       3 </span>            :  * Author : S. Hamblett &lt;steve.hamblett@linux.com&gt;
+<span class="lineNum">       4 </span>            :  * Date   : 07/01/2014
+<span class="lineNum">       5 </span>            :  * Copyright :  S.Hamblett@OSCF
+<span class="lineNum">       6 </span>            :  *
+<span class="lineNum">       7 </span>            :  * Change notification control class
+<span class="lineNum">       8 </span>            :  * 
+<span class="lineNum">       9 </span>            :  * This class when constructed initiates change notification processing with either
+<span class="lineNum">      10 </span>            :  * a default set of change notification parameters or one supplied by the client.
+<span class="lineNum">      11 </span>            :  * When destroyed, change notification ceases.
+<span class="lineNum">      12 </span>            :  * 
+<span class="lineNum">      13 </span>            :  * 
+<span class="lineNum">      14 </span>            :  * The resulting notifications are turned into notification events and streamed to
+<span class="lineNum">      15 </span>            :  * the notification consumer. as a stream of WiltChangeNotificationEvent objects, see 
+<span class="lineNum">      16 </span>            :  * this class for further details.
+<span class="lineNum">      17 </span>            :  * 
+<span class="lineNum">      18 </span>            :  * CouchDb is initialized to supply the change notification stream in 'normal' mode, hence
+<span class="lineNum">      19 </span>            :  * this class requests the updates manually on a timed basis dependent on the heartberat period.
+<span class="lineNum">      20 </span>            :  * 
+<span class="lineNum">      21 </span>            :  * Note that as form CouchDB 1.6.1 you must auth as an administrator with CouchDb
+<span class="lineNum">      22 </span>            :  * to allow notificatons to work, if you do not supply auth credentials before 
+<span class="lineNum">      23 </span>            :  * starting notifications an exception is raised. 
+<span class="lineNum">      24 </span>            :  */
+<span class="lineNum">      25 </span>            : 
+<span class="lineNum">      26 </span>            : part of wilt;
+<span class="lineNum">      27 </span>            : 
+<span class="lineNum">      28 </span>            : class _WiltChangeNotification {
+<span class="lineNum">      29 </span>            :   _WiltChangeNotification(
+<span class="lineNum">      30 </span>            :       this._host, this._port, this._scheme, this._httpAdapter,
+<span class="lineNum">      31 </span><span class="lineCov">          1 :       [this._dbName, this._parameters]) {</span>
+<span class="lineNum">      32 </span><span class="lineCov">          1 :     if (_parameters == null) {</span>
+<span class="lineNum">      33 </span><span class="lineCov">          2 :       _parameters = new WiltChangeNotificationParameters();</span>
+<span class="lineNum">      34 </span>            :     }
+<span class="lineNum">      35 </span>            : 
+<span class="lineNum">      36 </span><span class="lineCov">          3 :     _sequence = _parameters.since;</span>
+<span class="lineNum">      37 </span>            : 
+<span class="lineNum">      38 </span>            :     /**
+<span class="lineNum">      39 </span>            :      * Start the heartbeat timer
+<span class="lineNum">      40 </span>            :      */
+<span class="lineNum">      41 </span>            :     final Duration heartbeat =
+<span class="lineNum">      42 </span><span class="lineCov">          3 :         new Duration(milliseconds: _parameters.heartbeat);</span>
+<span class="lineNum">      43 </span><span class="lineCov">          3 :     _timer = new Timer.periodic(heartbeat, _requestChanges);</span>
+<span class="lineNum">      44 </span>            : 
+<span class="lineNum">      45 </span>            :     /**
+<span class="lineNum">      46 </span>            :      * Start change notifications
+<span class="lineNum">      47 </span>            :      */
+<span class="lineNum">      48 </span><span class="lineCov">          2 :     _requestChanges(_timer);</span>
+<span class="lineNum">      49 </span>            :   }
+<span class="lineNum">      50 </span>            : 
+<span class="lineNum">      51 </span>            :   /// Parameters set
+<span class="lineNum">      52 </span>            :   WiltChangeNotificationParameters _parameters = null;
+<span class="lineNum">      53 </span><span class="lineNoCov">          0 :   WiltChangeNotificationParameters get parameters =&gt; _parameters;</span>
+<span class="lineNum">      54 </span>            :   set parameters(WiltChangeNotificationParameters parameters) =&gt;
+<span class="lineNum">      55 </span><span class="lineNoCov">          0 :       _parameters = parameters;</span>
+<span class="lineNum">      56 </span>            : 
+<span class="lineNum">      57 </span>            :   /// Database name
+<span class="lineNum">      58 </span>            :   String _dbName = null;
+<span class="lineNum">      59 </span>            : 
+<span class="lineNum">      60 </span>            :   /// Host name
+<span class="lineNum">      61 </span>            :   String _host = null;
+<span class="lineNum">      62 </span>            : 
+<span class="lineNum">      63 </span>            :   /// Port number
+<span class="lineNum">      64 </span>            :   String _port = null;
+<span class="lineNum">      65 </span>            : 
+<span class="lineNum">      66 </span>            :   /// HTTP scheme
+<span class="lineNum">      67 </span>            :   String _scheme = null;
+<span class="lineNum">      68 </span>            : 
+<span class="lineNum">      69 </span>            :   /// Timer
+<span class="lineNum">      70 </span>            :   Timer _timer = null;
+<span class="lineNum">      71 </span>            : 
+<span class="lineNum">      72 </span>            :   /// Since sequence number
+<span class="lineNum">      73 </span>            :   int _sequence = 0;
+<span class="lineNum">      74 </span>            : 
+<span class="lineNum">      75 </span>            :   /// Paused indicator
+<span class="lineNum">      76 </span>            :   bool _paused = false;
+<span class="lineNum">      77 </span><span class="lineCov">          1 :   bool get pause =&gt; _paused;</span>
+<span class="lineNum">      78 </span><span class="lineCov">          1 :   set pause(bool flag) =&gt; _paused = flag;</span>
+<span class="lineNum">      79 </span>            : 
+<span class="lineNum">      80 </span>            :   WiltHTTPAdapter _httpAdapter = null;
+<span class="lineNum">      81 </span>            : 
+<span class="lineNum">      82 </span>            :   /// Change notification stream controller
+<span class="lineNum">      83 </span>            :   ///
+<span class="lineNum">      84 </span>            :   /// Populated with WiltChangeNotificationEvent events
+<span class="lineNum">      85 </span>            :   final StreamController _changeNotification = new StreamController.broadcast();
+<span class="lineNum">      86 </span><span class="lineCov">          1 :   StreamController get changeNotification =&gt; _changeNotification;</span>
+<span class="lineNum">      87 </span>            : 
+<span class="lineNum">      88 </span>            :   /// Request the change notifications
+<span class="lineNum">      89 </span>            :   void _requestChanges(Timer timer) {
+<span class="lineNum">      90 </span>            :     /**
+<span class="lineNum">      91 </span>            :      * If paused return
+<span class="lineNum">      92 </span>            :      */
+<span class="lineNum">      93 </span><span class="lineCov">          1 :     if (_paused) return;</span>
+<span class="lineNum">      94 </span>            : 
+<span class="lineNum">      95 </span>            :     /**
+<span class="lineNum">      96 </span>            :      * Create the URL from the parameters
+<span class="lineNum">      97 </span>            :      */
+<span class="lineNum">      98 </span><span class="lineCov">          2 :     final String sequence = _sequence.toString();</span>
+<span class="lineNum">      99 </span><span class="lineCov">          2 :     final String path = &quot;$_dbName/_changes?&quot; +</span>
+<span class="lineNum">     100 </span><span class="lineCov">          1 :         &quot;&amp;since=$sequence&quot; +</span>
+<span class="lineNum">     101 </span><span class="lineCov">          3 :         &quot;&amp;descending=${_parameters.descending}&quot; +</span>
+<span class="lineNum">     102 </span><span class="lineCov">          3 :         &quot;&amp;include_docs=${_parameters.includeDocs}&quot; +</span>
+<span class="lineNum">     103 </span><span class="lineCov">          3 :         &quot;&amp;attachments=${_parameters.includeAttachments}&quot;;</span>
+<span class="lineNum">     104 </span>            : 
+<span class="lineNum">     105 </span><span class="lineCov">          5 :     final String url = &quot;$_scheme$_host:${_port.toString()}/$path&quot;;</span>
+<span class="lineNum">     106 </span>            : 
+<span class="lineNum">     107 </span>            :     /**
+<span class="lineNum">     108 </span>            :      * Open the request
+<span class="lineNum">     109 </span>            :      */
+<span class="lineNum">     110 </span>            :     try {
+<span class="lineNum">     111 </span><span class="lineCov">          2 :       _httpAdapter.getString(url)</span>
+<span class="lineNum">     112 </span><span class="lineCov">          1 :         ..then((result) {</span>
+<span class="lineNum">     113 </span>            :           /**
+<span class="lineNum">     114 </span>            :         * Process the change notification
+<span class="lineNum">     115 </span>            :         */
+<span class="lineNum">     116 </span>            :           try {
+<span class="lineNum">     117 </span><span class="lineCov">          1 :             final Map dbChange = JSON.decode(result);</span>
+<span class="lineNum">     118 </span><span class="lineCov">          1 :             processDbChange(dbChange);</span>
+<span class="lineNum">     119 </span>            :           } catch (e) {
+<span class="lineNum">     120 </span>            :             /**
+<span class="lineNum">     121 </span>            :           * Recoverable error, send the client an error event
+<span class="lineNum">     122 </span>            :           */
+<span class="lineNum">     123 </span><span class="lineNoCov">          0 :             print(</span>
+<span class="lineNum">     124 </span><span class="lineNoCov">          0 :                 &quot;WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}&quot;);</span>
+<span class="lineNum">     125 </span>            :             final WiltChangeNotificationEvent notification =
+<span class="lineNum">     126 </span><span class="lineNoCov">          0 :                 new WiltChangeNotificationEvent.decodeError(</span>
+<span class="lineNum">     127 </span><span class="lineNoCov">          0 :                     result, e.toString());</span>
+<span class="lineNum">     128 </span>            : 
+<span class="lineNum">     129 </span><span class="lineNoCov">          0 :             _changeNotification.add(notification);</span>
+<span class="lineNum">     130 </span>            :           }
+<span class="lineNum">     131 </span>            :         });
+<span class="lineNum">     132 </span>            :     } catch (e) {
+<span class="lineNum">     133 </span>            :       /**
+<span class="lineNum">     134 </span>            :        * Unrecoverable error, send the client an abort event
+<span class="lineNum">     135 </span>            :        */
+<span class="lineNum">     136 </span><span class="lineNoCov">          0 :       print(</span>
+<span class="lineNum">     137 </span><span class="lineNoCov">          0 :           &quot;WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}&quot;);</span>
+<span class="lineNum">     138 </span>            :       final WiltChangeNotificationEvent notification =
+<span class="lineNum">     139 </span><span class="lineNoCov">          0 :           new WiltChangeNotificationEvent.abort(e.toString());</span>
+<span class="lineNum">     140 </span>            : 
+<span class="lineNum">     141 </span><span class="lineNoCov">          0 :       _changeNotification.add(notification);</span>
+<span class="lineNum">     142 </span>            :     }
+<span class="lineNum">     143 </span>            :   }
+<span class="lineNum">     144 </span>            : 
+<span class="lineNum">     145 </span>            :   /// Database change updates
+<span class="lineNum">     146 </span>            :   void processDbChange(Map change) {
+<span class="lineNum">     147 </span>            :     /**
+<span class="lineNum">     148 </span>            :      * Check for an error response
+<span class="lineNum">     149 </span>            :      */
+<span class="lineNum">     150 </span><span class="lineCov">          1 :     if (change.containsKey('error')) {</span>
+<span class="lineNum">     151 </span>            :       final WiltChangeNotificationEvent notification =
+<span class="lineNum">     152 </span><span class="lineNoCov">          0 :           new WiltChangeNotificationEvent.couchDbError(</span>
+<span class="lineNum">     153 </span><span class="lineNoCov">          0 :               change['error'], change['reason']);</span>
+<span class="lineNum">     154 </span>            : 
+<span class="lineNum">     155 </span><span class="lineNoCov">          0 :       _changeNotification.add(notification);</span>
+<span class="lineNum">     156 </span>            : 
+<span class="lineNum">     157 </span>            :       return;
+<span class="lineNum">     158 </span>            :     }
+<span class="lineNum">     159 </span>            : 
+<span class="lineNum">     160 </span>            :     /**
+<span class="lineNum">     161 </span>            :      * Update the last sequence number
+<span class="lineNum">     162 </span>            :      */
+<span class="lineNum">     163 </span><span class="lineCov">          2 :     _sequence = change['last_seq'];</span>
+<span class="lineNum">     164 </span>            : 
+<span class="lineNum">     165 </span>            :     /**
+<span class="lineNum">     166 </span>            :      * Process the result list
+<span class="lineNum">     167 </span>            :      */
+<span class="lineNum">     168 </span><span class="lineCov">          1 :     final List results = change['results'];</span>
+<span class="lineNum">     169 </span><span class="lineCov">          1 :     if (results.isEmpty) {</span>
+<span class="lineNum">     170 </span>            :       final WiltChangeNotificationEvent notification =
+<span class="lineNum">     171 </span><span class="lineCov">          2 :           new WiltChangeNotificationEvent.sequence(_sequence);</span>
+<span class="lineNum">     172 </span>            : 
+<span class="lineNum">     173 </span><span class="lineCov">          2 :       _changeNotification.add(notification);</span>
+<span class="lineNum">     174 </span>            : 
+<span class="lineNum">     175 </span>            :       return;
+<span class="lineNum">     176 </span>            :     }
+<span class="lineNum">     177 </span>            : 
+<span class="lineNum">     178 </span><span class="lineCov">          1 :     results.forEach((Map result) {</span>
+<span class="lineNum">     179 </span><span class="lineCov">          2 :       final Map changes = result['changes'][0];</span>
+<span class="lineNum">     180 </span>            : 
+<span class="lineNum">     181 </span>            :       /**
+<span class="lineNum">     182 </span>            :        * Check for delete or update
+<span class="lineNum">     183 </span>            :        */
+<span class="lineNum">     184 </span><span class="lineCov">          1 :       if (result.containsKey('deleted')) {</span>
+<span class="lineNum">     185 </span>            :         final WiltChangeNotificationEvent notification =
+<span class="lineNum">     186 </span><span class="lineCov">          1 :             new WiltChangeNotificationEvent.delete(</span>
+<span class="lineNum">     187 </span><span class="lineCov">          3 :                 result['id'], changes['rev'], result['seq']);</span>
+<span class="lineNum">     188 </span>            : 
+<span class="lineNum">     189 </span><span class="lineCov">          2 :         _changeNotification.add(notification);</span>
+<span class="lineNum">     190 </span>            :       } else {
+<span class="lineNum">     191 </span>            :         jsonobject.JsonObject document = null;
+<span class="lineNum">     192 </span><span class="lineCov">          1 :         if (result.containsKey('doc')) {</span>
+<span class="lineNum">     193 </span><span class="lineCov">          2 :           document = new jsonobject.JsonObject.fromMap(result['doc']);</span>
+<span class="lineNum">     194 </span>            :         }
+<span class="lineNum">     195 </span>            :         final WiltChangeNotificationEvent notification =
+<span class="lineNum">     196 </span><span class="lineCov">          1 :             new WiltChangeNotificationEvent.update(</span>
+<span class="lineNum">     197 </span><span class="lineCov">          3 :                 result['id'], changes['rev'], result['seq'], document);</span>
+<span class="lineNum">     198 </span>            : 
+<span class="lineNum">     199 </span><span class="lineCov">          2 :         _changeNotification.add(notification);</span>
+<span class="lineNum">     200 </span>            :       }
+<span class="lineNum">     201 </span>            :     });
+<span class="lineNum">     202 </span>            :   }
+<span class="lineNum">     203 </span>            : 
+<span class="lineNum">     204 </span>            :   /// Stop change notifications
+<span class="lineNum">     205 </span>            :   void stopNotifications() {
+<span class="lineNum">     206 </span><span class="lineCov">          2 :     _timer.cancel();</span>
+<span class="lineNum">     207 </span>            :   }
+<span class="lineNum">     208 </span>            : 
+<span class="lineNum">     209 </span>            :   /// Restart change notifications
+<span class="lineNum">     210 </span>            :   void restartChangeNotifications() {
+<span class="lineNum">     211 </span>            :     /**
+<span class="lineNum">     212 </span>            :      * Start the heartbeat timer
+<span class="lineNum">     213 </span>            :      */
+<span class="lineNum">     214 </span>            :     final Duration heartbeat =
+<span class="lineNum">     215 </span><span class="lineCov">          3 :         new Duration(milliseconds: _parameters.heartbeat);</span>
+<span class="lineNum">     216 </span><span class="lineCov">          3 :     _timer = new Timer.periodic(heartbeat, _requestChanges);</span>
+<span class="lineNum">     217 </span>            : 
+<span class="lineNum">     218 </span>            :     /**
+<span class="lineNum">     219 </span>            :      * Start change notifications
+<span class="lineNum">     220 </span>            :      */
+<span class="lineNum">     221 </span><span class="lineCov">          2 :     _requestChanges(_timer);</span>
+<span class="lineNum">     222 </span>            :   }
+<span class="lineNum">     223 </span>            : }
+</pre>
+      </td>
+    </tr>
+  </table>
+  <br>
+
+  <table width="100%" border=0 cellspacing=0 cellpadding=0>
+    <tr><td class="ruler"><img src="../../glass.png" width=3 height=3 alt=""></td></tr>
+    <tr><td class="versionInfo">Generated by: <a href="http://ltp.sourceforge.net/coverage/lcov.php" target="_parent">LCOV version 1.10</a></td></tr>
+  </table>
+  <br>
+
+</body>
+</html>
