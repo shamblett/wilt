@@ -9,7 +9,6 @@
 
 library wilt_server_client;
 
-import 'dart:io';
 import 'dart:convert';
 import 'dart:async';
 import 'package:cryptoutils/cryptoutils.dart';

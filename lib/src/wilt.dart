@@ -210,15 +210,17 @@ class Wilt {
     if (db == null) {
       return WiltException.noDatabaseSpecified;
     }
-    if (url == null) return '/';
+    if (url == null) {
+      return '/';
+    }
     String urlRet = url;
     /* The first char of the URL should be a slash. */
     if (!url.startsWith('/')) {
       urlRet = "/$urlRet";
     }
-
-    if (db != null) urlRet = "/$db$url";
-
+    if (db != null) {
+      urlRet = "/$db$urlRet";
+    }
     return urlRet;
   }
 
@@ -283,7 +285,7 @@ class Wilt {
   /// the current database added.
   Future put(String url, String data, [Map headers]) {
     final String url1 = _conditionUrl(url);
-    if (url == WiltException.noDatabaseSpecified) {
+    if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
@@ -295,7 +297,7 @@ class Wilt {
   /// the current database added.
   Future delete(String url) {
     final String url1 = _conditionUrl(url);
-    if (url == WiltException.noDatabaseSpecified) {
+    if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
@@ -408,7 +410,7 @@ class Wilt {
     }
 
     final String url = _conditionUrl(id);
-    return _httpRequest('PUT_DOCUMENT', url, data: jsonData);
+    return _httpRequest(putDocumentt, url, data: jsonData);
   }
 
   /// PUT's to the specified  document where the document is supplied as
@@ -424,7 +426,7 @@ class Wilt {
       id1 = "$id1?rev=$rev";
     }
     final String url = _conditionUrl(id1);
-    return _httpRequest('PUT_DOCUMENT', url, data: document);
+    return _httpRequest(putDocumentt, url, data: document);
   }
 
   /// POST's the specified document.
@@ -449,7 +451,7 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    return _httpRequest('POST_DOCUMENT', url, data: jsonData, headers: headers);
+    return _httpRequest(postDocumentt, url, data: jsonData, headers: headers);
   }
 
   /// POST's to the specified  document where the document is supplied as

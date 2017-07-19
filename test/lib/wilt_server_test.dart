@@ -71,7 +71,7 @@ void main() {
             WiltException.header + WiltException.badConstNoAdapter);
       }
     });
-  });
+  }, skip:false);
 
   /* Group 2 - Basic methods parameter validation  */
   group("2. Basic Methods Parameter Validation - ", () {
@@ -159,7 +159,7 @@ void main() {
         completer(e);
       });
     });
-  });
+  }, skip:false);
 
   /* Group 3 - Document/Database methods parameter validation  */
   group("3. Document/Database Parameter Validation - ", () {
@@ -715,7 +715,7 @@ void main() {
         expect(e.toString(), WiltException.header + WiltException.cnNoAuth);
       }
     });
-  });
+  }, skip:false);
 
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
@@ -1274,7 +1274,7 @@ void main() {
           completer(res);
         });
     });
-  });
+  }, skip:false);
 
   /* Group 5 - Bulk documents */
   group("5. Bulk Documents - ", () {
@@ -1681,7 +1681,7 @@ void main() {
           completer(res);
         });
     });
-  });
+  }, skip:true);
 
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
@@ -1856,7 +1856,7 @@ void main() {
           completer(res);
         });
     });
-  });
+  }, skip:true);
 
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
@@ -2219,7 +2219,7 @@ void main() {
           completer(res);
         });
     });
-  });
+  }, skip:true);
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
@@ -2344,5 +2344,5 @@ void main() {
         if (count == 3) completer();
       });
     });
-  });
+  }, skip:true);
 }

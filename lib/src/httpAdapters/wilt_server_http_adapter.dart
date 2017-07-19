@@ -195,7 +195,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /// Error completion
-    void onError(HttpException response) {
+    void onError(FormatException response) {
       /* Process the error response */
       final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
       jsonResponse.method = method;
