@@ -874,6 +874,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the documents parameters */
@@ -901,6 +902,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Get the documents id and re-get the document to check correctness */
@@ -939,6 +941,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the documents parameters */
@@ -965,6 +968,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Get the documents id and re-get the document to check correctness */
@@ -1003,6 +1007,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the documents parameters */
@@ -1026,6 +1031,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the documents parameters */
@@ -1065,6 +1071,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Get the documents id and re-get the document to check correctness */
@@ -1111,6 +1118,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the document has been deleted */
@@ -1132,6 +1140,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Get the documents id and re-get the document to check correctness */
@@ -1171,6 +1180,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the document has been deleted */
@@ -1192,6 +1202,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Get the documents id and re-get the document to check correctness */
@@ -1231,6 +1242,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         /* Check the copied document */
@@ -1260,6 +1272,7 @@ void main() {
           logMessage("WILT::Reason is $reasonText");
           final int statusCode = res.errorCode;
           logMessage("WILT::Status code is $statusCode");
+          return;
         }
 
         final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
@@ -1681,7 +1694,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:true);
+  }, skip:false);
 
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
@@ -1856,7 +1869,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:true);
+  }, skip:false);
 
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
@@ -2219,7 +2232,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:true);
+  }, skip:false);
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
@@ -2344,5 +2357,5 @@ void main() {
         if (count == 3) completer();
       });
     });
-  }, skip:true);
+  }, skip:false);
 }
