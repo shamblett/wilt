@@ -31,8 +31,8 @@ void main() {
         wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.badConstParams);
+        expect(
+            e.toString(), WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -43,8 +43,8 @@ void main() {
         wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.badConstParams);
+        expect(
+            e.toString(), WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -55,8 +55,8 @@ void main() {
         wilting.toString();
       } catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.badConstParams);
+        expect(
+            e.toString(), WiltException.header + WiltException.badConstParams);
       }
     });
 
@@ -71,7 +71,7 @@ void main() {
             WiltException.header + WiltException.badConstNoAdapter);
       }
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 2 - Basic methods parameter validation  */
   group("2. Basic Methods Parameter Validation - ", () {
@@ -159,7 +159,7 @@ void main() {
         completer(e);
       });
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 3 - Document/Database methods parameter validation  */
   group("3. Document/Database Parameter Validation - ", () {
@@ -169,8 +169,7 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(
-            e.toString(), WiltException.header + WiltException.getDocNoId);
+        expect(e.toString(), WiltException.header + WiltException.getDocNoId);
       });
 
       wilting.getDocument(null).then((jsonobject.JsonObject res) {
@@ -186,8 +185,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.getDocRevNoId);
+        expect(
+            e.toString(), WiltException.header + WiltException.getDocRevNoId);
       });
 
       wilting.getDocumentRevision(null).then((jsonobject.JsonObject res) {
@@ -237,8 +236,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.putDocNoIdBody);
+        expect(
+            e.toString(), WiltException.header + WiltException.putDocNoIdBody);
       });
 
       jsonobject.JsonObject doc;
@@ -255,8 +254,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.putDocNoIdBody);
+        expect(
+            e.toString(), WiltException.header + WiltException.putDocNoIdBody);
       });
 
       wilting.putDocument('1', null).then((jsonobject.JsonObject res) {
@@ -272,8 +271,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.postDocNoBody);
+        expect(
+            e.toString(), WiltException.header + WiltException.postDocNoBody);
       });
 
       wilting.postDocument(null).then((jsonobject.JsonObject res) {
@@ -306,8 +305,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createDbNoName);
+        expect(
+            e.toString(), WiltException.header + WiltException.createDbNoName);
       });
 
       wilting.createDatabase(null).then((jsonobject.JsonObject res) {
@@ -323,8 +322,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteDbNoName);
+        expect(
+            e.toString(), WiltException.header + WiltException.deleteDbNoName);
       });
 
       wilting.deleteDatabase(null).then((jsonobject.JsonObject res) {
@@ -340,8 +339,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.getAllDocsLimit);
+        expect(
+            e.toString(), WiltException.header + WiltException.getAllDocsLimit);
       });
 
       wilting.getAllDocs(limit: -1).then((jsonobject.JsonObject res) {
@@ -357,8 +356,7 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(
-            e.toString(), WiltException.header + WiltException.genIdsAmount);
+        expect(e.toString(), WiltException.header + WiltException.genIdsAmount);
       });
 
       wilting.generateIds(-1).then((jsonobject.JsonObject res) {
@@ -374,8 +372,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.copyDocNoSrcId);
+        expect(
+            e.toString(), WiltException.header + WiltException.copyDocNoSrcId);
       });
 
       wilting.copyDocument(null, '1').then((jsonobject.JsonObject res) {
@@ -391,8 +389,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.copyDocNoDestId);
+        expect(
+            e.toString(), WiltException.header + WiltException.copyDocNoDestId);
       });
 
       wilting.copyDocument('1', null).then((jsonobject.JsonObject res) {
@@ -453,8 +451,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createAttNoName);
+        expect(
+            e.toString(), WiltException.header + WiltException.createAttNoName);
       });
 
       final String payload = 'Hello';
@@ -472,8 +470,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createAttNoRev);
+        expect(
+            e.toString(), WiltException.header + WiltException.createAttNoRev);
       });
 
       final String payload = 'Hello';
@@ -547,8 +545,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.updateAttNoName);
+        expect(
+            e.toString(), WiltException.header + WiltException.updateAttNoName);
       });
 
       final String payload = 'Hello';
@@ -566,8 +564,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.updateAttNoRev);
+        expect(
+            e.toString(), WiltException.header + WiltException.updateAttNoRev);
       });
 
       final String payload = 'Hello';
@@ -640,8 +638,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteAttNoName);
+        expect(
+            e.toString(), WiltException.header + WiltException.deleteAttNoName);
       });
 
       wilting.deleteAttachment('id', null, 'rev').then(
@@ -658,8 +656,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteAttNoRev);
+        expect(
+            e.toString(), WiltException.header + WiltException.deleteAttNoRev);
       });
 
       wilting.deleteAttachment('id', 'name', null).then(
@@ -676,8 +674,8 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.getAttNoDocId);
+        expect(
+            e.toString(), WiltException.header + WiltException.getAttNoDocId);
       });
 
       wilting.getAttachment(null, 'name').then((jsonobject.JsonObject res) {
@@ -693,8 +691,7 @@ void main() {
 
       final completer = expectAsync1((e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(
-            e.toString(), WiltException.header + WiltException.getAttNoName);
+        expect(e.toString(), WiltException.header + WiltException.getAttNoName);
       });
 
       wilting.getAttachment('id', null).then((jsonobject.JsonObject res) {
@@ -715,7 +712,7 @@ void main() {
         expect(e.toString(), WiltException.header + WiltException.cnNoAuth);
       }
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 4 - Single documents and database methods */
   group("4. Single documents and database - ", () {
@@ -762,34 +759,6 @@ void main() {
           completer(res);
         });
     });
-
-    /* Create the test database */
-    test("Create Test Database", () {
-      final completer = expectAsync1((res) {
-        expect(res.method, Wilt.createDatabasee);
-        try {
-          expect(res.error, isFalse);
-        } catch (e) {
-          logMessage("WILT::Create Test Database Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
-          final String errorText = errorResponse.error;
-          logMessage("WILT::Error is $errorText");
-          final String reasonText = errorResponse.reason;
-          logMessage("WILT::Reason is $reasonText");
-          final int statusCode = res.errorCode;
-          logMessage("WILT::Status code is $statusCode");
-        }
-
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
-      });
-
-      wilting.createDatabase(databaseNameServer)
-        ..then((res) {
-          completer(res);
-        });
-    });
-
     /* Create a database then delete it */
     test("Delete Database", () {
       final checkCompleter = expectAsync1((res) {
@@ -831,6 +800,57 @@ void main() {
       });
 
       wilting.createDatabase("wiltdeleteme")
+        ..then((res) {
+          completer(res);
+        });
+    });
+
+    /* Delete the test database now we know delete is OK before we start the tests */
+    test("Delete Test Database", () {
+      final completer = expectAsync1((res) {
+        expect(res.method, Wilt.deleteDatabasee);
+        try {
+          expect(res.error, isFalse);
+        } catch (e) {
+          logMessage("WILT::Create Database Failed");
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          final String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          final int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+        }
+      });
+
+      wilting.deleteDatabase(databaseNameServer)
+        ..then((res) {
+          completer(res);
+        });
+    });
+
+    /* Create the test database */
+    test("Create Test Database", () {
+      final completer = expectAsync1((res) {
+        expect(res.method, Wilt.createDatabasee);
+        try {
+          expect(res.error, isFalse);
+        } catch (e) {
+          logMessage("WILT::Create Test Database Failed");
+          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final String errorText = errorResponse.error;
+          logMessage("WILT::Error is $errorText");
+          final String reasonText = errorResponse.reason;
+          logMessage("WILT::Reason is $reasonText");
+          final int statusCode = res.errorCode;
+          logMessage("WILT::Status code is $statusCode");
+        }
+
+        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        expect(successResponse.ok, isTrue);
+      });
+
+      wilting.createDatabase(databaseNameServer)
         ..then((res) {
           completer(res);
         });
@@ -1287,7 +1307,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 5 - Bulk documents */
   group("5. Bulk Documents - ", () {
@@ -1694,7 +1714,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 6 - Information tests */
   group("Information/Utilty Tests - ", () {
@@ -1869,7 +1889,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 7 - Attachment tests */
   group("Attachment Tests - ", () {
@@ -2232,7 +2252,7 @@ void main() {
           completer(res);
         });
     });
-  }, skip:false);
+  }, skip: false);
 
   /* Group 8 - Change Notifications */
   group("Change Notification Tests - ", () {
@@ -2357,5 +2377,5 @@ void main() {
         if (count == 3) completer();
       });
     });
-  }, skip:false);
+  }, skip: false);
 }
