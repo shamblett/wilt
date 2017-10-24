@@ -10,7 +10,7 @@ library wilt_test_browser;
 import 'dart:html';
 import 'package:wilt/wilt.dart';
 import 'package:wilt/wilt_browser_client.dart';
-import 'package:json_object/json_object.dart' as jsonobject;
+import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
 import 'wilt_test_config.dart';
 
@@ -85,7 +85,7 @@ void main() {
             WiltException.header + WiltException.noDatabaseSpecified);
       });
 
-      wilting.head(null).then((jsonobject.JsonObject res) {
+      wilting.head(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -102,7 +102,7 @@ void main() {
             WiltException.header + WiltException.noDatabaseSpecified);
       });
 
-      wilting.get(null).then((jsonobject.JsonObject res) {
+      wilting.get(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -119,7 +119,7 @@ void main() {
             WiltException.header + WiltException.noDatabaseSpecified);
       });
 
-      wilting.post(null, "1").then((jsonobject.JsonObject res) {
+      wilting.post(null, "1").then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -136,7 +136,7 @@ void main() {
             WiltException.header + WiltException.noDatabaseSpecified);
       });
 
-      wilting.put(null, "1").then((jsonobject.JsonObject res) {
+      wilting.put(null, "1").then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -153,7 +153,7 @@ void main() {
             WiltException.header + WiltException.noDatabaseSpecified);
       });
 
-      wilting.delete(null).then((jsonobject.JsonObject res) {
+      wilting.delete(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -172,7 +172,7 @@ void main() {
         expect(e.toString(), WiltException.header + WiltException.getDocNoId);
       });
 
-      wilting.getDocument(null).then((jsonobject.JsonObject res) {
+      wilting.getDocument(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -189,7 +189,7 @@ void main() {
             WiltException.header + WiltException.deleteDocNoIdRev);
       });
 
-      wilting.deleteDocument(null, null).then((jsonobject.JsonObject res) {
+      wilting.deleteDocument(null, null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -206,7 +206,7 @@ void main() {
             WiltException.header + WiltException.deleteDocNoIdRev);
       });
 
-      wilting.deleteDocument('1', null).then((jsonobject.JsonObject res) {
+      wilting.deleteDocument('1', null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -223,8 +223,8 @@ void main() {
             e.toString(), WiltException.header + WiltException.putDocNoIdBody);
       });
 
-      jsonobject.JsonObject doc;
-      wilting.putDocument(null, doc).then((jsonobject.JsonObject res) {
+      jsonobject.JsonObjectLite doc;
+      wilting.putDocument(null, doc).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -241,7 +241,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.putDocNoIdBody);
       });
 
-      wilting.putDocument('1', null).then((jsonobject.JsonObject res) {
+      wilting.putDocument('1', null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -258,7 +258,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.postDocNoBody);
       });
 
-      wilting.postDocument(null).then((jsonobject.JsonObject res) {
+      wilting.postDocument(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -275,7 +275,7 @@ void main() {
             WiltException.header + WiltException.postDocStringNoBody);
       });
 
-      wilting.postDocumentString(null).then((jsonobject.JsonObject res) {
+      wilting.postDocumentString(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -292,7 +292,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.createDbNoName);
       });
 
-      wilting.createDatabase(null).then((jsonobject.JsonObject res) {
+      wilting.createDatabase(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -309,7 +309,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.deleteDbNoName);
       });
 
-      wilting.deleteDatabase(null).then((jsonobject.JsonObject res) {
+      wilting.deleteDatabase(null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -326,7 +326,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.getAllDocsLimit);
       });
 
-      wilting.getAllDocs(limit: -1).then((jsonobject.JsonObject res) {
+      wilting.getAllDocs(limit: -1).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -342,7 +342,7 @@ void main() {
         expect(e.toString(), WiltException.header + WiltException.genIdsAmount);
       });
 
-      wilting.generateIds(-1).then((jsonobject.JsonObject res) {
+      wilting.generateIds(-1).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -359,7 +359,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.copyDocNoSrcId);
       });
 
-      wilting.copyDocument(null, '1').then((jsonobject.JsonObject res) {
+      wilting.copyDocument(null, '1').then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -376,7 +376,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.copyDocNoDestId);
       });
 
-      wilting.copyDocument('1', null).then((jsonobject.JsonObject res) {
+      wilting.copyDocument('1', null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -421,7 +421,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -440,7 +440,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -459,7 +459,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -478,7 +478,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.createAttachment('id', 'name', 'rev', null, payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -496,7 +496,7 @@ void main() {
       });
 
       wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -515,7 +515,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -534,7 +534,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -553,7 +553,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -572,7 +572,7 @@ void main() {
 
       final String payload = 'Hello';
       wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -590,7 +590,7 @@ void main() {
       });
 
       wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -608,7 +608,7 @@ void main() {
       });
 
       wilting.deleteAttachment(null, 'name', 'rev').then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -626,7 +626,7 @@ void main() {
       });
 
       wilting.deleteAttachment('id', null, 'rev').then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -644,7 +644,7 @@ void main() {
       });
 
       wilting.deleteAttachment('id', 'name', null).then(
-          (jsonobject.JsonObject res) {
+              (jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -661,7 +661,7 @@ void main() {
             e.toString(), WiltException.header + WiltException.getAttNoDocId);
       });
 
-      wilting.getAttachment(null, 'name').then((jsonobject.JsonObject res) {
+      wilting.getAttachment(null, 'name').then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -677,7 +677,7 @@ void main() {
         expect(e.toString(), WiltException.header + WiltException.getAttNoName);
       });
 
-      wilting.getAttachment('id', null).then((jsonobject.JsonObject res) {
+      wilting.getAttachment('id', null).then((jsonobject.JsonObjectLite res) {
         // nothing to do
       }, onError: (WiltException e) {
         completer(e);
@@ -729,7 +729,7 @@ void main() {
         try {
           expect(res.error, isFalse);
         } catch (e) {
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           expect(errorResponse.error, equals('unauthorized'));
           expect(errorResponse.reason, equals('Name or password is incorrect'));
           expect(res.errorCode, equals(401));
@@ -750,7 +750,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Test Database Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -759,7 +759,7 @@ void main() {
           logMessage("WILT::Status code is $statusCode");
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -777,7 +777,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete Database check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -793,7 +793,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Database Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -822,7 +822,7 @@ void main() {
           expect(res.error, isTrue);
         } catch (e) {
           logMessage("WILT::Head null URL");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -846,7 +846,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(POST) and check creation");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -856,7 +856,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, docId);
@@ -873,7 +873,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(POST) and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -885,7 +885,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         docId = successResponse.id;
         expect(docId, isNot(isEmpty));
         /* Now get the document and check it */
@@ -896,7 +896,8 @@ void main() {
       });
 
       wilting.db = databaseNameClient;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Post Request";
       document.version = 1;
       document.author = "Me";
@@ -913,7 +914,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Document(PUT) and check updated");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -923,7 +924,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
@@ -939,7 +940,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Put Document and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -949,7 +950,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
@@ -960,7 +961,8 @@ void main() {
       });
 
       wilting.db = databaseNameClient;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Put Request";
       document.version = 2;
       document.author = "Me again";
@@ -977,7 +979,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check updated");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -987,7 +989,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId = successResponse.id;
         expect(returnedDocId, equals(putId));
         final String returnedDocRev = successResponse.rev;
@@ -1000,7 +1002,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check created");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1010,7 +1012,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
@@ -1022,7 +1024,8 @@ void main() {
         expect(successResponse.version, equals(3));
         expect(successResponse.author, equals("Me also"));
         /* Now alter the document using putDocument */
-        final jsonobject.JsonObject document = new jsonobject.JsonObject();
+        final jsonobject.JsonObjectLite document =
+        new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request for updating ";
         document.version = 4;
         document.author = "Me also and again";
@@ -1040,7 +1043,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update document and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1050,7 +1053,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         /* Now get the document and check it */
@@ -1061,7 +1064,8 @@ void main() {
       });
 
       wilting.db = databaseNameClient;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Put Request for checking";
       document.version = 3;
       document.author = "Me also";
@@ -1086,7 +1090,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document and check deletion");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1096,7 +1100,7 @@ void main() {
         }
 
         /* Check the document has been deleted */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
       });
@@ -1107,7 +1111,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1117,7 +1121,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
         final String returnedDocRev = successResponse.rev;
@@ -1129,7 +1133,8 @@ void main() {
       });
 
       wilting.db = databaseNameClient;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Put Request for deleting";
       document.version = 1;
       document.author = "Its me again";
@@ -1146,7 +1151,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document preserve and check deletion");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1156,7 +1161,7 @@ void main() {
         }
 
         /* Check the document has been deleted */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
       });
@@ -1167,7 +1172,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete document preserve and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1177,7 +1182,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
         final String returnedDocRev = successResponse.rev;
@@ -1189,7 +1194,8 @@ void main() {
       });
 
       wilting.db = databaseNameServer;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Put Request for preserve deleting";
       document.version = 1;
       document.author = "Its me again";
@@ -1206,7 +1212,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Copy document");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1216,7 +1222,7 @@ void main() {
         }
 
         /* Check the copied document */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String copyDocId = successResponse.id;
         expect(copyDocId, equals(copyId));
       });
@@ -1235,7 +1241,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Raw HTTP Request failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1244,7 +1250,7 @@ void main() {
           logMessage("WILT::Status code is $statusCode");
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
@@ -1263,10 +1269,10 @@ void main() {
     test("User Utils  - Various", () {
       final String id = "myId";
       final String rev = "1-765frd";
-      jsonobject.JsonObject record = new jsonobject.JsonObject();
+      jsonobject.JsonObjectLite record = new jsonobject.JsonObjectLite();
       record.name = "Steve";
       record.tag = "MyTag";
-      jsonobject.JsonObject record2 = record;
+      jsonobject.JsonObjectLite record2 = record;
 
       record = WiltUserUtils.addDocumentIdJo(record, id);
       String tmp = record.toString();
@@ -1287,7 +1293,7 @@ void main() {
 
       record2.name = "newName";
       record2.tag = "2-uy6543";
-      final List<jsonobject.JsonObject> jList = [record, record2];
+      final List<jsonobject.JsonObjectLite> jList = [record, record2];
       final String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
       expect(bulk, isNotNull);
       expect(bulk,
@@ -1319,7 +1325,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - Include docs");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1329,7 +1335,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
         expect(successResponse.rows[2].id, equals(putId));
@@ -1355,7 +1361,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - limit");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1365,7 +1371,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, isNot(equals(putId)));
         expect(successResponse.rows[0].id, isNot(equals(putId2)));
@@ -1396,7 +1402,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - start key");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1406,7 +1412,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
         int count = 0;
@@ -1436,7 +1442,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Get All Docs  - end key");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1446,7 +1452,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
         int count = 0;
@@ -1476,7 +1482,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Get All Docs  - key list");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1486,7 +1492,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
         expect(successResponse.rows[1].key, equals(putId2));
@@ -1520,7 +1526,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Docs  - descending");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1530,7 +1536,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(putId));
         expect(successResponse.rows[0].key, equals(putId2));
@@ -1564,7 +1570,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Bulk Insert Auto Keys");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1574,7 +1580,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse[0].ok, isTrue);
         expect(successResponse[1].ok, isTrue);
         expect(successResponse[2].ok, isTrue);
@@ -1585,18 +1591,21 @@ void main() {
         wilting.login(userName, userPassword);
       }
       wilting.db = databaseNameClient;
-      final List docList = new List<jsonobject.JsonObject>();
-      final jsonobject.JsonObject document1 = new jsonobject.JsonObject();
+      final List docList = new List<jsonobject.JsonObjectLite>();
+      final jsonobject.JsonObjectLite document1 =
+      new jsonobject.JsonObjectLite();
       document1.title = "Document 1";
       document1.version = 1;
       document1.attribute = "Doc 1 attribute";
       docList.add(document1);
-      final jsonobject.JsonObject document2 = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document2 =
+      new jsonobject.JsonObjectLite();
       document2.title = "Document 2";
       document2.version = 2;
       document2.attribute = "Doc 2 attribute";
       docList.add(document2);
-      final jsonobject.JsonObject document3 = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document3 =
+      new jsonobject.JsonObjectLite();
       document3.title = "Document 3";
       document3.version = 3;
       document3.attribute = "Doc 3 attribute";
@@ -1618,7 +1627,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Bulk Insert Supplied Keys");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1628,7 +1637,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse[0].id, equals("MyBulkId1"));
         expect(successResponse[1].id, equals("MyBulkId2"));
         expect(successResponse[2].id, equals("MyBulkId3"));
@@ -1640,17 +1649,20 @@ void main() {
       }
       wilting.db = databaseNameClient;
 
-      final jsonobject.JsonObject document1 = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document1 =
+      new jsonobject.JsonObjectLite();
       document1.title = "Document 1";
       document1.version = 1;
       document1.attribute = "Doc 1 attribute";
       final String doc1 = WiltUserUtils.addDocumentId(document1, "MyBulkId1");
-      final jsonobject.JsonObject document2 = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document2 =
+      new jsonobject.JsonObjectLite();
       document2.title = "Document 2";
       document2.version = 2;
       document2.attribute = "Doc 2 attribute";
       final String doc2 = WiltUserUtils.addDocumentId(document2, "MyBulkId2");
-      final jsonobject.JsonObject document3 = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document3 =
+      new jsonobject.JsonObjectLite();
       document3.title = "Document 3";
       document3.version = 3;
       document3.attribute = "Doc 3 attribute";
@@ -1685,7 +1697,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Session Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1695,7 +1707,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -1712,7 +1724,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Stats Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1722,7 +1734,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.couchdb, isNotNull);
       });
 
@@ -1739,7 +1751,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Database Information - default");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1749,7 +1761,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.db_name, equals(databaseNameClient));
       });
 
@@ -1767,7 +1779,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Database Information - specified");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1777,7 +1789,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.db_name, equals(databaseNameClient));
       });
 
@@ -1794,7 +1806,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get All Db's Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1804,7 +1816,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.contains(databaseNameClient), isTrue);
       });
 
@@ -1821,7 +1833,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Generate Ids");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1831,7 +1843,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.uuids.length, equals(10));
       });
 
@@ -1875,7 +1887,7 @@ void main() {
         } catch (e) {
           logMessage(
               "WILT::Create Document(PUT) for attachment tests and check updated");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1885,7 +1897,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
@@ -1902,7 +1914,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Test Put Document for attachment tests and check");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1912,7 +1924,7 @@ void main() {
         }
 
         /* Get the documents id and re-get the document to check correctness */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String putDocId = successResponse.id;
         expect(putDocId, equals('attachmentTestDoc'));
         /* Now get the document and check it */
@@ -1923,7 +1935,8 @@ void main() {
       });
 
       wilting.db = databaseNameClient;
-      final jsonobject.JsonObject document = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite document =
+      new jsonobject.JsonObjectLite();
       document.title = "Created by a Put Request for attachment testing";
       document.version = 1;
       document.author = "SJH";
@@ -1940,7 +1953,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1950,7 +1963,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
       });
@@ -1970,7 +1983,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Create Attachment Get Document Revision");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -1980,7 +1993,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
@@ -2002,7 +2015,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Create Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2012,7 +2025,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         final String payload = res.responseText;
         expect(payload, equals(pngImage));
@@ -2041,7 +2054,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Update Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2051,7 +2064,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2070,7 +2083,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Update Attachment Get Document Revision");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2080,7 +2093,7 @@ void main() {
         }
 
         /* Check the documents parameters */
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         final String returnedDocId =
             WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
@@ -2097,7 +2110,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Get Update Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2107,7 +2120,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         final String payload = res.responseText;
@@ -2135,7 +2148,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Create Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2145,7 +2158,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2180,7 +2193,7 @@ void main() {
           expect(res.error, isFalse);
         } catch (e) {
           logMessage("WILT::Delete Attachment Failed");
-          final jsonobject.JsonObject errorResponse = res.jsonCouchResponse;
+          final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           final String errorText = errorResponse.error;
           logMessage("WILT::Error is $errorText");
           final String reasonText = errorResponse.reason;
@@ -2190,7 +2203,7 @@ void main() {
           return;
         }
 
-        final jsonobject.JsonObject successResponse = res.jsonCouchResponse;
+        final jsonobject.JsonObjectLite successResponse = res.jsonCouchResponse;
         expect(successResponse.ok, isTrue);
       });
 
@@ -2268,7 +2281,7 @@ void main() {
         count++;
         if (e.docId == 'mytestid2') {
           if (e.type == WiltChangeNotificationEvent.updatee) {
-            final jsonobject.JsonObject document = e.document;
+            final jsonobject.JsonObjectLite document = e.document;
             expect(document.title, "Created by a Put Request for updating ");
             expect(document.version, 4);
             expect(document.author, "Me also and again");

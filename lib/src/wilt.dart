@@ -131,8 +131,9 @@ class Wilt {
   }
 
   /// Response getter for completion callbacks
-  jsonobject.JsonObject _completionResponse;
-  jsonobject.JsonObject get completionResponse => _completionResponse;
+  jsonobject.JsonObjectLite _completionResponse;
+
+  jsonobject.JsonObjectLite get completionResponse => _completionResponse;
 
   /// Authentication, user name
   String _user = null;
@@ -145,7 +146,7 @@ class Wilt {
 
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
-  Future<jsonobject.JsonObject> _httpRequest(String method, String url,
+  Future<jsonobject.JsonObjectLite> _httpRequest(String method, String url,
       {String data: null, Map headers: null}) {
     /* Build the request for the HttpAdapter*/
     final Map wiltHeaders = new Map<String, String>();
@@ -172,7 +173,7 @@ class Wilt {
     }
 
     /* Execute the request*/
-    final Future<jsonobject.JsonObject> completion =
+    final Future<jsonobject.JsonObjectLite> completion =
         _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)
           ..then((jsonResponse) {
             if (_clientCompletion != null) {
@@ -240,7 +241,7 @@ class Wilt {
   ///
   /// This can be used for CouchDb functions that are not directly supported by Wilt,
   /// e.g views, attachments and design documents.
-  Future<jsonobject.JsonObject> httpRequest(String url,
+  Future<jsonobject.JsonObjectLite> httpRequest(String url,
       {String method: "GET"}) {
     return _httpRequest(method, url);
   }
@@ -337,8 +338,8 @@ class Wilt {
 
     final Completer completer = new Completer();
     head(id).then((res) {
-      final jsonobject.JsonObject headers =
-          new jsonobject.JsonObject.fromMap(res.allResponseHeaders);
+      final jsonobject.JsonObjectLite headers =
+      new jsonobject.JsonObjectLite.fromMap(res.allResponseHeaders);
       if (headers != null) {
         if (headers.containsKey(etag)) {
           String ver = headers.etag;
@@ -365,9 +366,9 @@ class Wilt {
 
     /* Check the preserve flag */
     if (preserve) {
-      getDocument(id).then((jsonobject.JsonObject res) {
+      getDocument(id).then((jsonobject.JsonObjectLite res) {
         if (res != null) {
-          jsonobject.JsonObject resp = res.jsonCouchResponse;
+          jsonobject.JsonObjectLite resp = res.jsonCouchResponse;
           resp = WiltUserUtils.addDocumentDeleteJo(resp);
           putDocument(id, resp).then((res1) {
             completer.complete(res1);
@@ -390,7 +391,7 @@ class Wilt {
   /// For an update the revision must be specified, this can be in the
   /// document body as a _rev parameter or specified in the call in which
   /// case this will be added to the document body.
-  Future putDocument(String id, jsonobject.JsonObject document,
+  Future putDocument(String id, jsonobject.JsonObjectLite document,
       [String rev = null]) {
     if ((id == null) || (document == null)) {
       return _raiseException(WiltException.putDocNoIdBody);
@@ -431,7 +432,7 @@ class Wilt {
 
   /// POST's the specified document.
   /// An optional path to the document can be specified.
-  Future postDocument(jsonobject.JsonObject document, {String path: null}) {
+  Future postDocument(jsonobject.JsonObjectLite document, {String path: null}) {
     if (document == null) {
       return _raiseException(WiltException.postDocNoBody);
     }
@@ -548,7 +549,8 @@ class Wilt {
 
   /// Bulk insert
   /// Bulk inserts a list of documents
-  Future bulk(List<jsonobject.JsonObject> docs, [bool allOrNothing = false]) {
+  Future bulk(List<jsonobject.JsonObjectLite> docs,
+      [bool allOrNothing = false]) {
     /* Validate the parameters */
     if (docs == null) {
       return _raiseException(WiltException.bulkNoDocList);

@@ -116,8 +116,9 @@ class WiltChangeNotificationEvent {
   /// Document object
   ///
   /// Valid for update and only if includeDocs is true
-  jsonobject.JsonObject _document = null;
-  jsonobject.JsonObject get document => _document;
+  jsonobject.JsonObjectLite _document = null;
+
+  jsonobject.JsonObjectLite get document => _document;
 
   /// Exception string
   ///

@@ -28,7 +28,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<jsonobject.JsonObject> httpRequest(String method, String url,
+  Future<jsonobject.JsonObjectLite> httpRequest(String method, String url,
       [String data = null, Map headers = null]) {
     // Initialise
     final Completer completer = new Completer();
@@ -39,7 +39,8 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
        *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite jsonResponse =
+      new jsonobject.JsonObjectLite();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -58,7 +59,8 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
           couchResp = JSON.decode(response.responseText);
         } catch (e) {
           jsonResponse.error = true;
-          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObjectLite errorAsJson =
+          new jsonobject.JsonObjectLite();
           errorAsJson.error = "JSON Decode Error";
           errorAsJson.reason = "None";
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -72,7 +74,8 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
           jsonResponse.error = true;
-          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObjectLite errorAsJson =
+          new jsonobject.JsonObjectLite();
           errorAsJson.error = "CouchDb Error";
           errorAsJson.reason = couchResp['reason'];
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -88,12 +91,14 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
          * Success response
          */
         if (method != Wilt.headd) {
-          final jsonobject.JsonObject successAsJson =
-              new jsonobject.JsonObject.fromJsonString(response.responseText);
+          final jsonobject.JsonObjectLite successAsJson =
+          new jsonobject.JsonObjectLite.fromJsonString(
+              response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
-        final jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+        final jsonobject.JsonObjectLite successAsJson =
+        new jsonobject.JsonObjectLite();
         successAsJson.ok = true;
         successAsJson.contentType = response.responseHeaders['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
@@ -113,18 +118,20 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       final html.HttpRequest req = response.target;
 
       /* Process the error response */
-      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite jsonResponse =
+      new jsonobject.JsonObjectLite();
       jsonResponse.method = method;
       jsonResponse.error = true;
       jsonResponse.successText = null;
       jsonResponse.responseText = req.responseText;
       jsonResponse.errorCode = req.status;
       if ((req.status != 0) && (method != Wilt.headd)) {
-        final jsonobject.JsonObject errorAsJson =
-            new jsonobject.JsonObject.fromJsonString(req.responseText);
+        final jsonobject.JsonObjectLite errorAsJson =
+        new jsonobject.JsonObjectLite.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
       } else {
-        final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+        final jsonobject.JsonObjectLite errorAsJson =
+        new jsonobject.JsonObjectLite();
         errorAsJson.error = "Invalid HTTP response";
         errorAsJson.reason = "HEAD or status code of 0";
         jsonResponse.jsonCouchResponse = errorAsJson;

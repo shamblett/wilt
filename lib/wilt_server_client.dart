@@ -15,7 +15,7 @@ import 'package:cryptoutils/cryptoutils.dart';
 
 import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;
-import 'package:json_object/json_object.dart' as jsonobject;
+import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 
 part 'src/httpAdapters/wilt_server_http_adapter.dart';
 

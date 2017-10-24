@@ -33,7 +33,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<jsonobject.JsonObject> httpRequest(String method, String url,
+  Future<jsonobject.JsonObjectLite> httpRequest(String method, String url,
       [String data = null, Map headers = null]) {
     /**
      *  Initialise
@@ -46,7 +46,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite jsonResponse =
+      new jsonobject.JsonObjectLite();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -65,7 +66,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
           couchResp = JSON.decode(response.body);
         } catch (e) {
           jsonResponse.error = true;
-          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObjectLite errorAsJson =
+          new jsonobject.JsonObjectLite();
           errorAsJson.error = "JSON Decode Error";
           errorAsJson.reason = "None";
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -79,7 +81,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
           jsonResponse.error = true;
-          final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+          final jsonobject.JsonObjectLite errorAsJson =
+          new jsonobject.JsonObjectLite();
           errorAsJson.error = "CouchDb Error";
           errorAsJson.reason = couchResp['reason'];
           jsonResponse.jsonCouchResponse = errorAsJson;
@@ -95,12 +98,13 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
          * Success response
          */
         if (method != Wilt.headd) {
-          final jsonobject.JsonObject successAsJson =
-              new jsonobject.JsonObject.fromJsonString(response.body);
+          final jsonobject.JsonObjectLite successAsJson =
+          new jsonobject.JsonObjectLite.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
-        final jsonobject.JsonObject successAsJson = new jsonobject.JsonObject();
+        final jsonobject.JsonObjectLite successAsJson =
+        new jsonobject.JsonObjectLite();
         successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
@@ -120,7 +124,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite jsonResponse =
+      new jsonobject.JsonObjectLite();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -140,8 +145,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
             couchResp = JSON.decode(text);
           } catch (e) {
             jsonResponse.error = true;
-            final jsonobject.JsonObject errorAsJson =
-                new jsonobject.JsonObject();
+            final jsonobject.JsonObjectLite errorAsJson =
+            new jsonobject.JsonObjectLite();
             errorAsJson.error = "JSON Decode Error";
             errorAsJson.reason = "None";
             jsonResponse.jsonCouchResponse = errorAsJson;
@@ -155,8 +160,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
           if ((couchResp is Map) && (couchResp.containsKey('error'))) {
             jsonResponse.error = true;
-            final jsonobject.JsonObject errorAsJson =
-                new jsonobject.JsonObject();
+            final jsonobject.JsonObjectLite errorAsJson =
+            new jsonobject.JsonObjectLite();
             errorAsJson.error = "CouchDb Error";
             errorAsJson.reason = couchResp['reason'];
             jsonResponse.jsonCouchResponse = errorAsJson;
@@ -172,13 +177,13 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
              * Success response
              */
           if (method != Wilt.headd) {
-            final jsonobject.JsonObject successAsJson =
-                new jsonobject.JsonObject.fromJsonString(text);
+            final jsonobject.JsonObjectLite successAsJson =
+            new jsonobject.JsonObjectLite.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
         } else {
-          final jsonobject.JsonObject successAsJson =
-              new jsonobject.JsonObject();
+          final jsonobject.JsonObjectLite successAsJson =
+          new jsonobject.JsonObjectLite();
           successAsJson.ok = true;
           successAsJson.contentType = response.headers['content-type'];
           jsonResponse.jsonCouchResponse = successAsJson;
@@ -197,12 +202,14 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     /// Error completion
     void onError(http.ClientException response) {
       /* Process the error response */
-      final jsonobject.JsonObject jsonResponse = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite jsonResponse =
+      new jsonobject.JsonObjectLite();
       jsonResponse.method = method;
       jsonResponse.error = true;
       jsonResponse.successText = null;
       jsonResponse.errorCode = 0;
-      final jsonobject.JsonObject errorAsJson = new jsonobject.JsonObject();
+      final jsonobject.JsonObjectLite errorAsJson =
+      new jsonobject.JsonObjectLite();
       errorAsJson.error = "Invalid HTTP response";
       errorAsJson.reason = response.message;
       jsonResponse.jsonCouchResponse = errorAsJson;

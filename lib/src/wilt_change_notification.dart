@@ -188,9 +188,9 @@ class _WiltChangeNotification {
 
         _changeNotification.add(notification);
       } else {
-        jsonobject.JsonObject document = null;
+        jsonobject.JsonObjectLite document = null;
         if (result.containsKey('doc')) {
-          document = new jsonobject.JsonObject.fromMap(result['doc']);
+          document = new jsonobject.JsonObjectLite.fromMap(result['doc']);
         }
         final WiltChangeNotificationEvent notification =
             new WiltChangeNotificationEvent.update(
