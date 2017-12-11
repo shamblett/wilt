@@ -11,7 +11,6 @@ library wilt_server_client;
 
 import 'dart:convert';
 import 'dart:async';
-import 'package:cryptoutils/cryptoutils.dart';
 
 import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;

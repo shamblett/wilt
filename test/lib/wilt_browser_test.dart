@@ -7,6 +7,7 @@
 
 library wilt_test_browser;
 
+@TestOn("browser")
 import 'dart:html';
 import 'package:wilt/wilt.dart';
 import 'package:wilt/wilt_browser_client.dart';

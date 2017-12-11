@@ -7,11 +7,12 @@
 
 library wilt_server_test;
 
+@TestOn("vm")
+import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:wilt/wilt_server_client.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
-import 'package:cryptoutils/cryptoutils.dart';
 import 'wilt_test_config.dart';
 
 void main() {
@@ -2056,7 +2057,7 @@ void main() {
         expect(attachments[0].data.content_type, 'image/png; charset=utf-8');
         expect(attachments[0].data.length, anything);
         final List bytes =
-            CryptoUtils.base64StringToBytes(attachments[0].data.data);
+        new Base64Decoder().convert(attachments[0].data.data);
         expect(bytes, pngImage.codeUnits);
       });
 

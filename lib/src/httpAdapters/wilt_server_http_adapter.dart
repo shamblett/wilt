@@ -273,7 +273,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
         case Wilt.authBasic:
           final String authStringToEncode = "$_user:$_password";
           final String encodedAuthString =
-              CryptoUtils.bytesToBase64(authStringToEncode.codeUnits);
+          new Base64Encoder().convert(authStringToEncode.codeUnits);
           final String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;

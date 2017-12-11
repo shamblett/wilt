@@ -10,7 +10,6 @@ environment:
 dependencies:
   browser: any
   crypto: '>=2.0.1 <3.0.0'
-  cryptoutils: '>=0.2.1 <=3.0.0'
   http: '>=0.11.3+13'
   json_object_lite: '>=1.0.0 <=2.0.0'
 
@@ -27,4 +26,4 @@ web:
 
 transformers:
 - test/pub_serve:
-    $include: test/wilt_test_browser.dart
+    $include: test/wilt_browser_test.dart

@@ -9,7 +9,6 @@ library wilt;
 
 import 'dart:async';
 import 'dart:convert';
-import 'package:cryptoutils/cryptoutils.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 
 part 'src/wilt.dart';

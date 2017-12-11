@@ -14,7 +14,6 @@ import 'dart:html' as html;
 import 'dart:convert';
 import 'dart:async';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
-import 'package:cryptoutils/cryptoutils.dart';
 
 part 'src/httpAdapters/wilt_browser_http_adapter.dart';
 
