@@ -1,3 +1,5 @@
+## 3.4.0
+Strong mode updates, switch to json_object_lite
 
 ## 3.3.0
 Update to latest packages/Dart environment.

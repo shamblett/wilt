@@ -341,7 +341,7 @@ class Wilt {
       final jsonobject.JsonObjectLite headers =
       new jsonobject.JsonObjectLite.fromMap(res.allResponseHeaders);
       if (headers != null) {
-        if (headers.containsKey(etag)) {
+        if (headers.containsKey(Wilt.etag)) {
           String ver = headers.etag;
           ver = ver.substring(1, ver.length - 1);
           completer.complete(ver);
