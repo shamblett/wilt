@@ -26,4 +26,5 @@ web:
 
 transformers:
 - test/pub_serve:
-    $include: test/wilt_browser_test.dart
+    $include: test/lib/wilt_browser_test.dart
+

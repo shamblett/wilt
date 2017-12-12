@@ -732,7 +732,8 @@ void main() {
         } catch (e) {
           final jsonobject.JsonObjectLite errorResponse = res.jsonCouchResponse;
           expect(errorResponse.error, equals('unauthorized'));
-          expect(errorResponse.reason, equals('Name or password is incorrect'));
+          expect(
+              errorResponse.reason, equals('Name or password is incorrect.'));
           expect(res.errorCode, equals(401));
         }
       });
