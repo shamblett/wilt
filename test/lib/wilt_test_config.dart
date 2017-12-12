@@ -5,7 +5,7 @@ final String serverPort = "5984";
 final String scheme = "http://";
 
 /* Databases to use for testing */
-final String databaseNameClient = 'wilttest_browser';
+final String databaseNameBrowser = 'wilttest_browser';
 final String databaseNameServer = 'wilttest_server';
 
 /// Authentication, set as you wish, note leaving userName and password null
