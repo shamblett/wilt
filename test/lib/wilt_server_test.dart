@@ -16,9 +16,11 @@ import 'wilt_test_config.dart';
 
 void main() {
 
-  /* Group 1 - WiltServerClient constructor tests */
-  group("1. Constructor Tests - ", () {
-    test("No hostname", () {
+  /* WiltServerClient constructor tests */
+  int groupNum = 0;
+  group("${groupNum++}. Constructor Tests - ", () {
+    int testNum = 0;
+    test("${testNum++}. No hostname", () {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(null, serverPort, scheme);
@@ -30,7 +32,7 @@ void main() {
       }
     });
 
-    test("No port", () {
+    test("${testNum++}. No port", () {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(hostName, null, scheme);
@@ -42,7 +44,7 @@ void main() {
       }
     });
 
-    test("No Scheme", () {
+    test("${testNum++}. No Scheme", () {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, null);
@@ -54,7 +56,7 @@ void main() {
       }
     });
 
-    test("No HTTP Adapter", () {
+    test("${testNum++}. No HTTP Adapter", () {
       try {
         final WiltServerClient wilting =
             new WiltServerClient(hostName, serverPort, scheme, null);
@@ -77,5 +79,8 @@ void main() {
   final WiltServerClient dbTestWilting =
   new WiltServerClient(hostName, serverPort, scheme);
 
-  WiltTestCommon.run(wilting, dbTestWilting, databaseNameServer);
+  void logger(String message) {
+    print(message);
+  }
+  WiltTestCommon.run(wilting, dbTestWilting, databaseNameServer, logger);
 }

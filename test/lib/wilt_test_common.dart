@@ -11,18 +11,21 @@ import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
 import 'wilt_test_config.dart';
 
-/* Helper functions */
-void logMessage(String message) {
-  print(message);
-}
 
 /// Common API test class
 class WiltTestCommon {
   /// Test run entry point
-  static void run(Wilt wilting, Wilt dbTestWilting, String databaseName) {
-    /* Group 2 - Basic methods parameter validation  */
-    group("2. Basic Methods Parameter Validation - ", () {
-      test("No Database Set HEAD", () {
+  static void run(Wilt wilting, Wilt dbTestWilting, String databaseName,
+      Function logger) {
+    /* Helper functions */
+    void logMessage(String message) {
+      logger(message);
+    }
+    int groupNum = 2;
+    /* Basic methods parameter validation  */
+    group("${groupNum++}. Basic Methods Parameter Validation - ", () {
+      int testNum = 1;
+      test("${testNum++}. No Database Set HEAD", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -35,7 +38,7 @@ class WiltTestCommon {
         });
       });
 
-      test("No Database Set GET", () {
+      test("${testNum++}. No Database Set GET", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -48,7 +51,7 @@ class WiltTestCommon {
         });
       });
 
-      test("No Database Set POST", () {
+      test("${testNum++}. No Database Set POST", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -61,7 +64,7 @@ class WiltTestCommon {
         });
       });
 
-      test("No Database Set PUT", () {
+      test("${testNum++}. No Database Set PUT", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -74,7 +77,7 @@ class WiltTestCommon {
         });
       });
 
-      test("No Database Set DELETE", () {
+      test("${testNum++}. No Database Set DELETE", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -88,9 +91,10 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 3 - Document/Database methods parameter validation  */
-    group("3. Document/Database Parameter Validation - ", () {
-      test("Get Document no id", () {
+    /* Document/Database methods parameter validation  */
+    group("${groupNum++}. Document/Database Parameter Validation - ", () {
+      int testNum = 1;
+      test("${testNum++}. Get Document no id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(), WiltException.header + WiltException.getDocNoId);
@@ -102,7 +106,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Get Document Revision no id", () {
+      test("${testNum++}. Get Document Revision no id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(
@@ -115,7 +119,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Document no id", () {
+      test("${testNum++}. Delete Document no id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -129,7 +133,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Document no rev", () {
+      test("${testNum++}. Delete Document no rev", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -142,7 +146,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Put Document no id", () {
+      test("${testNum++}. Put Document no id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -156,7 +160,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Put Document no data", () {
+      test("${testNum++}. Put Document no data", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -169,7 +173,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Post Document no document body", () {
+      test("${testNum++}. Post Document no document body", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(
@@ -182,7 +186,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Post Document String no document string", () {
+      test("${testNum++}. Post Document String no document string", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -195,7 +199,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Create Database no name", () {
+      test("${testNum++}. Create Database no name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -208,7 +212,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Database no name", () {
+      test("${testNum++}. Delete Database no name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -221,7 +225,7 @@ class WiltTestCommon {
         });
       });
 
-      test("All Docs invalid limit ", () {
+      test("${testNum++}. All Docs invalid limit ", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -234,7 +238,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Generate Ids invalid amount ", () {
+      test("${testNum++}. Generate Ids invalid amount ", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(
@@ -247,7 +251,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Copy document no source id", () {
+      test("${testNum++}. Copy document no source id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -260,7 +264,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Copy document no destinationid", () {
+      test("${testNum++}. Copy document no destinationid", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -273,7 +277,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Login null user name", () {
+      test("${testNum++}. Login null user name", () {
         try {
           wilting.login(null, "password");
         } catch (e) {
@@ -283,7 +287,7 @@ class WiltTestCommon {
         }
       });
 
-      test("Login null password", () {
+      test("${testNum++}. Login null password", () {
         try {
           wilting.login("name", null);
         } catch (e) {
@@ -293,7 +297,7 @@ class WiltTestCommon {
         }
       });
 
-      test("Create Attachment no Doc Id", () {
+      test("${testNum++}. Create Attachment no Doc Id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -309,7 +313,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Create Attachment no Attachment name", () {
+      test("${testNum++}. Create Attachment no Attachment name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -324,7 +328,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Create Attachment no Revision", () {
+      test("${testNum++}. Create Attachment no Revision", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -339,7 +343,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Create Attachment no Content Type", () {
+      test("${testNum++}. Create Attachment no Content Type", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -354,7 +358,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Create Attachment no Payload", () {
+      test("${testNum++}. Create Attachment no Payload", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -368,7 +372,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Update Attachment no Doc Id", () {
+      test("${testNum++}. Update Attachment no Doc Id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -384,7 +388,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Update Attachment no Attachment name", () {
+      test("${testNum++}. Update Attachment no Attachment name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -399,7 +403,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Update Attachment no Revision", () {
+      test("${testNum++}. Update Attachment no Revision", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -414,7 +418,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Update Attachment no Content Type", () {
+      test("${testNum++}. Update Attachment no Content Type", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -429,7 +433,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Update Attachment no Payload", () {
+      test("${testNum++}. Update Attachment no Payload", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -443,7 +447,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Attachment no Doc Id", () {
+      test("${testNum++}. Delete Attachment no Doc Id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -457,7 +461,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Attachment no Attachment name", () {
+      test("${testNum++}. Delete Attachment no Attachment name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -471,7 +475,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Delete Attachment no Revision", () {
+      test("${testNum++}. Delete Attachment no Revision", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(),
@@ -485,7 +489,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Get Attachment no Doc Id", () {
+      test("${testNum++}. Get Attachment no Doc Id", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(
@@ -499,7 +503,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Get Attachment no Attachment name", () {
+      test("${testNum++}. Get Attachment no Attachment name", () {
         final completer = expectAsync1((e) {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(
@@ -512,7 +516,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Start Notifications no Auth Credentials", () {
+      test("${testNum++}. Start Notifications no Auth Credentials", () {
         try {
           wilting.startChangeNotification(null);
         } catch (e) {
@@ -522,8 +526,9 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 4 - Single documents and database methods */
-    group("4. Single documents and database - ", () {
+    /* Single documents and database methods */
+    group("${groupNum++}. Single documents and database - ", () {
+      int testNum = 0;
       /* Login if we are using authentication */
       if (userName != null) {
         wilting.login(userName, userPassword);
@@ -538,7 +543,7 @@ class WiltTestCommon {
       final String copyId = 'mycopyid';
       String returnedDocRev;
 
-      test("Create Database not authorized", () {
+      test("${testNum++}. Create Database not authorized", () {
         dbTestWilting.login('freddy', 'freddypass');
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.createDatabasee);
@@ -559,7 +564,7 @@ class WiltTestCommon {
           });
       });
       /* Create a database then delete it */
-      test("Delete Database", () {
+      test("${testNum++}. Delete Database", () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.deleteDatabasee);
           try {
@@ -607,7 +612,7 @@ class WiltTestCommon {
       });
 
       /* Delete the test database now we know delete is OK before we start the tests */
-      test("Delete Test Database", () {
+      test("${testNum++}. Delete Test Database", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.deleteDatabasee);
           try {
@@ -632,7 +637,7 @@ class WiltTestCommon {
       });
 
       /* Create the test database */
-      test("Create Test Database", () {
+      test("${testNum++}. Create Test Database", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.createDatabasee);
           try {
@@ -685,7 +690,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Create document(POST) and check", () {
+      test("${testNum++}. Create document(POST) and check", () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -757,7 +762,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Create document(PUT) and check", () {
+      test("${testNum++}. Create document(PUT) and check", () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -828,7 +833,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Update document(PUT) and check", () {
+      test("${testNum++}. Update document(PUT) and check", () {
         final checkUpdater = expectAsync1((res) {
           expect(res.method, Wilt.putDocumentt);
           try {
@@ -939,7 +944,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get document revision and check ", () {
+      test("${testNum++}. Get document revision and check ", () {
         wilting.db = databaseName;
         wilting.getDocumentRevision(putId)
           ..then((rev) {
@@ -947,7 +952,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Delete document and check ", () {
+      test("${testNum++}. Delete document and check ", () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.deleteDocumentt);
           try {
@@ -1014,7 +1019,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Delete document preserve and check ", () {
+      test("${testNum++}. Delete document preserve and check ", () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.putDocumentt);
           try {
@@ -1081,7 +1086,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Copy document", () {
+      test("${testNum++}. Copy document", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.copyDocumentt);
           try {
@@ -1114,7 +1119,7 @@ class WiltTestCommon {
       });
 
       /* Raw HTTP Request */
-      test("Raw HTTP Request", () {
+      test("${testNum++}. Raw HTTP Request", () {
         final completer = expectAsync1((res) {
           try {
             expect(res.error, isFalse);
@@ -1146,9 +1151,10 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 5 - Bulk documents */
-    group("5. Bulk Documents - ", () {
-      test("User Utils  - Various", () {
+    /* Bulk documents */
+    group("${groupNum++}. Bulk Documents - ", () {
+      int testNum = 0;
+      test("${testNum++}. User Utils  - Various", () {
         final String id = "myId";
         final String rev = "1-765frd";
         jsonobject.JsonObjectLite record = new jsonobject.JsonObjectLite();
@@ -1192,7 +1198,7 @@ class WiltTestCommon {
       final String putId2 = 'mytestid2';
       final String copyId = 'mycopyid';
 
-      test("Get All Docs  - Include docs", () {
+      test("${testNum++}. Get All Docs  - Include docs", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1227,7 +1233,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All Docs  - limit", () {
+      test("${testNum++}. Get All Docs  - limit", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1267,7 +1273,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All Docs  - start key", () {
+      test("${testNum++}. Get All Docs  - start key", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1306,7 +1312,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All Docs  - end key", () {
+      test("${testNum++}. Get All Docs  - end key", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1345,7 +1351,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All Docs - key list", () {
+      test("${testNum++}. Get All Docs - key list", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1388,7 +1394,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All Docs  - descending", () {
+      test("${testNum++}. Get All Docs  - descending", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDocss);
           try {
@@ -1431,7 +1437,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Bulk Insert Auto Keys", () {
+      test("${testNum++}. Bulk Insert Auto Keys", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.bulkk);
           try {
@@ -1486,7 +1492,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Bulk Insert Supplied Keys", () {
+      test("${testNum++}. Bulk Insert Supplied Keys", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.bulkStringg);
           try {
@@ -1547,14 +1553,15 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 6 - Information tests */
-    group("6. Information/Utilty Tests - ", () {
+    /* Information tests */
+    group("${groupNum++}. Information/Utilty Tests - ", () {
+      int testNum = 0;
       /* Login if we are using authentication */
       if (userName != null) {
         wilting.login(userName, userPassword);
       }
 
-      test("Get Session Information", () {
+      test("${testNum++}. Get Session Information", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getSessionn);
           try {
@@ -1583,7 +1590,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get Stats Information", () {
+      test("${testNum++}. Get Stats Information", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getStatss);
           try {
@@ -1612,7 +1619,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get Database Information - default", () {
+      test("${testNum++}. Get Database Information - default", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.databaseInfo);
           try {
@@ -1642,7 +1649,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get Database Information - specified", () {
+      test("${testNum++}. Get Database Information - specified", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.databaseInfo);
           try {
@@ -1671,7 +1678,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get All DB's", () {
+      test("${testNum++}. Get All DB's", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.getAllDbss);
           try {
@@ -1700,7 +1707,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Generate Ids", () {
+      test("${testNum++}. Generate Ids", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.generateIdss);
           try {
@@ -1730,8 +1737,9 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 7 - Attachment tests */
-    group("7. Attachment Tests - ", () {
+    /* Attachment tests */
+    group("${groupNum++}. Attachment Tests - ", () {
+      int testNum = 0;
       /* Login if we are using authentication */
       if (userName != null) {
         wilting.login(userName, userPassword);
@@ -1751,7 +1759,8 @@ class WiltTestCommon {
               'EX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r' +
               '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
 
-      test("Create document(PUT) for attachment tests and check", () {
+      test("${testNum++}. Create document(PUT) for attachment tests and check",
+              () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -1823,7 +1832,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Create Attachment", () {
+      test("${testNum++}. Create Attachment", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.createAttachmentt);
           try {
@@ -1855,7 +1864,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get Create Attachment", () {
+      test("${testNum++}. Get Create Attachment", () {
         final revisionCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -1933,7 +1942,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Update Attachment", () {
+      test("${testNum++}. Update Attachment", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.updateAttachmentt);
           try {
@@ -1964,7 +1973,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Get Update Attachment", () {
+      test("${testNum++}. Get Update Attachment", () {
         final revisionCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -2033,7 +2042,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Create Attachment With New Document", () {
+      test("${testNum++}. Create Attachment With New Document", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.createAttachmentt);
           try {
@@ -2064,7 +2073,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Create Attachment Invalid Revision", () {
+      test("${testNum++}. Create Attachment Invalid Revision", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.createAttachmentt);
           expect(res.error, isTrue);
@@ -2080,7 +2089,7 @@ class WiltTestCommon {
           });
       });
 
-      test("Delete Attachment", () {
+      test("${testNum++}. Delete Attachment", () {
         final completer = expectAsync1((res) {
           expect(res.method, Wilt.deleteAttachmentt);
           try {
@@ -2112,14 +2121,15 @@ class WiltTestCommon {
       });
     }, skip: false);
 
-    /* Group 8 - Change Notifications */
-    group("8. Change Notification Tests - ", () {
+    /* Change Notifications */
+    group("${groupNum++}. Change Notification Tests - ", () {
+      int testNum = 0;
       /* Login for change notification */
       if (userName != null) {
         wilting.login(userName, userPassword);
       }
 
-      test("Start Change Notification", () {
+      test("${testNum++}. Start Change Notification", () {
         wilting.db = databaseName;
         void wrapper() {
           wilting.startChangeNotification();
@@ -2128,7 +2138,7 @@ class WiltTestCommon {
         expect(wrapper, returnsNormally);
       });
 
-      test("Check Change Notifications", () {
+      test("${testNum++}. Check Change Notifications", () {
         int count = 0;
 
         final completer = expectAsync0(() {
@@ -2149,7 +2159,8 @@ class WiltTestCommon {
         });
       });
 
-      test("Start Change Notification With Docs and Attachments", () {
+      test("${testNum++}. Start Change Notification With Docs and Attachments",
+              () {
         wilting.db = databaseName;
         final WiltChangeNotificationParameters parameters =
             new WiltChangeNotificationParameters();
@@ -2162,7 +2173,7 @@ class WiltTestCommon {
         expect(wrapper, returnsNormally);
       });
 
-      test("Check Change Notifications With Docs", () {
+      test("${testNum++}. Check Change Notifications With Docs", () {
         int count = 0;
 
         final completer = expectAsync0(() {
@@ -2193,7 +2204,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Notification Pause", () {
+      test("${testNum++}. Notification Pause", () {
         int count = 0;
 
         final completer = expectAsync0(() {
@@ -2208,7 +2219,7 @@ class WiltTestCommon {
         });
       });
 
-      test("Check Notification Pause", () {
+      test("${testNum++}. Check Notification Pause", () {
         final completer = expectAsync0(() {
           expect(wilting.changeNotificationsPaused, true);
         });
@@ -2216,7 +2227,7 @@ class WiltTestCommon {
         completer();
       });
 
-      test("Notification Restart", () {
+      test("${testNum++}. Notification Restart", () {
         int count = 0;
 
         final completer = expectAsync0(() {
