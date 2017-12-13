@@ -550,7 +550,7 @@ class WiltTestCommon {
             expect(errorResponse.error, equals('unauthorized'));
             expect(
                 errorResponse.reason, equals('Name or password is incorrect.'));
-            expect(res.errorCode, equals(0));
+            expect(res.errorCode, equals(401));
           }
         });
         dbTestWilting.createDatabase(databaseName)
@@ -2069,7 +2069,7 @@ class WiltTestCommon {
           expect(res.method, Wilt.createAttachmentt);
           expect(res.error, isTrue);
           final int statusCode = res.errorCode;
-          expect(statusCode, equals(0));
+          expect(statusCode, anyOf(0, 409));
         });
 
         wilting.db = databaseName;

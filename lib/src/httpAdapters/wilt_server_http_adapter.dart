@@ -49,7 +49,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       final jsonobject.JsonObjectLite jsonResponse =
       new jsonobject.JsonObjectLite();
       jsonResponse.error = false;
-      jsonResponse.errorCode = 0;
+      jsonResponse.errorCode = response.statusCode;
       jsonResponse.successText = null;
       jsonResponse.errorText = null;
       jsonResponse.allResponseHeader = null;
@@ -200,7 +200,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /// Error completion
-    void onError(http.ClientException response) {
+    void onError(http.ClientException exception) {
       /* Process the error response */
       final jsonobject.JsonObjectLite jsonResponse =
       new jsonobject.JsonObjectLite();
@@ -211,7 +211,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       final jsonobject.JsonObjectLite errorAsJson =
       new jsonobject.JsonObjectLite();
       errorAsJson.error = "Invalid HTTP response";
-      errorAsJson.reason = response.message;
+      errorAsJson.reason = exception.message;
       jsonResponse.jsonCouchResponse = errorAsJson;
 
       /**

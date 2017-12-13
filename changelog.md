@@ -1,5 +1,6 @@
 ## 3.4.0
-Strong mode updates, switch to json_object_lite
+Strong mode updates, switch to json_object_lite. Major test refactor
+Wilt now compiles under the dev compiler, tests factored into common and platform specific.
 
 ## 3.3.0
 Update to latest packages/Dart environment.
