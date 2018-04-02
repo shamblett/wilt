@@ -1,3 +1,6 @@
+## 3.4.1
+Correct the SDK version constraint for Flutter
+
 ## 3.4.0
 Strong mode updates, switch to json_object_lite. Major test refactor
 Wilt now compiles under the dev compiler, tests factored into common and platform specific.
