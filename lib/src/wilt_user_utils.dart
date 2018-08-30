@@ -10,34 +10,34 @@
 part of wilt;
 
 class WiltUserUtils {
-  /// Get a document id from a JSON Object
+  /// Get a document id from a json Object
   static String getDocumentId(jsonobject.JsonObjectLite response) {
     response.isImmutable = false;
     return response['_id'];
   }
 
-  /// Get a revision from a JSON object
+  /// Get a revision from a json object
   static String getDocumentRev(jsonobject.JsonObjectLite response) {
     response.isImmutable = false;
     return response['_rev'];
   }
 
-  /// Adds a CouchDB _rev to the JSON body of a document
+  /// Adds a CouchDB _rev to the json body of a document
   static String addDocumentRev(jsonobject.JsonObjectLite document,
       String revision) {
     document.isImmutable = false;
     document["_rev"] = revision;
-    return JSON.encode(document);
+    return json.encode(document);
   }
 
-  /// Adds a CouchDB _id to the JSON body of a document
+  /// Adds a CouchDB _id to the json body of a document
   static String addDocumentId(jsonobject.JsonObjectLite document, String id) {
     document.isImmutable = false;
     document["_id"] = id;
-    return JSON.encode(document);
+    return json.encode(document);
   }
 
-  /// Adds a CouchDB _rev to the JSON body of a document
+  /// Adds a CouchDB _rev to the json body of a document
   static jsonobject.JsonObjectLite addDocumentRevJo(
       jsonobject.JsonObjectLite document, String revision) {
     document.isImmutable = false;
@@ -46,22 +46,22 @@ class WiltUserUtils {
       ..isImmutable = false;
   }
 
-  /// Adds a CouchDB _id to the JSON body of a document
+  /// Adds a CouchDB _id to the json body of a document
   static jsonobject.JsonObjectLite addDocumentIdJo(
       jsonobject.JsonObjectLite document, String id) {
     document.isImmutable = false;
     document["_id"] = id;
-    return new jsonobject.JsonObjectLite.fromMap(document);
+    return document;
   }
 
-  /// Adds a CouchDB _deleted to the JSON body of a document
+  /// Adds a CouchDB _deleted to the json body of a document
   static String addDocumentDeleted(jsonobject.JsonObjectLite document) {
     document.isImmutable = false;
     document["_deleted"] = true;
-    return JSON.encode(document);
+    return json.encode(document);
   }
 
-  /// Adds a CouchDB _deleted to the JSON body of a document
+  /// Adds a CouchDB _deleted to the json body of a document
   static jsonobject.JsonObjectLite addDocumentDeleteJo(
       jsonobject.JsonObjectLite document) {
     document.isImmutable = false;
@@ -70,18 +70,18 @@ class WiltUserUtils {
       ..isImmutable = false;
   }
 
-  /// Adds both a CouchDb _id and _rev to the JSON body of a document
+  /// Adds both a CouchDb _id and _rev to the json body of a document
   static jsonobject.JsonObjectLite addDocumentIdRevJojsonobject(
       jsonobject.JsonObjectLite document, String id, String rev) {
     document.isImmutable = false;
     document["_id"] = id;
     document['_rev'] = rev;
-    final String json = JSON.encode(document);
-    return new jsonobject.JsonObjectLite.fromJsonString(json)
+    final String jsonString = json.encode(document);
+    return new jsonobject.JsonObjectLite.fromJsonString(jsonString)
       ..isImmutable = false;
   }
 
-  /// Creates a JSON string for bulk inserts where an
+  /// Creates a json string for bulk inserts where an
   /// _id and or _rev is needed form document strings
   static String createBulkInsertString(List<String> docStrings) {
     String innerString = " ";
@@ -96,7 +96,7 @@ class WiltUserUtils {
     return insertString.trim();
   }
 
-  /// Creates a JSON string for bulk inserts where an
+  /// Creates a json string for bulk inserts where an
   /// _id and or _rev is needed from JsonObjects.
   static String createBulkInsertStringJo(
       List<jsonobject.JsonObjectLite> records) {
@@ -116,13 +116,13 @@ class WiltUserUtils {
       jsonobject.JsonObjectLite document) {
     final List attachmentsList = new List<jsonobject.JsonObjectLite>();
     final String docString = document.toString();
-    final Map docMap = JSON.decode(docString);
+    final Map docMap = json.decode(docString);
     if (docMap.containsKey('_attachments')) {
       final Map attachmentList = docMap['_attachments'];
       attachmentList.keys.forEach((key) {
-        final jsonobject.JsonObjectLite jsonAttachmentData =
+        final dynamic jsonAttachmentData =
         new jsonobject.JsonObjectLite.fromMap(attachmentList[key]);
-        final jsonobject.JsonObjectLite jsonAttachment =
+        final dynamic jsonAttachment =
         new jsonobject.JsonObjectLite();
         jsonAttachment.name = key;
         jsonAttachment.data = jsonAttachmentData;

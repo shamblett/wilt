@@ -6,7 +6,7 @@
  *
  * Browser(dart:html) CouchDB HTTP adapter for Wilt.
  *  
- * This always returns a JSON Object the format of which is documented in
+ * This always returns a json Object the format of which is documented in
  * the Result Interface document
  *                      
  */
@@ -39,7 +39,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
        *  Process the success response, note that an error response from CouchDB is
        *  treated as an error, not as a success with an 'error' field in it.
        */
-      final jsonobject.JsonObjectLite jsonResponse =
+      final dynamic jsonResponse =
       new jsonobject.JsonObjectLite();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
@@ -56,12 +56,12 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       if (response.responseHeaders.containsValue('application/json')) {
         var couchResp;
         try {
-          couchResp = JSON.decode(response.responseText);
+          couchResp = json.decode(response.responseText);
         } catch (e) {
           jsonResponse.error = true;
-          final jsonobject.JsonObjectLite errorAsJson =
+          final dynamic errorAsJson =
           new jsonobject.JsonObjectLite();
-          errorAsJson.error = "JSON Decode Error";
+          errorAsJson.error = "json Decode Error";
           errorAsJson.reason = "None";
           jsonResponse.jsonCouchResponse = errorAsJson;
           /* Set the response headers */
@@ -74,7 +74,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
           jsonResponse.error = true;
-          final jsonobject.JsonObjectLite errorAsJson =
+          final dynamic errorAsJson =
           new jsonobject.JsonObjectLite();
           errorAsJson.error = "CouchDb Error";
           errorAsJson.reason = couchResp['reason'];
@@ -97,7 +97,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
-        final jsonobject.JsonObjectLite successAsJson =
+        final dynamic successAsJson =
         new jsonobject.JsonObjectLite();
         successAsJson.ok = true;
         successAsJson.contentType = response.responseHeaders['content-type'];
@@ -118,7 +118,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       final html.HttpRequest req = response.target;
 
       /* Process the error response */
-      final jsonobject.JsonObjectLite jsonResponse =
+      final dynamic jsonResponse =
       new jsonobject.JsonObjectLite();
       jsonResponse.method = method;
       jsonResponse.error = true;
@@ -130,7 +130,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         new jsonobject.JsonObjectLite.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
       } else {
-        final jsonobject.JsonObjectLite errorAsJson =
+        final dynamic errorAsJson =
         new jsonobject.JsonObjectLite();
         errorAsJson.error = "Invalid HTTP response";
         errorAsJson.reason = "HEAD or status code of 0";

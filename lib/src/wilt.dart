@@ -366,9 +366,9 @@ class Wilt {
 
     /* Check the preserve flag */
     if (preserve) {
-      getDocument(id).then((jsonobject.JsonObjectLite res) {
+      getDocument(id).then((dynamic res) {
         if (res != null) {
-          jsonobject.JsonObjectLite resp = res.jsonCouchResponse;
+          dynamic resp = res.jsonCouchResponse;
           resp = WiltUserUtils.addDocumentDeleteJo(resp);
           putDocument(id, resp).then((res1) {
             completer.complete(res1);
@@ -404,7 +404,7 @@ class Wilt {
       if (rev != null) {
         jsonData = WiltUserUtils.addDocumentRev(document, rev);
       } else {
-        jsonData = JSON.encode(document);
+        jsonData = json.encode(document);
       }
     } catch (e) {
       return _raiseException(WiltException.putDocCantStringify);
@@ -415,7 +415,7 @@ class Wilt {
   }
 
   /// PUT's to the specified  document where the document is supplied as
-  /// a JSON string. Must be used if '_id' and or '_rev' are needed.
+  /// a json string. Must be used if '_id' and or '_rev' are needed.
   Future putDocumentString(String id, String document, [String rev = null]) {
     if ((id == null) || (document == null)) {
       return _raiseException(WiltException.putDocStringNoIdBody);
@@ -446,7 +446,7 @@ class Wilt {
 
     String jsonData = null;
     try {
-      jsonData = JSON.encode(document);
+      jsonData = json.encode(document);
     } catch (e) {
       return _raiseException(WiltException.postDocCantStringify);
     }
@@ -456,7 +456,7 @@ class Wilt {
   }
 
   /// POST's to the specified  document where the document is supplied as
-  /// a JSON string. Must be used if '_id' and or '_rev' are needed.
+  /// a json string. Must be used if '_id' and or '_rev' are needed.
   Future postDocumentString(String document, {String path: null}) {
     if (document == null) {
       return _raiseException(WiltException.postDocStringNoBody);
@@ -539,7 +539,7 @@ class Wilt {
     }
 
     if (keys != null) {
-      final String keyString = JSON.encode(keys);
+      final String keyString = json.encode(keys);
       url = _setURLParameter(url, 'keys', keyString);
     }
 
@@ -567,7 +567,7 @@ class Wilt {
     documentMap["docs"] = docs;
     String docString = null;
     try {
-      docString = JSON.encode(documentMap);
+      docString = json.encode(documentMap);
     } catch (e) {
       return _raiseException(WiltException.bulkCantStringify);
     }
@@ -580,7 +580,7 @@ class Wilt {
     return _httpRequest(bulkk, url, data: docString, headers: headers);
   }
 
-  /// Bulk insert JSON string version.
+  /// Bulk insert json string version.
   /// Must be used if '_id' and or '_rev' are needed in ANY of the documents
   Future bulkString(String docs, [bool allOrNothing = false]) {
     /* Validate the parameters */

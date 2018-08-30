@@ -31,7 +31,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.noDatabaseSpecified);
         });
-        wilting.head(null).then((jsonobject.JsonObjectLite res) {
+        wilting.head(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -44,7 +44,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.noDatabaseSpecified);
         });
-        wilting.get(null).then((jsonobject.JsonObjectLite res) {
+        wilting.get(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -57,7 +57,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.noDatabaseSpecified);
         });
-        wilting.post(null, "1").then((jsonobject.JsonObjectLite res) {
+        wilting.post(null, "1").then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -70,7 +70,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.noDatabaseSpecified);
         });
-        wilting.put(null, "1").then((jsonobject.JsonObjectLite res) {
+        wilting.put(null, "1").then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -83,7 +83,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.noDatabaseSpecified);
         });
-        wilting.delete(null).then((jsonobject.JsonObjectLite res) {
+        wilting.delete(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -99,7 +99,7 @@ class WiltTestCommon {
           expect(e.runtimeType.toString(), 'WiltException');
           expect(e.toString(), WiltException.header + WiltException.getDocNoId);
         });
-        wilting.getDocument(null).then((jsonobject.JsonObjectLite res) {
+        wilting.getDocument(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -112,7 +112,7 @@ class WiltTestCommon {
           expect(
               e.toString(), WiltException.header + WiltException.getDocRevNoId);
         });
-        wilting.getDocumentRevision(null).then((jsonobject.JsonObjectLite res) {
+        wilting.getDocumentRevision(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -126,7 +126,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.deleteDocNoIdRev);
         });
         wilting.deleteDocument(null, null).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -139,7 +139,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.deleteDocNoIdRev);
         });
-        wilting.deleteDocument('1', null).then((jsonobject.JsonObjectLite res) {
+        wilting.deleteDocument('1', null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -152,8 +152,8 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.putDocNoIdBody);
         });
-        jsonobject.JsonObjectLite doc;
-        wilting.putDocument(null, doc).then((jsonobject.JsonObjectLite res) {
+        dynamic doc;
+        wilting.putDocument(null, doc).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -166,7 +166,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.putDocNoIdBody);
         });
-        wilting.putDocument('1', null).then((jsonobject.JsonObjectLite res) {
+        wilting.putDocument('1', null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -179,7 +179,7 @@ class WiltTestCommon {
           expect(
               e.toString(), WiltException.header + WiltException.postDocNoBody);
         });
-        wilting.postDocument(null).then((jsonobject.JsonObjectLite res) {
+        wilting.postDocument(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -192,7 +192,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.postDocStringNoBody);
         });
-        wilting.postDocumentString(null).then((jsonobject.JsonObjectLite res) {
+        wilting.postDocumentString(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -205,7 +205,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.createDbNoName);
         });
-        wilting.createDatabase(null).then((jsonobject.JsonObjectLite res) {
+        wilting.createDatabase(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -218,7 +218,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.deleteDbNoName);
         });
-        wilting.deleteDatabase(null).then((jsonobject.JsonObjectLite res) {
+        wilting.deleteDatabase(null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -231,7 +231,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.getAllDocsLimit);
         });
-        wilting.getAllDocs(limit: -1).then((jsonobject.JsonObjectLite res) {
+        wilting.getAllDocs(limit: -1).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -244,7 +244,7 @@ class WiltTestCommon {
           expect(
               e.toString(), WiltException.header + WiltException.genIdsAmount);
         });
-        wilting.generateIds(-1).then((jsonobject.JsonObjectLite res) {
+        wilting.generateIds(-1).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -257,7 +257,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.copyDocNoSrcId);
         });
-        wilting.copyDocument(null, '1').then((jsonobject.JsonObjectLite res) {
+        wilting.copyDocument(null, '1').then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -270,7 +270,7 @@ class WiltTestCommon {
           expect(e.toString(),
               WiltException.header + WiltException.copyDocNoDestId);
         });
-        wilting.copyDocument('1', null).then((jsonobject.JsonObjectLite res) {
+        wilting.copyDocument('1', null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -306,7 +306,7 @@ class WiltTestCommon {
         final String payload = 'Hello';
         wilting
             .createAttachment(null, 'name', 'rev', 'image/png', payload)
-            .then((jsonobject.JsonObjectLite res) {
+            .then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -321,7 +321,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -336,7 +336,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -351,7 +351,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.createAttachment('id', 'name', 'rev', null, payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -365,7 +365,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.createAttNoPayload);
         });
         wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -381,7 +381,7 @@ class WiltTestCommon {
         final String payload = 'Hello';
         wilting
             .updateAttachment(null, 'name', 'rev', 'image/png', payload)
-            .then((jsonobject.JsonObjectLite res) {
+            .then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -396,7 +396,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -411,7 +411,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -426,7 +426,7 @@ class WiltTestCommon {
         });
         final String payload = 'Hello';
         wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -440,7 +440,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.updateAttNoPayload);
         });
         wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -454,7 +454,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.deleteAttNoDocId);
         });
         wilting.deleteAttachment(null, 'name', 'rev').then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -468,7 +468,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.deleteAttNoName);
         });
         wilting.deleteAttachment('id', null, 'rev').then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -482,7 +482,7 @@ class WiltTestCommon {
               WiltException.header + WiltException.deleteAttNoRev);
         });
         wilting.deleteAttachment('id', 'name', null).then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -496,7 +496,7 @@ class WiltTestCommon {
               e.toString(), WiltException.header + WiltException.getAttNoDocId);
         });
         wilting.getAttachment(null, 'name').then(
-            (jsonobject.JsonObjectLite res) {
+            (dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -509,7 +509,7 @@ class WiltTestCommon {
           expect(
               e.toString(), WiltException.header + WiltException.getAttNoName);
         });
-        wilting.getAttachment('id', null).then((jsonobject.JsonObjectLite res) {
+        wilting.getAttachment('id', null).then((dynamic res) {
           // nothing to do
         }, onError: (WiltException e) {
           completer(e);
@@ -550,7 +550,7 @@ class WiltTestCommon {
           try {
             expect(res.error, isFalse);
           } catch (e) {
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             expect(errorResponse.error, equals('unauthorized'));
             expect(
@@ -571,7 +571,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete Database check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -588,7 +588,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Database Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -619,7 +619,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Database Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -644,7 +644,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Test Database Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -654,7 +654,7 @@ class WiltTestCommon {
             logMessage("WILT::Status code is $statusCode");
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
         });
@@ -672,7 +672,7 @@ class WiltTestCommon {
             expect(res.error, isTrue);
           } catch (e) {
             logMessage("WILT::Head null URL");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -697,7 +697,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Document(POST) and check creation");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -709,13 +709,11 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
           expect(returnedDocId, docId);
-          final String returnedDocRev =
-              WiltUserUtils.getDocumentRev(successResponse);
           expect(successResponse.title, equals("Created by a Post Request"));
           expect(successResponse.version, equals(1));
           expect(successResponse.author, equals("Me"));
@@ -727,7 +725,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Document(POST) and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -739,7 +737,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           docId = successResponse.id;
           expect(docId, isNot(isEmpty));
@@ -751,7 +749,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Post Request";
         document.version = 1;
@@ -769,7 +767,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Document(PUT) and check updated");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -781,7 +779,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
@@ -798,7 +796,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Test Put Document and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -810,7 +808,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId));
@@ -822,7 +820,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request";
         document.version = 2;
@@ -840,7 +838,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Update document and check updated");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -852,7 +850,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId = successResponse.id;
           expect(returnedDocId, equals(putId));
@@ -866,7 +864,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Update document and check created");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -878,7 +876,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
           expect(returnedDocId, putId);
@@ -890,7 +888,7 @@ class WiltTestCommon {
           expect(successResponse.version, equals(3));
           expect(successResponse.author, equals("Me also"));
           /* Now alter the document using putDocument */
-          final jsonobject.JsonObjectLite document =
+          final dynamic document =
               new jsonobject.JsonObjectLite();
           document.title = "Created by a Put Request for updating ";
           document.version = 4;
@@ -909,7 +907,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Update document and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -921,7 +919,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId));
@@ -933,7 +931,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request for checking";
         document.version = 3;
@@ -959,7 +957,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete document and check deletion");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -971,7 +969,7 @@ class WiltTestCommon {
           }
 
           /* Check the document has been deleted */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId3));
@@ -983,7 +981,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete document and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -995,7 +993,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId3));
@@ -1008,7 +1006,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request for deleting";
         document.version = 1;
@@ -1026,7 +1024,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete document preserve and check deletion");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1038,7 +1036,7 @@ class WiltTestCommon {
           }
 
           /* Check the document has been deleted */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId2));
@@ -1050,7 +1048,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete document preserve and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1062,7 +1060,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals(putId2));
@@ -1075,7 +1073,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request for preserve deleting";
         document.version = 1;
@@ -1093,7 +1091,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Copy document");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1105,7 +1103,7 @@ class WiltTestCommon {
           }
 
           /* Check the copied document */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String copyDocId = successResponse.id;
           expect(copyDocId, equals(copyId));
@@ -1125,7 +1123,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Raw HTTP Request failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1136,7 +1134,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
@@ -1157,10 +1155,10 @@ class WiltTestCommon {
       test("${testNum++}. User Utils  - Various", () {
         final String id = "myId";
         final String rev = "1-765frd";
-        jsonobject.JsonObjectLite record = new jsonobject.JsonObjectLite();
+        dynamic record = new jsonobject.JsonObjectLite();
         record.name = "Steve";
         record.tag = "MyTag";
-        jsonobject.JsonObjectLite record2 = record;
+        dynamic record2 = record;
 
         record = WiltUserUtils.addDocumentIdJo(record, id);
         String tmp = record.toString();
@@ -1205,7 +1203,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get All Docs  - Include docs");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1216,7 +1214,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[1].id, equals(copyId));
@@ -1240,7 +1238,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get All Docs  - limit");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1251,7 +1249,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[0].id, isNot(equals(putId)));
@@ -1280,7 +1278,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get All Docs  - start key");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1291,7 +1289,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[0].id, equals(putId));
@@ -1319,7 +1317,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Test Get All Docs  - end key");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1330,7 +1328,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[1].id, equals(copyId));
@@ -1358,7 +1356,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Test Get All Docs  - key list");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1369,7 +1367,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[0].id, equals(putId));
@@ -1401,7 +1399,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get All Docs  - descending");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1412,7 +1410,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.total_rows, equals(3));
           expect(successResponse.rows[1].id, equals(putId));
@@ -1444,7 +1442,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Bulk Insert Auto Keys");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1455,7 +1453,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse[0].ok, isTrue);
           expect(successResponse[1].ok, isTrue);
@@ -1467,19 +1465,19 @@ class WiltTestCommon {
         }
         wilting.db = databaseName;
         final List docList = new List<jsonobject.JsonObjectLite>();
-        final jsonobject.JsonObjectLite document1 =
+        final dynamic document1 =
             new jsonobject.JsonObjectLite();
         document1.title = "Document 1";
         document1.version = 1;
         document1.attribute = "Doc 1 attribute";
         docList.add(document1);
-        final jsonobject.JsonObjectLite document2 =
+        final dynamic document2 =
             new jsonobject.JsonObjectLite();
         document2.title = "Document 2";
         document2.version = 2;
         document2.attribute = "Doc 2 attribute";
         docList.add(document2);
-        final jsonobject.JsonObjectLite document3 =
+        final dynamic document3 =
             new jsonobject.JsonObjectLite();
         document3.title = "Document 3";
         document3.version = 3;
@@ -1499,7 +1497,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Bulk Insert Supplied Keys");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1510,7 +1508,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse[0].id, equals("MyBulkId1"));
           expect(successResponse[1].id, equals("MyBulkId2"));
@@ -1523,19 +1521,19 @@ class WiltTestCommon {
         }
         wilting.db = databaseName;
 
-        final jsonobject.JsonObjectLite document1 =
+        final dynamic document1 =
             new jsonobject.JsonObjectLite();
         document1.title = "Document 1";
         document1.version = 1;
         document1.attribute = "Doc 1 attribute";
         final String doc1 = WiltUserUtils.addDocumentId(document1, "MyBulkId1");
-        final jsonobject.JsonObjectLite document2 =
+        final dynamic document2 =
             new jsonobject.JsonObjectLite();
         document2.title = "Document 2";
         document2.version = 2;
         document2.attribute = "Doc 2 attribute";
         final String doc2 = WiltUserUtils.addDocumentId(document2, "MyBulkId2");
-        final jsonobject.JsonObjectLite document3 =
+        final dynamic document3 =
             new jsonobject.JsonObjectLite();
         document3.title = "Document 3";
         document3.version = 3;
@@ -1568,7 +1566,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Session Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1579,7 +1577,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
         });
@@ -1597,7 +1595,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Stats Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1608,7 +1606,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.couchdb, isNotNull);
         });
@@ -1626,7 +1624,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Database Information - default");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1637,7 +1635,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.db_name, equals(databaseName));
         });
@@ -1656,7 +1654,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Database Information - specified");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1667,7 +1665,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.db_name, equals(databaseName));
         });
@@ -1685,7 +1683,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get All Db's Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1696,7 +1694,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.contains(databaseName), isTrue);
         });
@@ -1714,7 +1712,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Generate Ids");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1725,7 +1723,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.uuids.length, equals(10));
         });
@@ -1768,7 +1766,7 @@ class WiltTestCommon {
           } catch (e) {
             logMessage(
                 "WILT::Create Document(PUT) for attachment tests and check updated");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1779,7 +1777,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
@@ -1798,7 +1796,7 @@ class WiltTestCommon {
           } catch (e) {
             logMessage(
                 "WILT::Test Put Document for attachment tests and check");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1809,7 +1807,7 @@ class WiltTestCommon {
           }
 
           /* Get the documents id and re-get the document to check correctness */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String putDocId = successResponse.id;
           expect(putDocId, equals('attachmentTestDoc'));
@@ -1821,7 +1819,7 @@ class WiltTestCommon {
         });
 
         wilting.db = databaseName;
-        final jsonobject.JsonObjectLite document =
+        final dynamic document =
             new jsonobject.JsonObjectLite();
         document.title = "Created by a Put Request for attachment testing";
         document.version = 1;
@@ -1839,7 +1837,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1850,7 +1848,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
           testDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -1871,7 +1869,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Create Attachment Get Document Revision");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1882,7 +1880,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
@@ -1908,7 +1906,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Create Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1919,7 +1917,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
           final String payload = res.responseText;
@@ -1949,7 +1947,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Update Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1960,7 +1958,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
         });
@@ -1980,7 +1978,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Update Attachment Get Document Revision");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -1991,7 +1989,7 @@ class WiltTestCommon {
           }
 
           /* Check the documents parameters */
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           final String returnedDocId =
               WiltUserUtils.getDocumentId(successResponse);
@@ -2009,7 +2007,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Get Update Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -2020,7 +2018,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
           testDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -2049,7 +2047,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Create Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -2060,7 +2058,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
         });
@@ -2096,7 +2094,7 @@ class WiltTestCommon {
             expect(res.error, isFalse);
           } catch (e) {
             logMessage("WILT::Delete Attachment Failed");
-            final jsonobject.JsonObjectLite errorResponse =
+            final dynamic errorResponse =
                 res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage("WILT::Error is $errorText");
@@ -2107,7 +2105,7 @@ class WiltTestCommon {
             return;
           }
 
-          final jsonobject.JsonObjectLite successResponse =
+          final dynamic successResponse =
               res.jsonCouchResponse;
           expect(successResponse.ok, isTrue);
         });
@@ -2184,7 +2182,7 @@ class WiltTestCommon {
           count++;
           if (e.docId == 'mytestid2') {
             if (e.type == WiltChangeNotificationEvent.updatee) {
-              final jsonobject.JsonObjectLite document = e.document;
+              final dynamic document = e.document;
               expect(document.title, "Created by a Put Request for updating ");
               expect(document.version, 4);
               expect(document.author, "Me also and again");

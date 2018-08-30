@@ -114,14 +114,14 @@ class _WiltChangeNotification {
         * Process the change notification
         */
           try {
-            final Map dbChange = JSON.decode(result);
+            final Map dbChange = json.decode(result);
             processDbChange(dbChange);
           } catch (e) {
             /**
           * Recoverable error, send the client an error event
           */
             print(
-                "WiltChangeNotification::MonitorChanges JSON decode fail ${e.toString()}");
+                "WiltChangeNotification::MonitorChanges json decode fail ${e.toString()}");
             final WiltChangeNotificationEvent notification =
                 new WiltChangeNotificationEvent.decodeError(
                     result, e.toString());
