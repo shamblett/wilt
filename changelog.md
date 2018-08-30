@@ -1,3 +1,6 @@
+## 4.0.0
+Update to Dart 2.0, issue 25
+
 ## 3.4.1
 Correct the SDK version constraint for Flutter
 
