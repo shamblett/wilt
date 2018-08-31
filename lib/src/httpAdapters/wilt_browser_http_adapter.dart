@@ -109,7 +109,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /// Error completion
-    void onError(html.ProgressEvent response) {
+    void onError(dynamic response) {
       /* Get the HTTP request from the progress event */
       final html.HttpRequest req = response.target;
 
