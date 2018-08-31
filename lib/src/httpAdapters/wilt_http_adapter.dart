@@ -15,7 +15,7 @@ abstract class WiltHTTPAdapter {
 
   /// Processes the HTTP request returning the  HTTP response as
   /// a JSON Object
-  Future<jsonobject.JsonObjectLite> httpRequest(String method, String url,
+  Future<dynamic> httpRequest(String method, String url,
       [String data = null, Map headers = null]);
 
   /// Specialised get for change notifications

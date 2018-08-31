@@ -28,7 +28,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<jsonobject.JsonObjectLite> httpRequest(String method, String url,
+  Future<dynamic> httpRequest(String method, String url,
       [String data = null, Map headers = null]) {
     // Initialise
     final Completer completer = new Completer();

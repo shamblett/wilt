@@ -122,7 +122,7 @@ class WiltUserUtils {
       attachmentList.keys.forEach((key) {
         final dynamic jsonAttachmentData =
         new jsonobject.JsonObjectLite.fromJsonString(
-            attachmentList[key].toString());
+            WiltUserUtils.mapToJson(attachmentList[key]));
         final dynamic jsonAttachment = new jsonobject.JsonObjectLite();
         jsonAttachment.name = key;
         jsonAttachment.data = jsonAttachmentData;
@@ -131,5 +131,10 @@ class WiltUserUtils {
     }
 
     return attachmentsList;
+  }
+
+  /// Serialize a map to a JSON string
+  static String mapToJson(Map map) {
+    return json.encode(map);
   }
 }

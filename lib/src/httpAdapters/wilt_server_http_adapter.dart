@@ -33,7 +33,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<jsonobject.JsonObjectLite> httpRequest(String method, String url,
+  Future<dynamic> httpRequest(String method, String url,
       [String data = null, Map headers = null]) {
     /**
      *  Initialise
@@ -192,7 +192,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /// Error completion
-    void onError(http.ClientException exception) {
+    void onError(exception) {
       /* Process the error response */
       final dynamic jsonResponse = new jsonobject.JsonObjectLite();
       jsonResponse.method = method;

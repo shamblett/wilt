@@ -33,7 +33,7 @@ class WiltTestCommon {
         });
         wilting.head(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -46,7 +46,7 @@ class WiltTestCommon {
         });
         wilting.get(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -59,7 +59,7 @@ class WiltTestCommon {
         });
         wilting.post(null, "1").then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -72,7 +72,7 @@ class WiltTestCommon {
         });
         wilting.put(null, "1").then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -85,7 +85,7 @@ class WiltTestCommon {
         });
         wilting.delete(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -101,7 +101,7 @@ class WiltTestCommon {
         });
         wilting.getDocument(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -114,7 +114,7 @@ class WiltTestCommon {
         });
         wilting.getDocumentRevision(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -127,7 +127,7 @@ class WiltTestCommon {
         });
         wilting.deleteDocument(null, null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -140,7 +140,7 @@ class WiltTestCommon {
         });
         wilting.deleteDocument('1', null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -154,7 +154,7 @@ class WiltTestCommon {
         dynamic doc;
         wilting.putDocument(null, doc).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -167,7 +167,7 @@ class WiltTestCommon {
         });
         wilting.putDocument('1', null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -180,7 +180,7 @@ class WiltTestCommon {
         });
         wilting.postDocument(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -193,7 +193,7 @@ class WiltTestCommon {
         });
         wilting.postDocumentString(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -206,7 +206,7 @@ class WiltTestCommon {
         });
         wilting.createDatabase(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -219,7 +219,7 @@ class WiltTestCommon {
         });
         wilting.deleteDatabase(null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -232,7 +232,7 @@ class WiltTestCommon {
         });
         wilting.getAllDocs(limit: -1).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -245,7 +245,7 @@ class WiltTestCommon {
         });
         wilting.generateIds(-1).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -258,7 +258,7 @@ class WiltTestCommon {
         });
         wilting.copyDocument(null, '1').then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -271,7 +271,7 @@ class WiltTestCommon {
         });
         wilting.copyDocument('1', null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -307,7 +307,7 @@ class WiltTestCommon {
             .createAttachment(null, 'name', 'rev', 'image/png', payload)
             .then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -322,7 +322,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -337,7 +337,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -352,7 +352,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', 'rev', null, payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -366,7 +366,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -382,7 +382,7 @@ class WiltTestCommon {
             .updateAttachment(null, 'name', 'rev', 'image/png', payload)
             .then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -397,7 +397,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -412,7 +412,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -427,7 +427,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -441,7 +441,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
             (dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+            }, onError: (e) {
           completer(e);
         });
       });
@@ -454,7 +454,7 @@ class WiltTestCommon {
         });
         wilting.deleteAttachment(null, 'name', 'rev').then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -467,7 +467,7 @@ class WiltTestCommon {
         });
         wilting.deleteAttachment('id', null, 'rev').then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -480,7 +480,7 @@ class WiltTestCommon {
         });
         wilting.deleteAttachment('id', 'name', null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -493,7 +493,7 @@ class WiltTestCommon {
         });
         wilting.getAttachment(null, 'name').then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -506,7 +506,7 @@ class WiltTestCommon {
         });
         wilting.getAttachment('id', null).then((dynamic res) {
           // nothing to do
-        }, onError: (WiltException e) {
+        }, onError: (e) {
           completer(e);
         });
       });

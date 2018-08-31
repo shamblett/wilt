@@ -146,7 +146,7 @@ class Wilt {
 
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
-  Future<jsonobject.JsonObjectLite> _httpRequest(String method, String url,
+  Future<dynamic> _httpRequest(String method, String url,
       {String data: null, Map headers: null}) {
     /* Build the request for the HttpAdapter*/
     final Map wiltHeaders = new Map<String, String>();
@@ -173,7 +173,7 @@ class Wilt {
     }
 
     /* Execute the request*/
-    final Future<jsonobject.JsonObjectLite> completion =
+    final Future<dynamic> completion =
         _httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)
           ..then((jsonResponse) {
             if (_clientCompletion != null) {
@@ -241,7 +241,7 @@ class Wilt {
   ///
   /// This can be used for CouchDb functions that are not directly supported by Wilt,
   /// e.g views, attachments and design documents.
-  Future<jsonobject.JsonObjectLite> httpRequest(String url,
+  Future<dynamic> httpRequest(String url,
       {String method: "GET"}) {
     return _httpRequest(method, url);
   }
@@ -339,7 +339,7 @@ class Wilt {
     final Completer completer = new Completer();
     head(id).then((res) {
       final dynamic headers = new jsonobject.JsonObjectLite.fromJsonString(
-          res.allResponseHeaders.toString());
+          WiltUserUtils.mapToJson(res.allResponseHeaders));
       if (headers != null) {
         if (headers.containsKey(Wilt.etag)) {
           String ver = headers[Wilt.etag];
