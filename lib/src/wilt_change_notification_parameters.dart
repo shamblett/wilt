@@ -13,7 +13,7 @@ part of wilt;
 class WiltChangeNotificationParameters {
   /// Since
   ///
-  /// Start the results from the change immediately after the given sequence number
+  /// Start the results from the change immediately after the given sequence update
   int _since = 0;
   int get since => _since;
   set since(int value) => _since = value;

@@ -69,7 +69,7 @@ class _WiltChangeNotification {
   /// Timer
   Timer _timer = null;
 
-  /// Since sequence number
+  /// Since sequence update
   int _sequence = 0;
 
   /// Paused indicator
@@ -82,8 +82,11 @@ class _WiltChangeNotification {
   /// Change notification stream controller
   ///
   /// Populated with WiltChangeNotificationEvent events
-  final StreamController _changeNotification = new StreamController.broadcast();
-  StreamController get changeNotification => _changeNotification;
+  final StreamController<WiltChangeNotificationEvent> _changeNotification =
+  new StreamController<WiltChangeNotificationEvent>.broadcast();
+
+  StreamController<WiltChangeNotificationEvent> get changeNotification =>
+      _changeNotification;
 
   /// Request the change notifications
   void _requestChanges(Timer timer) {
@@ -95,9 +98,8 @@ class _WiltChangeNotification {
     /**
      * Create the URL from the parameters
      */
-    final String sequence = _sequence.toString();
     final String path = "$_dbName/_changes?" +
-        "&since=$sequence" +
+        "&since=$_sequence" +
         "&descending=${_parameters.descending}" +
         "&include_docs=${_parameters.includeDocs}" +
         "&attachments=${_parameters.includeAttachments}";
@@ -160,7 +162,7 @@ class _WiltChangeNotification {
     /**
      * Update the last sequence number
      */
-    _sequence = change['last_seq'];
+    _sequence = WiltUserUtils.getCnSequenceNumber(change['last_seq']);
 
     /**
      * Process the result list
@@ -194,8 +196,8 @@ class _WiltChangeNotification {
               result['doc'].toString());
         }
         final WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.update(
-                result['id'], changes['rev'], result['seq'], document);
+        new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
+            WiltUserUtils.getCnSequenceNumber(result['seq']), document);
 
         _changeNotification.add(notification);
       }

@@ -192,7 +192,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     /// Error completion
-    void onError(exception) {
+    void onError(dynamic exception) {
       /* Process the error response */
       final dynamic jsonResponse = new jsonobject.JsonObjectLite();
       jsonResponse.method = method;

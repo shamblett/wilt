@@ -2,7 +2,7 @@
 Introduction
 ============
 
-This document describes the properties present on the JsonObject result object returned from
+This document describes the properties present on the JsonObjectLite result object returned from
 Wilt API calls whether future or completion based. The future based API returns the result as
 a parameter, the completion API assumes the client will get the result object from Wilt using
 the completionResponse getter. 

@@ -137,4 +137,20 @@ class WiltUserUtils {
   static String mapToJson(Map map) {
     return json.encode(map);
   }
+
+  /// Get a sequence number form a change notification update, caters
+  /// for string based or numerical sequence numbers
+  static int getCnSequenceNumber(dynamic seq) {
+    if (seq is int) {
+      return seq;
+    }
+
+    if (seq is String) {
+      List<String> seqList = seq.split("-");
+      return int.tryParse(seqList[0]);
+    }
+
+    // Null if we get here
+    return null;
+  }
 }

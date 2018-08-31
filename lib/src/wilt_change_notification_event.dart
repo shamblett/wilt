@@ -99,6 +99,7 @@ class WiltChangeNotificationEvent {
   /// Valid for update, delete and sequence
   ///
   int _sequenceNumber = 0;
+
   int get sequenceNumber => _sequenceNumber;
 
   /// Document identifier
