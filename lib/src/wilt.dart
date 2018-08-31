@@ -338,8 +338,8 @@ class Wilt {
 
     final Completer completer = new Completer();
     head(id).then((res) {
-      final jsonobject.JsonObjectLite headers =
-      new jsonobject.JsonObjectLite.fromMap(res.allResponseHeaders);
+      final dynamic headers = new jsonobject.JsonObjectLite.fromJsonString(
+          res.allResponseHeaders.toString());
       if (headers != null) {
         if (headers.containsKey(Wilt.etag)) {
           String ver = headers[Wilt.etag];

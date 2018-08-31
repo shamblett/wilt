@@ -175,7 +175,7 @@ class _WiltChangeNotification {
       return;
     }
 
-    results.forEach((Map result) {
+    results.forEach((result) {
       final Map changes = result['changes'][0];
 
       /**
@@ -188,9 +188,10 @@ class _WiltChangeNotification {
 
         _changeNotification.add(notification);
       } else {
-        jsonobject.JsonObjectLite document = null;
+        dynamic document;
         if (result.containsKey('doc')) {
-          document = new jsonobject.JsonObjectLite.fromMap(result['doc']);
+          document = new jsonobject.JsonObjectLite.fromJsonString(
+              result['doc'].toString());
         }
         final WiltChangeNotificationEvent notification =
             new WiltChangeNotificationEvent.update(

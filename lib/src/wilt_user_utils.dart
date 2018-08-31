@@ -42,8 +42,8 @@ class WiltUserUtils {
       jsonobject.JsonObjectLite document, String revision) {
     document.isImmutable = false;
     document["_rev"] = revision;
-    return new jsonobject.JsonObjectLite.fromMap(document)
-      ..isImmutable = false;
+    document.isImmutable = false;
+    return document;
   }
 
   /// Adds a CouchDB _id to the json body of a document
@@ -66,8 +66,8 @@ class WiltUserUtils {
       jsonobject.JsonObjectLite document) {
     document.isImmutable = false;
     document["_deleted"] = true;
-    return new jsonobject.JsonObjectLite.fromMap(document)
-      ..isImmutable = false;
+    document.isImmutable = false;
+    return document;
   }
 
   /// Adds both a CouchDb _id and _rev to the json body of a document
@@ -121,9 +121,9 @@ class WiltUserUtils {
       final Map attachmentList = docMap['_attachments'];
       attachmentList.keys.forEach((key) {
         final dynamic jsonAttachmentData =
-        new jsonobject.JsonObjectLite.fromMap(attachmentList[key]);
-        final dynamic jsonAttachment =
-        new jsonobject.JsonObjectLite();
+        new jsonobject.JsonObjectLite.fromJsonString(
+            attachmentList[key].toString());
+        final dynamic jsonAttachment = new jsonobject.JsonObjectLite();
         jsonAttachment.name = key;
         jsonAttachment.data = jsonAttachmentData;
         attachmentsList.add(jsonAttachment);

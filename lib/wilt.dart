@@ -18,6 +18,3 @@ part 'src/wilt_change_notification_parameters.dart';
 part 'src/wilt_change_notification_event.dart';
 part 'src/wilt_change_notification.dart';
 part 'src/httpAdapters/wilt_http_adapter.dart';
-
-
-

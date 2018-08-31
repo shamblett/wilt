@@ -15,7 +15,6 @@ import 'package:test/test.dart';
 import 'wilt_test_config.dart';
 
 void main() {
-
   /* WiltServerClient constructor tests */
   int groupNum = 0;
   group("${groupNum++}. Constructor Tests - ", () {
@@ -82,5 +81,6 @@ void main() {
   void logger(String message) {
     print(message);
   }
+
   WiltTestCommon.run(wilting, dbTestWilting, databaseNameServer, logger);
 }

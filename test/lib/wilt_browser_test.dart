@@ -33,5 +33,6 @@ void main() {
   void logger(String message) {
     window.console.log(message);
   }
+
   WiltTestCommon.run(wilting, dbTestWilting, databaseNameBrowser, logger);
 }
