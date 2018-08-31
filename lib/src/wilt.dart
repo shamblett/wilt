@@ -337,16 +337,19 @@ class Wilt {
 
     final Completer completer = new Completer();
     head(id).then((res) {
-      final dynamic headers = new jsonobject.JsonObjectLite.fromJsonString(
-          WiltUserUtils.mapToJson(res.allResponseHeaders));
+      final dynamic headers = WiltUserUtils.mapToJson(res.allResponseHeaders);
       if (headers != null) {
-        if (headers.containsKey(Wilt.etag)) {
-          String ver = headers[Wilt.etag];
+        final dynamic jsonHeaders =
+        new jsonobject.JsonObjectLite.fromJsonString(headers);
+        if (jsonHeaders.containsKey(Wilt.etag)) {
+          String ver = jsonHeaders[Wilt.etag];
           ver = ver.substring(1, ver.length - 1);
           completer.complete(ver);
         } else {
           completer.complete(null);
         }
+      } else {
+        completer.complete(null);
       }
     });
 

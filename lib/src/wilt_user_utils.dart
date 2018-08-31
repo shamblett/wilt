@@ -136,10 +136,14 @@ class WiltUserUtils {
   /// Serialize a map to a JSON string
   static String mapToJson(dynamic map) {
     if (map is String) {
-      final res = json.decode(map);
-      if (res != null) {
-        return map;
-      } else {
+      try {
+        final res = json.decode(map);
+        if (res != null) {
+          return map;
+        } else {
+          return null;
+        }
+      } catch (e) {
         return null;
       }
     }
