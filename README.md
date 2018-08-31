@@ -22,3 +22,5 @@ or error responses from its HTTP interface adapter.
 Note that the Wilt methods that previously returned Json Objects(JsonObjectLite) now return the dynamic type,
 this is a JsonObjectLite and can be used as such. This change was necessitated as part of the
 Dart 2.0 updates.
+
+Current version supports both CouchDb 2.2.0 and 1.6.
