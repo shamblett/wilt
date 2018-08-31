@@ -70,7 +70,7 @@ class _WiltChangeNotification {
   Timer _timer = null;
 
   /// Since sequence update
-  int _sequence = 0;
+  dynamic _sequence = 0;
 
   /// Paused indicator
   bool _paused = false;
@@ -98,11 +98,19 @@ class _WiltChangeNotification {
     /**
      * Create the URL from the parameters
      */
-    final String path = "$_dbName/_changes?" +
-        "&since=$_sequence" +
-        "&descending=${_parameters.descending}" +
-        "&include_docs=${_parameters.includeDocs}" +
-        "&attachments=${_parameters.includeAttachments}";
+    String path;
+    if (_sequence != null) {
+      path = "$_dbName/_changes?" +
+          "&since=$_sequence" +
+          "&descending=${_parameters.descending}" +
+          "&include_docs=${_parameters.includeDocs}" +
+          "&attachments=${_parameters.includeAttachments}";
+    } else {
+      path = "$_dbName/_changes?" +
+          "&descending=${_parameters.descending}" +
+          "&include_docs=${_parameters.includeDocs}" +
+          "&attachments=${_parameters.includeAttachments}";
+    }
 
     final String url = "$_scheme$_host:${_port.toString()}/$path";
 
@@ -185,15 +193,15 @@ class _WiltChangeNotification {
        */
       if (result.containsKey('deleted')) {
         final WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.delete(
-                result['id'], changes['rev'], result['seq']);
+        new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
+            WiltUserUtils.getCnSequenceNumber(result['seq']));
 
         _changeNotification.add(notification);
       } else {
         dynamic document;
         if (result.containsKey('doc')) {
           document = new jsonobject.JsonObjectLite.fromJsonString(
-              result['doc'].toString());
+              WiltUserUtils.mapToJson(result['doc']));
         }
         final WiltChangeNotificationEvent notification =
         new WiltChangeNotificationEvent.update(result['id'], changes['rev'],

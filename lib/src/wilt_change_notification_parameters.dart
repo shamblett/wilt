@@ -14,9 +14,11 @@ class WiltChangeNotificationParameters {
   /// Since
   ///
   /// Start the results from the change immediately after the given sequence update
-  int _since = 0;
-  int get since => _since;
-  set since(int value) => _since = value;
+  dynamic _since;
+
+  dynamic get since => _since;
+
+  set since(dynamic value) => _since = value;
 
   /// Descending
   ///

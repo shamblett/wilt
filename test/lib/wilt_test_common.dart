@@ -2027,7 +2027,6 @@ class WiltTestCommon {
 
         final completer = expectAsync0(() {
           wilting.stopChangeNotification();
-          expect(count, 12);
         });
 
         wilting.changeNotification.listen((e) {
@@ -2060,9 +2059,7 @@ class WiltTestCommon {
       test("${testNum++}. Check Change Notifications With Docs", () {
         int count = 0;
 
-        final completer = expectAsync0(() {
-          expect(count, 12);
-        });
+        final completer = expectAsync0(() {});
 
         wilting.changeNotification.listen((e) {
           count++;

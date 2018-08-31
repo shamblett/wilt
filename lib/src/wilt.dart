@@ -241,8 +241,7 @@ class Wilt {
   ///
   /// This can be used for CouchDb functions that are not directly supported by Wilt,
   /// e.g views, attachments and design documents.
-  Future<dynamic> httpRequest(String url,
-      {String method: "GET"}) {
+  Future<dynamic> httpRequest(String url, {String method: "GET"}) {
     return _httpRequest(method, url);
   }
 
