@@ -2023,14 +2023,12 @@ class WiltTestCommon {
       });
 
       test("${testNum++}. Check Change Notifications", () {
-        int count = 0;
 
         final completer = expectAsync0(() {
           wilting.stopChangeNotification();
         });
 
         wilting.changeNotification.listen((e) {
-          count++;
           if (e.docId == 'mytestid2')
             expect(
                 (e.type == WiltChangeNotificationEvent.updatee) ||
@@ -2057,12 +2055,10 @@ class WiltTestCommon {
       });
 
       test("${testNum++}. Check Change Notifications With Docs", () {
-        int count = 0;
 
         final completer = expectAsync0(() {});
 
         wilting.changeNotification.listen((e) {
-          count++;
           if (e.docId == 'mytestid2') {
             if (e.type == WiltChangeNotificationEvent.updatee) {
               final dynamic document = e.document;
