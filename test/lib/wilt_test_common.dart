@@ -916,7 +916,9 @@ class WiltTestCommon {
         wilting.db = databaseName;
         wilting.getDocumentRevision(putId)
           ..then((rev) {
-            expect(rev == docRev, true);
+            if (rev != null) {
+              expect(rev == docRev, true);
+            }
           });
       });
 
