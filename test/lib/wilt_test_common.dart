@@ -14,8 +14,8 @@ import 'wilt_test_config.dart';
 /// Common API test class
 class WiltTestCommon {
   /// Test run entry point
-  static void run(Wilt wilting, Wilt dbTestWilting, String databaseName,
-      Function logger) {
+  static void run(
+      Wilt wilting, Wilt dbTestWilting, String databaseName, Function logger) {
     /* Helper functions */
     void logMessage(String message) {
       logger(message);
@@ -322,7 +322,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -337,7 +337,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -352,7 +352,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', 'rev', null, payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -366,7 +366,7 @@ class WiltTestCommon {
         wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -397,7 +397,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -412,7 +412,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -427,7 +427,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -441,7 +441,7 @@ class WiltTestCommon {
         wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
             (dynamic res) {
           // nothing to do
-            }, onError: (e) {
+        }, onError: (e) {
           completer(e);
         });
       });
@@ -1667,7 +1667,7 @@ class WiltTestCommon {
               '8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
 
       test("${testNum++}. Create document(PUT) for attachment tests and check",
-              () {
+          () {
         final checkCompleter = expectAsync1((res) {
           expect(res.method, Wilt.getDocumentt);
           try {
@@ -2042,7 +2042,7 @@ class WiltTestCommon {
       });
 
       test("${testNum++}. Start Change Notification With Docs and Attachments",
-              () {
+          () {
         wilting.db = databaseName;
         final WiltChangeNotificationParameters parameters =
             new WiltChangeNotificationParameters();

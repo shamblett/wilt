@@ -90,14 +90,11 @@ void main() async {
     returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
     print("EXAMPLE:: Example document read OK, revision is $returnedDocRev");
     print(
-        "EXAMPLE:: Example document read OK, title is ${successResponse
-            .title}");
+        "EXAMPLE:: Example document read OK, title is ${successResponse.title}");
     print(
-        "EXAMPLE:: Example document read OK, version is ${successResponse
-            .version}");
+        "EXAMPLE:: Example document read OK, version is ${successResponse.version}");
     print(
-        "EXAMPLE:: Example document read OK, author is ${successResponse
-            .author}");
+        "EXAMPLE:: Example document read OK, author is ${successResponse.author}");
   } else {
     print("EXAMPLE:: Example document read failed");
   }

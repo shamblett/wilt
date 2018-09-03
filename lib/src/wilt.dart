@@ -162,7 +162,7 @@ class Wilt {
         case authBasic:
           final String authStringToEncode = "$_user:$_password";
           final String encodedAuthString =
-          new Base64Encoder().convert(authStringToEncode.codeUnits);
+              new Base64Encoder().convert(authStringToEncode.codeUnits);
           final String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;
@@ -340,7 +340,7 @@ class Wilt {
       final dynamic headers = WiltUserUtils.mapToJson(res.allResponseHeaders);
       if (headers != null) {
         final dynamic jsonHeaders =
-        new jsonobject.JsonObjectLite.fromJsonString(headers);
+            new jsonobject.JsonObjectLite.fromJsonString(headers);
         if (jsonHeaders.containsKey(Wilt.etag)) {
           String ver = jsonHeaders[Wilt.etag];
           ver = ver.substring(1, ver.length - 1);

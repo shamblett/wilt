@@ -24,11 +24,11 @@ void main() {
 
 /* Test client */
   final WiltBrowserClient wilting =
-  new WiltBrowserClient(hostName, port, scheme);
+      new WiltBrowserClient(hostName, port, scheme);
 
 /* Create a test client for database creation/deletion testing */
   final WiltBrowserClient dbTestWilting =
-  new WiltBrowserClient(hostName, port, scheme);
+      new WiltBrowserClient(hostName, port, scheme);
 
   void logger(String message) {
     window.console.log(message);

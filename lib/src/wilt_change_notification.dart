@@ -83,7 +83,7 @@ class _WiltChangeNotification {
   ///
   /// Populated with WiltChangeNotificationEvent events
   final StreamController<WiltChangeNotificationEvent> _changeNotification =
-  new StreamController<WiltChangeNotificationEvent>.broadcast();
+      new StreamController<WiltChangeNotificationEvent>.broadcast();
 
   StreamController<WiltChangeNotificationEvent> get changeNotification =>
       _changeNotification;
@@ -193,8 +193,8 @@ class _WiltChangeNotification {
        */
       if (result.containsKey('deleted')) {
         final WiltChangeNotificationEvent notification =
-        new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
-            WiltUserUtils.getCnSequenceNumber(result['seq']));
+            new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
+                WiltUserUtils.getCnSequenceNumber(result['seq']));
 
         _changeNotification.add(notification);
       } else {
@@ -204,8 +204,8 @@ class _WiltChangeNotification {
               WiltUserUtils.mapToJson(result['doc']));
         }
         final WiltChangeNotificationEvent notification =
-        new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
-            WiltUserUtils.getCnSequenceNumber(result['seq']), document);
+            new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
+                WiltUserUtils.getCnSequenceNumber(result['seq']), document);
 
         _changeNotification.add(notification);
       }
