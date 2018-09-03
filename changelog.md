@@ -1,3 +1,6 @@
+## 4.0.1
+Pub analysis fixes
+
 ## 4.0.0
 Update to Dart 2.0, issue 25
 
