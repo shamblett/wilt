@@ -72,11 +72,11 @@ void main() {
 
   /* Test client */
   final WiltServerClient wilting =
-  new WiltServerClient(hostName, serverPort, scheme);
+      new WiltServerClient(hostName, serverPort, scheme);
 
   /* Create a test client for database creation/deletion testing */
   final WiltServerClient dbTestWilting =
-  new WiltServerClient(hostName, serverPort, scheme);
+      new WiltServerClient(hostName, serverPort, scheme);
 
   void logger(String message) {
     print(message);

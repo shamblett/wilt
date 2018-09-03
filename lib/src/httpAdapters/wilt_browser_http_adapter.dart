@@ -89,8 +89,8 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
          */
         if (method != Wilt.headd) {
           final jsonobject.JsonObjectLite successAsJson =
-          new jsonobject.JsonObjectLite.fromJsonString(
-              response.responseText);
+              new jsonobject.JsonObjectLite.fromJsonString(
+                  response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
@@ -122,7 +122,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.errorCode = req.status;
       if ((req.status != 0) && (method != Wilt.headd)) {
         final jsonobject.JsonObjectLite errorAsJson =
-        new jsonobject.JsonObjectLite.fromJsonString(req.responseText);
+            new jsonobject.JsonObjectLite.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
       } else {
         final dynamic errorAsJson = new jsonobject.JsonObjectLite();
@@ -173,7 +173,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         case Wilt.authBasic:
           final String authStringToEncode = "$_user:$_password";
           final String encodedAuthString =
-          new Base64Encoder().convert(authStringToEncode.codeUnits);
+              new Base64Encoder().convert(authStringToEncode.codeUnits);
           final String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;

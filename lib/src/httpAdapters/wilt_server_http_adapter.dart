@@ -96,7 +96,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
          */
         if (method != Wilt.headd) {
           final jsonobject.JsonObjectLite successAsJson =
-          new jsonobject.JsonObjectLite.fromJsonString(response.body);
+              new jsonobject.JsonObjectLite.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
@@ -171,7 +171,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
              */
           if (method != Wilt.headd) {
             final jsonobject.JsonObjectLite successAsJson =
-            new jsonobject.JsonObjectLite.fromJsonString(text);
+                new jsonobject.JsonObjectLite.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
         } else {
@@ -263,7 +263,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
         case Wilt.authBasic:
           final String authStringToEncode = "$_user:$_password";
           final String encodedAuthString =
-          new Base64Encoder().convert(authStringToEncode.codeUnits);
+              new Base64Encoder().convert(authStringToEncode.codeUnits);
           final String authString = "Basic $encodedAuthString";
           wiltHeaders['Authorization'] = authString;
           break;

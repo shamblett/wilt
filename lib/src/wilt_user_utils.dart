@@ -28,8 +28,8 @@ class WiltUserUtils {
   }
 
   /// Adds a CouchDB _rev to the json body of a document
-  static String addDocumentRev(jsonobject.JsonObjectLite document,
-      String revision) {
+  static String addDocumentRev(
+      jsonobject.JsonObjectLite document, String revision) {
     document.isImmutable = false;
     document["_rev"] = revision;
     return json.encode(document);
@@ -126,8 +126,8 @@ class WiltUserUtils {
       final Map attachmentList = docMap['_attachments'];
       attachmentList.keys.forEach((key) {
         final dynamic jsonAttachmentData =
-        new jsonobject.JsonObjectLite.fromJsonString(
-            WiltUserUtils.mapToJson(attachmentList[key]));
+            new jsonobject.JsonObjectLite.fromJsonString(
+                WiltUserUtils.mapToJson(attachmentList[key]));
         final dynamic jsonAttachment = new jsonobject.JsonObjectLite();
         jsonAttachment.name = key;
         jsonAttachment.data = jsonAttachmentData;
