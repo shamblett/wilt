@@ -19,7 +19,12 @@ class WiltUserUtils {
   /// Get a revision from a json object
   static String getDocumentRev(jsonobject.JsonObjectLite response) {
     response.isImmutable = false;
-    return response['_rev'];
+    if (response.containsKey('_rev')) {
+      // Use this first if present
+      return response['_rev'];
+    } else {
+      return response['rev'];
+    }
   }
 
   /// Adds a CouchDB _rev to the json body of a document

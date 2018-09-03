@@ -67,7 +67,7 @@ void main() async {
     print("EXAMPLE:: Example document creation failed");
   }
 
-  /// Update the document, note we now supply the returned document revision from above.
+  /// Update the document to version 2, note we now supply the returned document revision from above.
   document.version = 2;
   res = await wilting.putDocument(putId, document, returnedDocRev);
   if (!res.error) {
@@ -87,18 +87,17 @@ void main() async {
   res = await wilting.getDocument(putId);
   if (!res.error) {
     final dynamic successResponse = res.jsonCouchResponse;
-    if (successResponse.ok) {
-      returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
-      print("EXAMPLE:: Example document read OK, revision is $returnedDocRev");
-      print(
-          "EXAMPLE:: Example document read OK, title is ${successResponse.title}");
-      print(
-          "EXAMPLE:: Example document read OK, version is ${successResponse.version}");
-      print(
-          "EXAMPLE:: Example document read OK, author is ${successResponse.author}");
-    } else {
-      print("EXAMPLE:: Example document read failed");
-    }
+    returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
+    print("EXAMPLE:: Example document read OK, revision is $returnedDocRev");
+    print(
+        "EXAMPLE:: Example document read OK, title is ${successResponse
+            .title}");
+    print(
+        "EXAMPLE:: Example document read OK, version is ${successResponse
+            .version}");
+    print(
+        "EXAMPLE:: Example document read OK, author is ${successResponse
+            .author}");
   } else {
     print("EXAMPLE:: Example document read failed");
   }
