@@ -2025,7 +2025,6 @@ class WiltTestCommon {
       });
 
       test("${testNum++}. Check Change Notifications", () {
-
         final completer = expectAsync0(() {
           wilting.stopChangeNotification();
         });
@@ -2057,7 +2056,6 @@ class WiltTestCommon {
       });
 
       test("${testNum++}. Check Change Notifications With Docs", () {
-
         final completer = expectAsync0(() {});
 
         wilting.changeNotification.listen((e) {
