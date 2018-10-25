@@ -1,7 +1,8 @@
-packages
+.packages
 pubspec.lock
 *.directory
 /.idea
 
 # Dart 2 additions
 .dart_tool/
+build/
