@@ -10,13 +10,15 @@
 
 part of wilt;
 
+/// HTTP adapter base class
 abstract class WiltHTTPAdapter {
+  /// Construction
   WiltHTTPAdapter();
 
   /// Processes the HTTP request returning the  HTTP response as
   /// a JSON Object
   Future<dynamic> httpRequest(String method, String url,
-      [String data = null, Map headers = null]);
+      [String data, Map<String, String> headers]);
 
   /// Specialised get for change notifications
   Future<String> getString(String url);

@@ -13,7 +13,13 @@
 
 part of wilt_server_client;
 
+/// Server HTTP adapter
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
+  /// Construction
+  WiltServerHTTPAdapter() {
+    _client = http.Client();
+  }
+
   /// User for change notification authorization
   String _user;
 
@@ -26,27 +32,19 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   /// HTTP client
   http.Client _client;
 
-  /// Construction
-  WiltServerHTTPAdapter() {
-    _client = new http.Client();
-  }
-
   /// Processes the HTTP request, returning the server's response
   /// as a future
+  @override
   Future<dynamic> httpRequest(String method, String url,
-      [String data = null, Map headers = null]) {
-    /**
-     *  Initialise
-     */
-    final Completer completer = new Completer();
+      [String data, Map<String, String> headers]) {
+    //  Initialise
+    final Completer<dynamic> completer = Completer<dynamic>();
 
     /// Successful completion
     void onSuccess(http.Response response) {
-      /**
-       *  Process the success response, note that an error response from CouchDB is
-       *  treated as an error, not as a success with an 'error' field in it.
-       */
-      final dynamic jsonResponse = new jsonobject.JsonObjectLite();
+      // Process the success response, note that an error response from CouchDB is
+      // treated as an error, not as a success with an 'error' field in it.
+      final dynamic jsonResponse = jsonobject.JsonObjectLite<dynamic>();
       jsonResponse.error = false;
       jsonResponse.errorCode = response.statusCode;
       jsonResponse.successText = null;
@@ -60,67 +58,66 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
        * otherwise its just raw data, ie an attachment.
        */
       if (response.headers.containsValue('application/json')) {
-        var couchResp;
+        dynamic couchResp;
         try {
           couchResp = json.decode(response.body);
-        } catch (e) {
+        } on Exception {
           jsonResponse.error = true;
-          final dynamic errorAsJson = new jsonobject.JsonObjectLite();
-          errorAsJson.error = "json Decode Error";
-          errorAsJson.reason = "None";
+          final dynamic errorAsJson = jsonobject.JsonObjectLite<dynamic>();
+          errorAsJson.error = 'json Decode Error';
+          errorAsJson.reason = 'None';
           jsonResponse.jsonCouchResponse = errorAsJson;
-          /* Set the response headers */
+          // Set the response headers
           jsonResponse.allResponseHeaders = response.headers;
-          /**
-            * Complete the request
-            */
-          if (!completer.isCompleted) completer.complete(jsonResponse);
+
+          // Complete the request
+          if (!completer.isCompleted) {
+            completer.complete(jsonResponse);
+          }
         }
 
         if ((couchResp is Map) && (couchResp.containsKey('error'))) {
           jsonResponse.error = true;
-          final dynamic errorAsJson = new jsonobject.JsonObjectLite();
-          errorAsJson.error = "CouchDb Error";
+          final dynamic errorAsJson = jsonobject.JsonObjectLite<dynamic>();
+          errorAsJson.error = 'CouchDb Error';
           errorAsJson.reason = couchResp['reason'];
           jsonResponse.jsonCouchResponse = errorAsJson;
-          /* Set the response headers */
+          // Set the response headers
           jsonResponse.allResponseHeaders = response.headers;
-          /**
-           * Complete the request
-           */
-          if (!completer.isCompleted) completer.complete(jsonResponse);
+
+          // Complete the request
+          if (!completer.isCompleted) {
+            completer.complete(jsonResponse);
+          }
         }
 
-        /**
-         * Success response
-         */
+        // Success response
         if (method != Wilt.headd) {
-          final jsonobject.JsonObjectLite successAsJson =
-              new jsonobject.JsonObjectLite.fromJsonString(response.body);
+          final jsonobject.JsonObjectLite<dynamic> successAsJson =
+              jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
-        final dynamic successAsJson = new jsonobject.JsonObjectLite();
+        final dynamic successAsJson = jsonobject.JsonObjectLite<dynamic>();
         successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
       }
 
-      /* Set the response headers */
+      // Set the response headers
       jsonResponse.allResponseHeaders = response.headers;
-      /**
-       * Complete the request
-       */
-      if (!completer.isCompleted) completer.complete(jsonResponse);
+
+      // Complete the request
+      if (!completer.isCompleted) {
+        completer.complete(jsonResponse);
+      }
     }
 
     /// Successful completion for Copy
     void onCopySuccess(http.StreamedResponse response) {
-      /**
-       *  Process the success response, note that an error response from CouchDB is
-       *  treated as an error, not as a success with an 'error' field in it.
-       */
-      final dynamic jsonResponse = new jsonobject.JsonObjectLite();
+      // Process the success response, note that an error response from CouchDB is
+      // treated as an error, not as a success with an 'error' field in it.
+      final dynamic jsonResponse = jsonobject.JsonObjectLite<dynamic>();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
       jsonResponse.successText = null;
@@ -135,115 +132,108 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
            * otherwise its just raw data, ie an attachment.
            */
         if (response.headers.containsValue('application/json')) {
-          var couchResp;
+          dynamic couchResp;
           try {
             couchResp = json.decode(text);
-          } catch (e) {
+          } on Exception {
             jsonResponse.error = true;
-            final dynamic errorAsJson = new jsonobject.JsonObjectLite();
-            errorAsJson.error = "json Decode Error";
-            errorAsJson.reason = "None";
+            final dynamic errorAsJson = jsonobject.JsonObjectLite<dynamic>();
+            errorAsJson.error = 'json Decode Error';
+            errorAsJson.reason = 'None';
             jsonResponse.jsonCouchResponse = errorAsJson;
-            /* Set the response headers */
+            // Set the response headers
             jsonResponse.allResponseHeaders = response.headers;
-            /**
-                * Complete the request
-                */
-            if (!completer.isCompleted) completer.complete(jsonResponse);
+
+            // Complete the request
+            if (!completer.isCompleted) {
+              completer.complete(jsonResponse);
+            }
           }
 
           if ((couchResp is Map) && (couchResp.containsKey('error'))) {
             jsonResponse.error = true;
-            final dynamic errorAsJson = new jsonobject.JsonObjectLite();
-            errorAsJson.error = "CouchDb Error";
+            final dynamic errorAsJson = jsonobject.JsonObjectLite<dynamic>();
+            errorAsJson.error = 'CouchDb Error';
             errorAsJson.reason = couchResp['reason'];
             jsonResponse.jsonCouchResponse = errorAsJson;
-            /* Set the response headers */
+            // Set the response headers
             jsonResponse.allResponseHeaders = response.headers;
-            /**
-               * Complete the reequest
-               */
-            if (!completer.isCompleted) completer.complete(jsonResponse);
+            // Complete the reequest
+            if (!completer.isCompleted) {
+              completer.complete(jsonResponse);
+            }
           }
 
-          /**
-             * Success response
-             */
+          // Success response
           if (method != Wilt.headd) {
-            final jsonobject.JsonObjectLite successAsJson =
-                new jsonobject.JsonObjectLite.fromJsonString(text);
+            final jsonobject.JsonObjectLite<dynamic> successAsJson =
+                jsonobject.JsonObjectLite<dynamic>.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
         } else {
-          final dynamic successAsJson = new jsonobject.JsonObjectLite();
+          final dynamic successAsJson = jsonobject.JsonObjectLite<dynamic>();
           successAsJson.ok = true;
           successAsJson.contentType = response.headers['content-type'];
           jsonResponse.jsonCouchResponse = successAsJson;
         }
 
-        /* Set the response headers */
+        // Set the response headers
         jsonResponse.allResponseHeaders = response.headers;
 
-        /**
-         * Complete the request
-        */
-        if (!completer.isCompleted) completer.complete(jsonResponse);
+        // Complete the request
+        if (!completer.isCompleted) {
+          completer.complete(jsonResponse);
+        }
       });
     }
 
     /// Error completion
     void onError(dynamic exception) {
-      /* Process the error response */
-      final dynamic jsonResponse = new jsonobject.JsonObjectLite();
+      // Process the error response
+      final dynamic jsonResponse = jsonobject.JsonObjectLite<dynamic>();
       jsonResponse.method = method;
       jsonResponse.error = true;
       jsonResponse.successText = null;
       jsonResponse.errorCode = 0;
-      final dynamic errorAsJson = new jsonobject.JsonObjectLite();
-      errorAsJson.error = "Invalid HTTP response";
+      final dynamic errorAsJson = jsonobject.JsonObjectLite<dynamic>();
+      errorAsJson.error = 'Invalid HTTP response';
       errorAsJson.reason = exception.message;
       jsonResponse.jsonCouchResponse = errorAsJson;
 
-      /**
-       * Complete the request
-       */
-      if (!completer.isCompleted) completer.complete(jsonResponse);
+      // Complete the request
+      if (!completer.isCompleted) {
+        completer.complete(jsonResponse);
+      }
     }
 
-    /**
-     * Condition the input method string to get the HTTP method
-     */
-    final List temp = method.split('_');
-    final String httpMethod = temp[0];
+    // Condition the input method string to get the HTTP method
+    final String httpMethod = method.split('_')[0];
 
-    /**
-     * Set the content type header correctly
-     */
+    // Set the content type header correctly
     if (headers.containsKey('Content-Type')) {
       final String contentType = headers['Content-Type'];
       headers.remove('Content-Type');
       headers['content-type'] = contentType;
     }
-    /**
-     *  Query CouchDB over HTTP
-     */
-    if (httpMethod == "GET") {
+
+    // Query CouchDB over HTTP
+    if (httpMethod == 'GET') {
       _client.get(url, headers: headers).then(onSuccess, onError: onError);
-    } else if (httpMethod == "PUT") {
+    } else if (httpMethod == 'PUT') {
       _client
           .put(url, headers: headers, body: data)
           .then(onSuccess, onError: onError);
-    } else if (httpMethod == "POST") {
+    } else if (httpMethod == 'POST') {
       _client
           .post(url, headers: headers, body: data)
           .then(onSuccess, onError: onError);
-    } else if (httpMethod == "HEAD") {
+    } else if (httpMethod == 'HEAD') {
       _client.head(url, headers: headers).then(onSuccess, onError: onError);
-    } else if (httpMethod == "DELETE") {
+    } else if (httpMethod == 'DELETE') {
       _client.delete(url, headers: headers).then(onSuccess, onError: onError);
-    } else if (httpMethod == "COPY") {
+    } else if (httpMethod == 'COPY') {
       final Uri encodedUrl = Uri.parse(url);
-      final request = new http.Request("COPY", encodedUrl);
+      final dynamic request = http.Request('COPY', encodedUrl);
       request.headers.addAll(headers);
       _client.send(request).then(onCopySuccess, onError: onError);
     }
@@ -252,19 +242,20 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   }
 
   /// Specialised 'get' for change notifications
+  @override
   Future<String> getString(String url) {
-    final Completer completer = new Completer<String>();
+    final Completer<dynamic> completer = Completer<String>();
 
     /* Must have authentication */
-    final Map wiltHeaders = new Map<String, String>();
-    wiltHeaders["Accept"] = "application/json";
+    final Map<String, String> wiltHeaders = Map<String, String>();
+    wiltHeaders['Accept'] = 'application/json';
     if (_user != null) {
       switch (_authType) {
         case Wilt.authBasic:
-          final String authStringToEncode = "$_user:$_password";
+          final String authStringToEncode = '$_user:$_password';
           final String encodedAuthString =
-              new Base64Encoder().convert(authStringToEncode.codeUnits);
-          final String authString = "Basic $encodedAuthString";
+              const Base64Encoder().convert(authStringToEncode.codeUnits);
+          final String authString = 'Basic $encodedAuthString';
           wiltHeaders['Authorization'] = authString;
           break;
 
@@ -273,7 +264,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       }
     }
 
-    _client.get(url, headers: wiltHeaders).then((response) {
+    _client.get(url, headers: wiltHeaders).then((dynamic response) {
       completer.complete(response.body);
     });
 
@@ -281,6 +272,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   }
 
   /// Authentication parameters for change notification
+  @override
   void notificationAuthParams(String user, String password, String authType) {
     _user = user;
     _password = password;
