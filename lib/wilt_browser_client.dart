@@ -9,19 +9,22 @@
 
 library wilt_browser_client;
 
-import 'package:wilt/wilt.dart';
-import 'dart:html' as html;
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:html' as html;
+
+import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 
 part 'src/httpAdapters/wilt_browser_http_adapter.dart';
 
 /// The Wilt browser client
 class WiltBrowserClient extends Wilt {
-  static WiltBrowserHTTPAdapter browserHttpAdapter =
-      new WiltBrowserHTTPAdapter();
-
-  WiltBrowserClient(host, port, scheme, [Object clientCompletion])
+  /// Construction
+  WiltBrowserClient(String host, String port, String scheme,
+      [Object clientCompletion])
       : super(host, port, scheme, browserHttpAdapter, clientCompletion);
+
+  /// The HTTP adapter
+  static WiltBrowserHTTPAdapter browserHttpAdapter = WiltBrowserHTTPAdapter();
 }

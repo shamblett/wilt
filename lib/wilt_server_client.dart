@@ -9,8 +9,8 @@
 
 library wilt_server_client;
 
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;
@@ -20,8 +20,11 @@ part 'src/httpAdapters/wilt_server_http_adapter.dart';
 
 /// The Wilt server client
 class WiltServerClient extends Wilt {
-  static WiltServerHTTPAdapter serverHttpAdapter = new WiltServerHTTPAdapter();
-
-  WiltServerClient(host, port, scheme, [Object clientCompletion])
+  /// Construction
+  WiltServerClient(String host, String port, String scheme,
+      [Object clientCompletion])
       : super(host, port, scheme, serverHttpAdapter, clientCompletion);
+
+  /// The HTTP adapter
+  static WiltServerHTTPAdapter serverHttpAdapter = WiltServerHTTPAdapter();
 }
