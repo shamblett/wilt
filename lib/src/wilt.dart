@@ -118,7 +118,7 @@ class Wilt {
       _changeNotifier.changeNotification.stream;
 
   /// Change notification paused state
-  bool get changeNotificationsPaused => _changeNotifier.pause;
+  bool get changeNotificationsPaused => _changeNotifier.paused;
 
   /// Completion function
   dynamic _clientCompletion;
@@ -146,18 +146,18 @@ class Wilt {
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
   Future<dynamic> _httpRequest(String method, String url,
-      {String data, Map<String, String> headers}) {
+      {String data, Map<String,String> headers}) {
     // Build the request for the HttpAdapter
-    final Map<String, String> wiltHeaders = Map<String, String>();
+    final Map<String,String> wiltHeaders = Map<String,String>();
     wiltHeaders['Accept'] = 'application/json';
     if (headers != null) {
       wiltHeaders.addAll(headers);
     }
 
-    /* Build the URL */
+    // Build the URL
     final String wiltUrl = '$scheme$host:$port$url';
 
-    /* Check for authentication */
+    // Check for authentication
     if (_user != null) {
       switch (authenticationType) {
         case authBasic:
@@ -173,7 +173,7 @@ class Wilt {
       }
     }
 
-    /* Execute the request*/
+    // Execute the request
     final Future<dynamic> completion =
         httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)
           ..then((dynamic jsonResponse) {
@@ -190,9 +190,9 @@ class Wilt {
   /// to the query parameters of the URL.
   String _setURLParameter(String url, String key, String value) {
     final Uri originalUrl = Uri.parse(url);
-    final Map<String, String> queryParams = originalUrl.queryParameters;
-    final Map<String, String> newQueryParams =
-        Map<String, String>.from(queryParams);
+    final Map<String,String> queryParams = originalUrl.queryParameters;
+    final Map<String,String> newQueryParams =
+        Map<String,String>.from(queryParams);
     newQueryParams[key] = value;
 
     final Uri newUrl = Uri(
@@ -204,7 +204,7 @@ class Wilt {
         queryParameters: newQueryParams);
 
     final String returnUrl = newUrl.toString();
-    return returnUrl /* Private */;
+    return returnUrl; // Private
   }
 
   /// Conditions the URL for use by Wilt and checks for
@@ -217,7 +217,7 @@ class Wilt {
       return '/';
     }
     String urlRet = url;
-    /* The first char of the URL should be a slash. */
+    // The first char of the URL should be a slash.
     if (!url.startsWith('/')) {
       urlRet = '/$urlRet';
     }
@@ -254,7 +254,7 @@ class Wilt {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
-    /* Perform the get */
+    // Perform the get
     return _httpRequest('GET', url1);
   }
 
@@ -266,31 +266,31 @@ class Wilt {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
-    /* Perform the head */
+    // Perform the head
     return _httpRequest(headd, url1);
   }
 
   /// Performs a HTTP POST operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> post(String url, String data, [Map<String, String> headers]) {
+  Future<dynamic> post(String url, String data, [Map<String,String> headers]) {
     final String url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
-    /* Perform the post */
+    // Perform the post
     return _httpRequest('POST', url1, data: data, headers: headers);
   }
 
   /// Performs a HTTP PUT operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> put(String url, String data, [Map<String, String> headers]) {
+  Future<dynamic> put(String url, String data, [Map<String,String> headers]) {
     final String url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
-    /* Perform the put */
+    // Perform the put
     return _httpRequest('PUT', url1, data: data, headers: headers);
   }
 
@@ -302,7 +302,7 @@ class Wilt {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
 
-    /* Perform the delete */
+    // Perform the delete
     return _httpRequest('DELETE', url1);
   }
 
@@ -373,7 +373,7 @@ class Wilt {
     }
     final Completer<dynamic> completer = Completer<dynamic>();
 
-    /* Check the preserve flag */
+    // Check the preserve flag
     if (preserve) {
       getDocument(id).then((dynamic res) {
         if (res != null) {
@@ -429,7 +429,7 @@ class Wilt {
       return _raiseException(WiltException.putDocStringNoIdBody);
     }
 
-    /* Check for a revision */
+    // Check for a revision
     String id1 = id;
     if (rev != null) {
       id1 = '$id1?rev=$rev';
@@ -451,8 +451,8 @@ class Wilt {
       url = '$url/$path';
     }
 
-    /* Set the content type for a post */
-    final Map<String, String> headers = Map<String, String>();
+    // Set the content type for a post
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = 'application/json';
 
     String jsonData;
@@ -478,8 +478,8 @@ class Wilt {
       url = '$url/$path';
     }
 
-    /* Set the content type for a post */
-    final Map<String, String> headers = Map<String, String>();
+    // Set the content type for a post
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -501,8 +501,8 @@ class Wilt {
 
     String url = sourceId;
 
-    /* Create the special COPY header */
-    final Map<String, String> headers = Map<String, String>();
+    // Create the special COPY header
+    final Map<String,String> headers = Map<String,String>();
     String destination = destinationId;
     if (rev != null) {
       destination = '$destinationId?rev=$rev';
@@ -523,14 +523,14 @@ class Wilt {
       String endKey,
       List<String> keys,
       bool descending}) {
-    /* Validate the parameters */
+    // Validate the parameters
     if ((limit != null) && (limit < 0)) {
       return _raiseException(WiltException.getAllDocsLimit);
     }
 
     String url = alldocs;
 
-    /* Check the parameters and build the URL as needed */
+    // Check the parameters and build the URL as needed
     if (includeDocs) {
       url = _setURLParameter(url, 'include_docs', 'true');
     }
@@ -567,7 +567,7 @@ class Wilt {
   Future<dynamic> bulk(List<jsonobject.JsonObjectLite<dynamic>> docs,
       // ignore: avoid_positional_boolean_parameters
       [bool allOrNothing = false]) {
-    /* Validate the parameters */
+    // Validate the parameters
     if (docs == null) {
       return _raiseException(WiltException.bulkNoDocList);
     }
@@ -578,19 +578,19 @@ class Wilt {
       url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
     }
 
-    /* Create the bulk insertion data structure */
+    // Create the bulk insertion data structure
     final Map<String, List<jsonobject.JsonObjectLite<dynamic>>> documentMap =
         Map<String, List<jsonobject.JsonObjectLite<dynamic>>>();
     documentMap['docs'] = docs;
     String docString;
     try {
       docString = json.encode(documentMap);
-    } catch (e) {
+    } on Exception {
       return _raiseException(WiltException.bulkCantStringify);
     }
 
-    /* Must set the content type for a post */
-    final Map headers = Map<String, String>();
+    // Must set the content type for a post
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -599,8 +599,9 @@ class Wilt {
 
   /// Bulk insert json string version.
   /// Must be used if '_id' and or '_rev' are needed in ANY of the documents
-  Future bulkString(String docs, [bool allOrNothing = false]) {
-    /* Validate the parameters */
+  // ignore: avoid_positional_boolean_parameters
+  Future<dynamic> bulkString(String docs, [bool allOrNothing = false]) {
+    // Validate the parameters
     if (docs == null) {
       return _raiseException(WiltException.bulkStringNoDoc);
     }
@@ -611,8 +612,8 @@ class Wilt {
       url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
     }
 
-    /* Must set the content type for a post */
-    final Map headers = Map<String, String>();
+    // Must set the content type for a post
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -620,12 +621,12 @@ class Wilt {
   }
 
   /// Creates a database with the specified name.
-  Future createDatabase(String name) {
-    if ((name == null)) {
+  Future<dynamic> createDatabase(String name) {
+    if (name == null) {
       return _raiseException(WiltException.createDbNoName);
     }
 
-    /* The first char of the URL should be a slash. */
+    // The first char of the URL should be a slash.
     String url = name;
     if (!url.startsWith('/')) {
       url = '/$url';
@@ -635,18 +636,18 @@ class Wilt {
   }
 
   /// Deletes the specified database
-  Future deleteDatabase(String name) {
+  Future<dynamic> deleteDatabase(String name) {
     if (name == null) {
       return _raiseException(WiltException.deleteDbNoName);
     }
 
-    /* The first char of the URL should be a slash. */
+    // The first char of the URL should be a slash. //
     String url = name;
     if (!url.startsWith('/')) {
       url = '/$url';
     }
 
-    /* Null the current database if we have deleted it */
+    // Null the current database if we have deleted it
     if (name == db) {
       db = null;
     }
@@ -655,7 +656,7 @@ class Wilt {
   }
 
   /// Get information about a database
-  Future getDatabaseInfo([String dbName = null]) {
+  Future<dynamic> getDatabaseInfo([String dbName]) {
     String name;
     if (dbName != null) {
       name = dbName;
@@ -669,22 +670,22 @@ class Wilt {
   }
 
   /// Get current session information from CouchDB
-  Future getSession() {
-    final String url = session;
+  Future<dynamic> getSession() {
+    const String url = session;
 
     return _httpRequest(getSessionn, url);
   }
 
   /// Get current stats from CouchDB
-  Future getStats() {
-    final String url = stats;
+  Future<dynamic> getStats() {
+    const String url = stats;
 
     return _httpRequest(getStatss, url);
   }
 
   /// Get all the databases from CouchDB
-  Future getAllDbs() {
-    final String url = alldbs;
+  Future<dynamic> getAllDbs() {
+    const String url = alldbs;
 
     return _httpRequest(getAllDbss, url);
   }
@@ -692,11 +693,9 @@ class Wilt {
   /// Create an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
   /// If the document needs to be created as well as the attachment set the rev to ''
-  Future createAttachment(String docId, String attachmentName, String rev,
+  Future<dynamic> createAttachment(String docId, String attachmentName, String rev,
       String contentType, String payload) {
-    /**
-    * Check all parameters are supplied
-    */
+    // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.createAttNoDocId);
     }
@@ -717,15 +716,11 @@ class Wilt {
       return _raiseException(WiltException.createAttNoPayload);
     }
 
-    /**
-     * Set the headers
-     */
-    final Map headers = Map<String, String>();
+     // Set the headers
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = contentType;
 
-    /**
-     * Make the PUT request
-     */
+     // Make the PUT request
     String url;
     if (rev != '') {
       url = '$docId/$attachmentName?rev=$rev';
@@ -740,11 +735,10 @@ class Wilt {
 
   /// Update an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
-  Future updateAttachment(String docId, String attachmentName, String rev,
+  Future<dynamic> updateAttachment(String docId, String attachmentName, String rev,
       String contentType, String payload) {
-    /**
-    * Check all parameters are supplied
-    */
+
+    // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.updateAttNoDocId);
     }
@@ -768,7 +762,7 @@ class Wilt {
     /**
      * Set the headers
      */
-    final Map headers = Map<String, String>();
+    final Map<String,String> headers = Map<String,String>();
     headers['Content-Type'] = contentType;
 
     String url = '$docId/$attachmentName?rev=$rev';
@@ -779,7 +773,7 @@ class Wilt {
   }
 
   /// Delete an attachment
-  Future deleteAttachment(String docId, String attachmentName, String rev) {
+  Future<dynamic> deleteAttachment(String docId, String attachmentName, String rev) {
     if (docId == null) {
       return _raiseException(WiltException.deleteAttNoDocId);
     }
@@ -799,7 +793,7 @@ class Wilt {
   }
 
   /// Get an attachment
-  Future getAttachment(String docId, String attachmentName) {
+  Future<dynamic> getAttachment(String docId, String attachmentName) {
     if (docId == null) {
       return _raiseException(WiltException.getAttNoDocId);
     }
@@ -820,8 +814,8 @@ class Wilt {
   ///
   /// If auth credentials are not set raise an exception.
   void startChangeNotification(
-      [WiltChangeNotificationParameters parameters = null,
-      String databaseName = null]) {
+      [WiltChangeNotificationParameters parameters,
+      String databaseName]) {
     if (_user == null) {
       throw WiltException(WiltException.cnNoAuth);
     }
@@ -865,13 +859,13 @@ class Wilt {
 
   /// Pause change notifications
   void pauseChangeNotifications() {
-    _changeNotifier.pause = true;
+    _changeNotifier.paused = true;
     _changeNotifier.stopNotifications();
   }
 
   /// Restart change notifications after a pause
   void restartChangeNotifications() {
-    _changeNotifier.pause = false;
+    _changeNotifier.paused = false;
     _changeNotifier.restartChangeNotifications();
   }
 
@@ -894,14 +888,14 @@ class Wilt {
   }
 
   /// Ask CouchDB to generate document Id's.
-  Future generateIds([int amount = 10]) {
+  Future<dynamic> generateIds([int amount = 10]) {
     if (amount < 1) {
       return _raiseException(WiltException.genIdsAmount);
     }
 
     String url = uuids;
 
-    url = url + '?count=${amount}';
+    url = '$url?count=$amount';
 
     return _httpRequest(generateIdss, url);
   }

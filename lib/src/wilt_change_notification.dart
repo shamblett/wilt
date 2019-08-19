@@ -28,138 +28,105 @@ part of wilt;
 class _WiltChangeNotification {
   _WiltChangeNotification(
       this._host, this._port, this._scheme, this._httpAdapter,
-      [this._dbName, this._parameters]) {
-    if (_parameters == null) {
-      _parameters = new WiltChangeNotificationParameters();
-    }
+      [this._dbName, this.parameters]) {
+    parameters ??= WiltChangeNotificationParameters();
 
-    _sequence = _parameters.since;
+    _sequence = parameters.since;
 
-    /**
-     * Start the heartbeat timer
-     */
-    final Duration heartbeat =
-        new Duration(milliseconds: _parameters.heartbeat);
-    _timer = new Timer.periodic(heartbeat, _requestChanges);
+    // Start the heartbeat timer
+    final Duration heartbeat = Duration(milliseconds: parameters.heartbeat);
+    _timer = Timer.periodic(heartbeat, _requestChanges);
 
-    /**
-     * Start change notifications
-     */
+    // Start change notifications
     _requestChanges(_timer);
   }
 
   /// Parameters set
-  WiltChangeNotificationParameters _parameters = null;
-  WiltChangeNotificationParameters get parameters => _parameters;
-  set parameters(WiltChangeNotificationParameters parameters) =>
-      _parameters = parameters;
+  WiltChangeNotificationParameters parameters;
 
   /// Database name
-  String _dbName = null;
+  String _dbName;
 
   /// Host name
-  String _host = null;
+  String _host;
 
   /// Port number
-  String _port = null;
+  String _port;
 
   /// HTTP scheme
-  String _scheme = null;
+  String _scheme;
 
   /// Timer
-  Timer _timer = null;
+  Timer _timer;
 
   /// Since sequence update
   dynamic _sequence = 0;
 
   /// Paused indicator
-  bool _paused = false;
-  bool get pause => _paused;
-  set pause(bool flag) => _paused = flag;
+  bool paused = false;
 
-  WiltHTTPAdapter _httpAdapter = null;
+  WiltHTTPAdapter _httpAdapter;
 
   /// Change notification stream controller
   ///
   /// Populated with WiltChangeNotificationEvent events
   final StreamController<WiltChangeNotificationEvent> _changeNotification =
-      new StreamController<WiltChangeNotificationEvent>.broadcast();
+      StreamController<WiltChangeNotificationEvent>.broadcast();
 
   StreamController<WiltChangeNotificationEvent> get changeNotification =>
       _changeNotification;
 
   /// Request the change notifications
   void _requestChanges(Timer timer) {
-    /**
-     * If paused return
-     */
-    if (_paused) return;
-
-    /**
-     * Create the URL from the parameters
-     */
-    String path;
-    if (_sequence != null) {
-      path = "$_dbName/_changes?" +
-          "&since=$_sequence" +
-          "&descending=${_parameters.descending}" +
-          "&include_docs=${_parameters.includeDocs}" +
-          "&attachments=${_parameters.includeAttachments}";
-    } else {
-      path = "$_dbName/_changes?" +
-          "&descending=${_parameters.descending}" +
-          "&include_docs=${_parameters.includeDocs}" +
-          "&attachments=${_parameters.includeAttachments}";
+    if (paused) {
+      return;
     }
 
-    final String url = "$_scheme$_host:${_port.toString()}/$path";
+    // Create the URL from the parameters
+    String path;
+    if (_sequence != null) {
+      path =
+          '$_dbName/_changes?&since=$_sequence&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+    } else {
+      path =
+          '$_dbName/_changes?&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+    }
 
-    /**
-     * Open the request
-     */
+    final String url = '$_scheme$_host:${_port.toString()}/$path';
+
+    // Open the request
     try {
-      _httpAdapter.getString(url)
-        ..then((result) {
-          /**
-        * Process the change notification
-        */
-          try {
-            final Map dbChange = json.decode(result);
-            processDbChange(dbChange);
-          } catch (e) {
-            /**
-          * Recoverable error, send the client an error event
-          */
-            print(
-                "WiltChangeNotification::MonitorChanges json decode fail ${e.toString()}");
-            final WiltChangeNotificationEvent notification =
-                new WiltChangeNotificationEvent.decodeError(
-                    result, e.toString());
+      _httpAdapter.getString(url).then((dynamic result) {
+        // Process the change notification
+        try {
+          final Map<dynamic, dynamic> dbChange = json.decode(result);
+          processDbChange(dbChange);
+        } on Exception catch (e) {
+          // Recoverable error, send the client an error event
+          print('WiltChangeNotification::MonitorChanges json decode fail $e');
+          final WiltChangeNotificationEvent notification =
+              WiltChangeNotificationEvent.decodeError(result, e.toString());
 
-            _changeNotification.add(notification);
-          }
-        });
-    } catch (e) {
-      /**
-       * Unrecoverable error, send the client an abort event
-       */
+          _changeNotification.add(notification);
+        }
+      });
+    } on Exception catch (e) {
+      // Unrecoverable error, send the client an abort event
       print(
-          "WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is ${e.toString()}");
+          'WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is $e');
       final WiltChangeNotificationEvent notification =
-          new WiltChangeNotificationEvent.abort(e.toString());
+          WiltChangeNotificationEvent.abort(e.toString());
 
       _changeNotification.add(notification);
     }
   }
 
   /// Database change updates
-  void processDbChange(Map change) {
-    /**
-     * Check for an error response
-     */
+  void processDbChange(Map<String, dynamic> change) {
+    // Check for an error response
     if (change.containsKey('error')) {
       final WiltChangeNotificationEvent notification =
-          new WiltChangeNotificationEvent.couchDbError(
+          WiltChangeNotificationEvent.couchDbError(
               change['error'], change['reason']);
 
       _changeNotification.add(notification);
@@ -167,49 +134,43 @@ class _WiltChangeNotification {
       return;
     }
 
-    /**
-     * Update the last sequence number
-     */
+    // Update the last sequence number
     _sequence = WiltUserUtils.getCnSequenceNumber(change['last_seq']);
 
-    /**
-     * Process the result list
-     */
-    final List results = change['results'];
+    // Process the result list
+    final List<dynamic> results = change['results'];
     if (results.isEmpty) {
       final WiltChangeNotificationEvent notification =
-          new WiltChangeNotificationEvent.sequence(_sequence);
+          WiltChangeNotificationEvent.sequence(_sequence);
 
       _changeNotification.add(notification);
 
       return;
     }
 
-    results.forEach((result) {
-      final Map changes = result['changes'][0];
+    for (dynamic result in results) {
+      final Map<String, dynamic> changes = result['changes'][0];
 
-      /**
-       * Check for delete or update
-       */
+      // Check for delete or update
       if (result.containsKey('deleted')) {
         final WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
+            WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
                 WiltUserUtils.getCnSequenceNumber(result['seq']));
 
         _changeNotification.add(notification);
       } else {
         dynamic document;
         if (result.containsKey('doc')) {
-          document = new jsonobject.JsonObjectLite.fromJsonString(
+          document = jsonobject.JsonObjectLite<dynamic>.fromJsonString(
               WiltUserUtils.mapToJson(result['doc']));
         }
         final WiltChangeNotificationEvent notification =
-            new WiltChangeNotificationEvent.update(result['id'], changes['rev'],
+            WiltChangeNotificationEvent.update(result['id'], changes['rev'],
                 WiltUserUtils.getCnSequenceNumber(result['seq']), document);
 
         _changeNotification.add(notification);
       }
-    });
+    }
   }
 
   /// Stop change notifications
@@ -219,16 +180,11 @@ class _WiltChangeNotification {
 
   /// Restart change notifications
   void restartChangeNotifications() {
-    /**
-     * Start the heartbeat timer
-     */
-    final Duration heartbeat =
-        new Duration(milliseconds: _parameters.heartbeat);
-    _timer = new Timer.periodic(heartbeat, _requestChanges);
+    // Start the heartbeat timer
+    final Duration heartbeat = Duration(milliseconds: parameters.heartbeat);
+    _timer = Timer.periodic(heartbeat, _requestChanges);
 
-    /**
-     * Start change notifications
-     */
+    // Start change notifications
     _requestChanges(_timer);
   }
 }
