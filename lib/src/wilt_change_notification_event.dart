@@ -16,43 +16,8 @@
 
 part of wilt;
 
+/// The change notification event class
 class WiltChangeNotificationEvent {
-  /// Update event
-  ///
-  /// A document has been created/updated
-  static const String updatee = "update";
-
-  /// Delete event
-  ///
-  /// A document has been deleted
-  static const String deletee = "delete";
-
-  /// Decode error event
-  ///
-  /// The change notification received from CouchDB cannot be
-  /// transformed into valid JSON, this may be a temporary issue,
-  /// the client must decide whether to continue on or re-initialise
-  /// the change notification class.
-  static const String decodeErrorr = "decode";
-
-  /// CouchDb error event
-  ///
-  /// The change notification received from CouchDB indicates an error.
-  static const String couchdbError = "couch";
-
-  /// Abort event
-  ///
-  /// A fatal error in the HTTP client has been detected, the client must
-  /// assume that on receiving the event the change notification interface must
-  /// be re-initialised.
-  static const String abortt = "abort";
-
-  /// Last sequence number event
-  ///
-  /// Sent by CouchDB when there are no changes, only the last sequence number is returned.
-  ///
-  static const String lastSequence = "sequence";
-
   /// Update event
   WiltChangeNotificationEvent.update(
       this._docId, this._docRevision, this._sequenceNumber,
@@ -88,60 +53,103 @@ class WiltChangeNotificationEvent {
     _type = lastSequence;
   }
 
+  /// Update event
+  ///
+  /// A document has been created/updated
+  static const String updatee = 'update';
+
+  /// Delete event
+  ///
+  /// A document has been deleted
+  static const String deletee = 'delete';
+
+  /// Decode error event
+  ///
+  /// The change notification received from CouchDB cannot be
+  /// transformed into valid JSON, this may be a temporary issue,
+  /// the client must decide whether to continue on or re-initialise
+  /// the change notification class.
+  static const String decodeErrorr = 'decode';
+
+  /// CouchDb error event
+  ///
+  /// The change notification received from CouchDB indicates an error.
+  static const String couchdbError = 'couch';
+
+  /// Abort event
+  ///
+  /// A fatal error in the HTTP client has been detected, the client must
+  /// assume that on receiving the event the change notification interface must
+  /// be re-initialised.
+  static const String abortt = 'abort';
+
+  /// Last sequence number event
+  ///
+  /// Sent by CouchDB when there are no changes, only the last sequence number is returned.
+  ///
+  static const String lastSequence = 'sequence';
+
+  String _type;
+
   /// Type
   ///
   /// Valid for all events
-  String _type = null;
   String get type => _type;
+
+  dynamic _sequenceNumber;
 
   /// Sequence Number
   ///
   /// Valid for update, delete and sequence
   ///
-  dynamic _sequenceNumber;
-
   dynamic get sequenceNumber => _sequenceNumber;
+
+  String _docId;
 
   /// Document identifier
   ///
   /// Valid for update and delete
-  String _docId = null;
   String get docId => _docId;
+
+  String _docRevision;
 
   /// Document revision
   ///
   /// Valid for update and delete but optional
-  String _docRevision = null;
   String get docRevision => _docRevision;
+
+  jsonobject.JsonObjectLite<dynamic> _document;
 
   /// Document object
   ///
   /// Valid for update and only if includeDocs is true
-  jsonobject.JsonObjectLite _document = null;
+  jsonobject.JsonObjectLite<dynamic> get document => _document;
 
-  jsonobject.JsonObjectLite get document => _document;
+  String _exception;
 
   /// Exception string
   ///
   /// Valid for abort and decode error
-  String _exception = null;
   String get exception => _exception;
+
+  String _httpResponseText;
 
   /// HTTP response text
   ///
   /// Valid for decode error
-  String _httpResponseText = null;
   String get httpResponseText => _httpResponseText;
+
+  String _couchError;
 
   /// Couch error
   ///
   /// Valid for update and delete
-  String _couchError = null;
   String get couchError => _couchError;
+
+  String _couchReason;
 
   /// Couch reason
   ///
   /// Valid for update and delete
-  String _couchReason = null;
   String get couchReason => _couchReason;
 }

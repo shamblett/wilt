@@ -146,9 +146,9 @@ class Wilt {
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
   Future<dynamic> _httpRequest(String method, String url,
-      {String data, Map<String,String> headers}) {
+      {String data, Map<String, String> headers}) {
     // Build the request for the HttpAdapter
-    final Map<String,String> wiltHeaders = Map<String,String>();
+    final Map<String, String> wiltHeaders = Map<String, String>();
     wiltHeaders['Accept'] = 'application/json';
     if (headers != null) {
       wiltHeaders.addAll(headers);
@@ -190,9 +190,9 @@ class Wilt {
   /// to the query parameters of the URL.
   String _setURLParameter(String url, String key, String value) {
     final Uri originalUrl = Uri.parse(url);
-    final Map<String,String> queryParams = originalUrl.queryParameters;
-    final Map<String,String> newQueryParams =
-        Map<String,String>.from(queryParams);
+    final Map<String, String> queryParams = originalUrl.queryParameters;
+    final Map<String, String> newQueryParams =
+        Map<String, String>.from(queryParams);
     newQueryParams[key] = value;
 
     final Uri newUrl = Uri(
@@ -272,7 +272,7 @@ class Wilt {
 
   /// Performs a HTTP POST operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> post(String url, String data, [Map<String,String> headers]) {
+  Future<dynamic> post(String url, String data, [Map<String, String> headers]) {
     final String url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -284,7 +284,7 @@ class Wilt {
 
   /// Performs a HTTP PUT operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> put(String url, String data, [Map<String,String> headers]) {
+  Future<dynamic> put(String url, String data, [Map<String, String> headers]) {
     final String url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -452,7 +452,7 @@ class Wilt {
     }
 
     // Set the content type for a post
-    final Map<String,String> headers = Map<String,String>();
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = 'application/json';
 
     String jsonData;
@@ -479,7 +479,7 @@ class Wilt {
     }
 
     // Set the content type for a post
-    final Map<String,String> headers = Map<String,String>();
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -502,7 +502,7 @@ class Wilt {
     String url = sourceId;
 
     // Create the special COPY header
-    final Map<String,String> headers = Map<String,String>();
+    final Map<String, String> headers = Map<String, String>();
     String destination = destinationId;
     if (rev != null) {
       destination = '$destinationId?rev=$rev';
@@ -590,7 +590,7 @@ class Wilt {
     }
 
     // Must set the content type for a post
-    final Map<String,String> headers = Map<String,String>();
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -613,7 +613,7 @@ class Wilt {
     }
 
     // Must set the content type for a post
-    final Map<String,String> headers = Map<String,String>();
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -693,8 +693,8 @@ class Wilt {
   /// Create an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
   /// If the document needs to be created as well as the attachment set the rev to ''
-  Future<dynamic> createAttachment(String docId, String attachmentName, String rev,
-      String contentType, String payload) {
+  Future<dynamic> createAttachment(String docId, String attachmentName,
+      String rev, String contentType, String payload) {
     // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.createAttNoDocId);
@@ -716,11 +716,11 @@ class Wilt {
       return _raiseException(WiltException.createAttNoPayload);
     }
 
-     // Set the headers
-    final Map<String,String> headers = Map<String,String>();
+    // Set the headers
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = contentType;
 
-     // Make the PUT request
+    // Make the PUT request
     String url;
     if (rev != '') {
       url = '$docId/$attachmentName?rev=$rev';
@@ -735,9 +735,8 @@ class Wilt {
 
   /// Update an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
-  Future<dynamic> updateAttachment(String docId, String attachmentName, String rev,
-      String contentType, String payload) {
-
+  Future<dynamic> updateAttachment(String docId, String attachmentName,
+      String rev, String contentType, String payload) {
     // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.updateAttNoDocId);
@@ -759,10 +758,8 @@ class Wilt {
       return _raiseException(WiltException.updateAttNoPayload);
     }
 
-    /**
-     * Set the headers
-     */
-    final Map<String,String> headers = Map<String,String>();
+    // Set the headers
+    final Map<String, String> headers = Map<String, String>();
     headers['Content-Type'] = contentType;
 
     String url = '$docId/$attachmentName?rev=$rev';
@@ -773,7 +770,8 @@ class Wilt {
   }
 
   /// Delete an attachment
-  Future<dynamic> deleteAttachment(String docId, String attachmentName, String rev) {
+  Future<dynamic> deleteAttachment(
+      String docId, String attachmentName, String rev) {
     if (docId == null) {
       return _raiseException(WiltException.deleteAttNoDocId);
     }
@@ -814,8 +812,7 @@ class Wilt {
   ///
   /// If auth credentials are not set raise an exception.
   void startChangeNotification(
-      [WiltChangeNotificationParameters parameters,
-      String databaseName]) {
+      [WiltChangeNotificationParameters parameters, String databaseName]) {
     if (_user == null) {
       throw WiltException(WiltException.cnNoAuth);
     }
@@ -883,7 +880,7 @@ class Wilt {
     _password = password;
     authenticationType = authBasic;
 
-    /* Set the auth details for change notification */
+    // Set the auth details for change notification
     httpAdapter.notificationAuthParams(_user, _password, authenticationType);
   }
 
