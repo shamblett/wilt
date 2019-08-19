@@ -8,10 +8,16 @@
  * parameter being passed to a function.
  */
 
+// ignore_for_file: public_member_api_docs
+
 part of wilt;
 
+/// Exceptions
 class WiltException implements Exception {
-  /* Exception message strings */
+  // Construction
+  WiltException([this._message]);
+
+  // Exception message strings
   static const String header = 'WiltException: ';
   static const String noDatabaseSpecified = 'No database specified';
   static const String getDocNoId = 'getDocument() must have a document id';
@@ -81,11 +87,10 @@ class WiltException implements Exception {
       'Bad construction - some or all required parameters are null';
   static const String badConstNoAdapter =
       'Bad construction - you must instantiate Wilt with a HTTP Adapter';
-  static const String cnNoAuth = "Change Notifications must be authorized";
+  static const String cnNoAuth = 'Change Notifications must be authorized';
 
-  /* Construction */
   String _message = 'No Message Supplied';
-  WiltException([this._message]);
 
-  String toString() => header + "${_message}";
+  @override
+  String toString() => 'header$_message';
 }
