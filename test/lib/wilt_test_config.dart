@@ -1,10 +1,10 @@
-/* CouchDB server */
+// CouchDB server
 const String hostName = 'localhost';
 const String port = '5984';
 const String serverPort = '5984';
 const String scheme = 'http://';
 
-/* Databases to use for testing */
+// Databases to use for testing
 const String databaseNameBrowser = 'wilttest_browser';
 const String databaseNameServer = 'wilttest_server';
 

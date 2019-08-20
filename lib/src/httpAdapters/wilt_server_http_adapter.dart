@@ -53,10 +53,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.method = method;
       jsonResponse.responseText = response.body;
 
-      /**
-       * Check the header, if application/json try and decode it,
-       * otherwise its just raw data, ie an attachment.
-       */
+      // Check the header, if application/json try and decode it,
+      // otherwise its just raw data, ie an attachment.
       if (response.headers.containsValue('application/json')) {
         dynamic couchResp;
         try {
@@ -127,10 +125,8 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       response.stream.bytesToString(utf8).then((String text) {
         jsonResponse.responseText = text;
 
-        /**
-           * Check the header, if application/json try and decode it,
-           * otherwise its just raw data, ie an attachment.
-           */
+        // Check the header, if application/json try and decode it,
+        // otherwise its just raw data, ie an attachment.
         if (response.headers.containsValue('application/json')) {
           dynamic couchResp;
           try {
@@ -246,7 +242,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   Future<String> getString(String url) {
     final Completer<dynamic> completer = Completer<String>();
 
-    /* Must have authentication */
+    // Must have authentication
     final Map<String, String> wiltHeaders = Map<String, String>();
     wiltHeaders['Accept'] = 'application/json';
     if (_user != null) {

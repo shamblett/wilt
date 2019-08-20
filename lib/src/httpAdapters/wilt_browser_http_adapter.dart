@@ -60,7 +60,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
           errorAsJson.error = 'json Decode Error';
           errorAsJson.reason = 'None';
           jsonResponse.jsonCouchResponse = errorAsJson;
-          /* Set the response headers */
+          // Set the response headers
           jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
           // Complete the request
           if (!completer.isCompleted) {
@@ -96,7 +96,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         jsonResponse.jsonCouchResponse = successAsJson;
       }
 
-      /* Set the response headers */
+      // Set the response headers
       jsonResponse.allResponseHeaders = response.getAllResponseHeaders();
       // Complete the request
       if (!completer.isCompleted) {
@@ -106,7 +106,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
     /// Error completion
     void onError(dynamic response) {
-      /* Get the HTTP request from the progress event */
+      // Get the HTTP request from the progress event
       final html.HttpRequest req = response.target;
 
       // Process the error response
@@ -127,7 +127,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
         jsonResponse.jsonCouchResponse = errorAsJson;
       }
 
-      /* Set the response headers */
+      // Set the response headers
       jsonResponse.allResponseHeaders = req.getAllResponseHeaders();
 
       // Complete the request
