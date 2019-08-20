@@ -92,7 +92,7 @@ class WiltUserUtils {
   /// Creates a json string for bulk inserts where an
   /// _id and or _rev is needed form document strings
   static String createBulkInsertString(List<String> docStrings) {
-    StringBuffer innerStringBuffer;
+    final StringBuffer innerStringBuffer = StringBuffer();
     for (String doc in docStrings) {
       innerStringBuffer.write('$doc,');
     }
@@ -101,7 +101,7 @@ class WiltUserUtils {
     final int len = innerStringBuffer.length;
     final String innerString =
         innerStringBuffer.toString().substring(0, len - 1);
-    final String insertString = "{'docs':[$innerString]}";
+    final String insertString = '{"docs":[$innerString]}';
     return insertString.trim();
   }
 

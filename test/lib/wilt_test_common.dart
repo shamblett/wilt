@@ -475,7 +475,7 @@ class WiltTestCommon {
         final dynamic completer = expectAsync1((dynamic res) {
           expect(res.method, Wilt.createDatabasee);
           try {
-            expect(res.error, isFalse);
+            expect(res.error, isTrue);
           } on Exception {
             final dynamic errorResponse = res.jsonCouchResponse;
             expect(errorResponse.error, equals('unauthorized'));
@@ -1019,7 +1019,7 @@ class WiltTestCommon {
         final String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
         expect(bulk, isNotNull);
         expect(bulk,
-            '{"docs":[ {"name":"Steve","tag":"MyTag","_id":"myId","_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543","_id":"myId","_rev":"1-765frd"}]}');
+            '{"docs":[{"name":"Steve","tag":"MyTag","_id":"myId","_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543","_id":"myId","_rev":"1-765frd"}]}');
       });
 
       // Login if we are using authentication
@@ -1357,30 +1357,6 @@ class WiltTestCommon {
         });
 
         wilting.getSession().then(completer);
-      });
-
-      test('${testNum++}. Get Stats Information', () {
-        final dynamic completer = expectAsync1((dynamic res) {
-          expect(res.method, Wilt.getStatss);
-          try {
-            expect(res.error, isFalse);
-          } on Exception {
-            logMessage('WILT::Get Stats Failed');
-            final dynamic errorResponse = res.jsonCouchResponse;
-            final String errorText = errorResponse.error;
-            logMessage('WILT::Error is $errorText');
-            final String reasonText = errorResponse.reason;
-            logMessage('WILT::Reason is $reasonText');
-            final int statusCode = res.errorCode;
-            logMessage('WILT::Status code is $statusCode');
-            return;
-          }
-
-          final dynamic successResponse = res.jsonCouchResponse;
-          expect(successResponse.couchdb, isNotNull);
-        });
-
-        wilting.getStats().then(completer);
       });
 
       test('${testNum++}. Get Database Information - default', () {

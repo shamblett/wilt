@@ -522,7 +522,7 @@ class Wilt {
       String startKey,
       String endKey,
       List<String> keys,
-      bool descending}) {
+      bool descending = false}) {
     // Validate the parameters
     if ((limit != null) && (limit < 0)) {
       return _raiseException(WiltException.getAllDocsLimit);
@@ -540,12 +540,12 @@ class Wilt {
     }
 
     if (startKey != null) {
-      final String jsonStartkey = "'$startKey'";
+      final String jsonStartkey = '"$startKey"';
       url = _setURLParameter(url, 'startkey', jsonStartkey);
     }
 
     if (endKey != null) {
-      final String jsonEndkey = "'$endKey'";
+      final String jsonEndkey = '"$endKey"';
       url = _setURLParameter(url, 'endkey', jsonEndkey);
     }
 
@@ -676,7 +676,7 @@ class Wilt {
     return _httpRequest(getSessionn, url);
   }
 
-  /// Get current stats from CouchDB
+  /// Get current stats from CouchDB, 1.xx versions only
   Future<dynamic> getStats() {
     const String url = stats;
 

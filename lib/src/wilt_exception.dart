@@ -92,5 +92,5 @@ class WiltException implements Exception {
   String _message = 'No Message Supplied';
 
   @override
-  String toString() => 'header$_message';
+  String toString() => '$header$_message';
 }
