@@ -93,7 +93,7 @@ class WiltUserUtils {
   /// _id and or _rev is needed form document strings
   static String createBulkInsertString(List<String> docStrings) {
     final StringBuffer innerStringBuffer = StringBuffer();
-    for (String doc in docStrings) {
+    for (final String doc in docStrings) {
       innerStringBuffer.write('$doc,');
     }
 
@@ -109,8 +109,8 @@ class WiltUserUtils {
   /// _id and or _rev is needed from JsonObjects.
   static String createBulkInsertStringJo(
       List<jsonobject.JsonObjectLite<dynamic>> records) {
-    final List<String> docStrings = List<String>();
-    for (dynamic record in records) {
+    final List<String> docStrings = <String>[];
+    for (final dynamic record in records) {
       docStrings.add(record.toString());
     }
 
@@ -124,12 +124,12 @@ class WiltUserUtils {
   static List<jsonobject.JsonObjectLite<dynamic>> getAttachments(
       jsonobject.JsonObjectLite<dynamic> document) {
     final List<jsonobject.JsonObjectLite<dynamic>> attachmentsList =
-        List<jsonobject.JsonObjectLite<dynamic>>();
+        <jsonobject.JsonObjectLite<dynamic>>[];
     final String docString = document.toString();
     final Map<String, dynamic> docMap = json.decode(docString);
     if (docMap.containsKey('_attachments')) {
       final Map<String, dynamic> attachmentList = docMap['_attachments'];
-      for (dynamic key in attachmentList.keys) {
+      for (final dynamic key in attachmentList.keys) {
         final dynamic jsonAttachmentData =
             jsonobject.JsonObjectLite<dynamic>.fromJsonString(
                 WiltUserUtils.mapToJson(attachmentList[key]));

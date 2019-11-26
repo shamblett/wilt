@@ -6,25 +6,26 @@
  *
  * Change notification control class
  * 
- * This class when constructed initiates change notification processing with either
- * a default set of change notification parameters or one supplied by the client.
- * When destroyed, change notification ceases.
- * 
- * 
- * The resulting notifications are turned into notification events and streamed to
- * the notification consumer. as a stream of WiltChangeNotificationEvent objects, see 
- * this class for further details.
- * 
- * CouchDb is initialized to supply the change notification stream in 'normal' mode, hence
- * this class requests the updates manually on a timed basis dependent on the heartberat period.
- * 
- * Note that as form CouchDB 1.6.1 you must auth as an administrator with CouchDb
- * to allow notificatons to work, if you do not supply auth credentials before 
- * starting notifications an exception is raised. 
  */
 
 part of wilt;
 
+/// This class initiates change notification processing with either
+/// a default set of change notification parameters or one supplied by
+/// the client. When destroyed, change notification ceases.
+///
+/// The resulting notifications are turned into notification events and
+/// streamed to the notification consumer. as a stream of
+/// WiltChangeNotificationEvent objects, see
+/// [WiltChangeNotificationEvent] class for further details.
+///
+/// CouchDb is initialized to supply the change notification stream in
+/// 'normal' mode, hence this class requests the updates manually on a
+/// timed basis dependent on the heartbeat period.
+///
+/// Note that as from CouchDB 1.6.1 you must auth as an administrator
+/// with CouchDb to allow notificatons to work, if you do not supply
+/// auth credentials before starting notifications an exception is raised.
 class _WiltChangeNotification {
   _WiltChangeNotification(
       this._host, this._port, this._scheme, this._httpAdapter,
@@ -45,16 +46,16 @@ class _WiltChangeNotification {
   WiltChangeNotificationParameters parameters;
 
   /// Database name
-  String _dbName;
+  final String _dbName;
 
   /// Host name
-  String _host;
+  final String _host;
 
   /// Port number
-  String _port;
+  final String _port;
 
   /// HTTP scheme
-  String _scheme;
+  final String _scheme;
 
   /// Timer
   Timer _timer;
@@ -65,7 +66,7 @@ class _WiltChangeNotification {
   /// Paused indicator
   bool paused = false;
 
-  WiltHTTPAdapter _httpAdapter;
+  final WiltHTTPAdapter _httpAdapter;
 
   /// Change notification stream controller
   ///
@@ -112,8 +113,8 @@ class _WiltChangeNotification {
       });
     } on Exception catch (e) {
       // Unrecoverable error, send the client an abort event
-      print(
-          'WiltChangeNotification::MonitorChanges unable to contact CouchDB Error is $e');
+      print('WiltChangeNotification::MonitorChanges unable to contact '
+          'CouchDB Error is $e');
       final WiltChangeNotificationEvent notification =
           WiltChangeNotificationEvent.abort(e.toString());
 
@@ -148,7 +149,7 @@ class _WiltChangeNotification {
       return;
     }
 
-    for (dynamic result in results) {
+    for (final dynamic result in results) {
       final Map<String, dynamic> changes = result['changes'][0];
 
       // Check for delete or update

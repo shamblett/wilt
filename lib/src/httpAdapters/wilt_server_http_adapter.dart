@@ -42,8 +42,9 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
     /// Successful completion
     void onSuccess(http.Response response) {
-      // Process the success response, note that an error response from CouchDB is
-      // treated as an error, not as a success with an 'error' field in it.
+      // Process the success response, note that an error response
+      // from CouchDB is treated as an error, not as a success with an
+      // 'error' field in it.
       final dynamic jsonResponse = jsonobject.JsonObjectLite<dynamic>();
       jsonResponse.error = false;
       jsonResponse.errorCode = response.statusCode;
@@ -113,8 +114,9 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
     /// Successful completion for Copy
     void onCopySuccess(http.StreamedResponse response) {
-      // Process the success response, note that an error response from CouchDB is
-      // treated as an error, not as a success with an 'error' field in it.
+      // Process the success response, note that an error response
+      // from CouchDB is treated as an error, not as a success with an
+      // 'error' field in it.
       final dynamic jsonResponse = jsonobject.JsonObjectLite<dynamic>();
       jsonResponse.error = false;
       jsonResponse.errorCode = 0;
@@ -243,7 +245,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     final Completer<dynamic> completer = Completer<String>();
 
     // Must have authentication
-    final Map<String, String> wiltHeaders = Map<String, String>();
+    final Map<String, String> wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
     if (_user != null) {
       switch (_authType) {

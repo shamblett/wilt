@@ -526,7 +526,8 @@ class WiltTestCommon {
         wilting.createDatabase('wiltdeleteme').then(completer);
       });
 
-      // Delete the test database now we know delete is OK before we start the tests
+      // Delete the test database now we know delete is OK before we
+      // start the tests.
       test('${testNum++}. Delete Test Database', () {
         final dynamic completer = expectAsync1((dynamic res) {
           expect(res.method, Wilt.deleteDatabasee);
@@ -1018,8 +1019,11 @@ class WiltTestCommon {
             <jsonobject.JsonObjectLite<dynamic>>[record, record2];
         final String bulk = WiltUserUtils.createBulkInsertStringJo(jList);
         expect(bulk, isNotNull);
-        expect(bulk,
-            '{"docs":[{"name":"Steve","tag":"MyTag","_id":"myId","_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543","_id":"myId","_rev":"1-765frd"}]}');
+        expect(
+            bulk,
+            '{"docs":[{"name":"Steve","tag":"MyTag","_id":"myId",'
+            '"_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543",'
+            '"_id":"myId","_rev":"1-765frd"}]}');
       });
 
       // Login if we are using authentication
@@ -1185,7 +1189,7 @@ class WiltTestCommon {
           wilting.login(userName, userPassword);
         }
         wilting.db = databaseName;
-        final List<String> keyList = List<String>();
+        final List<String> keyList = <String>[];
         keyList.add(putId);
         keyList.add(putId2);
         wilting.getAllDocs(keys: keyList).then(completer);
@@ -1220,7 +1224,7 @@ class WiltTestCommon {
           wilting.login(userName, userPassword);
         }
         wilting.db = databaseName;
-        final List<String> keyList = List<String>();
+        final List<String> keyList = <String>[];
         keyList.add(putId);
         keyList.add(putId2);
         wilting.getAllDocs(keys: keyList, descending: true).then(completer);
@@ -1254,7 +1258,7 @@ class WiltTestCommon {
         }
         wilting.db = databaseName;
         final List<jsonobject.JsonObjectLite<dynamic>> docList =
-            List<jsonobject.JsonObjectLite<dynamic>>();
+            <jsonobject.JsonObjectLite<dynamic>>[];
         final dynamic document1 = jsonobject.JsonObjectLite<dynamic>();
         document1.title = 'Document 1';
         document1.version = 1;
@@ -1318,7 +1322,7 @@ class WiltTestCommon {
         document3.version = 3;
         document3.attribute = 'Doc 3 attribute';
         final String doc3 = WiltUserUtils.addDocumentId(document3, 'MyBulkId3');
-        final List<String> docList = List<String>();
+        final List<String> docList = <String>[];
         docList.add(doc1);
         docList.add(doc2);
         docList.add(doc3);
@@ -1480,8 +1484,8 @@ class WiltTestCommon {
           try {
             expect(res.error, isFalse);
           } on Exception {
-            logMessage(
-                'WILT::Create Document(PUT) for attachment tests and check updated');
+            logMessage('WILT::Create Document(PUT) for attachment tests and '
+                'check updated');
             final dynamic errorResponse = res.jsonCouchResponse;
             final String errorText = errorResponse.error;
             logMessage('WILT::Error is $errorText');

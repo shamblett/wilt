@@ -4,19 +4,18 @@
  * Date   : 04/06/2013
  * Copyright : S.Hamblett@OSCF
  *
- * Change notification event
- * 
- * The type property of this class determines the validity of the rest of the
- * class data, see individual properties for this mapping. Uers should check the 
- * event type property BEFORE accessing any other property.
- * 
- * See each event below for a description of its effect.
  * 
  */
 
 part of wilt;
 
-/// The change notification event class
+/// The change notification event.
+///
+/// The type property of this class determines the validity of the rest of the
+/// class data, see individual properties for this mapping. Uers should
+/// check the event type property BEFORE accessing any other property.
+///
+/// See each event below for a description of its effect.
 class WiltChangeNotificationEvent {
   /// Update event
   WiltChangeNotificationEvent.update(
@@ -85,7 +84,8 @@ class WiltChangeNotificationEvent {
 
   /// Last sequence number event
   ///
-  /// Sent by CouchDB when there are no changes, only the last sequence number is returned.
+  /// Sent by CouchDB when there are no changes, only the last sequence
+  /// number is returned.
   ///
   static const String lastSequence = 'sequence';
 

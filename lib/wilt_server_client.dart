@@ -12,9 +12,9 @@ library wilt_server_client;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:wilt/wilt.dart';
 import 'package:http/http.dart' as http;
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
+import 'wilt.dart';
 
 part 'src/httpAdapters/wilt_server_http_adapter.dart';
 

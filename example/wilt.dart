@@ -14,9 +14,11 @@ import '../test/lib/wilt_test_config.dart';
 
 /// A simple Wilt client example.
 /// Please adjust the settings in wilt_test_config to suite your CouchDb setup.
-/// If you are using the browser test please check your CORS settings in CouchDB.
+/// If you are using the browser test please check your CORS settings
+/// in CouchDB.
 /// For more detailed examples of the API see the test suite.
 ///
+// ignore: avoid_void_async
 void main() async {
   /// Create a test client
   final WiltServerClient wilting =
@@ -27,8 +29,8 @@ void main() async {
   //  new WiltBrowserClient(hostName, port, scheme);
 
   // Login if we are using authentication. If you are using authentication
-  // try the example with this commented out, you should see all the operations fail
-  // with 'not authorised'.
+  // try the example with this commented out, you should see all
+  // the operations fail with 'not authorised'.
   if (userName != null) {
     wilting.login(userName, userPassword);
   }
@@ -68,7 +70,8 @@ void main() async {
     print('EXAMPLE:: Example document creation failed');
   }
 
-  /// Update the document to version 2, note we now supply the returned document revision from above.
+  /// Update the document to version 2, note we now supply the returned
+  /// document revision from above.
   document.version = 2;
   res = await wilting.putDocument(putId, document, returnedDocRev);
   if (!res.error) {
@@ -90,12 +93,12 @@ void main() async {
     final dynamic successResponse = res.jsonCouchResponse;
     returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
     print('EXAMPLE:: Example document read OK, revision is $returnedDocRev');
-    print(
-        'EXAMPLE:: Example document read OK, title is ${successResponse.title}');
-    print(
-        'EXAMPLE:: Example document read OK, version is ${successResponse.version}');
-    print(
-        'EXAMPLE:: Example document read OK, author is ${successResponse.author}');
+    print('EXAMPLE:: Example document read OK, title is '
+        '${successResponse.title}');
+    print('EXAMPLE:: Example document read OK, version is '
+        '${successResponse.version}');
+    print('EXAMPLE:: Example document read OK, author is '
+        '${successResponse.author}');
   } else {
     print('EXAMPLE:: Example document read failed');
   }

@@ -4,22 +4,21 @@
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
  *
- * The Wilt class provides core functionality for interacting with CouchDB databases from
- * both the browser and the server. Wilt should not be instantiated standalone but rather through
- * inclusion of one of the wilt_browser_client or wilt_server_client files.
- * 
- * Further documentation can be found in the docs folder.
  * 
  */
 
 // ignore_for_file: public_member_api_docs
 part of wilt;
 
-/// The Wilt client
+/// The Wilt client.
+/// * The Wilt class provides core functionality for interacting with
+/// CouchDB databases from both the browser and the server.
 class Wilt {
   /// Please use the wilt_browser_client or wilt_server_client import files to
-  /// instantiate a Wilt object for use in either the browser or server environment.
-  /// You can do this here but you must supply either a browser or server HTTP adapter
+  /// instantiate a Wilt object for use in either the browser or
+  /// server environment.
+  /// You can do this here but you must supply either a browser or
+  /// server HTTP adapter
   /// to use.
   Wilt(this._host, this._port, this._scheme, this.httpAdapter,
       [this._clientCompletion]) {
@@ -95,15 +94,18 @@ class Wilt {
   String changeNotificationDbName;
 
   /// Host name
-  String _host;
+  final String _host;
+
   String get host => _host;
 
   /// Port number
-  String _port;
+  final String _port;
+
   String get port => _port;
 
   /// HTTP scheme
-  String _scheme;
+  final String _scheme;
+
   String get scheme => _scheme;
 
   /// HTTP Adapter
@@ -148,7 +150,7 @@ class Wilt {
   Future<dynamic> _httpRequest(String method, String url,
       {String data, Map<String, String> headers}) {
     // Build the request for the HttpAdapter
-    final Map<String, String> wiltHeaders = Map<String, String>();
+    final Map<String, String> wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
     if (headers != null) {
       wiltHeaders.addAll(headers);
@@ -241,8 +243,8 @@ class Wilt {
   /// Wilt applies no checks to this URL nor does it add the
   /// database, the format of this is entirely up to the user.
   ///
-  /// This can be used for CouchDb functions that are not directly supported by Wilt,
-  /// e.g views, attachments and design documents.
+  /// This can be used for CouchDb functions that are not directly
+  /// supported by Wilt, e.g views, attachments and design documents.
   Future<dynamic> httpRequest(String url, {String method = 'GET'}) =>
       _httpRequest(method, url);
 
@@ -452,7 +454,7 @@ class Wilt {
     }
 
     // Set the content type for a post
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     String jsonData;
@@ -479,7 +481,7 @@ class Wilt {
     }
 
     // Set the content type for a post
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -487,8 +489,9 @@ class Wilt {
         data: document, headers: headers);
   }
 
-  /// Copies the source document to the destination document with an optional revision
-  /// NOTE this method uses the CouchDB COPY method which is not standard HTTP.
+  /// Copies the source document to the destination document with an
+  /// optional revision. NOTE this method uses the CouchDB COPY method which is
+  /// not standard HTTP.
   Future<dynamic> copyDocument(String sourceId, String destinationId,
       [String rev]) {
     if (sourceId == null) {
@@ -502,7 +505,7 @@ class Wilt {
     String url = sourceId;
 
     // Create the special COPY header
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     String destination = destinationId;
     if (rev != null) {
       destination = '$destinationId?rev=$rev';
@@ -580,7 +583,7 @@ class Wilt {
 
     // Create the bulk insertion data structure
     final Map<String, List<jsonobject.JsonObjectLite<dynamic>>> documentMap =
-        Map<String, List<jsonobject.JsonObjectLite<dynamic>>>();
+        <String, List<jsonobject.JsonObjectLite<dynamic>>>{};
     documentMap['docs'] = docs;
     String docString;
     try {
@@ -590,7 +593,7 @@ class Wilt {
     }
 
     // Must set the content type for a post
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -613,7 +616,7 @@ class Wilt {
     }
 
     // Must set the content type for a post
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -692,7 +695,8 @@ class Wilt {
 
   /// Create an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
-  /// If the document needs to be created as well as the attachment set the rev to ''
+  /// If the document needs to be created as well as the attachment
+  /// set the rev to ''.
   Future<dynamic> createAttachment(String docId, String attachmentName,
       String rev, String contentType, String payload) {
     // Check all parameters are supplied
@@ -717,7 +721,7 @@ class Wilt {
     }
 
     // Set the headers
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = contentType;
 
     // Make the PUT request
@@ -759,7 +763,7 @@ class Wilt {
     }
 
     // Set the headers
-    final Map<String, String> headers = Map<String, String>();
+    final Map<String, String> headers = <String, String>{};
     headers['Content-Type'] = contentType;
 
     String url = '$docId/$attachmentName?rev=$rev';
@@ -806,9 +810,11 @@ class Wilt {
     return _httpRequest(getAttachmentt, url);
   }
 
-  /// Change notification start, see the WiltChangeNotification class for more details
+  /// Change notification start, see the WiltChangeNotification class
+  /// for more details.
   ///
-  /// If a database name is not supplied the currently selected database is used.
+  /// If a database name is not supplied the currently selected
+  /// database is used.
   ///
   /// If auth credentials are not set raise an exception.
   void startChangeNotification(
@@ -828,10 +834,11 @@ class Wilt {
         _host, _port, _scheme, httpAdapter, name, parameters);
   }
 
-  /// Change notification stop, see the WiltChangeNotification class for more details
+  /// Change notification stop, see the WiltChangeNotification
+  /// class for more details
   ///
-  /// Note that this destroys the internal changeNotifier object which can only be
-  /// reinstated by a call to startChangeNotification.
+  /// Note that this destroys the internal changeNotifier object
+  /// which can only be reinstated by a call to startChangeNotification.
   void stopChangeNotification() {
     _changeNotifier.stopNotifications();
     _changeNotifier = null;
@@ -869,8 +876,8 @@ class Wilt {
   /// Authentication.
   /// Updates the login credentials in Wilt that will be used for all further
   /// requests to CouchDB. Both user name and password must be set, even if one
-  /// or the other is '' i.e empty. After logging in all communication with CouchDB
-  /// is made using the selected authentication method.
+  /// or the other is '' i.e empty. After logging in all communication
+  /// with CouchDB is made using the selected authentication method.
   void login(String user, String password) {
     if ((user == null) || (password == null)) {
       throw WiltException(WiltException.loginWrongParams);

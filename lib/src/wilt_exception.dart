@@ -15,7 +15,7 @@ part of wilt;
 /// Exceptions
 class WiltException implements Exception {
   // Construction
-  WiltException([this._message]);
+  WiltException([this._message = 'No Message Supplied']);
 
   // Exception message strings
   static const String header = 'WiltException: ';
@@ -89,7 +89,7 @@ class WiltException implements Exception {
       'Bad construction - you must instantiate Wilt with a HTTP Adapter';
   static const String cnNoAuth = 'Change Notifications must be authorized';
 
-  String _message = 'No Message Supplied';
+  final String _message;
 
   @override
   String toString() => '$header$_message';

@@ -3,23 +3,24 @@
  * Author : S. Hamblett <steve.hamblett@linux.com>
  * Date   : 04/06/2013
  * Copyright :  S.Hamblett@OSCF
- *
- * Change notification parameters, defaults taken from the CouchDB API documents.
  * 
  */
 
 part of wilt;
 
-/// Change notification parameters class
+/// Change notification parameters class,  defaults taken from the CouchDB
+/// API documents.
 class WiltChangeNotificationParameters {
   /// Since
   ///
-  /// Start the results from the change immediately after the given sequence update
+  /// Start the results from the change immediately after the given
+  /// sequence update
   dynamic since;
 
   /// Descending
   ///
-  /// Return the change results in descending sequence order (most recent change first)
+  /// Return the change results in descending sequence order
+  /// (most recent change first)
   bool descending = false;
 
   /// Heartbeat
