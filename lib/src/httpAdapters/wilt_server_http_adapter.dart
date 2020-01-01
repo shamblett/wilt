@@ -13,6 +13,12 @@
 
 part of wilt_server_client;
 
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 /// Server HTTP adapter
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   /// Construction
@@ -124,6 +130,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.errorText = null;
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
+      // ignore: avoid_types_on_closure_parameters
       response.stream.bytesToString(utf8).then((String text) {
         jsonResponse.responseText = text;
 

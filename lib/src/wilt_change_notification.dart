@@ -10,6 +10,12 @@
 
 part of wilt;
 
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 /// This class initiates change notification processing with either
 /// a default set of change notification parameters or one supplied by
 /// the client. When destroyed, change notification ceases.

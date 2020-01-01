@@ -1,6 +1,5 @@
 name: wilt
-version: 4.0.3
-author: S. Hamblett <steve.hamblett@linux.com>
+version: 4.0.4
 description: A browser/server based CouchDB client library supporting attachments and change notification.
 homepage: https://github.com/shamblett/wilt
 

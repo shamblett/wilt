@@ -7,8 +7,14 @@
  * 
  */
 
-// ignore_for_file: public_member_api_docs
 part of wilt;
+
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+// ignore_for_file: public_member_api_docs
 
 /// The Wilt client.
 /// * The Wilt class provides core functionality for interacting with
@@ -126,6 +132,7 @@ class Wilt {
   dynamic _clientCompletion;
 
   /// Completion callback
+  // ignore: avoid_setters_without_getters
   set resultCompletion(final Object completion) {
     _clientCompletion = completion;
   }

@@ -12,6 +12,11 @@ import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 // ignore: avoid_relative_lib_imports
 import '../test/lib/wilt_test_config.dart';
 
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+
 /// A simple Wilt client example.
 /// Please adjust the settings in wilt_test_config to suite your CouchDb setup.
 /// If you are using the browser test please check your CORS settings

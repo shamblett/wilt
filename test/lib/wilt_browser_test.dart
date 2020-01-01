@@ -14,6 +14,12 @@ import 'package:test/test.dart';
 import 'wilt_test_common.dart';
 import 'wilt_test_config.dart';
 
+// ignore_for_file: omit_local_variable_types
+// ignore_for_file: unnecessary_final
+// ignore_for_file: cascade_invocations
+// ignore_for_file: avoid_print
+// ignore_for_file: avoid_annotating_with_dynamic
+
 void main() {
   /// Info for test run only, constructor tests are done in the
   /// server test suite.
