@@ -9,13 +9,6 @@
 
 part of wilt;
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-// ignore_for_file: public_member_api_docs
-
 /// The Wilt client.
 /// * The Wilt class provides core functionality for interacting with
 /// CouchDB databases from both the browser and the server.
@@ -132,7 +125,6 @@ class Wilt {
   dynamic _clientCompletion;
 
   /// Completion callback
-  // ignore: avoid_setters_without_getters
   set resultCompletion(final Object completion) {
     _clientCompletion = completion;
   }
@@ -157,23 +149,23 @@ class Wilt {
   Future<dynamic> _httpRequest(String method, String url,
       {String data, Map<String, String> headers}) {
     // Build the request for the HttpAdapter
-    final Map<String, String> wiltHeaders = <String, String>{};
+    final wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
     if (headers != null) {
       wiltHeaders.addAll(headers);
     }
 
     // Build the URL
-    final String wiltUrl = '$scheme$host:$port$url';
+    final wiltUrl = '$scheme$host:$port$url';
 
     // Check for authentication
     if (_user != null) {
       switch (authenticationType) {
         case authBasic:
-          final String authStringToEncode = '$_user:$_password';
-          final String encodedAuthString =
+          final authStringToEncode = '$_user:$_password';
+          final encodedAuthString =
               const Base64Encoder().convert(authStringToEncode.codeUnits);
-          final String authString = 'Basic $encodedAuthString';
+          final authString = 'Basic $encodedAuthString';
           wiltHeaders['Authorization'] = authString;
           break;
 
@@ -183,7 +175,7 @@ class Wilt {
     }
 
     // Execute the request
-    final Future<dynamic> completion =
+    final completion =
         httpAdapter.httpRequest(method, wiltUrl, data, wiltHeaders)
           ..then((dynamic jsonResponse) {
             if (_clientCompletion != null) {
@@ -198,13 +190,12 @@ class Wilt {
   /// Takes a URL and key/value pair for a URL parameter and adds this
   /// to the query parameters of the URL.
   String _setURLParameter(String url, String key, String value) {
-    final Uri originalUrl = Uri.parse(url);
-    final Map<String, String> queryParams = originalUrl.queryParameters;
-    final Map<String, String> newQueryParams =
-        Map<String, String>.from(queryParams);
+    final originalUrl = Uri.parse(url);
+    final queryParams = originalUrl.queryParameters;
+    final newQueryParams = Map<String, String>.from(queryParams);
     newQueryParams[key] = value;
 
-    final Uri newUrl = Uri(
+    final newUrl = Uri(
         scheme: originalUrl.scheme,
         userInfo: originalUrl.userInfo,
         host: originalUrl.host,
@@ -212,7 +203,7 @@ class Wilt {
         path: originalUrl.path,
         queryParameters: newQueryParams);
 
-    final String returnUrl = newUrl.toString();
+    final returnUrl = newUrl.toString();
     return returnUrl; // Private
   }
 
@@ -225,7 +216,7 @@ class Wilt {
     if (url == null) {
       return '/';
     }
-    String urlRet = url;
+    var urlRet = url;
     // The first char of the URL should be a slash.
     if (!url.startsWith('/')) {
       urlRet = '/$urlRet';
@@ -258,7 +249,7 @@ class Wilt {
   /// Performs an HTTP GET operation, the URL is conditioned and
   /// the current database added.
   Future<dynamic> get(String url) {
-    final String url1 = _conditionUrl(url);
+    final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
@@ -270,7 +261,7 @@ class Wilt {
   /// Performs a HTTP HEAD operation, the URL is conditioned and
   /// the current database added.
   Future<dynamic> head(String url) {
-    final String url1 = _conditionUrl(url);
+    final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
@@ -282,7 +273,7 @@ class Wilt {
   /// Performs a HTTP POST operation,, the URL is conditioned and
   /// the current database added.
   Future<dynamic> post(String url, String data, [Map<String, String> headers]) {
-    final String url1 = _conditionUrl(url);
+    final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
@@ -294,7 +285,7 @@ class Wilt {
   /// Performs a HTTP PUT operation,, the URL is conditioned and
   /// the current database added.
   Future<dynamic> put(String url, String data, [Map<String, String> headers]) {
-    final String url1 = _conditionUrl(url);
+    final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
@@ -306,7 +297,7 @@ class Wilt {
   /// Performs a HTTP DELETE operation,, the URL is conditioned and
   /// the current database added.
   Future<dynamic> delete(String url) {
-    final String url1 = _conditionUrl(url);
+    final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
     }
@@ -320,15 +311,12 @@ class Wilt {
   /// any attachments are also supplied, note this could make this
   /// a large transfer.
   Future<dynamic> getDocument(String id,
-      // ignore: avoid_positional_boolean_parameters
-      [String rev,
-      // ignore: avoid_positional_boolean_parameters
-      bool withAttachments = false]) {
+      [String rev, bool withAttachments = false]) {
     if (id == null) {
       return _raiseException(WiltException.getDocNoId);
     }
 
-    String url = id;
+    var url = id;
     if (rev != null) {
       url = _setURLParameter(url, 'rev', rev);
     }
@@ -348,7 +336,7 @@ class Wilt {
       return _raiseException(WiltException.getDocRevNoId);
     }
 
-    final Completer<dynamic> completer = Completer<dynamic>();
+    final completer = Completer<dynamic>();
     head(id).then((dynamic res) {
       final dynamic headers = WiltUserUtils.mapToJson(res.allResponseHeaders);
       if (headers != null) {
@@ -373,14 +361,12 @@ class Wilt {
   /// If preserve is set to true the whole document is preserved
   /// and marked as deleted otherwise only a stub document is
   /// kept. Default is to not preserve.
-  // ignore: avoid_positional_boolean_parameters
   Future<dynamic> deleteDocument(String id, String rev,
-      // ignore: avoid_positional_boolean_parameters
       [bool preserve = false]) {
     if ((id == null) || (rev == null)) {
       return _raiseException(WiltException.deleteDocNoIdRev);
     }
-    final Completer<dynamic> completer = Completer<dynamic>();
+    final completer = Completer<dynamic>();
 
     // Check the preserve flag
     if (preserve) {
@@ -395,7 +381,7 @@ class Wilt {
       });
       return completer.future;
     } else {
-      String url = id;
+      var url = id;
       url = _setURLParameter(url, 'rev', rev);
       url = _conditionUrl(url);
       return _httpRequest('DELETE_DOCUMENT', url);
@@ -427,7 +413,7 @@ class Wilt {
       return _raiseException(WiltException.putDocCantStringify);
     }
 
-    final String url = _conditionUrl(id);
+    final url = _conditionUrl(id);
     return _httpRequest(putDocumentt, url, data: jsonData);
   }
 
@@ -439,11 +425,11 @@ class Wilt {
     }
 
     // Check for a revision
-    String id1 = id;
+    var id1 = id;
     if (rev != null) {
       id1 = '$id1?rev=$rev';
     }
-    final String url = _conditionUrl(id1);
+    final url = _conditionUrl(id1);
     return _httpRequest(putDocumentt, url, data: document);
   }
 
@@ -455,13 +441,13 @@ class Wilt {
       return _raiseException(WiltException.postDocNoBody);
     }
 
-    String url = '';
+    var url = '';
     if (path != null) {
       url = '$url/$path';
     }
 
     // Set the content type for a post
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     String jsonData;
@@ -482,13 +468,13 @@ class Wilt {
       return _raiseException(WiltException.postDocStringNoBody);
     }
 
-    String url = '';
+    var url = '';
     if (path != null) {
       url = '$url/$path';
     }
 
     // Set the content type for a post
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -509,11 +495,11 @@ class Wilt {
       return _raiseException(WiltException.copyDocNoDestId);
     }
 
-    String url = sourceId;
+    var url = sourceId;
 
     // Create the special COPY header
-    final Map<String, String> headers = <String, String>{};
-    String destination = destinationId;
+    final headers = <String, String>{};
+    var destination = destinationId;
     if (rev != null) {
       destination = '$destinationId?rev=$rev';
     }
@@ -538,7 +524,7 @@ class Wilt {
       return _raiseException(WiltException.getAllDocsLimit);
     }
 
-    String url = alldocs;
+    var url = alldocs;
 
     // Check the parameters and build the URL as needed
     if (includeDocs) {
@@ -550,12 +536,12 @@ class Wilt {
     }
 
     if (startKey != null) {
-      final String jsonStartkey = '"$startKey"';
+      final jsonStartkey = '"$startKey"';
       url = _setURLParameter(url, 'startkey', jsonStartkey);
     }
 
     if (endKey != null) {
-      final String jsonEndkey = '"$endKey"';
+      final jsonEndkey = '"$endKey"';
       url = _setURLParameter(url, 'endkey', jsonEndkey);
     }
 
@@ -564,7 +550,7 @@ class Wilt {
     }
 
     if (keys != null) {
-      final String keyString = json.encode(keys);
+      final keyString = json.encode(keys);
       url = _setURLParameter(url, 'keys', keyString);
     }
 
@@ -575,22 +561,20 @@ class Wilt {
   /// Bulk insert
   /// Bulk inserts a list of documents
   Future<dynamic> bulk(List<jsonobject.JsonObjectLite<dynamic>> docs,
-      // ignore: avoid_positional_boolean_parameters
       [bool allOrNothing = false]) {
     // Validate the parameters
     if (docs == null) {
       return _raiseException(WiltException.bulkNoDocList);
     }
 
-    String url = bulkdocs;
+    var url = bulkdocs;
 
     if (allOrNothing) {
       url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
     }
 
     // Create the bulk insertion data structure
-    final Map<String, List<jsonobject.JsonObjectLite<dynamic>>> documentMap =
-        <String, List<jsonobject.JsonObjectLite<dynamic>>>{};
+    final documentMap = <String, List<jsonobject.JsonObjectLite<dynamic>>>{};
     documentMap['docs'] = docs;
     String docString;
     try {
@@ -600,7 +584,7 @@ class Wilt {
     }
 
     // Must set the content type for a post
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -609,21 +593,20 @@ class Wilt {
 
   /// Bulk insert json string version.
   /// Must be used if '_id' and or '_rev' are needed in ANY of the documents
-  // ignore: avoid_positional_boolean_parameters
   Future<dynamic> bulkString(String docs, [bool allOrNothing = false]) {
     // Validate the parameters
     if (docs == null) {
       return _raiseException(WiltException.bulkStringNoDoc);
     }
 
-    String url = bulkdocs;
+    var url = bulkdocs;
 
     if (allOrNothing) {
       url = _setURLParameter(url, 'all_or_nothing', allOrNothing.toString());
     }
 
     // Must set the content type for a post
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
@@ -637,7 +620,7 @@ class Wilt {
     }
 
     // The first char of the URL should be a slash.
-    String url = name;
+    var url = name;
     if (!url.startsWith('/')) {
       url = '/$url';
     }
@@ -652,7 +635,7 @@ class Wilt {
     }
 
     // The first char of the URL should be a slash. //
-    String url = name;
+    var url = name;
     if (!url.startsWith('/')) {
       url = '/$url';
     }
@@ -674,28 +657,28 @@ class Wilt {
       name = db;
     }
 
-    final String url = '/$name';
+    final url = '/$name';
 
     return _httpRequest(databaseInfo, url);
   }
 
   /// Get current session information from CouchDB
   Future<dynamic> getSession() {
-    const String url = session;
+    const url = session;
 
     return _httpRequest(getSessionn, url);
   }
 
   /// Get current stats from CouchDB, 1.xx versions only
   Future<dynamic> getStats() {
-    const String url = stats;
+    const url = stats;
 
     return _httpRequest(getStatss, url);
   }
 
   /// Get all the databases from CouchDB
   Future<dynamic> getAllDbs() {
-    const String url = alldbs;
+    const url = alldbs;
 
     return _httpRequest(getAllDbss, url);
   }
@@ -728,7 +711,7 @@ class Wilt {
     }
 
     // Set the headers
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = contentType;
 
     // Make the PUT request
@@ -770,10 +753,10 @@ class Wilt {
     }
 
     // Set the headers
-    final Map<String, String> headers = <String, String>{};
+    final headers = <String, String>{};
     headers['Content-Type'] = contentType;
 
-    String url = '$docId/$attachmentName?rev=$rev';
+    var url = '$docId/$attachmentName?rev=$rev';
 
     url = _conditionUrl(url);
     return _httpRequest(updateAttachmentt, url,
@@ -795,7 +778,7 @@ class Wilt {
       return _raiseException(WiltException.deleteAttNoRev);
     }
 
-    String url = '$docId/$attachmentName?rev=$rev';
+    var url = '$docId/$attachmentName?rev=$rev';
 
     url = _conditionUrl(url);
     return _httpRequest(deleteAttachmentt, url);
@@ -811,7 +794,7 @@ class Wilt {
       return _raiseException(WiltException.getAttNoName);
     }
 
-    String url = '$docId/$attachmentName';
+    var url = '$docId/$attachmentName';
 
     url = _conditionUrl(url);
     return _httpRequest(getAttachmentt, url);
@@ -904,7 +887,7 @@ class Wilt {
       return _raiseException(WiltException.genIdsAmount);
     }
 
-    String url = uuids;
+    var url = uuids;
 
     url = '$url?count=$amount';
 

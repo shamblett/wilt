@@ -8,8 +8,6 @@
  * parameter being passed to a function.
  */
 
-// ignore_for_file: public_member_api_docs
-
 part of wilt;
 
 /// Exceptions
@@ -89,7 +87,6 @@ class WiltException implements Exception {
       'Bad construction - you must instantiate Wilt with a HTTP Adapter';
   static const String cnNoAuth = 'Change Notifications must be authorized';
 
-  // ignore: unnecessary_final
   final String _message;
 
   @override
