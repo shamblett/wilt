@@ -14,21 +14,14 @@ import 'package:test/test.dart';
 import 'wilt_test_common.dart';
 import 'wilt_test_config.dart';
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 void main() {
   // WiltServerClient constructor tests
-  int groupNum = 0;
+  var groupNum = 0;
   group('${groupNum++}. Constructor Tests - ', () {
-    int testNum = 0;
+    var testNum = 0;
     test('${testNum++}. No hostname', () {
       try {
-        final WiltServerClient wilting =
-            WiltServerClient(null, serverPort, scheme);
+        final wilting = WiltServerClient(null, serverPort, scheme);
         wilting.toString();
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -39,8 +32,7 @@ void main() {
 
     test('${testNum++}. No port', () {
       try {
-        final WiltServerClient wilting =
-            WiltServerClient(hostName, null, scheme);
+        final wilting = WiltServerClient(hostName, null, scheme);
         wilting.toString();
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -51,8 +43,7 @@ void main() {
 
     test('${testNum++}. No Scheme', () {
       try {
-        final WiltServerClient wilting =
-            WiltServerClient(hostName, serverPort, null);
+        final wilting = WiltServerClient(hostName, serverPort, null);
         wilting.toString();
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -63,8 +54,7 @@ void main() {
 
     test('${testNum++}. No HTTP Adapter', () {
       try {
-        final WiltServerClient wilting =
-            WiltServerClient(hostName, serverPort, scheme, null);
+        final wilting = WiltServerClient(hostName, serverPort, scheme, null);
         wilting.toString();
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
@@ -77,12 +67,10 @@ void main() {
   /// Run the common API tests
 
   // Test client
-  final WiltServerClient wilting =
-      WiltServerClient(hostName, serverPort, scheme);
+  final wilting = WiltServerClient(hostName, serverPort, scheme);
 
   // Create a test client for database creation/deletion testing
-  final WiltServerClient dbTestWilting =
-      WiltServerClient(hostName, serverPort, scheme);
+  final dbTestWilting = WiltServerClient(hostName, serverPort, scheme);
 
   void logger(String message) {
     print(message);
