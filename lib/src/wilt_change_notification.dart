@@ -33,9 +33,8 @@ part of wilt;
 /// with CouchDb to allow notificatons to work, if you do not supply
 /// auth credentials before starting notifications an exception is raised.
 class _WiltChangeNotification {
-  _WiltChangeNotification(
-      this._host, this._port, this._scheme, this._httpAdapter,
-      [this._dbName, this.parameters]) {
+  _WiltChangeNotification(this._host, this._port, this._wilt,
+      {this.useSSL, this.dbName, this.parameters}) {
     parameters ??= WiltChangeNotificationParameters();
 
     _sequence = parameters.since;
@@ -52,16 +51,16 @@ class _WiltChangeNotification {
   WiltChangeNotificationParameters parameters;
 
   /// Database name
-  final String _dbName;
+  final String dbName;
 
   /// Host name
   final String _host;
 
   /// Port number
-  final String _port;
+  final int _port;
 
   /// HTTP scheme
-  final String _scheme;
+  final bool useSSL;
 
   /// Timer
   Timer _timer;
@@ -72,7 +71,7 @@ class _WiltChangeNotification {
   /// Paused indicator
   bool paused = false;
 
-  final WiltHTTPAdapter _httpAdapter;
+  final Wilt _wilt;
 
   /// Change notification stream controller
   ///
@@ -93,17 +92,18 @@ class _WiltChangeNotification {
     String path;
     if (_sequence != null) {
       path =
-          '$_dbName/_changes?&since=$_sequence&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+          '$dbName/_changes?&since=$_sequence&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
     } else {
       path =
-          '$_dbName/_changes?&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+          '$dbName/_changes?&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
     }
 
-    final String url = '$_scheme$_host:${_port.toString()}/$path';
+    final String scheme = useSSL ? 'https://' : 'http://';
+    final String url = '$scheme$_host:${_port.toString()}/$path';
 
     // Open the request
     try {
-      _httpAdapter.getString(url).then((dynamic result) {
+      _wilt.getString(url).then((dynamic result) {
         // Process the change notification
         try {
           final Map<dynamic, dynamic> dbChange = json.decode(result);

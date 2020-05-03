@@ -6,11 +6,9 @@
  */
 
 import 'package:wilt/wilt.dart';
-import 'package:wilt/wilt_server_client.dart'; // Comment out for browser.
-//import 'package:wilt/wilt_browser_client.dart'; Uncomment for browser
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 // ignore: avoid_relative_lib_imports
-import '../test/lib/wilt_test_config.dart';
+import '../test/wilt_test_config.dart';
 
 // ignore_for_file: omit_local_variable_types
 // ignore_for_file: unnecessary_final
@@ -26,8 +24,7 @@ import '../test/lib/wilt_test_config.dart';
 // ignore: avoid_void_async
 void main() async {
   /// Create a test client
-  final WiltServerClient wilting =
-      WiltServerClient(hostName, serverPort, scheme);
+  final Wilt wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
 
   /// Or for the browser
   /// final WiltBrowserClient wilting =
