@@ -13,12 +13,6 @@
 
 part of wilt_server_client;
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 /// Server HTTP adapter
 class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   /// Construction
@@ -44,7 +38,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
   Future<dynamic> httpRequest(String method, String url,
       [String data, Map<String, String> headers]) {
     //  Initialise
-    final Completer<dynamic> completer = Completer<dynamic>();
+    final completer = Completer<dynamic>();
 
     /// Successful completion
     void onSuccess(http.Response response) {
@@ -98,7 +92,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
         // Success response
         if (method != Wilt.headd) {
-          final jsonobject.JsonObjectLite<dynamic> successAsJson =
+          final successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
@@ -130,7 +124,6 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.errorText = null;
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
-      // ignore: avoid_types_on_closure_parameters
       response.stream.bytesToString(utf8).then((String text) {
         jsonResponse.responseText = text;
 
@@ -171,7 +164,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
 
           // Success response
           if (method != Wilt.headd) {
-            final jsonobject.JsonObjectLite<dynamic> successAsJson =
+            final successAsJson =
                 jsonobject.JsonObjectLite<dynamic>.fromJsonString(text);
             jsonResponse.jsonCouchResponse = successAsJson;
           }
@@ -212,11 +205,11 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     }
 
     // Condition the input method string to get the HTTP method
-    final String httpMethod = method.split('_')[0];
+    final httpMethod = method.split('_')[0];
 
     // Set the content type header correctly
     if (headers.containsKey('Content-Type')) {
-      final String contentType = headers['Content-Type'];
+      final contentType = headers['Content-Type'];
       headers.remove('Content-Type');
       headers['content-type'] = contentType;
     }
@@ -237,7 +230,7 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     } else if (httpMethod == 'DELETE') {
       _client.delete(url, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == 'COPY') {
-      final Uri encodedUrl = Uri.parse(url);
+      final encodedUrl = Uri.parse(url);
       final dynamic request = http.Request('COPY', encodedUrl);
       request.headers.addAll(headers);
       _client.send(request).then(onCopySuccess, onError: onError);
@@ -252,15 +245,15 @@ class WiltServerHTTPAdapter implements WiltHTTPAdapter {
     final Completer<dynamic> completer = Completer<String>();
 
     // Must have authentication
-    final Map<String, String> wiltHeaders = <String, String>{};
+    final wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
     if (_user != null) {
       switch (_authType) {
         case Wilt.authBasic:
-          final String authStringToEncode = '$_user:$_password';
-          final String encodedAuthString =
+          final authStringToEncode = '$_user:$_password';
+          final encodedAuthString =
               const Base64Encoder().convert(authStringToEncode.codeUnits);
-          final String authString = 'Basic $encodedAuthString';
+          final authString = 'Basic $encodedAuthString';
           wiltHeaders['Authorization'] = authString;
           break;
 

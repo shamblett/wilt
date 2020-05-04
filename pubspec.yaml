@@ -1,5 +1,5 @@
 name: wilt
-version: 4.0.4
+version: 4.0.5
 description: A browser/server based CouchDB client library supporting attachments and change notification.
 homepage: https://github.com/shamblett/wilt
 
@@ -12,7 +12,10 @@ dependencies:
   json_object_lite: '^2.1.0'
 
 dev_dependencies:
-  test: '^1.9.4'
-  build_runner: '^1.7.2'
-  build_test: '^0.10.10'
-  build_web_compilers: '^2.7.1'
+  test: '^1.14.2'
+  pana: '^0.13.5'
+  pedantic: '^1.9.0'
+  build_runner: '^1.8.0'
+  build_test: '^0.10.12+1'
+  build_web_compilers: '^2.8.0'
+

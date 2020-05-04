@@ -13,12 +13,6 @@
 
 part of wilt_browser_client;
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 /// Browser HTTP adapter
 class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
   /// Construction
@@ -39,7 +33,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
   Future<dynamic> httpRequest(String method, String url,
       [String data, Map<String, String> headers]) {
     // Initialise
-    final Completer<dynamic> completer = Completer<dynamic>();
+    final completer = Completer<dynamic>();
 
     //Successful completion
     void onSuccess(html.HttpRequest response) {
@@ -91,7 +85,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
 
         // Success response
         if (method != Wilt.headd) {
-          final jsonobject.JsonObjectLite<dynamic> successAsJson =
+          final successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(
                   response.responseText);
           jsonResponse.jsonCouchResponse = successAsJson;
@@ -124,7 +118,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
       jsonResponse.responseText = req.responseText;
       jsonResponse.errorCode = req.status;
       if ((req.status != 0) && (method != Wilt.headd)) {
-        final jsonobject.JsonObjectLite<dynamic> errorAsJson =
+        final errorAsJson =
             jsonobject.JsonObjectLite<dynamic>.fromJsonString(req.responseText);
         jsonResponse.jsonCouchResponse = errorAsJson;
       } else {
@@ -144,7 +138,7 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
     }
 
     // Condition the input method string to get the HTTP method
-    final String httpMethod = method.split('_')[0];
+    final httpMethod = method.split('_')[0];
 
     // Query CouchDB over HTTP
     html.HttpRequest.request(url,
@@ -162,18 +156,18 @@ class WiltBrowserHTTPAdapter implements WiltHTTPAdapter {
   /// Specialised 'get' for change notifications
   @override
   Future<String> getString(String url) {
-    final Completer<String> completer = Completer<String>();
+    final completer = Completer<String>();
 
     // Must have authentication
-    final Map<String, String> wiltHeaders = <String, String>{};
+    final wiltHeaders = <String, String>{};
     wiltHeaders['accept'] = 'application/json';
     if (_user != null) {
       switch (_authType) {
         case Wilt.authBasic:
-          final String authStringToEncode = '$_user:$_password';
-          final String encodedAuthString =
+          final authStringToEncode = '$_user:$_password';
+          final encodedAuthString =
               const Base64Encoder().convert(authStringToEncode.codeUnits);
-          final String authString = 'Basic $encodedAuthString';
+          final authString = 'Basic $encodedAuthString';
           wiltHeaders['authorization'] = authString;
           break;
         case Wilt.authNone:
