@@ -10,12 +10,6 @@
 
 part of wilt;
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 /// This class initiates change notification processing with either
 /// a default set of change notification parameters or one supplied by
 /// the client. When destroyed, change notification ceases.
@@ -40,7 +34,7 @@ class _WiltChangeNotification {
     _sequence = parameters.since;
 
     // Start the heartbeat timer
-    final Duration heartbeat = Duration(milliseconds: parameters.heartbeat);
+    final heartbeat = Duration(milliseconds: parameters.heartbeat);
     _timer = Timer.periodic(heartbeat, _requestChanges);
 
     // Start change notifications
@@ -98,8 +92,8 @@ class _WiltChangeNotification {
           '$dbName/_changes?&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
     }
 
-    final String scheme = useSSL ? 'https://' : 'http://';
-    final String url = '$scheme$_host:${_port.toString()}/$path';
+    final scheme = useSSL ? 'https://' : 'http://';
+    final url = '$scheme$_host:${_port.toString()}/$path';
 
     // Open the request
     try {
@@ -111,7 +105,7 @@ class _WiltChangeNotification {
         } on Exception catch (e) {
           // Recoverable error, send the client an error event
           print('WiltChangeNotification::MonitorChanges json decode fail $e');
-          final WiltChangeNotificationEvent notification =
+          final notification =
               WiltChangeNotificationEvent.decodeError(result, e.toString());
 
           _changeNotification.add(notification);
@@ -121,8 +115,7 @@ class _WiltChangeNotification {
       // Unrecoverable error, send the client an abort event
       print('WiltChangeNotification::MonitorChanges unable to contact '
           'CouchDB Error is $e');
-      final WiltChangeNotificationEvent notification =
-          WiltChangeNotificationEvent.abort(e.toString());
+      final notification = WiltChangeNotificationEvent.abort(e.toString());
 
       _changeNotification.add(notification);
     }
@@ -132,9 +125,8 @@ class _WiltChangeNotification {
   void processDbChange(Map<String, dynamic> change) {
     // Check for an error response
     if (change.containsKey('error')) {
-      final WiltChangeNotificationEvent notification =
-          WiltChangeNotificationEvent.couchDbError(
-              change['error'], change['reason']);
+      final notification = WiltChangeNotificationEvent.couchDbError(
+          change['error'], change['reason']);
 
       _changeNotification.add(notification);
 
@@ -147,8 +139,7 @@ class _WiltChangeNotification {
     // Process the result list
     final List<dynamic> results = change['results'];
     if (results.isEmpty) {
-      final WiltChangeNotificationEvent notification =
-          WiltChangeNotificationEvent.sequence(_sequence);
+      final notification = WiltChangeNotificationEvent.sequence(_sequence);
 
       _changeNotification.add(notification);
 
@@ -160,9 +151,8 @@ class _WiltChangeNotification {
 
       // Check for delete or update
       if (result.containsKey('deleted')) {
-        final WiltChangeNotificationEvent notification =
-            WiltChangeNotificationEvent.delete(result['id'], changes['rev'],
-                WiltUserUtils.getCnSequenceNumber(result['seq']));
+        final notification = WiltChangeNotificationEvent.delete(result['id'],
+            changes['rev'], WiltUserUtils.getCnSequenceNumber(result['seq']));
 
         _changeNotification.add(notification);
       } else {
@@ -171,9 +161,11 @@ class _WiltChangeNotification {
           document = jsonobject.JsonObjectLite<dynamic>.fromJsonString(
               WiltUserUtils.mapToJson(result['doc']));
         }
-        final WiltChangeNotificationEvent notification =
-            WiltChangeNotificationEvent.update(result['id'], changes['rev'],
-                WiltUserUtils.getCnSequenceNumber(result['seq']), document);
+        final notification = WiltChangeNotificationEvent.update(
+            result['id'],
+            changes['rev'],
+            WiltUserUtils.getCnSequenceNumber(result['seq']),
+            document);
 
         _changeNotification.add(notification);
       }
@@ -188,7 +180,7 @@ class _WiltChangeNotification {
   /// Restart change notifications
   void restartChangeNotifications() {
     // Start the heartbeat timer
-    final Duration heartbeat = Duration(milliseconds: parameters.heartbeat);
+    final heartbeat = Duration(milliseconds: parameters.heartbeat);
     _timer = Timer.periodic(heartbeat, _requestChanges);
 
     // Start change notifications

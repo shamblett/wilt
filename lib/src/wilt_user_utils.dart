@@ -9,12 +9,6 @@
 
 part of wilt;
 
-// ignore_for_file: omit_local_variable_types
-// ignore_for_file: unnecessary_final
-// ignore_for_file: cascade_invocations
-// ignore_for_file: avoid_print
-// ignore_for_file: avoid_annotating_with_dynamic
-
 /// User utilities
 class WiltUserUtils {
   /// Get a document id from a json Object
@@ -90,7 +84,7 @@ class WiltUserUtils {
     document.isImmutable = false;
     document['_id'] = id;
     document['_rev'] = rev;
-    final String jsonString = json.encode(document);
+    final jsonString = json.encode(document);
     return jsonobject.JsonObjectLite<dynamic>.fromJsonString(jsonString)
       ..isImmutable = false;
   }
@@ -98,16 +92,15 @@ class WiltUserUtils {
   /// Creates a json string for bulk inserts where an
   /// _id and or _rev is needed form document strings
   static String createBulkInsertString(List<String> docStrings) {
-    final StringBuffer innerStringBuffer = StringBuffer();
-    for (final String doc in docStrings) {
+    final innerStringBuffer = StringBuffer();
+    for (final doc in docStrings) {
       innerStringBuffer.write('$doc,');
     }
 
     // Remove the last ','
-    final int len = innerStringBuffer.length;
-    final String innerString =
-        innerStringBuffer.toString().substring(0, len - 1);
-    final String insertString = '{"docs":[$innerString]}';
+    final len = innerStringBuffer.length;
+    final innerString = innerStringBuffer.toString().substring(0, len - 1);
+    final insertString = '{"docs":[$innerString]}';
     return insertString.trim();
   }
 
@@ -115,7 +108,7 @@ class WiltUserUtils {
   /// _id and or _rev is needed from JsonObjects.
   static String createBulkInsertStringJo(
       List<jsonobject.JsonObjectLite<dynamic>> records) {
-    final List<String> docStrings = <String>[];
+    final docStrings = <String>[];
     for (final dynamic record in records) {
       docStrings.add(record.toString());
     }
@@ -129,9 +122,8 @@ class WiltUserUtils {
   /// being the attachment data returned from CouchDb.
   static List<jsonobject.JsonObjectLite<dynamic>> getAttachments(
       jsonobject.JsonObjectLite<dynamic> document) {
-    final List<jsonobject.JsonObjectLite<dynamic>> attachmentsList =
-        <jsonobject.JsonObjectLite<dynamic>>[];
-    final String docString = document.toString();
+    final attachmentsList = <jsonobject.JsonObjectLite<dynamic>>[];
+    final docString = document.toString();
     final Map<String, dynamic> docMap = json.decode(docString);
     if (docMap.containsKey('_attachments')) {
       final Map<String, dynamic> attachmentList = docMap['_attachments'];
