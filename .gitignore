@@ -6,3 +6,5 @@ pubspec.lock
 # Dart 2 additions
 .dart_tool/
 build/
+/test/wilt_test_config.dart
+/.vscode
