@@ -963,7 +963,6 @@ class Wilt {
       jsonResponse.errorText = null;
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
-      // ignore: avoid_types_on_closure_parameters
       response.stream.bytesToString(utf8).then((String text) {
         jsonResponse.responseText = text;
 

@@ -7,8 +7,6 @@
 
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
-// ignore: avoid_relative_lib_imports
-import '../test/wilt_test_config.dart';
 
 /// A simple Wilt client example.
 /// Please adjust the settings in wilt_test_config to suite your CouchDb setup.
@@ -16,14 +14,16 @@ import '../test/wilt_test_config.dart';
 /// in CouchDB.
 /// For more detailed examples of the API see the test suite.
 ///
-// ignore: avoid_void_async
 void main() async {
+  /// Set as needed
+  const hostName = 'localhost';
+  const serverPort = 5984;
+  const useSSL = false;
+  const userName = 'xxxx';
+  const userPassword = 'yyyyy';
+
   /// Create a test client
   final wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
-
-  /// Or for the browser
-  /// final WiltBrowserClient wilting =
-  //  new WiltBrowserClient(hostName, port, scheme);
 
   // Login if we are using authentication. If you are using authentication
   // try the example with this commented out, you should see all
