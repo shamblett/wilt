@@ -482,9 +482,7 @@ void main() {
   group('${groupNum++}. Single documents and database - ', () {
     var testNum = 0;
     // Login if we are using authentication
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
+    wilting.login(userName, userPassword);
 
     // Group setup
     String? docId;
@@ -928,9 +926,7 @@ void main() {
     });
 
     // Login if we are using authentication
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
+    wilting.login(userName, userPassword);
 
     // Setup
     const putId = 'mytestid';
@@ -953,9 +949,7 @@ void main() {
         expect(successResponse.rows[2].id, equals(putId));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
       wilting.db = databaseName;
       wilting.getAllDocs(includeDocs: true).then(completer);
     });
@@ -978,9 +972,8 @@ void main() {
         expect(count, equals(1));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
       wilting.getAllDocs(limit: 1).then(completer);
     });
@@ -1002,9 +995,8 @@ void main() {
         expect(count, equals(1));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
       wilting.getAllDocs(startKey: putId).then(completer);
     });
@@ -1026,9 +1018,8 @@ void main() {
         expect(count, equals(3));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
       wilting.getAllDocs(endKey: putId2).then(completer);
     });
@@ -1051,9 +1042,8 @@ void main() {
         expect(count, equals(2));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
       final keyList = <String>[];
       keyList.add(putId);
@@ -1079,9 +1069,8 @@ void main() {
         expect(count, equals(2));
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
       final keyList = <String>[];
       keyList.add(putId);
@@ -1105,9 +1094,7 @@ void main() {
         expect(successResponse[2].ok, isTrue);
       });
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
       wilting.db = databaseName;
       final docList = <jsonobject.JsonObjectLite<dynamic>>[];
       final dynamic document1 = jsonobject.JsonObjectLite<dynamic>();
@@ -1146,9 +1133,8 @@ void main() {
       });
 
       // Login if we are using authentication
-      if (userName != null) {
-        wilting.login(userName, userPassword);
-      }
+      wilting.login(userName, userPassword);
+
       wilting.db = databaseName;
 
       final dynamic document1 = jsonobject.JsonObjectLite<dynamic>();
@@ -1179,9 +1165,7 @@ void main() {
   group('${groupNum++}. Information/Utilty Tests - ', () {
     var testNum = 0;
     // Login if we are using authentication
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
+    wilting.login(userName, userPassword);
 
     test('${testNum++}. Get Session Information', () {
       final dynamic completer = expectAsync1((dynamic res) {
@@ -1283,9 +1267,7 @@ void main() {
   group('${groupNum++}. Attachment Tests - ', () {
     var testNum = 0;
     // Login if we are using authentication
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
+    wilting.login(userName, userPassword);
 
     // Globals for the group
     String? testDocRev;
@@ -1564,9 +1546,7 @@ void main() {
   group('${groupNum++}. Change Notification Tests - ', () {
     var testNum = 0;
     // Login for change notification
-    if (userName != null) {
-      wilting.login(userName, userPassword);
-    }
+    wilting.login(userName, userPassword);
 
     test('${testNum++}. Start Change Notification', () {
       wilting.db = databaseName;

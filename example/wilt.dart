@@ -28,9 +28,8 @@ void main() async {
   // Login if we are using authentication. If you are using authentication
   // try the example with this commented out, you should see all
   // the operations fail with 'not authorised'.
-  if (userName != null) {
-    wilting.login(userName, userPassword);
-  }
+  wilting.login(userName, userPassword);
+
 
   /// Create an example database
   dynamic res = await wilting.createDatabase('wilt_example');

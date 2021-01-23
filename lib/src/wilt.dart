@@ -19,11 +19,7 @@ class Wilt {
   /// You can do this here but you must supply either a browser or
   /// server HTTP adapter
   /// to use.
-  Wilt(this.host, {this.port = 5984, this.useSSL = false}) {
-    if ((host == null) || (port == null)) {
-      throw WiltException(WiltException.badConstParams);
-    }
-  }
+  Wilt(this.host, {this.port = 5984, this.useSSL = false});
 
   /// URL constant for CouchDB SESSION function
   static const String session = '/_session';
@@ -391,9 +387,6 @@ class Wilt {
   /// PUT's to the specified  document where the document is supplied as
   /// a json string. Must be used if '_id' and or '_rev' are needed.
   Future<dynamic> putDocumentString(String id, String document, [String? rev]) {
-    if ((id == null) || (document == null)) {
-      return _raiseException(WiltException.putDocStringNoIdBody);
-    }
 
     // Check for a revision
     var id1 = id;
@@ -533,10 +526,6 @@ class Wilt {
   /// Bulk inserts a list of documents
   Future<dynamic> bulk(List<jsonobject.JsonObjectLite<dynamic>> docs,
       [bool allOrNothing = false]) {
-    // Validate the parameters
-    if (docs == null) {
-      return _raiseException(WiltException.bulkNoDocList);
-    }
 
     var url = bulkdocs;
 
@@ -565,10 +554,6 @@ class Wilt {
   /// Bulk insert json string version.
   /// Must be used if '_id' and or '_rev' are needed in ANY of the documents
   Future<dynamic> bulkString(String docs, [bool allOrNothing = false]) {
-    // Validate the parameters
-    if (docs == null) {
-      return _raiseException(WiltException.bulkStringNoDoc);
-    }
 
     var url = bulkdocs;
 
@@ -811,9 +796,6 @@ class Wilt {
   /// Note that database name, host, port and scheme are not changeable.
   void updateChangeNotificationParameters(
       WiltChangeNotificationParameters parameters) {
-    if (parameters == null) {
-      throw WiltException(WiltException.updateCnpNoParams);
-    }
 
     if (_changeNotifier == null) {
       throw WiltException(WiltException.updateCnpNoNotifier);
@@ -875,7 +857,7 @@ class Wilt {
   /// Processes the HTTP request, returning the server's response
   /// as a future
   Future<dynamic> doHttpRequest(String method, String url,
-      [String? data, Map<String, String?> headers]) {
+      [String? data, Map<String, String?> headers = const {} ]) {
     //  Initialise
     final completer = Completer<dynamic>();
 
