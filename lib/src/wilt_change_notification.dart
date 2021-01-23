@@ -31,10 +31,10 @@ class _WiltChangeNotification {
       {this.useSSL, this.dbName, this.parameters}) {
     parameters ??= WiltChangeNotificationParameters();
 
-    _sequence = parameters.since;
+    _sequence = parameters!.since;
 
     // Start the heartbeat timer
-    final heartbeat = Duration(milliseconds: parameters.heartbeat);
+    final heartbeat = Duration(milliseconds: parameters!.heartbeat);
     _timer = Timer.periodic(heartbeat, _requestChanges);
 
     // Start change notifications
@@ -42,22 +42,22 @@ class _WiltChangeNotification {
   }
 
   /// Parameters set
-  WiltChangeNotificationParameters parameters;
+  WiltChangeNotificationParameters? parameters;
 
   /// Database name
-  final String dbName;
+  final String? dbName;
 
   /// Host name
-  final String _host;
+  final String? _host;
 
   /// Port number
   final int _port;
 
   /// HTTP scheme
-  final bool useSSL;
+  final bool? useSSL;
 
   /// Timer
-  Timer _timer;
+  Timer? _timer;
 
   /// Since sequence update
   dynamic _sequence = 0;
@@ -77,7 +77,7 @@ class _WiltChangeNotification {
       _changeNotification;
 
   /// Request the change notifications
-  void _requestChanges(Timer timer) {
+  void _requestChanges(Timer? timer) {
     if (paused) {
       return;
     }
@@ -86,13 +86,13 @@ class _WiltChangeNotification {
     String path;
     if (_sequence != null) {
       path =
-          '$dbName/_changes?&since=$_sequence&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+          '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
     } else {
       path =
-          '$dbName/_changes?&descending=${parameters.descending}&include_docs=${parameters.includeDocs}&attachments=${parameters.includeAttachments}';
+          '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
     }
 
-    final scheme = useSSL ? 'https://' : 'http://';
+    final scheme = useSSL! ? 'https://' : 'http://';
     final url = '$scheme$_host:${_port.toString()}/$path';
 
     // Open the request
@@ -101,7 +101,7 @@ class _WiltChangeNotification {
         // Process the change notification
         try {
           final Map<dynamic, dynamic> dbChange = json.decode(result);
-          processDbChange(dbChange);
+          processDbChange(dbChange as Map<String, dynamic>);
         } on Exception catch (e) {
           // Recoverable error, send the client an error event
           print('WiltChangeNotification::MonitorChanges json decode fail $e');
@@ -147,23 +147,23 @@ class _WiltChangeNotification {
     }
 
     for (final dynamic result in results) {
-      final Map<String, dynamic> changes = result['changes'][0];
+      final Map<String, dynamic>? changes = result['changes'][0];
 
       // Check for delete or update
       if (result.containsKey('deleted')) {
         final notification = WiltChangeNotificationEvent.delete(result['id'],
-            changes['rev'], WiltUserUtils.getCnSequenceNumber(result['seq']));
+            changes!['rev'], WiltUserUtils.getCnSequenceNumber(result['seq']));
 
         _changeNotification.add(notification);
       } else {
         dynamic document;
         if (result.containsKey('doc')) {
           document = jsonobject.JsonObjectLite<dynamic>.fromJsonString(
-              WiltUserUtils.mapToJson(result['doc']));
+              WiltUserUtils.mapToJson(result['doc'])!);
         }
         final notification = WiltChangeNotificationEvent.update(
             result['id'],
-            changes['rev'],
+            changes!['rev'],
             WiltUserUtils.getCnSequenceNumber(result['seq']),
             document);
 
@@ -174,13 +174,13 @@ class _WiltChangeNotification {
 
   /// Stop change notifications
   void stopNotifications() {
-    _timer.cancel();
+    _timer!.cancel();
   }
 
   /// Restart change notifications
   void restartChangeNotifications() {
     // Start the heartbeat timer
-    final heartbeat = Duration(milliseconds: parameters.heartbeat);
+    final heartbeat = Duration(milliseconds: parameters!.heartbeat);
     _timer = Timer.periodic(heartbeat, _requestChanges);
 
     // Start change notifications

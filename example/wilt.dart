@@ -47,7 +47,7 @@ void main() async {
 
   /// Create a test document
   wilting.db = 'wilt_example';
-  String returnedDocRev;
+  String? returnedDocRev;
   const putId = 'exampletestid';
   final dynamic document = jsonobject.JsonObjectLite<dynamic>();
   document.title = 'Created by a Put Request';

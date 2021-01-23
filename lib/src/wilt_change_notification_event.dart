@@ -89,12 +89,12 @@ class WiltChangeNotificationEvent {
   ///
   static const String lastSequence = 'sequence';
 
-  String _type;
+  String? _type;
 
   /// Type
   ///
   /// Valid for all events
-  String get type => _type;
+  String? get type => _type;
 
   dynamic _sequenceNumber;
 
@@ -104,52 +104,52 @@ class WiltChangeNotificationEvent {
   ///
   dynamic get sequenceNumber => _sequenceNumber;
 
-  String _docId;
+  String? _docId;
 
   /// Document identifier
   ///
   /// Valid for update and delete
-  String get docId => _docId;
+  String? get docId => _docId;
 
-  String _docRevision;
+  String? _docRevision;
 
   /// Document revision
   ///
   /// Valid for update and delete but optional
-  String get docRevision => _docRevision;
+  String? get docRevision => _docRevision;
 
-  jsonobject.JsonObjectLite<dynamic> _document;
+  jsonobject.JsonObjectLite<dynamic>? _document;
 
   /// Document object
   ///
   /// Valid for update and only if includeDocs is true
-  jsonobject.JsonObjectLite<dynamic> get document => _document;
+  jsonobject.JsonObjectLite<dynamic>? get document => _document;
 
-  String _exception;
+  String? _exception;
 
   /// Exception string
   ///
   /// Valid for abort and decode error
-  String get exception => _exception;
+  String? get exception => _exception;
 
-  String _httpResponseText;
+  String? _httpResponseText;
 
   /// HTTP response text
   ///
   /// Valid for decode error
-  String get httpResponseText => _httpResponseText;
+  String? get httpResponseText => _httpResponseText;
 
-  String _couchError;
+  String? _couchError;
 
   /// Couch error
   ///
   /// Valid for update and delete
-  String get couchError => _couchError;
+  String? get couchError => _couchError;
 
-  String _couchReason;
+  String? _couchReason;
 
   /// Couch reason
   ///
   /// Valid for update and delete
-  String get couchReason => _couchReason;
+  String? get couchReason => _couchReason;
 }

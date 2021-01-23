@@ -12,13 +12,13 @@ part of wilt;
 /// User utilities
 class WiltUserUtils {
   /// Get a document id from a json Object
-  static String getDocumentId(jsonobject.JsonObjectLite<dynamic> response) {
+  static String? getDocumentId(jsonobject.JsonObjectLite<dynamic> response) {
     response.isImmutable = false;
     return response['_id'];
   }
 
   /// Get a revision from a json object
-  static String getDocumentRev(jsonobject.JsonObjectLite<dynamic> response) {
+  static String? getDocumentRev(jsonobject.JsonObjectLite<dynamic> response) {
     response.isImmutable = false;
     if (response.containsKey('_rev')) {
       // Use this first if present
@@ -30,7 +30,7 @@ class WiltUserUtils {
 
   /// Adds a CouchDB _rev to the json body of a document
   static String addDocumentRev(
-      jsonobject.JsonObjectLite<dynamic> document, String revision) {
+      jsonobject.JsonObjectLite<dynamic> document, String? revision) {
     document.isImmutable = false;
     document['_rev'] = revision;
     return json.encode(document);
@@ -121,7 +121,7 @@ class WiltUserUtils {
   /// Returned Json Object contains the fields 'name' and 'data', the data
   /// being the attachment data returned from CouchDb.
   static List<jsonobject.JsonObjectLite<dynamic>> getAttachments(
-      jsonobject.JsonObjectLite<dynamic> document) {
+      jsonobject.JsonObjectLite<dynamic>? document) {
     final attachmentsList = <jsonobject.JsonObjectLite<dynamic>>[];
     final docString = document.toString();
     final Map<String, dynamic> docMap = json.decode(docString);
@@ -130,7 +130,7 @@ class WiltUserUtils {
       for (final dynamic key in attachmentList.keys) {
         final dynamic jsonAttachmentData =
             jsonobject.JsonObjectLite<dynamic>.fromJsonString(
-                WiltUserUtils.mapToJson(attachmentList[key]));
+                WiltUserUtils.mapToJson(attachmentList[key])!);
         final dynamic jsonAttachment = jsonobject.JsonObjectLite<dynamic>();
         jsonAttachment.name = key;
         jsonAttachment.data = jsonAttachmentData;
@@ -142,7 +142,7 @@ class WiltUserUtils {
   }
 
   /// Serialize a map to a JSON string
-  static String mapToJson(dynamic map) {
+  static String? mapToJson(dynamic map) {
     if (map is String) {
       try {
         final dynamic res = json.decode(map);
