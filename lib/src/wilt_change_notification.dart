@@ -86,18 +86,20 @@ class _WiltChangeNotification {
     String path;
     if (_sequence != null) {
       path =
-          '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
+         '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}'
+          '&filter=app_v1/by_types&type=${parameters!.type}';
     } else {
       path =
           '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
     }
 
     final scheme = useSSL! ? 'https://' : 'http://';
-    final url = '$scheme$_host:${_port.toString()}/$path';
+   // final url = '$scheme$_host:${_port.toString()}/$path';
+    final uri=Uri(scheme: scheme,host: _host,path: path);
 
     // Open the request
     try {
-      _wilt.getString(url).then((dynamic result) {
+      _wilt.getString(uri).then((dynamic result) {
         // Process the change notification
         try {
           final Map<dynamic, dynamic> dbChange = json.decode(result);

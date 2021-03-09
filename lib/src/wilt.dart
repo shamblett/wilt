@@ -137,8 +137,7 @@ class Wilt {
 
     // Build the URL
     final scheme = useSSL ? 'https://' : 'http://';
-    final wiltUrl = '$scheme$host:$port$url';
-
+     final wiltUrl =Uri(scheme: scheme,host: host,port: port,path:url);
     // Check for authentication
     if (_user != null) {
       switch (authenticationType) {
@@ -856,7 +855,7 @@ class Wilt {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<dynamic> doHttpRequest(String method, String url,
+  Future<dynamic> doHttpRequest(String method, Uri url,
       [String? data, Map<String, String?> headers = const {} ]) {
     //  Initialise
     final completer = Completer<dynamic>();
@@ -1051,7 +1050,7 @@ class Wilt {
     } else if (httpMethod == 'DELETE') {
       _client.delete(url, headers: headers as Map<String, String>).then(onSuccess, onError: onError);
     } else if (httpMethod == 'COPY') {
-      final encodedUrl = Uri.parse(url);
+      final encodedUrl = url;
       final request = http.Request('COPY', encodedUrl);
       request.headers.addAll(headers as Map<String, String>);
       _client.send(request).then(onCopySuccess, onError: onError);
@@ -1061,7 +1060,7 @@ class Wilt {
   }
 
   /// Specialised 'get' for change notifications
-  Future<String> getString(String url) {
+  Future<String> getString(Uri url) {
     final Completer<dynamic> completer = Completer<String>();
 
     // Must have authentication
