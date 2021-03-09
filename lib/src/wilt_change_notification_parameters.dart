@@ -15,13 +15,13 @@ class WiltChangeNotificationParameters {
   ///
   /// Start the results from the change immediately after the given
   /// sequence update
-  dynamic since;
+  dynamic? since;
 
   /// Descending
   ///
   /// Return the change results in descending sequence order
   /// (most recent change first)
-  bool descending = false;
+  bool descending;
 
   /// Heartbeat
   ///
@@ -42,5 +42,7 @@ class WiltChangeNotificationParameters {
   /// as well as the stub data that is normally supplied.
   bool includeAttachments = false;
 
-  String type='mobile-app-test';
+  String? type;
+
+  WiltChangeNotificationParameters({ this.since,this.descending=false,this.heartbeat=10000,this.includeAttachments=false,this.includeDocs=false,this.type});
 }
