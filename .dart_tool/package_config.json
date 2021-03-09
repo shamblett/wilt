@@ -33,9 +33,9 @@
     },
     {
       "name": "json_object_lite",
-      "rootUri": "file:///Users/jean/.pub-cache/hosted/pub.dartlang.org/json_object_lite-2.1.1",
+      "rootUri": "file:///Users/jean/.pub-cache/hosted/pub.dartlang.org/json_object_lite-3.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "meta",
@@ -86,7 +86,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-09T15:11:26.203575Z",
+  "generated": "2021-03-09T15:31:14.461651Z",
   "generator": "pub",
   "generatorVersion": "2.12.0"
 }
