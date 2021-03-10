@@ -1,4 +1,5 @@
 # Wilt - both a browser and server based CouchDB client library
+[![Build Status](https://travis-ci.com/shamblett/wilt.svg?branch=master)](https://travis-ci.com/shamblett/wilt)
 
 Wilt is based on the lightweight SAG PHP CouchDB library [available here](https://github.com/sbisbee/sag).
 Users of this library should recognise the structure of Wilt easily. A common processing body is 
