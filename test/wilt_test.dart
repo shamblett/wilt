@@ -5,6 +5,8 @@
  * Copyright :  S.Hamblett
  */
 
+// @dart = 2.10
+
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
@@ -33,7 +35,7 @@ void main() {
     logMessage('WILT::Error is $errorText');
     final reasonText = errorResponse.reason;
     logMessage('WILT::Reason is $reasonText');
-    final int? statusCode = res.errorCode;
+    final int statusCode = res.errorCode;
     logMessage('WILT::Status code is $statusCode');
   }
 
@@ -485,13 +487,13 @@ void main() {
     wilting.login(userName, userPassword);
 
     // Group setup
-    String? docId;
-    String? docRev;
+    String docId;
+    String docRev;
     const putId = 'mytestid';
     const putId2 = 'mytestid2';
     const putId3 = 'mytestid3';
     const copyId = 'mycopyid';
-    String? returnedDocRev;
+    String returnedDocRev;
 
     test('${testNum++}. Create Database not authorized', () {
       dbTestWilting.login('freddy', 'freddypass');
@@ -968,7 +970,7 @@ void main() {
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, isNot(equals(putId)));
         expect(successResponse.rows[0].id, isNot(equals(putId2)));
-        final int? count = successResponse.rows.length;
+        final int count = successResponse.rows.length;
         expect(count, equals(1));
       });
       // Login if we are using authentication
@@ -991,7 +993,7 @@ void main() {
         final dynamic successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
-        final int? count = successResponse.rows.length;
+        final int count = successResponse.rows.length;
         expect(count, equals(1));
       });
       // Login if we are using authentication
@@ -1014,7 +1016,7 @@ void main() {
         final dynamic successResponse = res.jsonCouchResponse;
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(copyId));
-        final int? count = successResponse.rows.length;
+        final int count = successResponse.rows.length;
         expect(count, equals(3));
       });
       // Login if we are using authentication
@@ -1038,7 +1040,7 @@ void main() {
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[0].id, equals(putId));
         expect(successResponse.rows[1].key, equals(putId2));
-        final int? count = successResponse.rows.length;
+        final int count = successResponse.rows.length;
         expect(count, equals(2));
       });
       // Login if we are using authentication
@@ -1065,7 +1067,7 @@ void main() {
         expect(successResponse.total_rows, equals(3));
         expect(successResponse.rows[1].id, equals(putId));
         expect(successResponse.rows[0].key, equals(putId2));
-        final int? count = successResponse.rows.length;
+        final int count = successResponse.rows.length;
         expect(count, equals(2));
       });
       // Login if we are using authentication
@@ -1233,7 +1235,7 @@ void main() {
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
           logMessage('WILT::Reason is $reasonText');
-          final int? statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage('WILT::Status code is $statusCode');
           return;
         }
@@ -1270,7 +1272,7 @@ void main() {
     wilting.login(userName, userPassword);
 
     // Globals for the group
-    String? testDocRev;
+    String testDocRev;
     const pngImage =
         'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABlBMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDrEX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 
@@ -1291,7 +1293,7 @@ void main() {
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
           logMessage('WILT::Reason is $reasonText');
-          final int? statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage('WILT::Status code is $statusCode');
         }
 
@@ -1317,7 +1319,7 @@ void main() {
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
           logMessage('WILT::Reason is $reasonText');
-          final int? statusCode = res.errorCode;
+          final int statusCode = res.errorCode;
           logMessage('WILT::Status code is $statusCode');
         }
 
@@ -1510,7 +1512,7 @@ void main() {
       final dynamic completer = expectAsync1((dynamic res) {
         expect(res.method, Wilt.createAttachmentt);
         expect(res.error, isTrue);
-        final int? statusCode = res.errorCode;
+        final int statusCode = res.errorCode;
         expect(statusCode, anyOf(0, 409));
       });
 

@@ -1,3 +1,6 @@
+## 6.0.0
+Issue 27(NNBD)
+
 ## 5.0.0
 Made multiplatform support cleaner by always using the multiplatform 'http' package
 You can now just import 'package:wilt/wilt.dart' into any project and it will Just Work(tm)

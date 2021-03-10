@@ -239,7 +239,8 @@ class Wilt {
 
   /// Performs a HTTP POST operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> post(String? url, String data, [Map<String, String>? headers]) {
+  Future<dynamic> post(String? url, String data,
+      [Map<String, String>? headers]) {
     final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -251,7 +252,8 @@ class Wilt {
 
   /// Performs a HTTP PUT operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> put(String? url, String data, [Map<String, String>? headers]) {
+  Future<dynamic> put(String? url, String data,
+      [Map<String, String>? headers]) {
     final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -387,7 +389,6 @@ class Wilt {
   /// PUT's to the specified  document where the document is supplied as
   /// a json string. Must be used if '_id' and or '_rev' are needed.
   Future<dynamic> putDocumentString(String id, String document, [String? rev]) {
-
     // Check for a revision
     var id1 = id;
     if (rev != null) {
@@ -526,7 +527,6 @@ class Wilt {
   /// Bulk inserts a list of documents
   Future<dynamic> bulk(List<jsonobject.JsonObjectLite<dynamic>> docs,
       [bool allOrNothing = false]) {
-
     var url = bulkdocs;
 
     if (allOrNothing) {
@@ -554,7 +554,6 @@ class Wilt {
   /// Bulk insert json string version.
   /// Must be used if '_id' and or '_rev' are needed in ANY of the documents
   Future<dynamic> bulkString(String docs, [bool allOrNothing = false]) {
-
     var url = bulkdocs;
 
     if (allOrNothing) {
@@ -796,7 +795,6 @@ class Wilt {
   /// Note that database name, host, port and scheme are not changeable.
   void updateChangeNotificationParameters(
       WiltChangeNotificationParameters parameters) {
-
     if (_changeNotifier == null) {
       throw WiltException(WiltException.updateCnpNoNotifier);
     }
@@ -857,7 +855,7 @@ class Wilt {
   /// Processes the HTTP request, returning the server's response
   /// as a future
   Future<dynamic> doHttpRequest(String method, String url,
-      [String? data, Map<String, String?> headers = const {} ]) {
+      [String? data, Map<String, String?> headers = const {}]) {
     //  Initialise
     final completer = Completer<dynamic>();
 
@@ -1037,7 +1035,9 @@ class Wilt {
 
     // Query CouchDB over HTTP
     if (httpMethod == 'GET') {
-      _client.get(url, headers: headers as Map<String, String>).then(onSuccess, onError: onError);
+      _client
+          .get(url, headers: headers as Map<String, String>)
+          .then(onSuccess, onError: onError);
     } else if (httpMethod == 'PUT') {
       _client
           .put(url, headers: headers as Map<String, String>, body: data)
@@ -1047,9 +1047,13 @@ class Wilt {
           .post(url, headers: headers as Map<String, String>, body: data)
           .then(onSuccess, onError: onError);
     } else if (httpMethod == 'HEAD') {
-      _client.head(url, headers: headers as Map<String, String>).then(onSuccess, onError: onError);
+      _client
+          .head(url, headers: headers as Map<String, String>)
+          .then(onSuccess, onError: onError);
     } else if (httpMethod == 'DELETE') {
-      _client.delete(url, headers: headers as Map<String, String>).then(onSuccess, onError: onError);
+      _client
+          .delete(url, headers: headers as Map<String, String>)
+          .then(onSuccess, onError: onError);
     } else if (httpMethod == 'COPY') {
       final encodedUrl = Uri.parse(url);
       final request = http.Request('COPY', encodedUrl);

@@ -30,7 +30,6 @@ void main() async {
   // the operations fail with 'not authorised'.
   wilting.login(userName, userPassword);
 
-
   /// Create an example database
   dynamic res = await wilting.createDatabase('wilt_example');
   if (!res.error) {
