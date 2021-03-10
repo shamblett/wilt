@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
-import 'wilt_test_config.dart';
 
 @TestOn('vm && browser')
 void main() {
@@ -17,6 +16,13 @@ void main() {
   var groupNum = 0;
 
   // Test client
+  final hostName = 'localhost';
+  final serverPort = 5984;
+  final useSSL = false;
+  final userName = 'admin';
+  final userPassword = 'password';
+  final databaseName = 'wilt_test';
+
   final wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
 
   // Create a test client for database creation/deletion testing
@@ -533,21 +539,6 @@ void main() {
       });
 
       wilting.createDatabase('wiltdeleteme').then(completer);
-    });
-
-    // Delete the test database now we know delete is OK before we
-    // start the tests.
-    test('${testNum++}. Delete Test Database', () {
-      final dynamic completer = expectAsync1((dynamic res) {
-        expect(res.method, Wilt.deleteDatabasee);
-        try {
-          expect(res.error, isFalse);
-        } on Exception {
-          logExceptionWithResponse('WILT::Create Database Failed', res);
-        }
-      });
-
-      wilting.deleteDatabase(databaseName).then(completer);
     });
 
     // Create the test database
@@ -1660,4 +1651,23 @@ void main() {
       });
     });
   }, skip: false);
+
+  // Clean up, run last
+  group('${groupNum++}. Deletion Tests - ', () {
+    var testNum = 0;
+    wilting.login(userName, userPassword);
+
+    test('${testNum++}. Delete Test Database', () {
+      final dynamic completer = expectAsync1((dynamic res) {
+        expect(res.method, Wilt.deleteDatabasee);
+        try {
+          expect(res.error, isFalse);
+        } on Exception {
+          logExceptionWithResponse('WILT::Delete Database Failed', res);
+        }
+      });
+
+      wilting.deleteDatabase(databaseName).then(completer);
+    });
+  });
 }
