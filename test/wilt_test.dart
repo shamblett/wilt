@@ -5,8 +5,6 @@
  * Copyright :  S.Hamblett
  */
 
-// @dart = 2.10
-
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
@@ -487,13 +485,13 @@ void main() {
     wilting.login(userName, userPassword);
 
     // Group setup
-    String docId;
-    String docRev;
+    String? docId;
+    String? docRev;
     const putId = 'mytestid';
     const putId2 = 'mytestid2';
     const putId3 = 'mytestid3';
     const copyId = 'mycopyid';
-    String returnedDocRev;
+    String? returnedDocRev;
 
     test('${testNum++}. Create Database not authorized', () {
       dbTestWilting.login('freddy', 'freddypass');
@@ -1272,7 +1270,7 @@ void main() {
     wilting.login(userName, userPassword);
 
     // Globals for the group
-    String testDocRev;
+    String? testDocRev;
     const pngImage =
         'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABlBMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDrEX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg==';
 

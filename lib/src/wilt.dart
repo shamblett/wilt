@@ -129,7 +129,7 @@ class Wilt {
   Future<dynamic> _httpRequest(String method, String url,
       {String? data, Map<String, String>? headers}) {
     // Build the request for the HttpAdapter
-    final wiltHeaders = <String, String?>{};
+    final wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
     if (headers != null) {
       wiltHeaders.addAll(headers);
@@ -855,7 +855,7 @@ class Wilt {
   /// Processes the HTTP request, returning the server's response
   /// as a future
   Future<dynamic> doHttpRequest(String method, String url,
-      [String? data, Map<String, String?> headers = const {}]) {
+      [String? data, Map<String, String> headers = const {}]) {
     //  Initialise
     final completer = Completer<dynamic>();
 
@@ -1028,36 +1028,31 @@ class Wilt {
 
     // Set the content type header correctly
     if (headers.containsKey('Content-Type')) {
-      final contentType = headers['Content-Type'];
+      var contentType = headers['Content-Type']!;
       headers.remove('Content-Type');
       headers['content-type'] = contentType;
     }
 
     // Query CouchDB over HTTP
+    final uri = Uri.parse(url);
     if (httpMethod == 'GET') {
-      _client
-          .get(url, headers: headers as Map<String, String>)
-          .then(onSuccess, onError: onError);
+      _client.get(uri, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == 'PUT') {
       _client
-          .put(url, headers: headers as Map<String, String>, body: data)
+          .put(uri, headers: headers, body: data)
           .then(onSuccess, onError: onError);
     } else if (httpMethod == 'POST') {
       _client
-          .post(url, headers: headers as Map<String, String>, body: data)
+          .post(uri, headers: headers, body: data)
           .then(onSuccess, onError: onError);
     } else if (httpMethod == 'HEAD') {
-      _client
-          .head(url, headers: headers as Map<String, String>)
-          .then(onSuccess, onError: onError);
+      _client.head(uri, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == 'DELETE') {
-      _client
-          .delete(url, headers: headers as Map<String, String>)
-          .then(onSuccess, onError: onError);
+      _client.delete(uri, headers: headers).then(onSuccess, onError: onError);
     } else if (httpMethod == 'COPY') {
       final encodedUrl = Uri.parse(url);
       final request = http.Request('COPY', encodedUrl);
-      request.headers.addAll(headers as Map<String, String>);
+      request.headers.addAll(headers);
       _client.send(request).then(onCopySuccess, onError: onError);
     }
 
@@ -1085,8 +1080,8 @@ class Wilt {
           break;
       }
     }
-
-    _client.get(url, headers: wiltHeaders).then((dynamic response) {
+    final uri = Uri.parse(url);
+    _client.get(uri, headers: wiltHeaders).then((dynamic response) {
       completer.complete(response.body);
     });
 
