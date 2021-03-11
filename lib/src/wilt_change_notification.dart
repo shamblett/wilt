@@ -51,7 +51,7 @@ class _WiltChangeNotification {
   final String? _host;
 
   /// Port number
-  final int _port;
+  final int? _port;
 
   /// HTTP scheme
   final bool? useSSL;
@@ -71,7 +71,7 @@ class _WiltChangeNotification {
   ///
   /// Populated with WiltChangeNotificationEvent events
   final StreamController<WiltChangeNotificationEvent> _changeNotification =
-      StreamController<WiltChangeNotificationEvent>.broadcast();
+  StreamController<WiltChangeNotificationEvent>.broadcast();
 
   StreamController<WiltChangeNotificationEvent> get changeNotification =>
       _changeNotification;
@@ -86,16 +86,22 @@ class _WiltChangeNotification {
     String path;
     if (_sequence != null) {
       path =
-         '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}'
-          '&filter=app_v1/by_types&type=${parameters!.type}';
+      '$dbName/_changes';
     } else {
       path =
-          '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
+      '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
     }
+    final parameter={'since': '$_sequence',
+      'descending' : '${parameters!.descending}',
+      'include_docs':'${parameters!.includeDocs}',
+      'attachments':'${parameters!.includeAttachments}',
+      'filter': "${parameters!.filter??''}",
+      'type':'${parameters!.type??''}'
+    };
 
-    final scheme = useSSL! ? 'https://' : 'http://';
-   // final url = '$scheme$_host:${_port.toString()}/$path';
-    final uri=Uri(scheme: scheme,host: _host,path: path);
+    final scheme = useSSL! ? 'https' : 'http';
+    // final url = '$scheme$_host:${_port.toString()}/$path';
+    final uri=Uri(scheme: scheme,host: _host,path: path,queryParameters: parameter,port: _port);
 
     // Open the request
     try {
@@ -108,7 +114,7 @@ class _WiltChangeNotification {
           // Recoverable error, send the client an error event
           print('WiltChangeNotification::MonitorChanges json decode fail $e');
           final notification =
-              WiltChangeNotificationEvent.decodeError(result, e.toString());
+          WiltChangeNotificationEvent.decodeError(result, e.toString());
 
           _changeNotification.add(notification);
         }

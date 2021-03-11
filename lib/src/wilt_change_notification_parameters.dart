@@ -27,22 +27,32 @@ class WiltChangeNotificationParameters {
   ///
   /// Period in milliseconds between notification requests to CouchDB
   /// Be sensible with this, 1 second between requests is a good minimum.
-  int heartbeat = 2000;
+  int heartbeat;
 
   /// Include documents
   ///
   /// Include the associated document with each result. If there are conflicts,
   /// only the winning revision is returned
-  bool includeDocs = false;
+  bool includeDocs;
 
   /// Include attachments
   ///
   /// Include any associated document attachments with each result.
   /// This will retrieve the body of the attachment in Base64 format
   /// as well as the stub data that is normally supplied.
-  bool includeAttachments = false;
+  bool includeAttachments;
 
   String? type;
 
-  WiltChangeNotificationParameters({ this.since,this.descending=false,this.heartbeat=10000,this.includeAttachments=false,this.includeDocs=false,this.type});
+  String? filter;
+
+  WiltChangeNotificationParameters(
+      {this.since,
+      this.descending = false,
+      this.heartbeat=2000,
+      this.includeAttachments = false,
+      this.includeDocs = false,
+      this.type,
+      this.filter,
+      });
 }

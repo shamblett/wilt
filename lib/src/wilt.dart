@@ -19,7 +19,7 @@ class Wilt {
   /// You can do this here but you must supply either a browser or
   /// server HTTP adapter
   /// to use.
-  Wilt(this.host, {this.port = 5984, this.useSSL = false});
+  Wilt(this.host, {this.port, this.useSSL = false});
 
   /// URL constant for CouchDB SESSION function
   static const String session = '/_session';
@@ -87,7 +87,7 @@ class Wilt {
   final host;
 
   /// Port number, defaults to 5984 (the couchdb default)
-  final int port;
+  final int? port;
 
   /// Use SSL when connecting to couchdb, defaults to false
   final bool useSSL;

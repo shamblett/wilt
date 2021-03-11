@@ -106,6 +106,9 @@ class WiltChangeNotificationEvent {
 
   String? _docId;
 
+  String? _timeStamp;
+   dynamic get timeStamp => _timeStamp;
+
   /// Document identifier
   ///
   /// Valid for update and delete
