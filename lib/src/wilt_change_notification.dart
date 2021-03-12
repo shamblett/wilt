@@ -96,7 +96,7 @@ class _WiltChangeNotification {
       'include_docs':'${parameters!.includeDocs}',
       'attachments':'${parameters!.includeAttachments}',
       'filter': "${parameters!.filter??''}",
-      'type':'${parameters!.type??''}'
+      'doc_ids':'${parameters!.doc_ids??''}'
     };
 
     final scheme = useSSL! ? 'https' : 'http';

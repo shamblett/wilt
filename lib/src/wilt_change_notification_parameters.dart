@@ -45,14 +45,18 @@ class WiltChangeNotificationParameters {
   String? type;
 
   String? filter;
+  String? doc_ids;
 
   WiltChangeNotificationParameters(
       {this.since,
-      this.descending = false,
-      this.heartbeat=2000,
-      this.includeAttachments = false,
-      this.includeDocs = false,
-      this.type,
-      this.filter,
-      });
+        this.descending = false,
+        this.heartbeat=2000,
+        this.includeAttachments = false,
+        this.includeDocs = false,
+        this.type,
+        this.filter,
+        String? doc_ids,
+      }){
+    this.doc_ids="[\"$doc_ids\"]";
+  }
 }
