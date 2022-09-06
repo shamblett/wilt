@@ -5,12 +5,27 @@
  * Copyright :  S.Hamblett
  */
 
-@TestOn('vm && browser')
+@TestOn('vm')
 
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
+
+void logMessage(String message) {
+  print(message);
+}
+
+void logExceptionWithResponse(String s, dynamic res) {
+  logExceptionWithResponse(s, res);
+  final dynamic errorResponse = res.jsonCouchResponse;
+  final errorText = errorResponse.error;
+  logMessage('WILT::Error is $errorText');
+  final reasonText = errorResponse.reason;
+  logMessage('WILT::Reason is $reasonText');
+  final int statusCode = res.errorCode;
+  logMessage('WILT::Status code is $statusCode');
+}
 
 void main() {
   // WiltServerClient constructor tests
@@ -28,21 +43,6 @@ void main() {
 
   // Create a test client for database creation/deletion testing
   final dbTestWilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
-
-  void logMessage(String message) {
-    print(message);
-  }
-
-  void logExceptionWithResponse(String s, dynamic res) {
-    logExceptionWithResponse(s, res);
-    final dynamic errorResponse = res.jsonCouchResponse;
-    final errorText = errorResponse.error;
-    logMessage('WILT::Error is $errorText');
-    final reasonText = errorResponse.reason;
-    logMessage('WILT::Reason is $reasonText');
-    final int statusCode = res.errorCode;
-    logMessage('WILT::Status code is $statusCode');
-  }
 
   group('${groupNum++}. Constructor Tests - ', () {
     var testNum = 0;
