@@ -5,12 +5,13 @@
  * Copyright :  S.Hamblett
  */
 
+@TestOn('vm && browser')
+
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
 
-@TestOn('vm && browser')
 void main() {
   // WiltServerClient constructor tests
   var groupNum = 0;
@@ -47,7 +48,7 @@ void main() {
     var testNum = 0;
     test('${testNum++}. No hostname', () {
       try {
-        final wilting = Wilt(null, port: serverPort, useSSL: useSSL);
+        final wilting = Wilt('', port: serverPort, useSSL: useSSL);
         wilting.toString();
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');

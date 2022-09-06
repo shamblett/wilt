@@ -1,3 +1,6 @@
+## 6.0.1 
+Issues 28 and 32
+
 ## 6.0.0
 Issue 27(NNBD)
 

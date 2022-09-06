@@ -84,7 +84,7 @@ class Wilt {
   String? changeNotificationDbName;
 
   /// Domain name or IP address of couchdb server
-  final host;
+  final String host;
 
   /// Port number, defaults to 5984 (the couchdb default)
   final int port;
