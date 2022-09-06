@@ -1566,7 +1566,7 @@ void main() {
           completer();
         }
       });
-    });
+    }, skip: true);
 
     test('${testNum++}. Start Change Notification With Docs and Attachments',
         () {
