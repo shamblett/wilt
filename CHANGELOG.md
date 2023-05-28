@@ -1,3 +1,6 @@
+## 7.0.0
+Issue 33 - Dart 3
+
 ## 6.0.1 
 Issues 28 and 32
 

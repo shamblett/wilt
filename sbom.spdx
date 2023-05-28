@@ -1,6 +1,6 @@
-SPDXVersion: SPDX-2.2DataLicense: CC0-1.0SPDXID: SPDXRef-DOCUMENTDocumentName: wiltDocumentNamespace: https://pub.dev/packages/wiltLicenseListVersion: 3.8Creator: Tool: https://pub.dev/packages/sbomCreated: 2022-09-06T13:50:12Z
+SPDXVersion: SPDX-2.2DataLicense: CC0-1.0SPDXID: SPDXRef-DOCUMENTDocumentName: wiltDocumentNamespace: https://pub.dev/packages/wiltLicenseListVersion: 3.8Creator: Tool: https://pub.dev/packages/sbomCreated: 2023-05-28T13:32:23Z
 
-PackageName: wiltSPDXID: SPDXRef-Package-wiltPackageVersion: 6.0.1PackageFileName: wiltPackageSupplier: NOASSERTIONPackageOriginator: NOASSERTIONPackageDownloadLocation: https://pub.dev/packages/wiltFilesAnalyzed: truePackageVerificationCode: cb9fcc0e8b28a16e233cd554e0e2be1e990e2a86PackageHomePage: https://pub.dev/packages/wiltPackageLicenseConcluded: NOASSERTIONPackageLicenseInfoFromFiles: NOASSERTIONPackageLicenseDeclared: NOASSERTIONPackageCopyrightText: NOASSERTIONPackageSummary: <text>A browser/server based CouchDB client library supporting attachments and change notification.</text>
+PackageName: wiltSPDXID: SPDXRef-Package-wiltPackageVersion: 7.0.0PackageFileName: wiltPackageSupplier: NOASSERTIONPackageOriginator: NOASSERTIONPackageDownloadLocation: https://pub.dev/packages/wiltFilesAnalyzed: truePackageVerificationCode: a0778d71b44384e2b91213a0523849fdf8149325PackageHomePage: https://pub.dev/packages/wiltPackageLicenseConcluded: NOASSERTIONPackageLicenseInfoFromFiles: NOASSERTIONPackageLicenseDeclared: NOASSERTIONPackageCopyrightText: NOASSERTIONPackageSummary: <text>A browser/server based CouchDB client library supporting attachments and change notification.</text>
 
 FileName: /lib/src/wilt.dartSPDXID: SPDXRef-wilt-0FileType: SOURCEFileChecksum: SHA1: cbe266e37be46a0e0ab4ec8c23c23bcf1c848b62LicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
@@ -16,7 +16,7 @@ FileName: /lib/src/wilt_user_utils.dartSPDXID: SPDXRef-wilt-user-utils-5FileTy
 
 FileName: /lib/wilt.dartSPDXID: SPDXRef-wilt-6FileType: SOURCEFileChecksum: SHA1: 519331b13447305649456e3cbc499e2f75bc28eaLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
-FileName: /pubspec.yamlSPDXID: SPDXRef-pubspec-7FileType: TEXTFileChecksum: SHA1: 9a59505a82f516cbeb5bf6724fb3fad20362699bLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+FileName: /pubspec.yamlSPDXID: SPDXRef-pubspec-7FileType: TEXTFileChecksum: SHA1: fa79b252a9361d285601c0531e7af58ac8909b4aLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
 Relationship: SPDXRef-pubspec-7 DEPENDENCY_MANIFEST_OF SPDXRef-Package-wilt
 
