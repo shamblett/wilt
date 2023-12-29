@@ -7,7 +7,7 @@
  * 
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// The change notification event.
 ///

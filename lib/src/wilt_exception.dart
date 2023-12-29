@@ -8,7 +8,7 @@
  * parameter being passed to a function.
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// Exceptions
 class WiltException implements Exception {
