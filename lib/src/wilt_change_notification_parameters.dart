@@ -6,7 +6,7 @@
  * 
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// Change notification parameters class,  defaults taken from the CouchDB
 /// API documents.

@@ -7,7 +7,7 @@
  * This class provides Wilt user utility functions 
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// User utilities
 class WiltUserUtils {

@@ -7,7 +7,7 @@
  * 
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// The Wilt client.
 /// * The Wilt class provides core functionality for interacting with

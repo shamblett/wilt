@@ -8,7 +8,7 @@
  * 
  */
 
-part of wilt;
+part of '../wilt.dart';
 
 /// This class initiates change notification processing with either
 /// a default set of change notification parameters or one supplied by
