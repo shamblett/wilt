@@ -911,8 +911,9 @@ class Wilt {
 
         // Success response
         if (method != Wilt.headd) {
-          final successAsJson =
+          final dynamic successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
+          successAsJson.ok = true;
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
