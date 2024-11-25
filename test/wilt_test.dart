@@ -6,6 +6,8 @@
  */
 
 @TestOn('vm')
+library;
+
 
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
