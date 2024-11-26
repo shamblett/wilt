@@ -8,12 +8,29 @@
 @TestOn('browser')
 library;
 
-
 import 'dart:convert';
 import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
 
+///
+/// These browser tests should be run manually with the following command -
+///
+/// dart test test/manual/wilt_test.dart -p chrome
+///
+/// The following settings are needed in your couchdb instance to enable CORS -
+///
+/// cors
+///
+/// credentials: true
+/// headers: accept, authorization, content-type, origin, referer, cache-control, x-requested-with
+/// methods: GET,PUT,POST,HEAD,DELETE,COPY
+/// origins: *
+///
+/// httpd
+///
+/// enable_cors = true
+///
 void logMessage(String message) {
   print(message);
 }
@@ -39,7 +56,7 @@ void main() {
   final useSSL = false;
   final userName = 'admin';
   final userPassword = 'password';
-  final databaseName = 'wilt_test';
+  final databaseName = 'wilt_browser_test';
 
   final wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
 
@@ -558,7 +575,7 @@ void main() {
         expect(successResponse.ok, isTrue);
       });
 
-      wilting.createDatabase(databaseName).then(completer);
+      wilting.createDatabase(databaseName).then(completer); //SJH
     });
 
     test('HEAD null URL', () {

@@ -39,7 +39,7 @@ void main() {
   final useSSL = false;
   final userName = 'admin';
   final userPassword = 'password';
-  final databaseName = 'wilt_test';
+  final databaseName = 'wilt_server_test';
 
   final wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
 
