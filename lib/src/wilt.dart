@@ -872,6 +872,7 @@ class Wilt {
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
       jsonResponse.responseText = response.body;
+      jsonResponse.jsonCouchResponse = null;
 
       // Check the header, if application/json try and decode it,
       // otherwise its just raw data, ie an attachment.
@@ -913,11 +914,13 @@ class Wilt {
         if (method != Wilt.headd) {
           final dynamic successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
+          successAsJson.isImmutable = false;
           successAsJson.ok = true;
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
         final dynamic successAsJson = jsonobject.JsonObjectLite<dynamic>();
+        successAsJson.isImmutable = false;
         successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;

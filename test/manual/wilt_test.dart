@@ -571,8 +571,9 @@ void main() {
           logExceptionWithResponse('WILT::Create Test Database Failed', res);
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
+        final successResponse = jsonobject.JsonObjectLite();
+        jsonobject.JsonObjectLite.toTypedJsonObjectLite(res.jsonCouchResponse, successResponse);
+        expect((successResponse as dynamic).ok, isTrue);
       });
 
       wilting.createDatabase(databaseName).then(completer); //SJH
