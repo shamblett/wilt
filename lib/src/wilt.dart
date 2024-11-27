@@ -341,7 +341,7 @@ class Wilt {
     if (preserve) {
       getDocument(id).then((dynamic res) {
         if (res != null) {
-          dynamic resp = res.jsonCouchResponse;
+          dynamic resp = WiltUserUtils.getJsonResponse(res);
           resp = WiltUserUtils.addDocumentDeleteJo(resp);
           putDocument(id, resp).then(completer.complete);
         } else {
@@ -914,14 +914,10 @@ class Wilt {
         if (method != Wilt.headd) {
           final dynamic successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
-          successAsJson.isImmutable = false;
-          successAsJson.ok = true;
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
         final dynamic successAsJson = jsonobject.JsonObjectLite<dynamic>();
-        successAsJson.isImmutable = false;
-        successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
       }
