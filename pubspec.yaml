@@ -1,5 +1,5 @@
 name: wilt
-version: 7.0.1
+version: 7.1.0
 description: A browser/server based CouchDB client library supporting attachments and change notification.
 homepage: https://github.com/shamblett/wilt
 
