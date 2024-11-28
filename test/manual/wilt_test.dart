@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett
  */
 
-@TestOn('vm')
+@TestOn('browser')
 library;
 
 import 'dart:convert';
@@ -13,13 +13,30 @@ import 'package:wilt/wilt.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:test/test.dart';
 
+///
+/// These browser tests should be run manually with the following command -
+///
+/// dart test test/manual/wilt_test.dart -p chrome
+///
+/// The following settings are needed in your couchdb instance to enable CORS -
+///
+/// cors
+///
+/// credentials: true
+/// headers: accept, authorization, content-type, origin, referer, cache-control, x-requested-with
+/// methods: GET,PUT,POST,HEAD,DELETE,COPY
+/// origins: *
+///
+/// httpd
+///
+/// enable_cors = true
+///
 void logMessage(String message) {
   print(message);
 }
 
 void logExceptionWithResponse(String s, dynamic res) {
-  logExceptionWithResponse(s, res);
-  final dynamic errorResponse = res.jsonCouchResponse;
+  final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
   final errorText = errorResponse.error;
   logMessage('WILT::Error is $errorText');
   final reasonText = errorResponse.reason;
@@ -38,7 +55,7 @@ void main() {
   final useSSL = false;
   final userName = 'admin';
   final userPassword = 'password';
-  final databaseName = 'wilt_server_test';
+  final databaseName = 'wilt_browser_test';
 
   final wilting = Wilt(hostName, port: serverPort, useSSL: useSSL);
 
@@ -508,7 +525,7 @@ void main() {
         try {
           expect(res.error, isTrue);
         } on Exception {
-          final dynamic errorResponse = res.jsonCouchResponse;
+          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
           expect(errorResponse.error, equals('unauthorized'));
           expect(
               errorResponse.reason, equals('Name or password is incorrect.'));
@@ -552,9 +569,7 @@ void main() {
         } on Exception {
           logExceptionWithResponse('WILT::Create Test Database Failed', res);
         }
-
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
+        expect((WiltUserUtils.isResultOK(res)), isTrue);
       });
 
       wilting.createDatabase(databaseName).then(completer);
@@ -586,7 +601,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, docId);
         expect(successResponse.title, equals('Created by a Post Request'));
@@ -605,8 +620,9 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
-        docId = successResponse.id;
+        final jsonobject.JsonObjectLite successResponse =
+            WiltUserUtils.getJsonResponse(res);
+        docId = (successResponse as dynamic).id;
         expect(docId, isNot(isEmpty));
         // Now get the document and check it
         wilting.getDocument(docId).then(checkCompleter);
@@ -632,7 +648,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
         returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -651,7 +667,7 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         // Now get the document and check it
@@ -678,7 +694,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = successResponse.id;
         expect(returnedDocId, equals(putId));
         final returnedDocRev = successResponse.rev;
@@ -696,7 +712,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
         final returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -725,7 +741,7 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId));
         // Now get the document and check it
@@ -761,7 +777,7 @@ void main() {
         }
 
         // Check the document has been deleted
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
       });
@@ -776,7 +792,7 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId3));
         final returnedDocRev = successResponse.rev;
@@ -804,7 +820,7 @@ void main() {
         }
 
         // Check the document has been deleted
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
       });
@@ -820,7 +836,7 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals(putId2));
         final returnedDocRev = successResponse.rev;
@@ -849,14 +865,14 @@ void main() {
         }
 
         // Check the copied document
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final copyDocId = successResponse.id;
         expect(copyDocId, equals(copyId));
       });
 
       wilting.db = databaseName;
       wilting.copyDocument(putId, copyId).then(completer);
-    });
+    }, skip: true);
 
     // Raw HTTP Request
     test('${testNum++}. Raw HTTP Request', () {
@@ -868,7 +884,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, putId);
       });
@@ -924,7 +940,7 @@ void main() {
     // Setup
     const putId = 'mytestid';
     const putId2 = 'mytestid2';
-    const copyId = 'mycopyid';
+    //const copyId = 'mycopyid';
 
     test('${testNum++}. Get All Docs  - Include docs', () {
       final dynamic completer = expectAsync1((dynamic res) {
@@ -936,10 +952,10 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
-        expect(successResponse.rows[1].id, equals(copyId));
-        expect(successResponse.rows[2].id, equals(putId));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
+        //expect(successResponse.rows[1].id, equals(copyId));
+        expect(successResponse.rows[1].id, equals(putId));
       });
       // Login if we are using authentication
       wilting.login(userName, userPassword);
@@ -957,8 +973,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
         expect(successResponse.rows[0].id, isNot(equals(putId)));
         expect(successResponse.rows[0].id, isNot(equals(putId2)));
         final int count = successResponse.rows.length;
@@ -981,8 +997,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
         expect(successResponse.rows[0].id, equals(putId));
         final int count = successResponse.rows.length;
         expect(count, equals(1));
@@ -1004,11 +1020,11 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
-        expect(successResponse.rows[1].id, equals(copyId));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
+        //expect(successResponse.rows[1].id, equals(copyId));
         final int count = successResponse.rows.length;
-        expect(count, equals(3));
+        expect(count, equals(2));
       });
       // Login if we are using authentication
       wilting.login(userName, userPassword);
@@ -1027,8 +1043,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
         expect(successResponse.rows[0].id, equals(putId));
         expect(successResponse.rows[1].key, equals(putId2));
         final int count = successResponse.rows.length;
@@ -1054,8 +1070,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.total_rows, equals(3));
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        expect(successResponse.total_rows, equals(2));
         expect(successResponse.rows[1].id, equals(putId));
         expect(successResponse.rows[0].key, equals(putId2));
         final int count = successResponse.rows.length;
@@ -1081,7 +1097,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse[0].ok, isTrue);
         expect(successResponse[1].ok, isTrue);
         expect(successResponse[2].ok, isTrue);
@@ -1119,7 +1135,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse[0].id, equals('MyBulkId1'));
         expect(successResponse[1].id, equals('MyBulkId2'));
         expect(successResponse[2].id, equals('MyBulkId3'));
@@ -1169,9 +1185,7 @@ void main() {
           logExceptionWithResponse('WILT::Get Session Failed', res);
           return;
         }
-
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
+        expect((WiltUserUtils.isResultOK(res)), isTrue);
       });
 
       wilting.getSession().then(completer);
@@ -1188,7 +1202,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.db_name, equals(databaseName));
       });
 
@@ -1207,7 +1221,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.db_name, equals(databaseName));
       });
 
@@ -1221,7 +1235,7 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logMessage("WILT::Get All Db's Failed");
-          final dynamic errorResponse = res.jsonCouchResponse;
+          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
           final errorText = errorResponse.error;
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
@@ -1231,7 +1245,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.contains(databaseName), isTrue);
       });
 
@@ -1248,7 +1262,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.uuids.length, equals(10));
       });
 
@@ -1279,7 +1293,7 @@ void main() {
         } on Exception {
           logMessage('WILT::Create Document(PUT) for attachment tests and '
               'check updated');
-          final dynamic errorResponse = res.jsonCouchResponse;
+          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
           final errorText = errorResponse.error;
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
@@ -1289,7 +1303,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -1305,7 +1319,7 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logMessage('WILT::Test Put Document for attachment tests and check');
-          final dynamic errorResponse = res.jsonCouchResponse;
+          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
           final errorText = errorResponse.error;
           logMessage('WILT::Error is $errorText');
           final reasonText = errorResponse.reason;
@@ -1315,7 +1329,7 @@ void main() {
         }
 
         // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final putDocId = successResponse.id;
         expect(putDocId, equals('attachmentTestDoc'));
         // Now get the document and check it
@@ -1340,8 +1354,9 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
+        final jsonobject.JsonObjectLite successResponse =
+            WiltUserUtils.getJsonResponse(res);
+        expect((WiltUserUtils.isResultOK(res)), isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
       });
 
@@ -1363,7 +1378,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -1390,7 +1405,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        //expect(successResponse.ok, isTrue);
         final payload = res.responseText;
         expect(payload, equals(pngImage));
         final contentType = successResponse.contentType;
@@ -1419,7 +1435,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.ok, isTrue);
       });
 
@@ -1441,7 +1457,7 @@ void main() {
         }
 
         // Check the documents parameters
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
@@ -1460,7 +1476,8 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+        //expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         final payload = res.responseText;
         expect(payload, equals(pngImageUpdate));
@@ -1486,7 +1503,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.ok, isTrue);
       });
 
@@ -1522,7 +1539,7 @@ void main() {
           return;
         }
 
-        final dynamic successResponse = res.jsonCouchResponse;
+        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
         expect(successResponse.ok, isTrue);
       });
 

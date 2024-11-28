@@ -5,7 +5,7 @@
  * Copyright :  S.Hamblett@OSCF
  */
 
-library wilt;
+library;
 
 import 'dart:async';
 import 'dart:convert';

@@ -13,7 +13,6 @@ part of '../wilt.dart';
 class WiltUserUtils {
   /// Get a document id from a json Object
   static String? getDocumentId(jsonobject.JsonObjectLite<dynamic> response) {
-    response.isImmutable = false;
     return response['_id'];
   }
 
@@ -158,7 +157,28 @@ class WiltUserUtils {
     return json.encode(map);
   }
 
-  /// Get a sequence number forom a change notification update, caters
+  /// Get a sequence number from a change notification update, caters
   /// for string based or numerical sequence numbers
   static dynamic getCnSequenceNumber(dynamic seq) => seq;
+
+  /// Get the JSON success response from an API operation result.
+  static jsonobject.JsonObjectLite getJsonResponse(
+      jsonobject.JsonObjectLite result) {
+    final jsonobject.JsonObjectLite response = jsonobject.JsonObjectLite();
+    jsonobject.JsonObjectLite.toTypedJsonObjectLite(
+        (result as dynamic).jsonCouchResponse, response);
+    return response;
+  }
+
+  /// Quick check if a returned JSON Couch response is Ok.
+  /// Pass a result from an API operation.
+  /// True if OK, false if anything else.
+  static bool isResultOK(jsonobject.JsonObjectLite result) {
+    try {
+      final dynamic successResponse = getJsonResponse(result);
+      return successResponse.ok;
+    } catch (e) {
+      return false;
+    }
+  }
 }

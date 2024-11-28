@@ -341,7 +341,7 @@ class Wilt {
     if (preserve) {
       getDocument(id).then((dynamic res) {
         if (res != null) {
-          dynamic resp = res.jsonCouchResponse;
+          dynamic resp = WiltUserUtils.getJsonResponse(res);
           resp = WiltUserUtils.addDocumentDeleteJo(resp);
           putDocument(id, resp).then(completer.complete);
         } else {
@@ -872,6 +872,7 @@ class Wilt {
       jsonResponse.allResponseHeader = null;
       jsonResponse.method = method;
       jsonResponse.responseText = response.body;
+      jsonResponse.jsonCouchResponse = null;
 
       // Check the header, if application/json try and decode it,
       // otherwise its just raw data, ie an attachment.
@@ -911,13 +912,12 @@ class Wilt {
 
         // Success response
         if (method != Wilt.headd) {
-          final successAsJson =
+          final dynamic successAsJson =
               jsonobject.JsonObjectLite<dynamic>.fromJsonString(response.body);
           jsonResponse.jsonCouchResponse = successAsJson;
         }
       } else {
         final dynamic successAsJson = jsonobject.JsonObjectLite<dynamic>();
-        successAsJson.ok = true;
         successAsJson.contentType = response.headers['content-type'];
         jsonResponse.jsonCouchResponse = successAsJson;
       }
