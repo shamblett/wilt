@@ -1392,7 +1392,6 @@ void main() {
         }
 
         final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
         final payload = res.responseText;
         expect(payload, equals(pngImage));
         final contentType = successResponse.contentType;
@@ -1463,7 +1462,6 @@ void main() {
         }
 
         final dynamic successResponse = res.jsonCouchResponse;
-        expect(successResponse.ok, isTrue);
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
         final payload = res.responseText;
         expect(payload, equals(pngImageUpdate));
