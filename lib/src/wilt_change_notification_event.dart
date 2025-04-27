@@ -19,20 +19,28 @@ part of '../wilt.dart';
 class WiltChangeNotificationEvent {
   /// Update event
   WiltChangeNotificationEvent.update(
-      this._docId, this._docRevision, this._sequenceNumber,
-      [this._document]) {
+    this._docId,
+    this._docRevision,
+    this._sequenceNumber, [
+    this._document,
+  ]) {
     _type = updatee;
   }
 
   /// Delete event
   WiltChangeNotificationEvent.delete(
-      this._docId, this._docRevision, this._sequenceNumber) {
+    this._docId,
+    this._docRevision,
+    this._sequenceNumber,
+  ) {
     _type = deletee;
   }
 
   /// Decode error event
   WiltChangeNotificationEvent.decodeError(
-      this._httpResponseText, this._exception) {
+    this._httpResponseText,
+    this._exception,
+  ) {
     _type = decodeErrorr;
   }
 
@@ -43,7 +51,9 @@ class WiltChangeNotificationEvent {
 
   /// CouchDB error event
   WiltChangeNotificationEvent.couchDbError(
-      this._couchError, this._couchReason) {
+    this._couchError,
+    this._couchReason,
+  ) {
     _type = couchdbError;
   }
 

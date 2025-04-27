@@ -27,8 +27,14 @@ part of '../wilt.dart';
 /// with CouchDb to allow notificatons to work, if you do not supply
 /// auth credentials before starting notifications an exception is raised.
 class _WiltChangeNotification {
-  _WiltChangeNotification(this._host, this._port, this._wilt,
-      {this.useSSL, this.dbName, this.parameters}) {
+  _WiltChangeNotification(
+    this._host,
+    this._port,
+    this._wilt, {
+    this.useSSL,
+    this.dbName,
+    this.parameters,
+  }) {
     parameters ??= WiltChangeNotificationParameters();
 
     _sequence = parameters!.since;
@@ -105,16 +111,20 @@ class _WiltChangeNotification {
         } on Exception catch (e) {
           // Recoverable error, send the client an error event
           print('WiltChangeNotification::MonitorChanges json decode fail $e');
-          final notification =
-              WiltChangeNotificationEvent.decodeError(result, e.toString());
+          final notification = WiltChangeNotificationEvent.decodeError(
+            result,
+            e.toString(),
+          );
 
           _changeNotification.add(notification);
         }
       });
     } on Exception catch (e) {
       // Unrecoverable error, send the client an abort event
-      print('WiltChangeNotification::MonitorChanges unable to contact '
-          'CouchDB Error is $e');
+      print(
+        'WiltChangeNotification::MonitorChanges unable to contact '
+        'CouchDB Error is $e',
+      );
       final notification = WiltChangeNotificationEvent.abort(e.toString());
 
       _changeNotification.add(notification);
@@ -126,7 +136,9 @@ class _WiltChangeNotification {
     // Check for an error response
     if (change.containsKey('error')) {
       final notification = WiltChangeNotificationEvent.couchDbError(
-          change['error'], change['reason']);
+        change['error'],
+        change['reason'],
+      );
 
       _changeNotification.add(notification);
 
@@ -151,21 +163,26 @@ class _WiltChangeNotification {
 
       // Check for delete or update
       if (result.containsKey('deleted')) {
-        final notification = WiltChangeNotificationEvent.delete(result['id'],
-            changes!['rev'], WiltUserUtils.getCnSequenceNumber(result['seq']));
+        final notification = WiltChangeNotificationEvent.delete(
+          result['id'],
+          changes!['rev'],
+          WiltUserUtils.getCnSequenceNumber(result['seq']),
+        );
 
         _changeNotification.add(notification);
       } else {
         dynamic document;
         if (result.containsKey('doc')) {
           document = jsonobject.JsonObjectLite<dynamic>.fromJsonString(
-              WiltUserUtils.mapToJson(result['doc'])!);
+            WiltUserUtils.mapToJson(result['doc'])!,
+          );
         }
         final notification = WiltChangeNotificationEvent.update(
-            result['id'],
-            changes!['rev'],
-            WiltUserUtils.getCnSequenceNumber(result['seq']),
-            document);
+          result['id'],
+          changes!['rev'],
+          WiltUserUtils.getCnSequenceNumber(result['seq']),
+          document,
+        );
 
         _changeNotification.add(notification);
       }

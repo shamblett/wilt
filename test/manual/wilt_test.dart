@@ -71,7 +71,9 @@ void main() {
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.badConstParams);
+          e.toString(),
+          WiltException.header + WiltException.badConstParams,
+        );
       }
     });
   }, skip: false);
@@ -82,8 +84,10 @@ void main() {
     test('${testNum++}. No Database Set HEAD', () {
       final dynamic completer = expectAsync1((WiltException e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.noDatabaseSpecified);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.noDatabaseSpecified,
+        );
       });
       wilting.head(null).then((dynamic res) {
         // nothing to do
@@ -93,8 +97,10 @@ void main() {
     test('${testNum++}. No Database Set GET', () {
       final dynamic completer = expectAsync1((WiltException e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.noDatabaseSpecified);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.noDatabaseSpecified,
+        );
       });
       wilting.get(null).then((dynamic res) {
         // nothing to do
@@ -104,8 +110,10 @@ void main() {
     test('${testNum++}. No Database Set POST', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.noDatabaseSpecified);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.noDatabaseSpecified,
+        );
       });
       wilting.post(null, '1').then((dynamic res) {
         // nothing to do
@@ -115,8 +123,10 @@ void main() {
     test('${testNum++}. No Database Set PUT', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.noDatabaseSpecified);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.noDatabaseSpecified,
+        );
       });
       wilting.put(null, '1').then((dynamic res) {
         // nothing to do
@@ -126,8 +136,10 @@ void main() {
     test('${testNum++}. No Database Set DELETE', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.noDatabaseSpecified);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.noDatabaseSpecified,
+        );
       });
       wilting.delete(null).then((dynamic res) {
         // nothing to do
@@ -152,7 +164,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.getDocRevNoId);
+          e.toString(),
+          WiltException.header + WiltException.getDocRevNoId,
+        );
       });
       wilting.getDocumentRevision(null).then((dynamic res) {
         // nothing to do
@@ -162,8 +176,10 @@ void main() {
     test('${testNum++}. Delete Document no id', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteDocNoIdRev);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.deleteDocNoIdRev,
+        );
       });
       wilting.deleteDocument(null, null).then((dynamic res) {
         // nothing to do
@@ -173,8 +189,10 @@ void main() {
     test('${testNum++}. Delete Document no rev', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteDocNoIdRev);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.deleteDocNoIdRev,
+        );
       });
       wilting.deleteDocument('1', null).then((dynamic res) {
         // nothing to do
@@ -185,7 +203,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.putDocNoIdBody);
+          e.toString(),
+          WiltException.header + WiltException.putDocNoIdBody,
+        );
       });
       dynamic doc;
       wilting.putDocument(null, doc).then((dynamic res) {
@@ -197,7 +217,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.putDocNoIdBody);
+          e.toString(),
+          WiltException.header + WiltException.putDocNoIdBody,
+        );
       });
       wilting.putDocument('1', null).then((dynamic res) {
         // nothing to do
@@ -208,7 +230,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.postDocNoBody);
+          e.toString(),
+          WiltException.header + WiltException.postDocNoBody,
+        );
       });
       wilting.postDocument(null).then((dynamic res) {
         // nothing to do
@@ -218,8 +242,10 @@ void main() {
     test('${testNum++}. Post Document String no document string', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.postDocStringNoBody);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.postDocStringNoBody,
+        );
       });
       wilting.postDocumentString(null).then((dynamic res) {
         // nothing to do
@@ -230,7 +256,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.createDbNoName);
+          e.toString(),
+          WiltException.header + WiltException.createDbNoName,
+        );
       });
       wilting.createDatabase(null).then((dynamic res) {
         // nothing to do
@@ -241,7 +269,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.deleteDbNoName);
+          e.toString(),
+          WiltException.header + WiltException.deleteDbNoName,
+        );
       });
       wilting.deleteDatabase(null).then((dynamic res) {
         // nothing to do
@@ -252,7 +282,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.getAllDocsLimit);
+          e.toString(),
+          WiltException.header + WiltException.getAllDocsLimit,
+        );
       });
       wilting.getAllDocs(limit: -1).then((dynamic res) {
         // nothing to do
@@ -273,7 +305,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.copyDocNoSrcId);
+          e.toString(),
+          WiltException.header + WiltException.copyDocNoSrcId,
+        );
       });
       wilting.copyDocument(null, '1').then((dynamic res) {
         // nothing to do
@@ -284,7 +318,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.copyDocNoDestId);
+          e.toString(),
+          WiltException.header + WiltException.copyDocNoDestId,
+        );
       });
       wilting.copyDocument('1', null).then((dynamic res) {
         // nothing to do
@@ -296,8 +332,10 @@ void main() {
         wilting.login(null, 'password');
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.loginWrongParams);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.loginWrongParams,
+        );
       }
     });
 
@@ -306,20 +344,25 @@ void main() {
         wilting.login('name', null);
       } on Exception catch (e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.loginWrongParams);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.loginWrongParams,
+        );
       }
     });
 
     test('${testNum++}. Create Attachment no Doc Id', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createAttNoDocId);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.createAttNoDocId,
+        );
       });
       const payload = 'Hello';
-      wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then(
-          (dynamic res) {
+      wilting.createAttachment(null, 'name', 'rev', 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -328,11 +371,14 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.createAttNoName);
+          e.toString(),
+          WiltException.header + WiltException.createAttNoName,
+        );
       });
       const payload = 'Hello';
-      wilting.createAttachment('id', null, 'rev', 'image/png', payload).then(
-          (dynamic res) {
+      wilting.createAttachment('id', null, 'rev', 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -341,11 +387,14 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.createAttNoRev);
+          e.toString(),
+          WiltException.header + WiltException.createAttNoRev,
+        );
       });
       const payload = 'Hello';
-      wilting.createAttachment('id', 'name', null, 'image/png', payload).then(
-          (dynamic res) {
+      wilting.createAttachment('id', 'name', null, 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -353,12 +402,15 @@ void main() {
     test('${testNum++}. Create Attachment no Content Type', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createAttNoContentType);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.createAttNoContentType,
+        );
       });
       const payload = 'Hello';
-      wilting.createAttachment('id', 'name', 'rev', null, payload).then(
-          (dynamic res) {
+      wilting.createAttachment('id', 'name', 'rev', null, payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -366,11 +418,14 @@ void main() {
     test('${testNum++}. Create Attachment no Payload', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.createAttNoPayload);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.createAttNoPayload,
+        );
       });
-      wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then(
-          (dynamic res) {
+      wilting.createAttachment('id', 'name', 'rev', 'image/png', null).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -378,12 +433,15 @@ void main() {
     test('${testNum++}. Update Attachment no Doc Id', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.updateAttNoDocId);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.updateAttNoDocId,
+        );
       });
       const payload = 'Hello';
-      wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then(
-          (dynamic res) {
+      wilting.updateAttachment(null, 'name', 'rev', 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -392,11 +450,14 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.updateAttNoName);
+          e.toString(),
+          WiltException.header + WiltException.updateAttNoName,
+        );
       });
       const payload = 'Hello';
-      wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then(
-          (dynamic res) {
+      wilting.updateAttachment('id', null, 'rev', 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -405,11 +466,14 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.updateAttNoRev);
+          e.toString(),
+          WiltException.header + WiltException.updateAttNoRev,
+        );
       });
       const payload = 'Hello';
-      wilting.updateAttachment('id', 'name', null, 'image/png', payload).then(
-          (dynamic res) {
+      wilting.updateAttachment('id', 'name', null, 'image/png', payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -417,12 +481,15 @@ void main() {
     test('${testNum++}. Update Attachment no Content Type', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.updateAttNoContentType);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.updateAttNoContentType,
+        );
       });
       const payload = 'Hello';
-      wilting.updateAttachment('id', 'name', 'rev', null, payload).then(
-          (dynamic res) {
+      wilting.updateAttachment('id', 'name', 'rev', null, payload).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -430,11 +497,14 @@ void main() {
     test('${testNum++}. Update Attachment no Payload', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.updateAttNoPayload);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.updateAttNoPayload,
+        );
       });
-      wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then(
-          (dynamic res) {
+      wilting.updateAttachment('id', 'name', 'rev', 'image/png', null).then((
+        dynamic res,
+      ) {
         // nothing to do
       }, onError: completer);
     });
@@ -442,8 +512,10 @@ void main() {
     test('${testNum++}. Delete Attachment no Doc Id', () {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
-        expect(e.toString(),
-            WiltException.header + WiltException.deleteAttNoDocId);
+        expect(
+          e.toString(),
+          WiltException.header + WiltException.deleteAttNoDocId,
+        );
       });
       wilting.deleteAttachment(null, 'name', 'rev').then((dynamic res) {
         // nothing to do
@@ -454,7 +526,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.deleteAttNoName);
+          e.toString(),
+          WiltException.header + WiltException.deleteAttNoName,
+        );
       });
       wilting.deleteAttachment('id', null, 'rev').then((dynamic res) {
         // nothing to do
@@ -465,7 +539,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.deleteAttNoRev);
+          e.toString(),
+          WiltException.header + WiltException.deleteAttNoRev,
+        );
       });
       wilting.deleteAttachment('id', 'name', null).then((dynamic res) {
         // nothing to do
@@ -476,7 +552,9 @@ void main() {
       final dynamic completer = expectAsync1((dynamic e) {
         expect(e.runtimeType.toString(), 'WiltException');
         expect(
-            e.toString(), WiltException.header + WiltException.getAttNoDocId);
+          e.toString(),
+          WiltException.header + WiltException.getAttNoDocId,
+        );
       });
       wilting.getAttachment(null, 'name').then((dynamic res) {
         // nothing to do
@@ -528,7 +606,9 @@ void main() {
           final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
           expect(errorResponse.error, equals('unauthorized'));
           expect(
-              errorResponse.reason, equals('Name or password is incorrect.'));
+            errorResponse.reason,
+            equals('Name or password is incorrect.'),
+          );
           expect(res.errorCode, equals(401));
         }
       });
@@ -596,7 +676,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Create Document(POST) and check creation', res);
+            'WILT::Create Document(POST) and check creation',
+            res,
+          );
           return;
         }
 
@@ -615,7 +697,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Create Document(POST) and check', res);
+            'WILT::Create Document(POST) and check',
+            res,
+          );
           return;
         }
 
@@ -643,7 +727,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Create Document(PUT) and check updated', res);
+            'WILT::Create Document(PUT) and check updated',
+            res,
+          );
           return;
         }
 
@@ -689,7 +775,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Update document and check updated', res);
+            'WILT::Update document and check updated',
+            res,
+          );
           return;
         }
 
@@ -707,7 +795,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Update document and check created', res);
+            'WILT::Update document and check created',
+            res,
+          );
           return;
         }
 
@@ -717,8 +807,10 @@ void main() {
         expect(returnedDocId, putId);
         final returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
         docRev = returnedDocRev;
-        expect(successResponse.title,
-            equals('Created by a Put Request for checking'));
+        expect(
+          successResponse.title,
+          equals('Created by a Put Request for checking'),
+        );
         expect(successResponse.version, equals(3));
         expect(successResponse.author, equals('Me also'));
         // Now alter the document using putDocument
@@ -726,8 +818,10 @@ void main() {
         document.title = 'Created by a Put Request for updating ';
         document.version = 4;
         document.author = 'Me also and again';
-        final docString =
-            WiltUserUtils.addDocumentRev(document, returnedDocRev);
+        final docString = WiltUserUtils.addDocumentRev(
+          document,
+          returnedDocRev,
+        );
         wilting.putDocumentString(putId, docString).then(checkUpdater);
       });
 
@@ -772,7 +866,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Delete document and check deletion', res);
+            'WILT::Delete document and check deletion',
+            res,
+          );
           return;
         }
 
@@ -815,7 +911,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Delete document preserve and check deletion', res);
+            'WILT::Delete document preserve and check deletion',
+            res,
+          );
           return;
         }
 
@@ -831,7 +929,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Delete document preserve and check', res);
+            'WILT::Delete document preserve and check',
+            res,
+          );
           return;
         }
 
@@ -928,10 +1028,11 @@ void main() {
       final bulk = WiltUserUtils.createBulkInsertStringJo(jList);
       expect(bulk, isNotNull);
       expect(
-          bulk,
-          '{"docs":[{"name":"Steve","tag":"MyTag","_id":"myId",'
-          '"_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543",'
-          '"_id":"myId","_rev":"1-765frd"}]}');
+        bulk,
+        '{"docs":[{"name":"Steve","tag":"MyTag","_id":"myId",'
+        '"_rev":"1-765frd"},{"name":"newName","tag":"2-uy6543",'
+        '"_id":"myId","_rev":"1-765frd"}]}',
+      );
     });
 
     // Login if we are using authentication
@@ -1198,7 +1299,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Get Database Information - default', res);
+            'WILT::Get Database Information - default',
+            res,
+          );
           return;
         }
 
@@ -1217,7 +1320,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Get Database Information - specified', res);
+            'WILT::Get Database Information - specified',
+            res,
+          );
           return;
         }
 
@@ -1284,65 +1389,73 @@ void main() {
     const pngImageUpdate =
         'iVBORw0KGgoAAAANSUhEUgAAABwAAAASCAMAAAB/2U7WAAAABlBMVEUAAAD///+l2Z/dAAAASUlEQVR4XqWQUQoAIAxC2/0vXZDrEX4IJTRkb7lobNUStXsB0jIXIAMSsQnWlsV+wULF4Avk9fLq2r8a5HSE35Q3eO2XP1A1wQkZSgETvDtKdQAAAABJRU5ErkJggg!!';
 
-    test('${testNum++}. Create document(PUT) for attachment tests and check',
-        () {
-      final dynamic checkCompleter = expectAsync1((dynamic res) {
-        expect(res.method, Wilt.getDocumentt);
-        try {
-          expect(res.error, isFalse);
-        } on Exception {
-          logMessage('WILT::Create Document(PUT) for attachment tests and '
-              'check updated');
-          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
-          final errorText = errorResponse.error;
-          logMessage('WILT::Error is $errorText');
-          final reasonText = errorResponse.reason;
-          logMessage('WILT::Reason is $reasonText');
-          final int statusCode = res.errorCode;
-          logMessage('WILT::Status code is $statusCode');
-        }
+    test(
+      '${testNum++}. Create document(PUT) for attachment tests and check',
+      () {
+        final dynamic checkCompleter = expectAsync1((dynamic res) {
+          expect(res.method, Wilt.getDocumentt);
+          try {
+            expect(res.error, isFalse);
+          } on Exception {
+            logMessage(
+              'WILT::Create Document(PUT) for attachment tests and '
+              'check updated',
+            );
+            final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
+            final errorText = errorResponse.error;
+            logMessage('WILT::Error is $errorText');
+            final reasonText = errorResponse.reason;
+            logMessage('WILT::Reason is $reasonText');
+            final int statusCode = res.errorCode;
+            logMessage('WILT::Status code is $statusCode');
+          }
 
-        // Check the documents parameters
-        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
-        final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
-        expect(returnedDocId, 'attachmentTestDoc');
-        testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title,
-            equals('Created by a Put Request for attachment testing'));
-        expect(successResponse.version, equals(1));
-        expect(successResponse.author, equals('SJH'));
-      });
+          // Check the documents parameters
+          final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+          final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
+          expect(returnedDocId, 'attachmentTestDoc');
+          testDocRev = WiltUserUtils.getDocumentRev(successResponse);
+          expect(
+            successResponse.title,
+            equals('Created by a Put Request for attachment testing'),
+          );
+          expect(successResponse.version, equals(1));
+          expect(successResponse.author, equals('SJH'));
+        });
 
-      final dynamic completer = expectAsync1((dynamic res) {
-        expect(res.method, Wilt.putDocumentt);
-        try {
-          expect(res.error, isFalse);
-        } on Exception {
-          logMessage('WILT::Test Put Document for attachment tests and check');
-          final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
-          final errorText = errorResponse.error;
-          logMessage('WILT::Error is $errorText');
-          final reasonText = errorResponse.reason;
-          logMessage('WILT::Reason is $reasonText');
-          final int statusCode = res.errorCode;
-          logMessage('WILT::Status code is $statusCode');
-        }
+        final dynamic completer = expectAsync1((dynamic res) {
+          expect(res.method, Wilt.putDocumentt);
+          try {
+            expect(res.error, isFalse);
+          } on Exception {
+            logMessage(
+              'WILT::Test Put Document for attachment tests and check',
+            );
+            final dynamic errorResponse = WiltUserUtils.getJsonResponse(res);
+            final errorText = errorResponse.error;
+            logMessage('WILT::Error is $errorText');
+            final reasonText = errorResponse.reason;
+            logMessage('WILT::Reason is $reasonText');
+            final int statusCode = res.errorCode;
+            logMessage('WILT::Status code is $statusCode');
+          }
 
-        // Get the documents id and re-get the document to check correctness
-        final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
-        final putDocId = successResponse.id;
-        expect(putDocId, equals('attachmentTestDoc'));
-        // Now get the document and check it
-        wilting.getDocument('attachmentTestDoc').then(checkCompleter);
-      });
+          // Get the documents id and re-get the document to check correctness
+          final dynamic successResponse = WiltUserUtils.getJsonResponse(res);
+          final putDocId = successResponse.id;
+          expect(putDocId, equals('attachmentTestDoc'));
+          // Now get the document and check it
+          wilting.getDocument('attachmentTestDoc').then(checkCompleter);
+        });
 
-      wilting.db = databaseName;
-      final dynamic document = jsonobject.JsonObjectLite<dynamic>();
-      document.title = 'Created by a Put Request for attachment testing';
-      document.version = 1;
-      document.author = 'SJH';
-      wilting.putDocument('attachmentTestDoc', document).then(completer);
-    });
+        wilting.db = databaseName;
+        final dynamic document = jsonobject.JsonObjectLite<dynamic>();
+        document.title = 'Created by a Put Request for attachment testing';
+        document.version = 1;
+        document.author = 'SJH';
+        wilting.putDocument('attachmentTestDoc', document).then(completer);
+      },
+    );
 
     test('${testNum++}. Create Attachment', () {
       final dynamic completer = expectAsync1((dynamic res) {
@@ -1362,8 +1475,13 @@ void main() {
 
       wilting.db = databaseName;
       wilting
-          .createAttachment('attachmentTestDoc', 'attachmentName', testDocRev,
-              'image/png', pngImage)
+          .createAttachment(
+            'attachmentTestDoc',
+            'attachmentName',
+            testDocRev,
+            'image/png',
+            pngImage,
+          )
           .then(completer);
     });
 
@@ -1374,7 +1492,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Get Create Attachment Get Document Revision', res);
+            'WILT::Get Create Attachment Get Document Revision',
+            res,
+          );
         }
 
         // Check the documents parameters
@@ -1382,17 +1502,21 @@ void main() {
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title,
-            equals('Created by a Put Request for attachment testing'));
+        expect(
+          successResponse.title,
+          equals('Created by a Put Request for attachment testing'),
+        );
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals('SJH'));
-        final List<dynamic> attachments =
-            WiltUserUtils.getAttachments(successResponse);
+        final List<dynamic> attachments = WiltUserUtils.getAttachments(
+          successResponse,
+        );
         expect(attachments[0].name, 'attachmentName');
         expect(attachments[0].data.content_type, 'image/png; charset=utf-8');
         expect(attachments[0].data.length, anything);
-        final List<int> bytes =
-            const Base64Decoder().convert(attachments[0].data.data);
+        final List<int> bytes = const Base64Decoder().convert(
+          attachments[0].data.data,
+        );
         expect(bytes, pngImage.codeUnits);
       });
 
@@ -1441,8 +1565,13 @@ void main() {
 
       wilting.db = databaseName;
       wilting
-          .updateAttachment('attachmentTestDoc', 'attachmentName', testDocRev,
-              'image/png', pngImageUpdate)
+          .updateAttachment(
+            'attachmentTestDoc',
+            'attachmentName',
+            testDocRev,
+            'image/png',
+            pngImageUpdate,
+          )
           .then(completer);
     });
 
@@ -1453,7 +1582,9 @@ void main() {
           expect(res.error, isFalse);
         } on Exception {
           logExceptionWithResponse(
-              'WILT::Get Update Attachment Get Document Revision', res);
+            'WILT::Get Update Attachment Get Document Revision',
+            res,
+          );
         }
 
         // Check the documents parameters
@@ -1461,8 +1592,10 @@ void main() {
         final returnedDocId = WiltUserUtils.getDocumentId(successResponse);
         expect(returnedDocId, 'attachmentTestDoc');
         testDocRev = WiltUserUtils.getDocumentRev(successResponse);
-        expect(successResponse.title,
-            equals('Created by a Put Request for attachment testing'));
+        expect(
+          successResponse.title,
+          equals('Created by a Put Request for attachment testing'),
+        );
         expect(successResponse.version, equals(1));
         expect(successResponse.author, equals('SJH'));
       });
@@ -1509,8 +1642,13 @@ void main() {
 
       wilting.db = databaseName;
       wilting
-          .createAttachment('anotherAttachmentTestDoc', 'attachmentName', '',
-              'image/png', pngImage)
+          .createAttachment(
+            'anotherAttachmentTestDoc',
+            'attachmentName',
+            '',
+            'image/png',
+            pngImage,
+          )
           .then(completer);
     });
 
@@ -1524,8 +1662,13 @@ void main() {
 
       wilting.db = databaseName;
       wilting
-          .createAttachment('attachmentTestDoc', 'anotherAttachmentName',
-              '1-bb48c078f0fac47234e774a7a51b86ac', 'image/png', pngImage)
+          .createAttachment(
+            'attachmentTestDoc',
+            'anotherAttachmentName',
+            '1-bb48c078f0fac47234e774a7a51b86ac',
+            'image/png',
+            pngImage,
+          )
           .then(completer);
     });
 
@@ -1571,9 +1714,10 @@ void main() {
       wilting.changeNotification.listen((dynamic e) {
         if (e.docId == 'mytestid2') {
           expect(
-              (e.type == WiltChangeNotificationEvent.updatee) ||
-                  (e.type == WiltChangeNotificationEvent.deletee),
-              true);
+            (e.type == WiltChangeNotificationEvent.updatee) ||
+                (e.type == WiltChangeNotificationEvent.deletee),
+            true,
+          );
         }
         if (e.docId == 'mytestid3') {
           expect(e.type, WiltChangeNotificationEvent.deletee);
@@ -1584,18 +1728,20 @@ void main() {
       });
     }, skip: true);
 
-    test('${testNum++}. Start Change Notification With Docs and Attachments',
-        () {
-      wilting.db = databaseName;
-      final parameters = WiltChangeNotificationParameters();
-      parameters.includeDocs = true;
-      parameters.includeAttachments = true;
-      void wrapper() {
-        wilting.startChangeNotification(parameters);
-      }
+    test(
+      '${testNum++}. Start Change Notification With Docs and Attachments',
+      () {
+        wilting.db = databaseName;
+        final parameters = WiltChangeNotificationParameters();
+        parameters.includeDocs = true;
+        parameters.includeAttachments = true;
+        void wrapper() {
+          wilting.startChangeNotification(parameters);
+        }
 
-      expect(wrapper, returnsNormally);
-    });
+        expect(wrapper, returnsNormally);
+      },
+    );
 
     test('${testNum++}. Check Change Notifications With Docs', () {
       final dynamic completer = expectAsync0(() {});
@@ -1615,8 +1761,9 @@ void main() {
           expect(e.type, WiltChangeNotificationEvent.deletee);
         }
         if (e.docId == 'anotherAttachmentTestDoc') {
-          final List<dynamic> attachments =
-              WiltUserUtils.getAttachments(e.document);
+          final List<dynamic> attachments = WiltUserUtils.getAttachments(
+            e.document,
+          );
           expect(attachments[0].name, 'attachmentName');
           expect(attachments[0].data.content_type, 'image/png; charset=utf-8');
           completer();

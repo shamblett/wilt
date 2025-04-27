@@ -126,8 +126,12 @@ class Wilt {
 
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
-  Future<dynamic> _httpRequest(String method, String url,
-      {String? data, Map<String, String>? headers}) {
+  Future<dynamic> _httpRequest(
+    String method,
+    String url, {
+    String? data,
+    Map<String, String>? headers,
+  }) {
     // Build the request for the HttpAdapter
     final wiltHeaders = <String, String>{};
     wiltHeaders['Accept'] = 'application/json';
@@ -144,8 +148,9 @@ class Wilt {
       switch (authenticationType) {
         case authBasic:
           final authStringToEncode = '$_user:$_password';
-          final encodedAuthString =
-              const Base64Encoder().convert(authStringToEncode.codeUnits);
+          final encodedAuthString = const Base64Encoder().convert(
+            authStringToEncode.codeUnits,
+          );
           final authString = 'Basic $encodedAuthString';
           wiltHeaders['Authorization'] = authString;
           break;
@@ -168,12 +173,13 @@ class Wilt {
     newQueryParams[key] = value;
 
     final newUrl = Uri(
-        scheme: originalUrl.scheme,
-        userInfo: originalUrl.userInfo,
-        host: originalUrl.host,
-        port: originalUrl.port,
-        path: originalUrl.path,
-        queryParameters: newQueryParams);
+      scheme: originalUrl.scheme,
+      userInfo: originalUrl.userInfo,
+      host: originalUrl.host,
+      port: originalUrl.port,
+      path: originalUrl.path,
+      queryParameters: newQueryParams,
+    );
 
     final returnUrl = newUrl.toString();
     return returnUrl; // Private
@@ -239,8 +245,11 @@ class Wilt {
 
   /// Performs a HTTP POST operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> post(String? url, String data,
-      [Map<String, String>? headers]) {
+  Future<dynamic> post(
+    String? url,
+    String data, [
+    Map<String, String>? headers,
+  ]) {
     final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -252,8 +261,11 @@ class Wilt {
 
   /// Performs a HTTP PUT operation,, the URL is conditioned and
   /// the current database added.
-  Future<dynamic> put(String? url, String data,
-      [Map<String, String>? headers]) {
+  Future<dynamic> put(
+    String? url,
+    String data, [
+    Map<String, String>? headers,
+  ]) {
     final url1 = _conditionUrl(url);
     if (url1 == WiltException.noDatabaseSpecified) {
       return _raiseException(WiltException.noDatabaseSpecified);
@@ -279,8 +291,11 @@ class Wilt {
   /// optional revision. If withAttachments is set the the body of
   /// any attachments are also supplied, note this could make this
   /// a large transfer.
-  Future<dynamic> getDocument(String? id,
-      [String? rev, bool withAttachments = false]) {
+  Future<dynamic> getDocument(
+    String? id, [
+    String? rev,
+    bool withAttachments = false,
+  ]) {
     if (id == null) {
       return _raiseException(WiltException.getDocNoId);
     }
@@ -330,8 +345,11 @@ class Wilt {
   /// If preserve is set to true the whole document is preserved
   /// and marked as deleted otherwise only a stub document is
   /// kept. Default is to not preserve.
-  Future<dynamic> deleteDocument(String? id, String? rev,
-      [bool preserve = false]) {
+  Future<dynamic> deleteDocument(
+    String? id,
+    String? rev, [
+    bool preserve = false,
+  ]) {
     if ((id == null) || (rev == null)) {
       return _raiseException(WiltException.deleteDocNoIdRev);
     }
@@ -363,8 +381,10 @@ class Wilt {
   /// document body as a _rev parameter or specified in the call in which
   /// case this will be added to the document body.
   Future<dynamic> putDocument(
-      String? id, jsonobject.JsonObjectLite<dynamic>? document,
-      [String? rev]) {
+    String? id,
+    jsonobject.JsonObjectLite<dynamic>? document, [
+    String? rev,
+  ]) {
     if ((id == null) || (document == null)) {
       return _raiseException(WiltException.putDocNoIdBody);
     }
@@ -400,8 +420,10 @@ class Wilt {
 
   /// POST's the specified document.
   /// An optional path to the document can be specified.
-  Future<dynamic> postDocument(jsonobject.JsonObjectLite<dynamic>? document,
-      {String? path}) {
+  Future<dynamic> postDocument(
+    jsonobject.JsonObjectLite<dynamic>? document, {
+    String? path,
+  }) {
     if (document == null) {
       return _raiseException(WiltException.postDocNoBody);
     }
@@ -443,15 +465,22 @@ class Wilt {
     headers['Content-Type'] = 'application/json';
 
     url = _conditionUrl(url);
-    return _httpRequest('POST_DOCUMENT_STRING', url,
-        data: document, headers: headers);
+    return _httpRequest(
+      'POST_DOCUMENT_STRING',
+      url,
+      data: document,
+      headers: headers,
+    );
   }
 
   /// Copies the source document to the destination document with an
   /// optional revision. NOTE this method uses the CouchDB COPY method which is
   /// not standard HTTP.
-  Future<dynamic> copyDocument(String? sourceId, String? destinationId,
-      [String? rev]) {
+  Future<dynamic> copyDocument(
+    String? sourceId,
+    String? destinationId, [
+    String? rev,
+  ]) {
     if (sourceId == null) {
       return _raiseException(WiltException.copyDocNoSrcId);
     }
@@ -477,13 +506,14 @@ class Wilt {
   /// Get all documents.
   /// The parameters should be self explanatory and are addative.
   /// Refer to the CouchDb documentation for further explanation.
-  Future<dynamic> getAllDocs(
-      {bool includeDocs = false,
-      int? limit,
-      String? startKey,
-      String? endKey,
-      List<String>? keys,
-      bool descending = false}) {
+  Future<dynamic> getAllDocs({
+    bool includeDocs = false,
+    int? limit,
+    String? startKey,
+    String? endKey,
+    List<String>? keys,
+    bool descending = false,
+  }) {
     // Validate the parameters
     if ((limit != null) && (limit < 0)) {
       return _raiseException(WiltException.getAllDocsLimit);
@@ -525,8 +555,10 @@ class Wilt {
 
   /// Bulk insert
   /// Bulk inserts a list of documents
-  Future<dynamic> bulk(List<jsonobject.JsonObjectLite<dynamic>> docs,
-      [bool allOrNothing = false]) {
+  Future<dynamic> bulk(
+    List<jsonobject.JsonObjectLite<dynamic>> docs, [
+    bool allOrNothing = false,
+  ]) {
     var url = bulkdocs;
 
     if (allOrNothing) {
@@ -642,8 +674,13 @@ class Wilt {
   /// contentType is in the form of a mime type e.g. 'image/png'
   /// If the document needs to be created as well as the attachment
   /// set the rev to ''.
-  Future<dynamic> createAttachment(String? docId, String? attachmentName,
-      String? rev, String? contentType, String? payload) {
+  Future<dynamic> createAttachment(
+    String? docId,
+    String? attachmentName,
+    String? rev,
+    String? contentType,
+    String? payload,
+  ) {
     // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.createAttNoDocId);
@@ -678,14 +715,23 @@ class Wilt {
     }
 
     url = _conditionUrl(url);
-    return _httpRequest(createAttachmentt, url,
-        data: payload, headers: headers);
+    return _httpRequest(
+      createAttachmentt,
+      url,
+      data: payload,
+      headers: headers,
+    );
   }
 
   /// Update an attachment on an existing document.
   /// contentType is in the form of a mime type e.g. 'image/png'
-  Future<dynamic> updateAttachment(String? docId, String? attachmentName,
-      String? rev, String? contentType, String? payload) {
+  Future<dynamic> updateAttachment(
+    String? docId,
+    String? attachmentName,
+    String? rev,
+    String? contentType,
+    String? payload,
+  ) {
     // Check all parameters are supplied
     if (docId == null) {
       return _raiseException(WiltException.updateAttNoDocId);
@@ -714,13 +760,20 @@ class Wilt {
     var url = '$docId/$attachmentName?rev=$rev';
 
     url = _conditionUrl(url);
-    return _httpRequest(updateAttachmentt, url,
-        data: payload, headers: headers);
+    return _httpRequest(
+      updateAttachmentt,
+      url,
+      data: payload,
+      headers: headers,
+    );
   }
 
   /// Delete an attachment
   Future<dynamic> deleteAttachment(
-      String? docId, String? attachmentName, String? rev) {
+    String? docId,
+    String? attachmentName,
+    String? rev,
+  ) {
     if (docId == null) {
       return _raiseException(WiltException.deleteAttNoDocId);
     }
@@ -762,8 +815,10 @@ class Wilt {
   /// database is used.
   ///
   /// If auth credentials are not set raise an exception.
-  void startChangeNotification(
-      [WiltChangeNotificationParameters? parameters, String? databaseName]) {
+  void startChangeNotification([
+    WiltChangeNotificationParameters? parameters,
+    String? databaseName,
+  ]) {
     if (_user == null) {
       throw WiltException(WiltException.cnNoAuth);
     }
@@ -775,8 +830,14 @@ class Wilt {
     }
 
     changeNotificationDbName = name;
-    _changeNotifier = _WiltChangeNotification(host, port, this,
-        useSSL: useSSL, dbName: name, parameters: parameters);
+    _changeNotifier = _WiltChangeNotification(
+      host,
+      port,
+      this,
+      useSSL: useSSL,
+      dbName: name,
+      parameters: parameters,
+    );
   }
 
   /// Change notification stop, see the WiltChangeNotification
@@ -794,7 +855,8 @@ class Wilt {
   ///
   /// Note that database name, host, port and scheme are not changeable.
   void updateChangeNotificationParameters(
-      WiltChangeNotificationParameters parameters) {
+    WiltChangeNotificationParameters parameters,
+  ) {
     if (_changeNotifier == null) {
       throw WiltException(WiltException.updateCnpNoNotifier);
     }
@@ -854,8 +916,12 @@ class Wilt {
 
   /// Processes the HTTP request, returning the server's response
   /// as a future
-  Future<dynamic> doHttpRequest(String method, String url,
-      [String? data, Map<String, String> headers = const {}]) {
+  Future<dynamic> doHttpRequest(
+    String method,
+    String url, [
+    String? data,
+    Map<String, String> headers = const {},
+  ]) {
     //  Initialise
     final completer = Completer<dynamic>();
 
@@ -1070,8 +1136,9 @@ class Wilt {
       switch (_authType) {
         case Wilt.authBasic:
           final authStringToEncode = '$_user:$_password';
-          final encodedAuthString =
-              const Base64Encoder().convert(authStringToEncode.codeUnits);
+          final encodedAuthString = const Base64Encoder().convert(
+            authStringToEncode.codeUnits,
+          );
           final authString = 'Basic $encodedAuthString';
           wiltHeaders['Authorization'] = authString;
           break;
