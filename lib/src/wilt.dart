@@ -10,16 +10,14 @@
 part of '../wilt.dart';
 
 /// The Wilt client.
-/// * The Wilt class provides core functionality for interacting with
+///
+/// The Wilt class provides core functionality for interacting with
 /// CouchDB databases from both the browser and the server.
 class Wilt {
-  /// Please use the wilt_browser_client or wilt_server_client import files to
-  /// instantiate a Wilt object for use in either the browser or
-  /// server environment.
-  /// You can do this here but you must supply either a browser or
-  /// server HTTP adapter
-  /// to use.
-  Wilt(this.host, {this.port = 5984, this.useSSL = false});
+  static const wiltDefaultPort = 5984;
+
+  /// Construction
+  Wilt(this.host, {this.port = wiltDefaultPort, this.useSSL = false});
 
   /// URL constant for CouchDB SESSION function
   static const String session = '/_session';
