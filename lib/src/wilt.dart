@@ -16,9 +16,6 @@ part of '../wilt.dart';
 class Wilt {
   static const wiltDefaultPort = 5984;
 
-  /// Construction
-  Wilt(this.host, {this.port = wiltDefaultPort, this.useSSL = false});
-
   /// URL constant for CouchDB SESSION function
   static const String session = '/_session';
 
@@ -121,6 +118,9 @@ class Wilt {
 
   /// Authentication, type
   String authenticationType = authNone;
+
+  /// Construction
+  Wilt(this.host, {this.port = wiltDefaultPort, this.useSSL = false});
 
   /// The internal HTTP request method. This wraps the
   /// HTTP adapter class.
