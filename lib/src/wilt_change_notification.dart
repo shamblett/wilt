@@ -24,9 +24,44 @@ part of '../wilt.dart';
 /// timed basis dependent on the heartbeat period.
 ///
 /// Note that as from CouchDB 1.6.1 you must auth as an administrator
-/// with CouchDb to allow notificatons to work, if you do not supply
+/// with CouchDb to allow notifications to work, if you do not supply
 /// auth credentials before starting notifications an exception is raised.
 class _WiltChangeNotification {
+  /// Parameters set
+  WiltChangeNotificationParameters? parameters;
+
+  /// Database name
+  final String? dbName;
+
+  /// HTTP scheme
+  final bool? useSSL;
+
+  /// Paused indicator
+  bool paused = false;
+
+  // Host name
+  final String? _host;
+
+  // Port number
+  final int _port;
+
+  // Timer
+  Timer? _timer;
+
+  // Since sequence update
+  dynamic _sequence = 0;
+
+  // Change notification stream controller
+  //
+  // Populated with WiltChangeNotificationEvent events
+  final StreamController<WiltChangeNotificationEvent> _changeNotification =
+      StreamController<WiltChangeNotificationEvent>.broadcast();
+
+  final Wilt _wilt;
+
+  StreamController<WiltChangeNotificationEvent> get changeNotification =>
+      _changeNotification;
+
   _WiltChangeNotification(
     this._host,
     this._port,
@@ -45,90 +80,6 @@ class _WiltChangeNotification {
 
     // Start change notifications
     _requestChanges(_timer);
-  }
-
-  /// Parameters set
-  WiltChangeNotificationParameters? parameters;
-
-  /// Database name
-  final String? dbName;
-
-  /// Host name
-  final String? _host;
-
-  /// Port number
-  final int _port;
-
-  /// HTTP scheme
-  final bool? useSSL;
-
-  /// Timer
-  Timer? _timer;
-
-  /// Since sequence update
-  dynamic _sequence = 0;
-
-  /// Paused indicator
-  bool paused = false;
-
-  final Wilt _wilt;
-
-  /// Change notification stream controller
-  ///
-  /// Populated with WiltChangeNotificationEvent events
-  final StreamController<WiltChangeNotificationEvent> _changeNotification =
-      StreamController<WiltChangeNotificationEvent>.broadcast();
-
-  StreamController<WiltChangeNotificationEvent> get changeNotification =>
-      _changeNotification;
-
-  /// Request the change notifications
-  void _requestChanges(Timer? timer) {
-    if (paused) {
-      return;
-    }
-
-    // Create the URL from the parameters
-    String path;
-    if (_sequence != null) {
-      path =
-          '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
-    } else {
-      path =
-          '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
-    }
-
-    final scheme = useSSL! ? 'https://' : 'http://';
-    final url = '$scheme$_host:${_port.toString()}/$path';
-
-    // Open the request
-    try {
-      _wilt.getString(url).then((dynamic result) {
-        // Process the change notification
-        try {
-          final Map<dynamic, dynamic> dbChange = json.decode(result);
-          processDbChange(dbChange as Map<String, dynamic>);
-        } on Exception catch (e) {
-          // Recoverable error, send the client an error event
-          print('WiltChangeNotification::MonitorChanges json decode fail $e');
-          final notification = WiltChangeNotificationEvent.decodeError(
-            result,
-            e.toString(),
-          );
-
-          _changeNotification.add(notification);
-        }
-      });
-    } on Exception catch (e) {
-      // Unrecoverable error, send the client an abort event
-      print(
-        'WiltChangeNotification::MonitorChanges unable to contact '
-        'CouchDB Error is $e',
-      );
-      final notification = WiltChangeNotificationEvent.abort(e.toString());
-
-      _changeNotification.add(notification);
-    }
   }
 
   /// Database change updates
@@ -202,5 +153,51 @@ class _WiltChangeNotification {
 
     // Start change notifications
     _requestChanges(_timer);
+  }
+
+  /// Request the change notifications
+  void _requestChanges(Timer? timer) {
+    if (paused) {
+      return;
+    }
+
+    // Create the URL from the parameters
+    String path;
+    path =
+        _sequence != null
+            ? '$dbName/_changes?&since=$_sequence&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}'
+            : '$dbName/_changes?&descending=${parameters!.descending}&include_docs=${parameters!.includeDocs}&attachments=${parameters!.includeAttachments}';
+
+    final scheme = useSSL! ? 'https://' : 'http://';
+    final url = '$scheme$_host:${_port.toString()}/$path';
+
+    // Open the request
+    try {
+      _wilt.getString(url).then((dynamic result) {
+        // Process the change notification
+        try {
+          final Map<dynamic, dynamic> dbChange = json.decode(result);
+          processDbChange(dbChange as Map<String, dynamic>);
+        } on Exception catch (e) {
+          // Recoverable error, send the client an error event
+          print('WiltChangeNotification::MonitorChanges json decode fail $e');
+          final notification = WiltChangeNotificationEvent.decodeError(
+            result,
+            e.toString(),
+          );
+
+          _changeNotification.add(notification);
+        }
+      });
+    } on Exception catch (e) {
+      // Unrecoverable error, send the client an abort event
+      print(
+        'WiltChangeNotification::MonitorChanges unable to contact '
+        'CouchDB Error is $e',
+      );
+      final notification = WiltChangeNotificationEvent.abort(e.toString());
+
+      _changeNotification.add(notification);
+    }
   }
 }
