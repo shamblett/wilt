@@ -19,12 +19,7 @@ class WiltUserUtils {
   /// Get a revision from a json object
   static String? getDocumentRev(jsonobject.JsonObjectLite<dynamic> response) {
     response.isImmutable = false;
-    if (response.containsKey('_rev')) {
-      // Use this first if present
-      return response['_rev'];
-    } else {
-      return response['rev'];
-    }
+    return response.containsKey('_rev') ? response['_rev'] : response['rev'];
   }
 
   /// Adds a CouchDB _rev to the json body of a document
@@ -111,7 +106,8 @@ class WiltUserUtils {
 
     // Remove the last ','
     final len = innerStringBuffer.length;
-    final innerString = innerStringBuffer.toString().substring(0, len - 1);
+    final innerString =
+        '${innerStringBuffer.toString().characters.getRange(0, len - 1)}';
     final insertString = '{"docs":[$innerString]}';
     return insertString.trim();
   }
@@ -161,11 +157,7 @@ class WiltUserUtils {
     if (map is String) {
       try {
         final dynamic res = json.decode(map);
-        if (res != null) {
-          return map;
-        } else {
-          return null;
-        }
+        return res != null ? map : null;
       } on Exception {
         return null;
       }
