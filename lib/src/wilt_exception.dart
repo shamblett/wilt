@@ -12,7 +12,6 @@ part of '../wilt.dart';
 
 /// Exceptions
 class WiltException implements Exception {
-
   // Exception message strings
   static const String header = 'WiltException: ';
   static const String noDatabaseSpecified = 'No database specified';
