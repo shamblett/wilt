@@ -9,6 +9,7 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:characters/characters.dart';
 import 'package:json_object_lite/json_object_lite.dart' as jsonobject;
 import 'package:http/http.dart' as http;
 

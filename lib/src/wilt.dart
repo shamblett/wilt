@@ -15,6 +15,7 @@ part of '../wilt.dart';
 /// CouchDB databases from both the browser and the server.
 class Wilt {
   static const wiltDefaultPort = 5984;
+  static const defaultDocumentAmount = 10;
 
   /// URL constant for CouchDB SESSION function
   static const String session = '/_session';
@@ -87,14 +88,26 @@ class Wilt {
   /// Use SSL when connecting to couchdb, defaults to false
   final bool useSSL;
 
-  /// Auth Type for change notification authorization
+  /// Authentication, type
+  String authenticationType = authNone;
+
+  // Auth Type for change notification authorization
   String? _authType;
 
-  /// HTTP client
+  // HTTP client
   final http.Client _client = http.Client();
 
-  /// Change notification
+  // Response getter for completion callbacks
+  jsonobject.JsonObjectLite<dynamic>? _completionResponse;
+
+  // Change notification
   _WiltChangeNotification? _changeNotifier;
+
+  // Authentication, user name
+  String? _user;
+
+  // Authentication, user password
+  String? _password;
 
   /// Change notification event stream
   /// This is a broadcast stream so can support more than one listener.
@@ -104,109 +117,11 @@ class Wilt {
   /// Change notification paused state
   bool get changeNotificationsPaused => _changeNotifier!.paused;
 
-  /// Response getter for completion callbacks
-  jsonobject.JsonObjectLite<dynamic>? _completionResponse;
-
   jsonobject.JsonObjectLite<dynamic>? get completionResponse =>
       _completionResponse;
 
-  /// Authentication, user name
-  String? _user;
-
-  /// Authentication, user password
-  String? _password;
-
-  /// Authentication, type
-  String authenticationType = authNone;
-
   /// Construction
   Wilt(this.host, {this.port = wiltDefaultPort, this.useSSL = false});
-
-  /// The internal HTTP request method. This wraps the
-  /// HTTP adapter class.
-  Future<dynamic> _httpRequest(
-    String method,
-    String url, {
-    String? data,
-    Map<String, String>? headers,
-  }) {
-    // Build the request for the HttpAdapter
-    final wiltHeaders = <String, String>{};
-    wiltHeaders['Accept'] = 'application/json';
-    if (headers != null) {
-      wiltHeaders.addAll(headers);
-    }
-
-    // Build the URL
-    final scheme = useSSL ? 'https://' : 'http://';
-    final wiltUrl = '$scheme$host:$port$url';
-
-    // Check for authentication
-    if (_user != null) {
-      switch (authenticationType) {
-        case authBasic:
-          final authStringToEncode = '$_user:$_password';
-          final encodedAuthString = const Base64Encoder().convert(
-            authStringToEncode.codeUnits,
-          );
-          final authString = 'Basic $encodedAuthString';
-          wiltHeaders['Authorization'] = authString;
-          break;
-
-        case authNone:
-          break;
-      }
-    }
-
-    // Execute the request
-    return doHttpRequest(method, wiltUrl, data, wiltHeaders);
-  }
-
-  /// Takes a URL and key/value pair for a URL parameter and adds this
-  /// to the query parameters of the URL.
-  String _setURLParameter(String url, String key, String value) {
-    final originalUrl = Uri.parse(url);
-    final queryParams = originalUrl.queryParameters;
-    final newQueryParams = Map<String, String>.from(queryParams);
-    newQueryParams[key] = value;
-
-    final newUrl = Uri(
-      scheme: originalUrl.scheme,
-      userInfo: originalUrl.userInfo,
-      host: originalUrl.host,
-      port: originalUrl.port,
-      path: originalUrl.path,
-      queryParameters: newQueryParams,
-    );
-
-    final returnUrl = newUrl.toString();
-    return returnUrl; // Private
-  }
-
-  /// Conditions the URL for use by Wilt and checks for
-  /// a valid database by default.
-  String _conditionUrl(String? url) {
-    if (db == null) {
-      return WiltException.noDatabaseSpecified;
-    }
-    if (url == null) {
-      return '/';
-    }
-    var urlRet = url;
-    // The first char of the URL should be a slash.
-    if (!url.startsWith('/')) {
-      urlRet = '/$urlRet';
-    }
-    if (db != null) {
-      urlRet = '/$db$urlRet';
-    }
-    return urlRet;
-  }
-
-  /// Raise an exception from a future API call.
-  /// If we are using completion throw an exception as normal.
-  Future<WiltException> _raiseException(String name) =>
-      Future<WiltException>.error(WiltException(name));
 
   /// Basic method where only a URL and a method is passed.
   /// Wilt applies no checks to this URL nor does it add the
@@ -326,7 +241,7 @@ class Wilt {
             jsonobject.JsonObjectLite<dynamic>.fromJsonString(headers);
         if (jsonHeaders.containsKey(Wilt.etag)) {
           String ver = jsonHeaders[Wilt.etag];
-          ver = ver.substring(1, ver.length - 1);
+          ver = '${ver.characters.getRange(1, ver.length - 1)}';
           completer.complete(ver);
         } else {
           completer.complete(null);
@@ -391,11 +306,10 @@ class Wilt {
     String jsonData;
 
     try {
-      if (rev != null) {
-        jsonData = WiltUserUtils.addDocumentRev(document, rev);
-      } else {
-        jsonData = json.encode(document);
-      }
+      jsonData =
+          rev != null
+              ? WiltUserUtils.addDocumentRev(document, rev)
+              : json.encode(document);
     } on Exception {
       return _raiseException(WiltException.putDocCantStringify);
     }
@@ -636,11 +550,7 @@ class Wilt {
   /// Get information about a database
   Future<dynamic> getDatabaseInfo([String? dbName]) {
     String? name;
-    if (dbName != null) {
-      name = dbName;
-    } else {
-      name = db;
-    }
+    name = dbName ?? db;
 
     final url = '/$name';
 
@@ -706,11 +616,10 @@ class Wilt {
 
     // Make the PUT request
     String url;
-    if (rev != '') {
-      url = '$docId/$attachmentName?rev=$rev';
-    } else {
-      url = '$docId/$attachmentName';
-    }
+    url =
+        rev != ''
+            ? '$docId/$attachmentName?rev=$rev'
+            : '$docId/$attachmentName';
 
     url = _conditionUrl(url);
     return _httpRequest(
@@ -821,11 +730,7 @@ class Wilt {
       throw WiltException(WiltException.cnNoAuth);
     }
     String? name;
-    if (databaseName == null) {
-      name = db;
-    } else {
-      name = databaseName;
-    }
+    name = databaseName ?? db;
 
     changeNotificationDbName = name;
     _changeNotifier = _WiltChangeNotification(
@@ -893,7 +798,7 @@ class Wilt {
   }
 
   /// Ask CouchDB to generate document Id's.
-  Future<dynamic> generateIds([int amount = 10]) {
+  Future<dynamic> generateIds([int amount = defaultDocumentAmount]) {
     if (amount < 1) {
       return _raiseException(WiltException.genIdsAmount);
     }
@@ -1088,7 +993,7 @@ class Wilt {
     }
 
     // Condition the input method string to get the HTTP method
-    final httpMethod = method.split('_')[0];
+    final httpMethod = method.split('_').first;
 
     // Set the content type header correctly
     if (headers.containsKey('Content-Type')) {
@@ -1151,5 +1056,90 @@ class Wilt {
     });
 
     return completer.future as Future<String>;
+  }
+
+  // Raise an exception from a future API call.
+  // If we are using completion throw an exception as normal.
+  Future<WiltException> _raiseException(String name) =>
+      Future<WiltException>.error(WiltException(name));
+
+  // Conditions the URL for use by Wilt and checks for
+  // a valid database by default.
+  String _conditionUrl(String? url) {
+    if (db == null) {
+      return WiltException.noDatabaseSpecified;
+    }
+    if (url == null) {
+      return '/';
+    }
+    var urlRet = url;
+    // The first char of the URL should be a slash.
+    if (!url.startsWith('/')) {
+      urlRet = '/$urlRet';
+    }
+    if (db != null) {
+      urlRet = '/$db$urlRet';
+    }
+    return urlRet;
+  }
+
+  // The internal HTTP request method. This wraps the
+  // HTTP adapter class.
+  Future<dynamic> _httpRequest(
+    String method,
+    String url, {
+    String? data,
+    Map<String, String>? headers,
+  }) {
+    // Build the request for the HttpAdapter
+    final wiltHeaders = <String, String>{};
+    wiltHeaders['Accept'] = 'application/json';
+    if (headers != null) {
+      wiltHeaders.addAll(headers);
+    }
+
+    // Build the URL
+    final scheme = useSSL ? 'https://' : 'http://';
+    final wiltUrl = '$scheme$host:$port$url';
+
+    // Check for authentication
+    if (_user != null) {
+      switch (authenticationType) {
+        case authBasic:
+          final authStringToEncode = '$_user:$_password';
+          final encodedAuthString = const Base64Encoder().convert(
+            authStringToEncode.codeUnits,
+          );
+          final authString = 'Basic $encodedAuthString';
+          wiltHeaders['Authorization'] = authString;
+          break;
+
+        case authNone:
+          break;
+      }
+    }
+
+    // Execute the request
+    return doHttpRequest(method, wiltUrl, data, wiltHeaders);
+  }
+
+  // Takes a URL and key/value pair for a URL parameter and adds this
+  // to the query parameters of the URL.
+  String _setURLParameter(String url, String key, String value) {
+    final originalUrl = Uri.parse(url);
+    final queryParams = originalUrl.queryParameters;
+    final newQueryParams = Map<String, String>.from(queryParams);
+    newQueryParams[key] = value;
+
+    final newUrl = Uri(
+      scheme: originalUrl.scheme,
+      userInfo: originalUrl.userInfo,
+      host: originalUrl.host,
+      port: originalUrl.port,
+      path: originalUrl.path,
+      queryParameters: newQueryParams,
+    );
+
+    return newUrl.toString();
   }
 }

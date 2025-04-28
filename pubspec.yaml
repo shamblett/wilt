@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.7.0 <4.0.0'
 
 dependencies:
+  characters: '^1.4.0'
   crypto: "^3.0.6"
   http: "^1.2.2"
   json_object_lite: "^4.0.1"
