@@ -1,3 +1,6 @@
+## 7.1.1
+- [Issue 39](https://github.com/shamblett/wilt/issues/39)
+
 ## 7.1.0
 - [Issue 37](https://github.com/shamblett/wilt/issues/37)
 

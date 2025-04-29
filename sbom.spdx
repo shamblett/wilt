@@ -1,22 +1,102 @@
-SPDXVersion: SPDX-2.2DataLicense: CC0-1.0SPDXID: SPDXRef-DOCUMENTDocumentName: wiltDocumentNamespace: https://pub.dev/packages/wiltLicenseListVersion: 3.8Creator: Tool: https://pub.dev/packages/sbomCreated: 2024-11-28T11:19:17Z
+SPDXVersion: SPDX-2.2
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: wilt
+DocumentNamespace: https://pub.dev/packages/wilt
+LicenseListVersion: 3.8
+Creator: Tool: https://pub.dev/packages/sbom
+Created: 2025-04-29T11:00:45Z
 
-PackageName: wiltSPDXID: SPDXRef-Package-wiltPackageVersion: 7.1.0PackageFileName: wiltPackageSupplier: NOASSERTIONPackageOriginator: NOASSERTIONPackageDownloadLocation: https://pub.dev/packages/wiltFilesAnalyzed: truePackageVerificationCode: ac19880974cd6bf0b3d0daf4010d0363aefd9492PackageHomePage: https://pub.dev/packages/wiltPackageLicenseConcluded: NOASSERTIONPackageLicenseInfoFromFiles: NOASSERTIONPackageLicenseDeclared: NOASSERTIONPackageCopyrightText: NOASSERTIONPackageSummary: <text>A browser/server based CouchDB client library supporting attachments and change notification.</text>
 
-FileName: /lib/src/wilt.dartSPDXID: SPDXRef-wilt-0FileType: SOURCEFileChecksum: SHA1: b3306e4f4777b928cd09c9ab30ebedc8057f500bLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+PackageName: wilt
+SPDXID: SPDXRef-Package-wilt
+PackageVersion: 7.1.1
+PackageFileName: wilt
+PackageSupplier: NOASSERTION
+PackageOriginator: NOASSERTION
+PackageDownloadLocation: https://pub.dev/packages/wilt
+FilesAnalyzed: true
+PackageVerificationCode: a6d3edd13ce498683f4aa094fbb77d30104209eb
+PackageHomePage: https://pub.dev/packages/wilt
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseInfoFromFiles: NOASSERTION
+PackageLicenseDeclared: NOASSERTION
+PackageCopyrightText: NOASSERTION
+PackageSummary: <text>A browser/server based CouchDB client library supporting attachments and change notification.</text>
 
-FileName: /lib/src/wilt_change_notification.dartSPDXID: SPDXRef-wilt-change-notification-1FileType: SOURCEFileChecksum: SHA1: e235cc8c24fc84d8ea976bbc46dcbae23618604aLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
-FileName: /lib/src/wilt_change_notification_event.dartSPDXID: SPDXRef-wilt-change-notification-event-2FileType: SOURCEFileChecksum: SHA1: 7a4dabdf7d14cb6a0dad8f759a89f9ae4159f2a0LicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+FileName: lib/src/wilt.dart
+SPDXID: SPDXRef-wilt-0
+FileType: SOURCE
+FileChecksum: SHA1: 7a4dabdf7d14cb6a0dad8f759a89f9ae4159f2a0
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
 
-FileName: /lib/src/wilt_change_notification_parameters.dartSPDXID: SPDXRef-wilt-change-notification-parameters-3FileType: SOURCEFileChecksum: SHA1: e1c1b4726a5dfe71295e5671e00ec27d26363c50LicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
-FileName: /lib/src/wilt_exception.dartSPDXID: SPDXRef-wilt-exception-4FileType: SOURCEFileChecksum: SHA1: 0751e96ddc75ff2cb829ab1fa63c115dfd3fc543LicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+FileName: lib/src/wilt_change_notification.dart
+SPDXID: SPDXRef-wilt-change-notification-1
+FileType: SOURCE
+FileChecksum: SHA1: 6edb8a61719db3af35b4282f22d59f3e39a9f688
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
 
-FileName: /lib/src/wilt_user_utils.dartSPDXID: SPDXRef-wilt-user-utils-5FileType: SOURCEFileChecksum: SHA1: 6b05879f002c2f62c81efb486b3aee14441a41bbLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
 
-FileName: /lib/wilt.dartSPDXID: SPDXRef-wilt-6FileType: SOURCEFileChecksum: SHA1: d605cab55916e6310069e2f63cd22f02249daf8bLicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+FileName: lib/src/wilt_change_notification_event.dart
+SPDXID: SPDXRef-wilt-change-notification-event-2
+FileType: SOURCE
+FileChecksum: SHA1: 32339b91a10a9d23b2372a7e5c5d3e7a86468fdd
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
 
-FileName: /pubspec.yamlSPDXID: SPDXRef-pubspec-7FileType: TEXTFileChecksum: SHA1: 915c791f26450e372d4080397f4f3dc4d81d30a8LicenseConcluded: NOASSERTIONLicenseInfoInFile: NOASSERTIONFileCopyrightText: NOASSERTION
+
+FileName: lib/src/wilt_change_notification_parameters.dart
+SPDXID: SPDXRef-wilt-change-notification-parameters-3
+FileType: SOURCE
+FileChecksum: SHA1: 96fdbea9200c7624850de7065ba1b24499a6b283
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+
+FileName: lib/src/wilt_exception.dart
+SPDXID: SPDXRef-wilt-exception-4
+FileType: SOURCE
+FileChecksum: SHA1: 1eda9179116978850286e79920a2ddbfb59bb33e
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+
+FileName: lib/src/wilt_user_utils.dart
+SPDXID: SPDXRef-wilt-user-utils-5
+FileType: SOURCE
+FileChecksum: SHA1: 4f7d88e0ecdab9e9b95ba70ecf492e659c4a600d
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+
+FileName: lib/wilt.dart
+SPDXID: SPDXRef-wilt-6
+FileType: SOURCE
+FileChecksum: SHA1: 0d606d4da0a94175585c813912dac6b9e4f688bb
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
+
+
+FileName: pubspec.yaml
+SPDXID: SPDXRef-pubspec-7
+FileType: TEXT
+FileChecksum: SHA1: 619c8b153f20dcf2f405f651cd0bb6a0f7186b90
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: NOASSERTION
+FileCopyrightText: NOASSERTION
+
 
 Relationship: SPDXRef-pubspec-7 DEPENDENCY_MANIFEST_OF SPDXRef-Package-wilt
+
 
