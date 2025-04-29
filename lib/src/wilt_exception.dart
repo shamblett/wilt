@@ -12,9 +12,6 @@ part of '../wilt.dart';
 
 /// Exceptions
 class WiltException implements Exception {
-  // Construction
-  WiltException([this._message = 'No Message Supplied']);
-
   // Exception message strings
   static const String header = 'WiltException: ';
   static const String noDatabaseSpecified = 'No database specified';
@@ -88,6 +85,9 @@ class WiltException implements Exception {
   static const String cnNoAuth = 'Change Notifications must be authorized';
 
   final String _message;
+
+  // Construction
+  WiltException([this._message = 'No Message Supplied']);
 
   @override
   String toString() => '$header$_message';

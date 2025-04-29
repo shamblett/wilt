@@ -57,7 +57,8 @@ void main() async {
     if (successResponse.ok) {
       returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
       print(
-          'EXAMPLE:: Example document created OK, revision is $returnedDocRev');
+        'EXAMPLE:: Example document created OK, revision is $returnedDocRev',
+      );
     } else {
       print('EXAMPLE:: Example document creation failed');
     }
@@ -74,7 +75,8 @@ void main() async {
     if (successResponse.ok) {
       returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
       print(
-          'EXAMPLE:: Example document updated OK, revision is $returnedDocRev');
+        'EXAMPLE:: Example document updated OK, revision is $returnedDocRev',
+      );
     } else {
       print('EXAMPLE:: Example document update failed');
     }
@@ -88,12 +90,18 @@ void main() async {
     final dynamic successResponse = res.jsonCouchResponse;
     returnedDocRev = WiltUserUtils.getDocumentRev(successResponse);
     print('EXAMPLE:: Example document read OK, revision is $returnedDocRev');
-    print('EXAMPLE:: Example document read OK, title is '
-        '${successResponse.title}');
-    print('EXAMPLE:: Example document read OK, version is '
-        '${successResponse.version}');
-    print('EXAMPLE:: Example document read OK, author is '
-        '${successResponse.author}');
+    print(
+      'EXAMPLE:: Example document read OK, title is '
+      '${successResponse.title}',
+    );
+    print(
+      'EXAMPLE:: Example document read OK, version is '
+      '${successResponse.version}',
+    );
+    print(
+      'EXAMPLE:: Example document read OK, author is '
+      '${successResponse.author}',
+    );
   } else {
     print('EXAMPLE:: Example document read failed');
   }
